@@ -3,6 +3,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rspec'
 require "active_record"
 require 'datagrid'
+require "datagrid/rspec"
 require 'ruby-debug'
 
 require "rspec/rails/adapters"

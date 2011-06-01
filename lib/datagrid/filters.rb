@@ -13,6 +13,7 @@ module Datagrid
     FILTER_TYPES = {
       :date => Filters::DateFilter,
       :string => Filters::DefaultFilter,
+      :default => Filters::DefaultFilter,
       :eboolean => Filters::BooleanEnumFilter ,
       :boolean => Filters::BooleanFilter ,
       :integer => Filters::IntegerFilter,
@@ -23,7 +24,9 @@ module Datagrid
       base.extend         ClassMethods
       base.class_eval do
 
+        include Datagrid::Core
         include Datagrid::Filters::CompositeFilters
+
       end
       base.send :include, InstanceMethods
     end # self.included
