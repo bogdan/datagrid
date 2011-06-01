@@ -6,6 +6,9 @@ module Datagrid
       base.extend         ClassMethods
       base.class_eval do
 
+        include Datagrid::Core
+
+        report_attribute :order
       end
       base.send :include, InstanceMethods
     end # self.included
@@ -21,6 +24,13 @@ module Datagrid
           self.send(name)
         end
         self.columns << Datagrid::Columns::Column.new(self, name, options, &block)
+      end
+
+      def assets
+        result = super
+        if self.order
+          result = result.order(self.order)
+        end
       end
 
     end # ClassMethods
@@ -44,6 +54,17 @@ module Datagrid
       def data
         self.assets.scoped({}).map do |asset|
           self.row_for(asset)
+        end
+      end
+
+      def to_csv(options = {})
+        require "fastercsv"
+        FasterCSV.generate(
+          {:headers => self.header, :write_headers => true}.merge(options)
+        ) do |csv|
+          self.data.each do |row|
+            csv << row
+          end
         end
       end
     end # InstanceMethods

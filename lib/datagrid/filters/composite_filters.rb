@@ -1,4 +1,4 @@
-module DataGrid
+module Datagrid
   module Filters
     module CompositeFilters
 

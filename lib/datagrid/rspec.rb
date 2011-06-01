@@ -8,11 +8,11 @@ shared_examples_for "Datagrid" do
 
         let(:filter_value) do
           
-          case BaseReport::FILTER_TYPES.invert[filter.class]
+          case Datagrid::Filters::FILTER_TYPES.invert[filter.class]
           when :date
             1.day.ago
           when :eboolean
-            BaseReport::BooleanEnumFilter::YES
+            Datagrid::Filters::BooleanEnumFilter::YES
           when :boolean
             true
           when :integer
