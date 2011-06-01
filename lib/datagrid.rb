@@ -1,3 +1,4 @@
+require "datagrid/form_builder"
 require "datagrid/filters"
 require "datagrid/columns"
 
@@ -7,16 +8,16 @@ module Datagrid
     base.extend         ClassMethods
     base.class_eval do
 
+      include Datagrid::Columns
+      include Datagrid::Filters
+
       attr_accessor :order
+
     end
     base.send :include, InstanceMethods
   end # self.included
 
   module ClassMethods
-
-    def columns
-      @columns ||= []
-    end
 
     def filters
       @filters ||= []
@@ -26,13 +27,6 @@ module Datagrid
       self.filters.find do |filter|
         filter.attribute.to_sym == attribute.to_sym
       end
-    end
-
-    def column(name, options = {}, &block)
-      block ||= lambda do
-        self.send(name)
-      end
-      self.columns << Datagrid::Columns::Column.new(self, name, options, &block)
     end
 
     def filter(attribute, type = :string, options = {}, &block)
@@ -57,23 +51,6 @@ module Datagrid
 
     end
 
-    def date_range_filters(field, from_name = :"from_#{field}", to_name = :"to_#{field}")
-      filter(from_name, :date) do |date|
-        self.from_date(date, field)
-      end
-      filter(to_name, :date) do |date|
-        self.to_date(date, field)
-      end
-    end
-
-    def integer_range_filters(field, from_name = :"from_#{field}", to_name = :"to_#{field}")
-      filter(from_name, :integer) do |value|
-        self.conditions("#{field} >= #{value}")
-      end
-      filter(to_name, :integer) do |value|
-        self.conditions("#{field} <= #{value}")
-      end
-    end
   end # ClassMethods
 
   module InstanceMethods
@@ -106,21 +83,6 @@ module Datagrid
     end
   end
 
-  def header
-    self.class.columns.map(&:header)
-  end
-
-  def data
-    self.assets.scoped({}).map do |asset|
-      self.row_for(asset)
-    end
-  end
-
-  def row_for(asset)
-    self.class.columns.map do |column|
-      column.value(asset)
-    end
-  end
 
   def assets
     result = self.scope
@@ -159,9 +121,6 @@ module Datagrid
     self.class.filters
   end
 
-  def columns
-    self.class.columns
-  end
 
   def to_csv(options = {})
     require "fastercsv"

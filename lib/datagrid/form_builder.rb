@@ -35,27 +35,12 @@ module Datagrid
       text_field get_attribute(attribute_or_filter), options
     end
 
-    def report_month_filter(attribute_or_filter, options = {})
-      select get_attribute(attribute_or_filter), Date::MONTHNAMES.enum_for(:each_with_index).collect {|name, index| [name, index]}, {}, options
-    end
-
-    def report_year_filter(attribute_or_filter, options = {})
-      select get_attribute(attribute_or_filter), (2010..Date.today.year), {:include_blank => true}, options
-    end
-
     def get_attribute(attribute_or_filter)
-      #TODO: fix "formbuilder not reloading" problem
       attribute_or_filter.is_a?(Symbol) ?  attribute_or_filter : attribute_or_filter.attribute 
     end
 
     def get_filter(attribute_or_filter)
-      #TODO: fix "formbuilder not reloading" problem
       attribute_or_filter.is_a?(Symbol) ? object.class.filter_by_name(attribute_or_filter) : attribute_or_filter
-    end
-
-    def html_safe_string
-      result = ""
-      result.respond_to?(:html_safe) ? result.html_safe : result
     end
 
   end

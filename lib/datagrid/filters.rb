@@ -9,5 +9,12 @@ module Datagrid
     require "datagrid/filters/default_filter"
     require "datagrid/filters/filter_eval"
     require "datagrid/filters/integer_filter"
+
+
+    require "datagrid/filters/composite_filters"
+
+    def self.included(base)
+      base.send(:include, Datagrid::Filters::CompositeFilters)
+    end
   end
 end

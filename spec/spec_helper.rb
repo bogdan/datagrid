@@ -3,6 +3,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rspec'
 require "active_record"
 require 'datagrid'
+require 'ruby-debug'
 
 require "rspec/rails/adapters"
 require "rspec/rails/fixture_support"
@@ -26,6 +27,7 @@ ActiveRecord::Schema.define(:version => 1) do
   end
 
   class ::Entry < ActiveRecord::Base
+    belongs_to :group
   end
   class ::Group < ActiveRecord::Base
   end
