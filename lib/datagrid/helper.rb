@@ -1,3 +1,5 @@
+require "action_view"
+
 module Datagrid
   module Helper
 
@@ -18,7 +20,7 @@ module Datagrid
     def report_table(report, *args)
       options = args.extract_options!
       html = options[:html] || {}
-      html[:class] ||= "standard-grid"
+      html[:class] ||= "datagrid"
       paginate = options[:paginate] || {}
       paginate[:page] ||= params[:page]
       assets = report.assets.paginate(paginate)
@@ -63,11 +65,11 @@ module Datagrid
 
     def empty_string
       res = ""
-      res.repond_to?(:html_safe) ? res.html_safe : res
+      res.respond_to?(:html_safe) ? res.html_safe : res
 
     end
   end
 
-  ::ActionView::Helpers.send(:include, ::Datagrid::Helper)
+  ::ActionView::Base.send(:include, ::Datagrid::Helper)
 
 end

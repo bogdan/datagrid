@@ -1,7 +1,18 @@
+require 'rubygems'
+require 'bundler'
+begin
+  Bundler.setup(:default, :development)
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts "Run `bundle install` to install missing gems"
+  exit e.status_code
+end
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
+
 require 'rspec'
 require "active_record"
+require "will_paginate"
 require 'datagrid'
 require "datagrid/rspec"
 require 'ruby-debug'
@@ -14,6 +25,10 @@ ActiveRecord::Base.configurations = true
 
 File.open('spec.log', "w").close
 ActiveRecord::Base.logger = Logger.new('spec.log')
+
+
+
+WillPaginate.enable
 
 ActiveRecord::Schema.verbose = false
 ActiveRecord::Schema.define(:version => 1) do

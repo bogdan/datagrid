@@ -1,10 +1,13 @@
+require "action_view"
+
 module Datagrid
   module FormBuilder
 
     def report_filter(filter_or_attribute, options = {})
       filter = get_filter(filter_or_attribute)
-      options[:class] ||= " "
-      options[:class] += " #{filter.attribute} #{filter.type}"
+      options[:class] ||= ""
+      options[:class] += " " unless options[:class].blank?
+      options[:class] += "#{filter.attribute} #{datagrid_filter_class(filter.class)}"
       self.send(:"report_#{filter.class.to_s.underscore.split('/').last}", filter, options)
     end
 
@@ -43,6 +46,9 @@ module Datagrid
       attribute_or_filter.is_a?(Symbol) ? object.class.filter_by_name(attribute_or_filter) : attribute_or_filter
     end
 
+    def datagrid_filter_class(klass)
+      klass.to_s.split("::").last.underscore
+    end
   end
 end
 

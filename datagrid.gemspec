@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{datagrid}
-  s.version = "0.0.1"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "datagrid.gemspec",
     "lib/datagrid.rb",
     "lib/datagrid/columns.rb",
     "lib/datagrid/columns/column.rb",
@@ -58,36 +59,48 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<activerecord>, [">= 0"])
+      s.add_runtime_dependency(%q<rails>, [">= 0"])
       s.add_development_dependency(%q<rake>, ["= 0.8.7"])
-      s.add_development_dependency(%q<rspec-rails>, ["~> 2.6.0"])
+      s.add_development_dependency(%q<mocha>, [">= 0"])
+      s.add_development_dependency(%q<rspec-rails>, ["= 2.6.0"])
+      s.add_development_dependency(%q<rspec>, ["= 2.6.0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6.0"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
       s.add_development_dependency(%q<ruby-debug>, [">= 0"])
       s.add_development_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_development_dependency(%q<fastercsv>, [">= 0"])
+      s.add_development_dependency(%q<nokogiri>, [">= 0"])
+      s.add_development_dependency(%q<will_paginate>, ["= 2.3.15"])
     else
-      s.add_dependency(%q<activerecord>, [">= 0"])
+      s.add_dependency(%q<rails>, [">= 0"])
       s.add_dependency(%q<rake>, ["= 0.8.7"])
-      s.add_dependency(%q<rspec-rails>, ["~> 2.6.0"])
+      s.add_dependency(%q<mocha>, [">= 0"])
+      s.add_dependency(%q<rspec-rails>, ["= 2.6.0"])
+      s.add_dependency(%q<rspec>, ["= 2.6.0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.6.0"])
       s.add_dependency(%q<rcov>, [">= 0"])
       s.add_dependency(%q<ruby-debug>, [">= 0"])
       s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_dependency(%q<fastercsv>, [">= 0"])
+      s.add_dependency(%q<nokogiri>, [">= 0"])
+      s.add_dependency(%q<will_paginate>, ["= 2.3.15"])
     end
   else
-    s.add_dependency(%q<activerecord>, [">= 0"])
+    s.add_dependency(%q<rails>, [">= 0"])
     s.add_dependency(%q<rake>, ["= 0.8.7"])
-    s.add_dependency(%q<rspec-rails>, ["~> 2.6.0"])
+    s.add_dependency(%q<mocha>, [">= 0"])
+    s.add_dependency(%q<rspec-rails>, ["= 2.6.0"])
+    s.add_dependency(%q<rspec>, ["= 2.6.0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.6.0"])
     s.add_dependency(%q<rcov>, [">= 0"])
     s.add_dependency(%q<ruby-debug>, [">= 0"])
     s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
     s.add_dependency(%q<fastercsv>, [">= 0"])
+    s.add_dependency(%q<nokogiri>, [">= 0"])
+    s.add_dependency(%q<will_paginate>, ["= 2.3.15"])
   end
 end
 

@@ -1,7 +1,9 @@
-require "datagrid/form_builder"
 require "datagrid/filters"
 require "datagrid/columns"
 require "datagrid/core"
+
+require "datagrid/helper"
+require "datagrid/form_builder"
 
 module Datagrid
 
