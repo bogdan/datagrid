@@ -9,6 +9,7 @@ module Datagrid
         include Datagrid::Core
 
         report_attribute :order
+
       end
       base.send :include, InstanceMethods
     end # self.included

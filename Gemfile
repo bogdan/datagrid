@@ -18,4 +18,5 @@ group :development do
   gem "rcov", ">= 0"
   gem "ruby-debug"
   gem "sqlite3-ruby"
+  gem "fastercsv"
 end

@@ -18,7 +18,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/bogdan/datagrid"
   gem.license = "MIT"
   gem.summary = %Q{Ruby gem to create datagrids}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.description = %Q{This allows you to easily build datagrid aka data tables with sortable columns and filters}
   gem.email = "agresso@gmail.com"
   gem.authors = ["Bogdan Gusiev"]
   # dependencies defined in Gemfile

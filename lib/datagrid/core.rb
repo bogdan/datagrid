@@ -46,7 +46,7 @@ module Datagrid
       def attributes
         result = {}
         self.class.report_attributes.each do |name|
-          result[filter.attribute] = self[name]
+          result[name] = self[name]
         end
         result
       end
