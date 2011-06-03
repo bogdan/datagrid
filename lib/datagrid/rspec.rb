@@ -10,7 +10,7 @@ shared_examples_for "Datagrid" do
     described_class.columns.each do |column|
       describe "column ##{column.name}" do
 
-        it "should return value" do
+        it "should has value in #data_hash" do
           subject.data_hash.first.should have_key(column.name)
         end
 

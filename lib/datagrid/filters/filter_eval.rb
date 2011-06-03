@@ -1,3 +1,8 @@
+# ActiveRecord is a little brain fuck.
+# We can not call instance_eval on ActiveRecord::Relation class
+# because it will automatically convert it to an array because #instance_eval
+# is not included in the method list that do not cause force result loading
+# That is why we need thi helper class
 class Datagrid::Filters::FilterEval
 
   def initialize(filter, scope, value)

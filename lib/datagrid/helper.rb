@@ -66,7 +66,6 @@ module Datagrid
     def empty_string
       res = ""
       res.respond_to?(:html_safe) ? res.html_safe : res
-
     end
   end
 
