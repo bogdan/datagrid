@@ -2,7 +2,10 @@ class SimpleReport
 
   include Datagrid
 
-  filter(:group_id)
+  filter(:group_id, :integer)
+  filter(:category, :enum, :select => ["first", "second"])
+  filter(:disabled, :eboolean)
+  filter(:confirmed, :boolean)
   filter(:name) do |value|
     self.scoped(:conditions => {:name => value})
   end

@@ -1,12 +1,12 @@
 require "nokogiri"
 
-def have_dom(text)
-  HaveDom.new(text)
+def equal_to_dom(text)
+  EqualToDom.new(text)
 end
 
 
 
-class HaveDom
+class EqualToDom
 
   def initialize(expectation)
     @expectation = Nokogiri::HTML::DocumentFragment.parse(expectation).to_s
