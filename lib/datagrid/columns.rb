@@ -48,15 +48,26 @@ module Datagrid
         end
       end
 
-      def columns
-        self.class.columns
+      def hash_for(asset)
+        result = {}
+        self.class.columns.each do |column|
+          result[column.name] = column.value(asset)
+        end
+        result
       end
 
       def data
-        self.assets.scoped({}).map do |asset|
+        self.assets.map do |asset|
           self.row_for(asset)
         end
       end
+
+      def data_hash
+        self.assets.map do |asset|
+          hash_for(asset)
+        end
+      end
+
 
       def to_csv(options = {})
         require "fastercsv"
@@ -68,6 +79,11 @@ module Datagrid
           end
         end
       end
+
+      def columns
+        self.class.columns
+      end
+
     end # InstanceMethods
 
   end

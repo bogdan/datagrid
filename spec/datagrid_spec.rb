@@ -26,7 +26,7 @@ describe SimpleReport do
   describe ".attributes" do
     it "should return report attributes" do
       subject.attributes.should == {
-        :order=>nil, :name=>"Star", :group_id=>8,  :disabled => false, :confirmed => false, :category => "first"
+        :order=>nil, :name=>"Star", :group_id=>group.id,  :disabled => false, :confirmed => false, :category => "first"
       }  
     end
 

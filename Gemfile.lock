@@ -79,11 +79,6 @@ GEM
     rspec-expectations (2.6.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.6.0)
-    rspec-rails (2.6.0)
-      actionpack (~> 3.0)
-      activesupport (~> 3.0)
-      railties (~> 3.0)
-      rspec (~> 2.6.0)
     ruby-debug (0.10.4)
       columnize (>= 0.1)
       ruby-debug-base (~> 0.10.4.0)
@@ -111,7 +106,6 @@ DEPENDENCIES
   rake (= 0.8.7)
   rcov
   rspec (= 2.6.0)
-  rspec-rails (= 2.6.0)
   ruby-debug
   sqlite3-ruby
   will_paginate (= 2.3.15)

@@ -13,7 +13,6 @@ gem "rails"
 group :development do
   gem "rake", "0.8.7"
   gem "mocha"
-  gem "rspec-rails", "2.6.0"
   gem "rspec", "2.6.0"
   gem "bundler", "~> 1.0.0"
   gem "jeweler", "~> 1.6.0"

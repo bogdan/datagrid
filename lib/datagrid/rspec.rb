@@ -1,10 +1,29 @@
 shared_examples_for "Datagrid" do
   describe "as Datagrid" do
 
+    it "should have at least one entry if assets" do
+      subject.assets.should_not be_empty
+    end
+
     its(:data) {should_not be_empty}
 
+    described_class.columns.each do |column|
+      describe "column ##{column.name}" do
+
+        it "should return value" do
+          subject.data_hash.first.should have_key(column.name)
+        end
+
+        it "should support order" do
+          subject.order = column.order
+          subject.assets.should_not be_empty
+        end
+      end
+
+    end
+
     described_class.filters.each do |filter|
-      describe "filter #{filter.attribute}" do
+      describe "filter ##{filter.attribute}" do
 
         let(:filter_value) do
           
