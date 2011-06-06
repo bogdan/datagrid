@@ -31,6 +31,15 @@ module Datagrid
         @report_attributes ||= []
       end
 
+      def scope(&block)
+        if block
+          @scope = block
+        else
+          raise(Datagrid::ConfigurationError, "Scope not defined") unless @scope
+          @scope.call
+        end
+      end
+
     end # ClassMethods
 
     module InstanceMethods
@@ -69,18 +78,12 @@ module Datagrid
         end
       end
 
-      def paginate(*args)
-        self.assets.paginate(*args)
+      def paginate(*args, &block)
+        self.assets.paginate(*args, &block)
       end
 
-
-      #
-      # Implementation
-      #
-
-      protected
       def scope
-        raise NotImplementedError, "#scope suppose to be overwritten"
+        self.class.scope
       end
 
 

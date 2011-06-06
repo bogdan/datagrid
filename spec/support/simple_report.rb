@@ -2,6 +2,11 @@ class SimpleReport
 
   include Datagrid
 
+
+  scope do
+    ::Entry.includes(:group)
+  end
+
   filter(:group_id, :integer)
   filter(:category, :enum, :select => ["first", "second"])
   filter(:disabled, :eboolean)
@@ -16,7 +21,4 @@ class SimpleReport
 
   column(:name)
 
-  def scope
-    Entry.includes(:group)
-  end
 end

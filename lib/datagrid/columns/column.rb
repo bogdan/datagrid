@@ -6,9 +6,6 @@ class Datagrid::Columns::Column
   def initialize(report, name, options = {}, &block)
     self.report = report
     self.name = name
-    unless options.has_key?(:order)
-      options[:order] = name
-    end
     self.options = options
     self.block = block
   end
@@ -35,7 +32,11 @@ class Datagrid::Columns::Column
   end
 
   def order
-    self.options[:order]
+    if options.has_key?(:order)
+      self.options[:order]
+    else
+      report.scope.column_names.include?(name.to_s) ? name : nil
+    end
   end
 
   def desc_order
