@@ -35,7 +35,7 @@ class Datagrid::Columns::Column
     if options.has_key?(:order)
       self.options[:order]
     else
-      report.scope.column_names.include?(name.to_s) ? name : nil
+      report.scope.column_names.include?(name.to_s) ? [report.scope.table_name, name].join(".") : nil
     end
   end
 
