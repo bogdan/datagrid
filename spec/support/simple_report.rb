@@ -21,4 +21,8 @@ class SimpleReport
 
   column(:name)
 
+  def param_name
+    :report
+  end
+
 end

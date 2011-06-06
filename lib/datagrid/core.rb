@@ -40,6 +40,10 @@ module Datagrid
         end
       end
 
+      def param_name
+        self.to_s.underscore.split('/').last
+      end
+
     end # ClassMethods
 
     module InstanceMethods
@@ -84,6 +88,10 @@ module Datagrid
 
       def scope
         self.class.scope
+      end
+
+      def param_name
+        self.class.param_name
       end
 
 

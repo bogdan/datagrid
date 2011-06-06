@@ -1,10 +1,10 @@
 
 class Datagrid::Columns::Column
 
-  attr_accessor :report, :options, :block, :name
+  attr_accessor :grid, :options, :block, :name
 
-  def initialize(report, name, options = {}, &block)
-    self.report = report
+  def initialize(grid, name, options = {}, &block)
+    self.grid = grid
     self.name = name
     self.options = options
     self.block = block
@@ -28,14 +28,14 @@ class Datagrid::Columns::Column
 
   def header
     self.options[:header] || 
-      I18n.translate(self.name, :scope => "reports.#{self.report}.columns", :default => self.name.to_s.humanize )
+      I18n.translate(self.name, :scope => "reports.#{self.grid}.columns", :default => self.name.to_s.humanize )
   end
 
   def order
     if options.has_key?(:order)
       self.options[:order]
     else
-      report.scope.column_names.include?(name.to_s) ? [report.scope.table_name, name].join(".") : nil
+      grid.scope.column_names.include?(name.to_s) ? [grid.scope.table_name, name].join(".") : nil
     end
   end
 

@@ -13,14 +13,14 @@ end
 describe Datagrid::FormBuilder do
 
   let(:template) { ActionView::Base.new}
-  let(:report) { SimpleReport.new }
-  let(:view) { ActionView::Helpers::FormBuilder.new(:report, report, template, {}, Proc.new {|f| })}
+  let(:grid) { SimpleReport.new }
+  let(:view) { ActionView::Helpers::FormBuilder.new(:report, grid, template, {}, Proc.new {|f| })}
   subject { view }
 
 
-  describe ".report_filter" do
+  describe ".datagrid_filter" do
 
-    subject { view.report_filter(_filter)}
+    subject { view.datagrid_filter(_filter)}
     context "with default filter type" do
       let(:_filter) { :name }
       it { should equal_to_dom(
@@ -42,7 +42,7 @@ describe Datagrid::FormBuilder do
       )}
       context "when first option is selected" do
         before(:each) do
-          report.category = "first"
+          grid.category = "first"
         end
         it { should equal_to_dom(
           '<select class="category enum_filter" id="report_category" name="report[category][]"><option value=""></option>

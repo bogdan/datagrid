@@ -25,6 +25,7 @@ RSpec.configure do |config|
     #TODO better database truncation
     Group.delete_all
     Entry.delete_all
+
   end
 
 

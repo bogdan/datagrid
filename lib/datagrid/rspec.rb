@@ -53,7 +53,7 @@ shared_examples_for "Datagrid" do
         end
 
         it "should be supported" do
-          subject.assets.should be_a(ActiveRecord::Relation)
+          subject.assets.should respond_to(:all)
         end
       end
     end
