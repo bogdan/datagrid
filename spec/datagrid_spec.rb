@@ -32,4 +32,25 @@ describe SimpleReport do
 
   end
 
+  describe ".scope" do
+    it "should return defined scope of objects" do
+      subject.scope.should respond_to(:table_name)
+    end
+      
+
+    context "when not defined on class level" do
+      before(:each) do
+        SimpleReport.instance_variable_set("@scope", nil)
+      end
+
+      it "should raise ConfigurationError" do
+        lambda {
+          subject.scope
+        }.should raise_error(Datagrid::ConfigurationError)
+        
+      end
+      
+    end
+  end
+
 end
