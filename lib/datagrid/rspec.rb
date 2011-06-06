@@ -16,7 +16,7 @@ shared_examples_for "Datagrid" do
 
         it "should support order" do
           subject.order = column.order
-          subject.assets.should_not be_empty
+          subject.assets.first.should_not be_nil
         end
       end
 

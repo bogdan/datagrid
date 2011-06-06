@@ -10,13 +10,13 @@ class SimpleReport
     self.scoped(:conditions => {:name => value})
   end
 
-  column(:group) do |model|
-    Group.find(model.group_id)
+  column(:group, :order => "groups.name") do |model|
+    group.name
   end
 
   column(:name)
 
   def scope
-    Entry
+    Entry.includes(:group)
   end
 end

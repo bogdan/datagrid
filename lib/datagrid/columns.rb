@@ -27,12 +27,6 @@ module Datagrid
         self.columns << Datagrid::Columns::Column.new(self, name, options, &block)
       end
 
-      def assets
-        result = super
-        if self.order
-          result = result.order(self.order)
-        end
-      end
 
     end # ClassMethods
 
@@ -68,6 +62,13 @@ module Datagrid
         end
       end
 
+      def assets
+        result = super
+        if self.order
+          result = result.order(self.order)
+        end
+        result
+      end
 
       def to_csv(options = {})
         require "fastercsv"

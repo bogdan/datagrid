@@ -31,11 +31,6 @@ module Datagrid
   class ConfigurationError < StandardError; end
 
 
-  def to_param
-    :report
-  end
-
-
 end
 
 
