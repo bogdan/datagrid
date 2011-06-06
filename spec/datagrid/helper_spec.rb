@@ -9,7 +9,7 @@ describe Datagrid::Helper do
   before(:each) do
     subject.stub!(:params).and_return({})
     subject.stub(:url_for) do |options|
-      "http://localhost?" + options.to_param
+      options.to_param
     end
     
   end
@@ -21,19 +21,16 @@ describe Datagrid::Helper do
   let(:grid) { SimpleReport.new }
 
   describe ".report_table" do
+    before(:each) do
+      subject.stub!(:datagrid_order_for).and_return(subject.content_tag(:div, "", :class => "order"))
+    end
     it "should return data table html" do
       subject.datagrid_table(grid).should equal_to_dom(<<-HTML)
        <table class="datagrid">
        <tr>
-       <th>Group<div class="order">
-       <a href="http://localhost?#{{:report => grid.attributes.merge(:order => "groups.name")}.to_param}">ASC</a> 
-       <a href="http://localhost?#{{:report => grid.attributes.merge(:order => "groups.name DESC")}.to_param}">DESC</a>
-       </div>
+       <th>Group<div class="order"></div>
        </th>
-       <th>Name<div class="order">
-       <a href="http://localhost?#{{:report => grid.attributes.merge(:order => "entries.name")}.to_param}">ASC</a> 
-       <a href="http://localhost?#{{:report => grid.attributes.merge(:order => "entries.name DESC")}.to_param}">DESC</a>
-       </div>
+       <th>Name<div class="order"></div>
        </th>
        </tr>
        <tr class="odd">
