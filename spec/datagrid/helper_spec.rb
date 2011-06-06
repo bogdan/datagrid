@@ -25,20 +25,20 @@ describe Datagrid::Helper do
       subject.stub!(:datagrid_order_for).and_return(subject.content_tag(:div, "", :class => "order"))
     end
     it "should return data table html" do
-      subject.datagrid_table(grid).should equal_to_dom(<<-HTML)
-       <table class="datagrid">
-       <tr>
-       <th>Group<div class="order"></div>
-       </th>
-       <th>Name<div class="order"></div>
-       </th>
-       </tr>
-       <tr class="odd">
-       <td>Pop</td>
-       <td>Star</td>
-       </tr>
-       </table>
-       HTML
+      subject.datagrid_table(grid).should equal_to_dom(
+'<table class="datagrid">
+<tr>
+<th>Group<div class="order"></div>
+</th>
+<th>Name<div class="order"></div>
+</th>
+</tr>
+
+<tr class="odd">
+<td>Pop</td>
+<td>Star</td>
+</tr>
+</table>')
     end
   end
   
