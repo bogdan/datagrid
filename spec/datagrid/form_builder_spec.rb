@@ -13,7 +13,8 @@ end
 describe Datagrid::FormBuilder do
 
   let(:template) { ActionView::Base.new}
-  let(:view) { ActionView::Helpers::FormBuilder.new(:report, SimpleReport.new, template, {}, Proc.new {|f| })}
+  let(:report) { SimpleReport.new }
+  let(:view) { ActionView::Helpers::FormBuilder.new(:report, report, template, {}, Proc.new {|f| })}
   subject { view }
 
 
@@ -39,6 +40,16 @@ describe Datagrid::FormBuilder do
        <option value="first">first</option>
        <option value="second">second</option></select>'
       )}
+      context "when first option is selected" do
+        before(:each) do
+          report.category = "first"
+        end
+        it { should equal_to_dom(
+          '<select class="category enum_filter" id="report_category" name="report[category][]"><option value=""></option>
+       <option value="first" selected="true">first</option>
+       <option value="second">second</option></select>'
+        )}
+      end
     end
 
     context "with eboolean filter type" do
