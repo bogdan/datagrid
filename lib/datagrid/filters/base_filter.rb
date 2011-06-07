@@ -2,11 +2,11 @@ require "datagrid/filters/filter_eval"
 
 class Datagrid::Filters::BaseFilter
 
-  attr_accessor :grid, :options, :block, :attribute
+  attr_accessor :grid, :options, :block, :name
 
-  def initialize(grid, attribute, options = {}, &block)
+  def initialize(grid, name, options = {}, &block)
     self.grid = grid
-    self.attribute = attribute
+    self.name = name
     self.options = options
     self.block = block
   end
@@ -22,15 +22,11 @@ class Datagrid::Filters::BaseFilter
   end
 
   def header
-    I18n.translate(self.attribute, :scope => "datagrid.#{grid.class.to_s.underscore.split("/").last}.filters", :default => self.attribute.to_s.humanize)
+    I18n.translate(self.name, :scope => "datagrid.#{grid.class.to_s.underscore.split("/").last}.filters", :default => self.name.to_s.humanize)
   end
 
   def default
     self.options[:default]
-  end
-
-  def name
-    self.attribute
   end
 
 end

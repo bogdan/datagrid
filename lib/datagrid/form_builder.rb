@@ -7,7 +7,7 @@ module Datagrid
       filter = get_filter(filter_or_attribute)
       options[:class] ||= ""
       options[:class] += " " unless options[:class].blank?
-      options[:class] += "#{filter.attribute} #{datagrid_filter_class(filter.class)}"
+      options[:class] += "#{filter.name} #{datagrid_filter_class(filter.class)}"
       self.send(:"datagrid_#{filter.class.to_s.underscore.split('/').last}", filter, options)
     end
 
@@ -31,7 +31,7 @@ module Datagrid
 
     def datagrid_enum_filter(attribute_or_filter, options = {})
       filter = get_filter(attribute_or_filter)
-      select filter.attribute, filter.select_for(self.object) || [], {:include_blank => filter.include_blank}, {:multiple => filter.multiple}.merge(options)
+      select filter.name, filter.select_for(self.object) || [], {:include_blank => filter.include_blank}, {:multiple => filter.multiple}.merge(options)
     end
 
     def datagrid_integer_filter(attribute_or_filter, options = {})
@@ -39,7 +39,7 @@ module Datagrid
     end
 
     def get_attribute(attribute_or_filter)
-      attribute_or_filter.is_a?(Symbol) ?  attribute_or_filter : attribute_or_filter.attribute 
+      attribute_or_filter.is_a?(Symbol) ?  attribute_or_filter : attribute_or_filter.name 
     end
 
     def get_filter(attribute_or_filter)

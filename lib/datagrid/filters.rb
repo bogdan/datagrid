@@ -39,7 +39,7 @@ module Datagrid
 
       def filter_by_name(attribute)
         self.filters.find do |filter|
-          filter.attribute.to_sym == attribute.to_sym
+          filter.name.to_sym == attribute.to_sym
         end
       end
 
@@ -123,7 +123,7 @@ module Datagrid
 
       def initialize(*args, &block)
         self.filters.each do |filter|
-          self[filter.attribute] = filter.default
+          self[filter.name] = filter.default
         end
         super(*args, &block)
       end
@@ -141,7 +141,7 @@ module Datagrid
       end
 
       def filter_value(filter)
-        self[filter.attribute]
+        self[filter.name]
       end
 
     end # InstanceMethods

@@ -28,7 +28,7 @@ shared_examples_for "Datagrid" do
     end
 
     described_class.filters.each do |filter|
-      describe "filter ##{filter.attribute}" do
+      describe "filter ##{filter.name}" do
 
         let(:filter_value) do
           
@@ -53,8 +53,8 @@ shared_examples_for "Datagrid" do
         end
 
         before(:each) do
-          subject.attributes = {filter.attribute => filter_value}
-          subject.send(filter.attribute).should_not be_nil
+          subject.attributes = {filter.name => filter_value}
+          subject.send(filter.name).should_not be_nil
         end
 
         it "should be supported" do
