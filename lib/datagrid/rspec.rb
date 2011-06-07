@@ -58,7 +58,8 @@ shared_examples_for "Datagrid" do
         end
 
         it "should be supported" do
-          subject.assets.should respond_to(:all)
+          subject.assets.should_not be_nil 
+          #TODO: better matcher.
         end
       end
     end
