@@ -1,5 +1,9 @@
 class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
 
+  def initialize(*args)
+    super(*args)
+    raise Datagrid::ConfigurationError, ":select option not specified" unless select
+  end
   def format(value)
     values = Array.new([*value])
     values.reject do |value|

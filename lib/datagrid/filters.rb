@@ -43,12 +43,59 @@ module Datagrid
         end
       end
 
+
+      # Defines the accessible attribute that is used to filter
+      # scope by the specified value with specified code.
+      # 
+      # Example:
+      #     
+      #   class UserGrid 
+      #     include Datagrid
+      #
+      #     filter(:name)
+      #     filter(:posts_count, :integer) do |value|
+      #       self.where(["posts_count >= ?", value])
+      #     end
+      #
+      #     scope do
+      #       User.order("users.created_at desc")
+      #     end
+      #   end
+      #
+      # Each filter becomes grid atttribute.
+      # In order to create grid that display all users with name 'John' that have more than zero posts:
+      #
+      #   grid = UserGrid.new(:posts_count => 1, :name => "John")
+      #   grid.assets # SELECT * FROM users WHERE users.posts_count > 1 AND name = 'John'
+      #
+      # Important! Take care about non-breaking the filter chain and force objects loading in filter.
+      # The filter block should always return a <tt>ActiveRecord::Scope</tt> rather than <tt>Array</tt>
+      #
+      # = Default filter block
+      #
+      # If no block given filter is generated automatically as simple select by filter name from scope.
+      #
+      # = Filter types
+      #
+      # Filter does types conversion automatically.
+      # The following filter types are supported:
+      #
+      # * <tt>:string</tt> (default) - converts value to string
+      # * <tt>:date</tt> - converts value to date using date parser
+      # * <tt>:enum</tt> - designed to be collection select. Additional options for this filter:
+      #   * <tt>:select</tt> (required) - collection of values to match agains.
+      #   * <tt>:multiple</tt> - if true multiple values can be assigned to this filter. Default: false.
+      #   * <tt>:strict</tt>  - determines if the filter should accept only values from specified collection. Default: false.
+      # * <tt>:eboolean</tt> - subtype of enum filter that provides select of "Yes", "No" and "Any". Could be useful.
+      # * <tt>:integer</tt> - converts given value to integer.
+      #   
+      #
       def filter(attribute, type = :string, options = {}, &block)
+
         klass = type.is_a?(Class) ? type : FILTER_TYPES[type]
         raise ConfigurationError, "filter class not found" unless klass
-        block ||= lambda do |value|
-          self.scoped(:conditions => {attribute => value})
-        end
+
+        block ||= default_filter(attribute)
 
         filter = klass.new(self, attribute, options, &block)
         self.filters << filter
@@ -58,6 +105,18 @@ module Datagrid
         end
 
       end
+
+      protected
+      def default_filter(attribute)
+        if self.scope.column_names.include?(attribute.to_s)
+          lambda do |value|
+            self.scoped(:conditions => {attribute => value})
+          end
+        else
+          raise ConfigurationError, "Not able to generate default filter. No column '#{attribute}' in #{self.scope.table_name}."
+        end
+      end
+
     end # ClassMethods
 
     module InstanceMethods

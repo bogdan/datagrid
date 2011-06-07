@@ -93,10 +93,7 @@ module Datagrid
       def param_name
         self.class.param_name
       end
-
-
+      
     end # InstanceMethods
-
   end
-
 end
