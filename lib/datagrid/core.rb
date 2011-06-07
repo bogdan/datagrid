@@ -11,12 +11,12 @@ module Datagrid
 
     module ClassMethods
 
-      def report_attribute(name, &block)
-        unless report_attributes.include?(name)
+      def datagrid_attribute(name, &block)
+        unless datagrid_attributes.include?(name)
           block ||= lambda do |value|
             value
           end
-          report_attributes << name
+          datagrid_attributes << name
           define_method name do
             instance_variable_get("@#{name}")
           end
@@ -27,8 +27,8 @@ module Datagrid
         end
       end
 
-      def report_attributes
-        @report_attributes ||= []
+      def datagrid_attributes
+        @datagrid_attributes ||= []
       end
 
       def scope(&block)
@@ -58,7 +58,7 @@ module Datagrid
 
       def attributes
         result = {}
-        self.class.report_attributes.each do |name|
+        self.class.datagrid_attributes.each do |name|
           result[name] = self[name]
         end
         result

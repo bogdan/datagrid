@@ -100,7 +100,7 @@ module Datagrid
         filter = klass.new(self, attribute, options, &block)
         self.filters << filter
 
-        report_attribute(attribute) do |value|
+        datagrid_attribute(attribute) do |value|
           filter.format(value)
         end
 

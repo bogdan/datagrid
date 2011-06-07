@@ -12,8 +12,8 @@ module Datagrid
 
         include Datagrid::Core
 
-        report_attribute :order
-        report_attribute :reverse
+        datagrid_attribute :order
+        datagrid_attribute :reverse
 
       end
       base.send :include, InstanceMethods
