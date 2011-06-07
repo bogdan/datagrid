@@ -25,9 +25,9 @@ describe SimpleReport do
 
   describe ".attributes" do
     it "should return report attributes" do
-      subject.attributes.should == {
-        :order=>nil, :name=>"Star", :group_id=>group.id,  :disabled => false, :confirmed => false, :category => "first"
-      }  
+      (subject.filters.map(&:name) + [:order, :reverse]).each do |attribute|
+        subject.attributes.should have_key(attribute)
+      end
     end
 
   end

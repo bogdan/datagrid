@@ -63,9 +63,9 @@ module Datagrid
     def datagrid_order_for(grid, column)
       content_tag(:div, :class => "order") do
         link_to(
-          I18n.t("datagrid.table.order.asc", :default => "ASC"), url_for(grid.param_name => grid.attributes.merge(:order => column.order))
+          I18n.t("datagrid.table.order.asc", :default => "ASC"), url_for(grid.param_name => grid.attributes.merge(:order => column.name))
         ) + " " +
-          link_to(I18n.t("datagrid.table.order.desc", :default => "DESC"), url_for(grid.param_name => grid.attributes.merge(:order => column.desc_order)))
+          link_to(I18n.t("datagrid.table.order.desc", :default => "DESC"), url_for(grid.param_name => grid.attributes.merge(:order => column.name, :reverse => true )))
       end
     end
 

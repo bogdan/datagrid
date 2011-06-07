@@ -1,4 +1,8 @@
 module Datagrid
+  
+  class OrderUnsupported < StandardError
+  end
+  
   module Columns
     require "datagrid/columns/column"
 
@@ -9,6 +13,7 @@ module Datagrid
         include Datagrid::Core
 
         report_attribute :order
+        report_attribute :reverse
 
       end
       base.send :include, InstanceMethods
@@ -65,7 +70,9 @@ module Datagrid
       def assets
         result = super
         if self.order
-          result = result.order(self.order)
+          column = column_by_name(self.order)
+          raise Datagrid::OrderUnsupported, "Can not sort #{self.inspect} by #{name.inspect}" unless column
+          result = result.order(self.reverse ? column.order : column.desc_order)
         end
         result
       end
@@ -83,6 +90,12 @@ module Datagrid
 
       def columns
         self.class.columns
+      end
+
+      def column_by_name(name)
+        self.columns.find do |col|
+          col.name.to_sym == name.to_sym
+        end
       end
 
     end # InstanceMethods

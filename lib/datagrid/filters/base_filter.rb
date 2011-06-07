@@ -29,5 +29,9 @@ class Datagrid::Filters::BaseFilter
     self.options[:default]
   end
 
+  def name
+    self.attribute
+  end
+
 end
 

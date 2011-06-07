@@ -15,7 +15,12 @@ shared_examples_for "Datagrid" do
         end
 
         it "should support order" do
-          subject.order = column.order
+          subject.order = column.name
+          subject.assets.first.should_not be_nil
+        end
+
+        it "should support reverse order" do
+          subject.reverse = true
           subject.assets.first.should_not be_nil
         end
       end
