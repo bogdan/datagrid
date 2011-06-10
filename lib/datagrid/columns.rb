@@ -15,6 +15,7 @@ module Datagrid
         datagrid_attribute :order
         datagrid_attribute :reverse
 
+
       end
       base.send :include, InstanceMethods
     end # self.included
@@ -72,7 +73,7 @@ module Datagrid
         if self.order
           column = column_by_name(self.order)
           raise Datagrid::OrderUnsupported, "Can not sort #{self.inspect} by #{name.inspect}" unless column
-          result = result.order(self.reverse ? column.order : column.desc_order)
+          result = result.order(self.reverse ? column.desc_order : column.order)
         end
         result
       end

@@ -40,7 +40,7 @@ class Datagrid::Columns::Column
   end
 
   def desc_order
-    order ? order.to_s + " DESC" : nil
+    self.options[:desc_order]  || (order ? order.to_s + " DESC" : nil)
   end
 
 end
