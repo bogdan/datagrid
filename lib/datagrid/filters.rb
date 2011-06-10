@@ -83,10 +83,9 @@ module Datagrid
       #
       # * <tt>:string</tt> (default) - converts value to string
       # * <tt>:date</tt> - converts value to date using date parser
-      # * <tt>:enum</tt> - designed to be collection select. Additional options for this filter:
+      # * <tt>:enum</tt> - designed to be collection select. Additional options for easy form generation:
       #   * <tt>:select</tt> (required) - collection of values to match agains.
       #   * <tt>:multiple</tt> - if true multiple values can be assigned to this filter. Default: false.
-      #   * <tt>:strict</tt>  - determines if the filter should accept only values from specified collection. Default: false.
       # * <tt>:eboolean</tt> - subtype of enum filter that provides select of "Yes", "No" and "Any". Could be useful.
       # * <tt>:integer</tt> - converts given value to integer.
       #   
