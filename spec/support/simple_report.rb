@@ -4,7 +4,7 @@ class SimpleReport
 
 
   scope do
-    ::Entry.includes(:group)
+    ::Entry.includes(:group).order(:created_at)
   end
 
   filter(:group_id, :integer)

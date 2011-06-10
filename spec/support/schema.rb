@@ -19,10 +19,12 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string :category
     t.boolean :disabled, :null => false, :default => nil
     t.boolean :confirmed, :null => false, :default => nil
+    t.timestamps
   end
 
   create_table :groups do |t|
     t.string :name
+    t.timestamps
   end
 
   class ::Entry < ActiveRecord::Base
