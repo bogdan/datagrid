@@ -1,0 +1,7 @@
+.bundle
+coverage
+rdoc
+.yardoc
+spec.log
+pkg
+
