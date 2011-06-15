@@ -81,13 +81,13 @@ module Datagrid
       # Filter does types conversion automatically.
       # The following filter types are supported:
       #
-      # * <tt>:string</tt> (default) - converts value to string
+      # * <tt>:default</tt> (default) - leave value as is
       # * <tt>:date</tt> - converts value to date using date parser
       # * <tt>:enum</tt> - designed to be collection select. Additional options for easy form generation:
-      #   * <tt>:select</tt> (required) - collection of values to match agains.
-      # * <tt>:boolean</tt> - converts value to true or false depending on whether it looks truly or falsy
-      # * <tt>:eboolean</tt> - subtype of enum filter that provides select of "Yes", "No" and "Any". Could be useful.
+      #   * <tt>:select</tt> (required) - collection of values to match against.
+      # * <tt>:boolean</tt> - converts value to true or false depending on whether it looks truly or not
       # * <tt>:integer</tt> - converts given value to integer.
+      # * <tt>:eboolean</tt> - subtype of enum filter that provides select of "Yes", "No" and "Any". Could be useful.
       #   
       # = Default filter options
       #

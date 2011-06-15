@@ -14,7 +14,6 @@ require 'rspec'
 require "active_record"
 require "will_paginate"
 require 'datagrid'
-require "datagrid/rspec"
 require 'ruby-debug'
 
 

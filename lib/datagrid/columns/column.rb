@@ -15,7 +15,11 @@ class Datagrid::Columns::Column
   end
 
   def value_for(object)
-    object.instance_eval(&self.block)
+    if self.block.arity == 1
+      self.block.call(object)
+    else
+      object.instance_eval(&self.block)
+    end
   end
 
   def format

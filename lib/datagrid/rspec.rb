@@ -1,3 +1,5 @@
+require "datagrid"
+
 shared_examples_for "Datagrid" do
   describe "as Datagrid" do
 

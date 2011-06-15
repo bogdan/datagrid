@@ -1,9 +1,10 @@
 require 'spec_helper'
+require "datagrid/rspec"
 
 
-describe SimpleReport do
+describe Datagrid do
   
-  it_should_behave_like 'Datagrid'
+  #it_should_behave_like 'Datagrid'
   
   let(:group) { Group.create!(:name => "Pop") }
   
@@ -40,7 +41,12 @@ describe SimpleReport do
 
     context "when not defined on class level" do
       before(:each) do
+        @scope = SimpleReport.instance_variable_get("@scope")
         SimpleReport.instance_variable_set("@scope", nil)
+      end
+
+      after(:each) do
+        SimpleReport.instance_variable_set("@scope", @scope)
       end
 
       it "should raise ConfigurationError" do
@@ -51,6 +57,7 @@ describe SimpleReport do
       end
     end
   end
+
 
 
 end

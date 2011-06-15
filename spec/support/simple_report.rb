@@ -15,11 +15,13 @@ class SimpleReport
     self.scoped(:conditions => {:name => value})
   end
 
-  column(:group, :order => "groups.name") do |model|
-    group.name
+  column(:group, :order => "groups.name") do
+    self.group.name
   end
 
-  column(:name)
+  column(:name) do |user|
+    user.name
+  end
 
   def param_name
     :report

@@ -26,9 +26,66 @@ module Datagrid
         @columns ||= []
       end
 
+      # Defines column that will be used to display data.
+      # 
+      # Example:
+      #     
+      #   class UserGrid 
+      #     include Datagrid
+      #
+      #     scope do
+      #       User.order("users.created_at desc").includes(:group)
+      #     end
+      #
+      #     column(:name)
+      #     column(:group, :order => "groups.name")
+      #       self.group.name
+      #     end
+      #     column(:active, :header => "Activated") do |user|
+      #       !user.disabled
+      #     end
+      #
+      #   end
+      #
+      # Each column will be used to generate data.
+      # In order to create grid that display all users:
+      #
+      #   grid = UserGrid.new
+      #   grid.rows 
+      #   grid.header # => ["Group", "Name", "Disabled"]
+      #   grid.rows   # => [
+      #               #      ["Steve", "Spammers", true],
+      #               #      [ "John", "Spoilers", true],
+      #               #      ["Berry", "Good people", false]
+      #               #    ]
+      #   grid.data   # => Header & Rows
+      #
+      # = Column value
+      #
+      # Column value can be defined by passing a block to <tt>#column</tt> method.
+      # If no block given column is generated automatically by sending column name method to model.
+      # The block could have zero arguments(<tt>instance_eval</tt>) or one argument that is model object.
+      #
+      # = Columns order
+      #
+      # Each column supports <tt>:order</tt> option that is used to specify SQL to sort data by the given column.
+      # In order to specify order for the given grid the following attributes are used:
+      #
+      # * <tt>:order</tt> - column name to use order. Default: nil.
+      # * <tt>:reverse</tt> - if true descending suffix is added to specified order. Default: false.
+      #
+      # 
+      # Example:
+      #
+      # grid = UserGrid.new(:order => :group, :reverse => true)
+      # grid.assets # => Return assets ordered by :group column descending
+      #
+      # = Options
+      #
+      # TODO
       def column(name, options = {}, &block)
-        block ||= lambda do
-          self.send(name)
+        block ||= lambda do |model|
+          model.send(name)
         end
         self.columns << Datagrid::Columns::Column.new(self, name, options, &block)
       end
@@ -56,10 +113,14 @@ module Datagrid
         result
       end
 
-      def data
+      def rows
         self.assets.map do |asset|
           self.row_for(asset)
         end
+      end
+
+      def data
+        self.rows.unshift(self.header)
       end
 
       def data_hash
@@ -83,7 +144,7 @@ module Datagrid
         FasterCSV.generate(
           {:headers => self.header, :write_headers => true}.merge(options)
         ) do |csv|
-          self.data.each do |row|
+          self.rows.each do |row|
             csv << row
           end
         end
