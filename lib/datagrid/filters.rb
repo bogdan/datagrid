@@ -63,7 +63,7 @@ module Datagrid
       #     end
       #   end
       #
-      # Each filter becomes grid atttribute.
+      # Each filter becomes grid attribute.
       # In order to create grid that display all users with name 'John' that have more than zero posts:
       #
       #   grid = UserGrid.new(:posts_count => 1, :name => "John")
@@ -86,9 +86,18 @@ module Datagrid
       # * <tt>:enum</tt> - designed to be collection select. Additional options for easy form generation:
       #   * <tt>:select</tt> (required) - collection of values to match agains.
       #   * <tt>:multiple</tt> - if true multiple values can be assigned to this filter. Default: false.
+      # * <tt>:boolean</tt> - converts value to true or false depending on whether it looks truly or falsy
       # * <tt>:eboolean</tt> - subtype of enum filter that provides select of "Yes", "No" and "Any". Could be useful.
       # * <tt>:integer</tt> - converts given value to integer.
       #   
+      # = Default filter options
+      #
+      # Options that could be passed to any filter type:
+      #
+      # * <tt>:header</tt> - human readable name of the filter. Default: generated from the filter name.
+      # * <tt>:default</tt> - default value of the filter. Default: nil.
+      # * <tt>:allow_nil</tt> - determines if filter should be called if filter value is nil. Default: false.
+      # * <tt>:allow_blank</tt> - determines if filter should be called if filter value is #blank?. Default: false.
       #
       def filter(attribute, type = :string, options = {}, &block)
 

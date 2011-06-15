@@ -30,26 +30,40 @@ class SimpleReport
   filter(:category, :enum, :select => ["first", "second"])
   filter(:disabled, :eboolean)
   filter(:confirmed, :boolean)
+  filter(:group_id, :multiple => true)
   integer_range_filter(:logins_count, :integer)
-  filter(:group_name) do |value|
+  filter(:group_name, :header => "Group") do |value|
     self.joins(:group).where(:groups => {:name => value})
   end
 
-  column(:group, :order => "groups.name") do |model|
-    group.name
-  end
 
   column(:name)
+  column(:group, :order => "groups.name") do |user|
+    user.name
+  end
+  column(:active, :header => "Activated") do |user|
+    !user.disabled
+  end
+
 
 
 end
 
 
-report = SimpleReport.new(:group_id => 5, :from_logins_count => 1, :category => "first")
-report.assets # => Array of User: SELECT * FROM users WHERE users.group_id = 5 AND users.logins_count >= 1 AND users.category = 'first'
-report.header
-report.rows
-report.data
+report = SimpleReport.new(:order => "group", :reverse => true, :group_id => [1,2], :from_logins_count => 1, :category => "first")
+
+report.assets # => Array of User instances: 
+              # SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count >= 1 AND users.category = 'first' ORDER BY groups.name DESC
+
+report.header # => ["Group", "Name", "Disabled"]
+report.rows   # => [
+              #      ["Steve", "Spammers", true],
+              #      [ "John", "Spoilers", true],
+              #      ["Berry", "Good people", false]
+              #    ]
+report.data   # => report.rows.unshift(report.header)
+
+report.to_csv # => Yes, it is
 
 ```
 
