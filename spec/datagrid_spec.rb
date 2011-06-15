@@ -49,8 +49,8 @@ describe SimpleReport do
         }.should raise_error(Datagrid::ConfigurationError)
         
       end
-      
     end
   end
+
 
 end

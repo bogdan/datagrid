@@ -4,10 +4,10 @@ class SimpleReport
 
 
   scope do
-    ::Entry.includes(:group).order(:created_at)
+    ::Entry.includes(:group).order("entries.created_at")
   end
 
-  filter(:group_id, :integer)
+  filter(:group_id, :integer, :multiple => true)
   filter(:category, :enum, :select => ["first", "second"])
   filter(:disabled, :eboolean)
   filter(:confirmed, :boolean)

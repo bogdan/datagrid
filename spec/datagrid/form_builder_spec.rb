@@ -30,7 +30,7 @@ describe Datagrid::FormBuilder do
     context "with integer filter type" do
       let(:_filter) { :group_id }
       it { should equal_to_dom(
-        '<input class="group_id integer_filter" id="report_group_id" name="report[group_id]" size="30" type="text"/>'
+        '<input class="group_id integer_filter" id="report_group_id" name="report[group_id]" size="30" type="text" value=""/>'
       )}
     end
     context "with enum filter type" do

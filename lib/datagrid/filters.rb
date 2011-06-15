@@ -85,7 +85,6 @@ module Datagrid
       # * <tt>:date</tt> - converts value to date using date parser
       # * <tt>:enum</tt> - designed to be collection select. Additional options for easy form generation:
       #   * <tt>:select</tt> (required) - collection of values to match agains.
-      #   * <tt>:multiple</tt> - if true multiple values can be assigned to this filter. Default: false.
       # * <tt>:boolean</tt> - converts value to true or false depending on whether it looks truly or falsy
       # * <tt>:eboolean</tt> - subtype of enum filter that provides select of "Yes", "No" and "Any". Could be useful.
       # * <tt>:integer</tt> - converts given value to integer.
@@ -96,6 +95,7 @@ module Datagrid
       #
       # * <tt>:header</tt> - human readable name of the filter. Default: generated from the filter name.
       # * <tt>:default</tt> - default value of the filter. Default: nil.
+      # * <tt>:multiple</tt> - if true multiple values can be assigned to this filter. Default: false.
       # * <tt>:allow_nil</tt> - determines if filter should be called if filter value is nil. Default: false.
       # * <tt>:allow_blank</tt> - determines if filter should be called if filter value is #blank?. Default: false.
       #
@@ -110,7 +110,7 @@ module Datagrid
         self.filters << filter
 
         datagrid_attribute(attribute) do |value|
-          filter.format(value)
+          filter.format_values(value)
         end
 
       end

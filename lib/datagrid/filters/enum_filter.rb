@@ -4,13 +4,10 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
     super(*args)
     raise Datagrid::ConfigurationError, ":select option not specified" unless select
   end
+
   def format(value)
-    values = Array.new([*value])
-    values.reject do |value|
-      #TODO: really impelement #strict option
-      self.strict && !select.include?(value)
-    end
-    self.multiple ? values : values.first
+    return nil if self.strict && !select.include?(value)
+    value
   end
 
   def select
@@ -26,7 +23,4 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
     self.options[:strict]
   end
 
-  def multiple
-    self.options[:multiple]
-  end
 end

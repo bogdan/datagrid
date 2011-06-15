@@ -11,23 +11,35 @@ class Datagrid::Filters::BaseFilter
     self.block = block
   end
 
+  def format(value)
+    raise NotImplementedError, "#format(value) suppose to be overwritten"
+  end
+
   def apply(scope, value)
     return scope if value.nil? && !options[:allow_nil]
     return scope if value.blank? && !options[:allow_blank]
     ::Datagrid::Filters::FilterEval.new(self, scope, value).run
   end
 
-  def format(value)
-    raise NotImplementedError, "#format(value) suppose to be overwritten"
+  def format_values(value)
+    values = Array(value)
+    values.map! do |value|
+      self.format(value)
+    end
+    self.multiple ? values : values.first
   end
 
   def header
-    I18n.translate(self.name, :scope => "datagrid.#{grid.class.to_s.underscore.split("/").last}.filters", :default => self.name.to_s.humanize)
+    options[:header] || 
+      I18n.translate(self.name, :scope => "datagrid.#{grid.class.to_s.underscore.split("/").last}.filters", :default => self.name.to_s.humanize)
   end
 
   def default
     self.options[:default]
   end
 
+  def multiple
+    self.options[:multiple]
+  end
 end
 
