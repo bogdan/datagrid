@@ -6,7 +6,12 @@ Ruby library that helps you to build and repsend table like data with:
 * Columns
 * Sort order
 * Localization
-* Exportort to CSV
+* Export to CSV
+
+
+*NOTE:* This gem is still under heavy development. If you find a bug don't consider this a peace of shit, just report it and I'll fix it shortly. 
+
+*This is not trivial staff, so a really need your help guys.*
 
 
 ### Grid DSL
@@ -66,7 +71,7 @@ report = SimpleReport.new(:order => "group", :reverse => true, :group_id => [1,2
 report.assets # => Array of User instances: 
               # SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count >= 1 AND users.category = 'first' ORDER BY groups.name DESC
 
-report.header # => ["Group", "Name", "Disabled"]
+report.header # => ["Group", "Name", "Activated"]
 report.rows   # => [
               #      ["Steve", "Spammers", true],
               #      [ "John", "Spoilers", true],
