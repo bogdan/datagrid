@@ -99,6 +99,10 @@ module Datagrid
       def param_name
         self.class.param_name
       end
+
+      def to_key
+        [self.class.param_name]
+      end
       
       protected
 
