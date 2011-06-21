@@ -21,9 +21,10 @@ module Datagrid
       options = args.extract_options!
       html = options[:html] || {}
       html[:class] ||= "datagrid"
-      paginate = options[:paginate] || {}
       paginate[:page] ||= params[:page]
-      assets = report.assets.paginate(paginate)
+      assets = report.assets
+      paginate = options[:paginate]
+      assets = assets.paginate(paginate) if paginate 
       content_tag(:table, html) do
         table = content_tag(:tr, datagrid_header(report, options))
         table << datagrid_rows(report.columns, assets, options)
