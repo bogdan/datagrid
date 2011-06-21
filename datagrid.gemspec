@@ -5,16 +5,15 @@
 
 Gem::Specification.new do |s|
   s.name = %q{datagrid}
-  s.version = "0.0.3"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = %q{2011-06-02}
+  s.date = %q{2011-06-21}
   s.description = %q{This allows you to easily build datagrid aka data tables with sortable columns and filters}
   s.email = %q{agresso@gmail.com}
   s.extra_rdoc_files = [
-    "LICENSE.txt",
-    "README.rdoc"
+    "LICENSE.txt"
   ]
   s.files = [
     ".document",
@@ -22,8 +21,8 @@ Gem::Specification.new do |s|
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
-    "README.rdoc",
     "Rakefile",
+    "Readme.md",
     "VERSION",
     "datagrid.gemspec",
     "lib/datagrid.rb",
@@ -43,10 +42,14 @@ Gem::Specification.new do |s|
     "lib/datagrid/form_builder.rb",
     "lib/datagrid/helper.rb",
     "lib/datagrid/rspec.rb",
+    "spec/datagrid/columns_spec.rb",
+    "spec/datagrid/form_builder_spec.rb",
+    "spec/datagrid/helper_spec.rb",
     "spec/datagrid_spec.rb",
-    "spec/simple_report_spec.rb",
     "spec/spec_helper.rb",
-    "tags"
+    "spec/support/equal_to_dom.rb",
+    "spec/support/schema.rb",
+    "spec/support/simple_report.rb"
   ]
   s.homepage = %q{http://github.com/bogdan/datagrid}
   s.licenses = ["MIT"]
@@ -62,7 +65,6 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<rails>, [">= 0"])
       s.add_development_dependency(%q<rake>, ["= 0.8.7"])
       s.add_development_dependency(%q<mocha>, [">= 0"])
-      s.add_development_dependency(%q<rspec-rails>, ["= 2.6.0"])
       s.add_development_dependency(%q<rspec>, ["= 2.6.0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6.0"])
@@ -76,7 +78,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rails>, [">= 0"])
       s.add_dependency(%q<rake>, ["= 0.8.7"])
       s.add_dependency(%q<mocha>, [">= 0"])
-      s.add_dependency(%q<rspec-rails>, ["= 2.6.0"])
       s.add_dependency(%q<rspec>, ["= 2.6.0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.6.0"])
@@ -91,7 +92,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rails>, [">= 0"])
     s.add_dependency(%q<rake>, ["= 0.8.7"])
     s.add_dependency(%q<mocha>, [">= 0"])
-    s.add_dependency(%q<rspec-rails>, ["= 2.6.0"])
     s.add_dependency(%q<rspec>, ["= 2.6.0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.6.0"])
