@@ -53,14 +53,15 @@ module Datagrid
       #   class UserGrid 
       #     include Datagrid
       #
+      #     scope do
+      #       User.order("users.created_at desc")
+      #     end
+      #
       #     filter(:name)
       #     filter(:posts_count, :integer) do |value|
       #       self.where(["posts_count >= ?", value])
       #     end
       #
-      #     scope do
-      #       User.order("users.created_at desc")
-      #     end
       #   end
       #
       # Each filter becomes grid attribute.
@@ -117,6 +118,7 @@ module Datagrid
 
       protected
       def default_filter(attribute)
+        check_scope_defined!("Scope should be defined before filters")
         if self.scope.column_names.include?(attribute.to_s)
           lambda do |value|
             self.scoped(:conditions => {attribute => value})

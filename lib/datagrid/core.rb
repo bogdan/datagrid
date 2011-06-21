@@ -35,13 +35,18 @@ module Datagrid
         if block
           @scope = block
         else
-          raise(Datagrid::ConfigurationError, "Scope not defined") unless @scope
+          check_scope_defined!
           @scope.call
         end
       end
 
       def param_name
         self.to_s.underscore.split('/').last
+      end
+
+      protected
+      def check_scope_defined!(message = "Scope not defined")
+        raise(Datagrid::ConfigurationError, message) unless @scope
       end
 
     end # ClassMethods
@@ -90,10 +95,17 @@ module Datagrid
         self.class.scope
       end
 
+
       def param_name
         self.class.param_name
       end
       
+      protected
+
+      def check_scope_defined!(message)
+        self.class.check_scope_defined!(message)
+      end
+
     end # InstanceMethods
   end
 end

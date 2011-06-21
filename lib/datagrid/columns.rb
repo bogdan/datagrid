@@ -77,13 +77,14 @@ module Datagrid
       # 
       # Example:
       #
-      # grid = UserGrid.new(:order => :group, :reverse => true)
-      # grid.assets # => Return assets ordered by :group column descending
+      #   grid = UserGrid.new(:order => :group, :reverse => true)
+      #   grid.assets # => Return assets ordered by :group column descending
       #
       # = Options
       #
       # TODO
       def column(name, options = {}, &block)
+        check_scope_defined!("Scope should be defined before columns")
         block ||= lambda do |model|
           model.send(name)
         end

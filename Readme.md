@@ -1,9 +1,11 @@
-## Datagrid
+# Datagrid
 
 Ruby library that helps you to build and repsend table like data with:
 
-* Filtering
+* Customizable filtering
+* Columns
 * Sort order
+* Localization
 * Exportort to CSV
 
 
@@ -15,6 +17,10 @@ In order to create a report You need to define:
 * filters that will be used to filter data
 * columns that should be displayed and sortable(if possible)
 
+
+### Working grid example
+
+In order to create a grid:
 
 ``` ruby
 
@@ -50,6 +56,11 @@ class SimpleReport
 end
 
 
+```
+
+Basic grid api:
+
+``` ruby
 report = SimpleReport.new(:order => "group", :reverse => true, :group_id => [1,2], :from_logins_count => 1, :category => "first")
 
 report.assets # => Array of User instances: 
@@ -61,10 +72,9 @@ report.rows   # => [
               #      [ "John", "Spoilers", true],
               #      ["Berry", "Good people", false]
               #    ]
-report.data   # => report.rows.unshift(report.header)
+report.data   # => [ header, *rows]
 
 report.to_csv # => Yes, it is
-
 ```
 
 ### Scope
@@ -77,8 +87,8 @@ In common case it is `ActiveRecord::Base` subclass with some generic scopes like
 Each filter definition consists of:
 
 * name of the filter
-* type that will be used for value conversion
-* conditions block that cegerates `ActiveRecord` scope
+* type that will be used for value typecast
+* conditions block that applies to defined scope
 * additional options
 
 Datagrid supports different type of filters including:
@@ -96,7 +106,9 @@ Read more about filters here:
 ### Columns
 
 Each column is represented by name and code block to calculate the value.
-If no block given the value will be the result of column name method call on object defined in Scope.
+Grids are sortable by it's columns. Ordering is controller by `#order` and `#reverse` attributes.
+
+More information about columns here:
 
 
 
