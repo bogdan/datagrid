@@ -30,11 +30,11 @@ module Datagrid
 
     protected
 
-    def datagrid_header(grid, options)
+    def datagrid_header(grid, options = {})
       header = empty_string
       grid.columns.each do |column|
         data = _safe(column.header)
-        if column.order
+        if options[:order] && column.order
           data << datagrid_order_for(grid, column)
         end
         header << content_tag(:th, data)
