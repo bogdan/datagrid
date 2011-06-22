@@ -44,6 +44,11 @@ module Datagrid
         self.to_s.underscore.split('/').last
       end
 
+      # Required for ActionView form builder
+      def model_name
+        self.param_name
+      end
+
       protected
       def check_scope_defined!(message = "Scope not defined")
         raise(Datagrid::ConfigurationError, message) unless @scope
