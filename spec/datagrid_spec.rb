@@ -26,7 +26,7 @@ describe Datagrid do
 
   describe ".attributes" do
     it "should return report attributes" do
-      (subject.filters.map(&:name) + [:order, :reverse]).each do |attribute|
+      (subject.filters.map(&:name) + [:order, :descending]).each do |attribute|
         subject.attributes.should have_key(attribute)
       end
     end

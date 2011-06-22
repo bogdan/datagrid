@@ -32,6 +32,7 @@ module Datagrid
 
     def datagrid_header(grid, options = {})
       header = empty_string
+      options[:order] = true unless options.has_key?(:order)
       grid.columns.each do |column|
         data = _safe(column.header)
         if options[:order] && column.order
@@ -60,7 +61,7 @@ module Datagrid
           :class => "order asc"
         ) + " " + link_to(
           I18n.t("datagrid.table.order.desc", :default => "DESC"),
-          url_for(grid.param_name => grid.attributes.merge(:order => column.name, :reverse => true )),
+          url_for(grid.param_name => grid.attributes.merge(:order => column.name, :descending => true )),
           :class => "order desc"
         )
       end

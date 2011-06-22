@@ -66,7 +66,7 @@ end
 Basic grid api:
 
 ``` ruby
-report = SimpleReport.new(:order => "group", :reverse => true, :group_id => [1,2], :from_logins_count => 1, :category => "first")
+report = SimpleReport.new(:order => "group", :descending => true, :group_id => [1,2], :from_logins_count => 1, :category => "first")
 
 report.assets # => Array of User instances: 
               # SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count >= 1 AND users.category = 'first' ORDER BY groups.name DESC
@@ -111,7 +111,7 @@ Read more about filters here:
 ### Columns
 
 Each column is represented by name and code block to calculate the value.
-Grids are sortable by it's columns. Ordering is controller by `#order` and `#reverse` attributes.
+Grids are sortable by it's columns. Ordering is controller by `#order` and `#descending` attributes.
 
 More information about columns here:
 

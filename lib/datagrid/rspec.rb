@@ -21,8 +21,8 @@ shared_examples_for "Datagrid" do
           subject.assets.first.should_not be_nil
         end
 
-        it "should support reverse order" do
-          subject.reverse = true
+        it "should support descending order" do
+          subject.descending = true
           subject.assets.first.should_not be_nil
         end
       end

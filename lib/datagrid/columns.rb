@@ -1,3 +1,5 @@
+require "datagrid/utils"
+
 module Datagrid
   
   class OrderUnsupported < StandardError
@@ -13,7 +15,9 @@ module Datagrid
         include Datagrid::Core
 
         datagrid_attribute :order
-        datagrid_attribute :reverse
+        datagrid_attribute :descending do |value|
+          Datagrid::Utils.booleanize(value)
+        end
 
 
       end
@@ -63,26 +67,32 @@ module Datagrid
       # = Column value
       #
       # Column value can be defined by passing a block to <tt>#column</tt> method.
-      # If no block given column is generated automatically by sending column name method to model.
+      # If no block given column it is generated automatically by sending column name method to model.
       # The block could have zero arguments(<tt>instance_eval</tt>) or one argument that is model object.
+      #
+      # = Column options
+      #
+      # The following options can be passed to column definition:
+      #
+      # * <tt>:order</tt> - an order SQL that should be used to sort by this column. 
+      # Default: report column name if there is database column with this name.
+      # * <tt>:order_desc</tt> - descending order expression from this column. Default: "#{order} desc".
+      #
+      # TODO: frontend options description
       #
       # = Columns order
       #
       # Each column supports <tt>:order</tt> option that is used to specify SQL to sort data by the given column.
-      # In order to specify order for the given grid the following attributes are used:
+      # In order to specify order the following attributes are used:
       #
-      # * <tt>:order</tt> - column name to use order. Default: nil.
-      # * <tt>:reverse</tt> - if true descending suffix is added to specified order. Default: false.
+      # * <tt>:order</tt> - column name to sort with as <tt>Symbol</tt>. Default: nil.
+      # * <tt>:descending</tt> - if true descending suffix is added to specified order. Default: false.
       #
-      # 
       # Example:
       #
-      #   grid = UserGrid.new(:order => :group, :reverse => true)
+      #   grid = UserGrid.new(:order => :group, :descending => true)
       #   grid.assets # => Return assets ordered by :group column descending
       #
-      # = Options
-      #
-      # TODO
       def column(name, options = {}, &block)
         check_scope_defined!("Scope should be defined before columns")
         block ||= lambda do |model|
@@ -135,7 +145,7 @@ module Datagrid
         if self.order
           column = column_by_name(self.order)
           raise Datagrid::OrderUnsupported, "Can not sort #{self.inspect} by #{name.inspect}" unless column
-          result = result.order(self.reverse ? column.desc_order : column.order)
+          result = result.order(self.descending ? column.desc_order : column.order)
         end
         result
       end
