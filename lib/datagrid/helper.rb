@@ -12,7 +12,7 @@ module Datagrid
         when :url
           link_to(column.label  ? asset.send(column.label) : I18n.t("datagrid.table.url_label", :default => "URL"), value)
         else
-          value
+          _safe(value)
         end
       end
     end
@@ -24,11 +24,8 @@ module Datagrid
       assets = report.assets
       paginate = options[:paginate]
       assets = assets.paginate(paginate) if paginate 
-      content_tag(:table, html) do
-        table = content_tag(:tr, datagrid_header(report, options))
-        table << datagrid_rows(report.columns, assets, options)
-        table
-      end
+      content = content_tag(:tr, datagrid_header(report, options)) + datagrid_rows(report.columns, assets, options)
+      content_tag(:table, content, html)
     end
 
     protected
@@ -36,7 +33,7 @@ module Datagrid
     def datagrid_header(grid, options)
       header = empty_string
       grid.columns.each do |column|
-        data = column.header.html_safe
+        data = _safe(column.header)
         if column.order
           data << datagrid_order_for(grid, column)
         end
@@ -46,32 +43,36 @@ module Datagrid
     end
 
     def datagrid_rows(columns, assets, options)
-      rows = empty_string
-      assets.each do |asset|
-        rows << content_tag(:tr, :class => cycle("odd", "even")) do
-          html = empty_string
-          columns.each do |column|
-            html << content_tag(:td, datagrid_format_value(column, asset))
-          end
-          html
-        end
-
-      end
-      rows
+      result = assets.map do |asset|
+        content = columns.map do |column|
+          content_tag(:td, datagrid_format_value(column, asset))
+        end.join(empty_string)
+        content_tag(:tr, _safe(content), :class => cycle("odd", "even"))
+      end.join(empty_string)
+      _safe(result)
     end
 
     def datagrid_order_for(grid, column)
       content_tag(:div, :class => "order") do
         link_to(
-          I18n.t("datagrid.table.order.asc", :default => "ASC"), url_for(grid.param_name => grid.attributes.merge(:order => column.name))
-        ) + " " +
-          link_to(I18n.t("datagrid.table.order.desc", :default => "DESC"), url_for(grid.param_name => grid.attributes.merge(:order => column.name, :reverse => true )))
+          I18n.t("datagrid.table.order.asc", :default => "ASC"), 
+          url_for(grid.param_name => grid.attributes.merge(:order => column.name)),
+          :class => "order asc"
+        ) + " " + link_to(
+          I18n.t("datagrid.table.order.desc", :default => "DESC"),
+          url_for(grid.param_name => grid.attributes.merge(:order => column.name, :reverse => true )),
+          :class => "order desc"
+        )
       end
     end
 
+    protected
     def empty_string
-      res = ""
-      res.respond_to?(:html_safe) ? res.html_safe : res
+      _safe("")
+    end
+
+    def _safe(string)
+      string.respond_to?(:html_safe) ? string.html_safe : string
     end
   end
 
