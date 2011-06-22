@@ -103,7 +103,7 @@ module Datagrid
       def filter(attribute, type = :string, options = {}, &block)
 
         klass = type.is_a?(Class) ? type : FILTER_TYPES[type]
-        raise ConfigurationError, "filter class not found" unless klass
+        raise ConfigurationError, "filter class #{type.inspect} not found" unless klass
 
         block ||= default_filter(attribute)
 

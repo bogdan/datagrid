@@ -1,7 +1,17 @@
+
+
+def test_report(&block)
+  klass = Class.new
+  klass.class_eval do
+    include Datagrid
+  end
+  klass.class_eval(&block)
+  klass.new
+end
+
 class SimpleReport
 
   include Datagrid
-
 
   scope do
     ::Entry.includes(:group).order("entries.created_at")
@@ -11,6 +21,7 @@ class SimpleReport
   filter(:category, :enum, :select => ["first", "second"])
   filter(:disabled, :eboolean)
   filter(:confirmed, :boolean)
+
   filter(:name) do |value|
     self.scoped(:conditions => {:name => value})
   end

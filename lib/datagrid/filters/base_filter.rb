@@ -35,7 +35,8 @@ class Datagrid::Filters::BaseFilter
   end
 
   def default
-    self.options[:default]
+    default = self.options[:default]
+    default.respond_to?(:call) ? default.call : default
   end
 
   def multiple
