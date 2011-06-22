@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{datagrid}
-  s.version = "0.1.2"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
     "Gemfile.lock",
     "LICENSE.txt",
     "Rakefile",
-    "Readme.md",
+    "Readme.markdown",
     "VERSION",
     "datagrid.gemspec",
     "lib/datagrid.rb",
@@ -42,6 +42,7 @@ Gem::Specification.new do |s|
     "lib/datagrid/form_builder.rb",
     "lib/datagrid/helper.rb",
     "lib/datagrid/rspec.rb",
+    "lib/datagrid/utils.rb",
     "spec/datagrid/columns_spec.rb",
     "spec/datagrid/filters_spec.rb",
     "spec/datagrid/form_builder_spec.rb",
