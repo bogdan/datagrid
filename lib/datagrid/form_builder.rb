@@ -7,8 +7,13 @@ module Datagrid
       filter = get_filter(filter_or_attribute)
       options[:class] ||= ""
       options[:class] += " " unless options[:class].blank?
-      options[:class] += "#{filter.name} #{datagrid_filter_class(filter.class)}"
-      self.send(:"datagrid_#{filter.class.to_s.underscore.split('/').last}", filter, options)
+      options[:class] += "#{filter.name} #{datagrid_html_class(filter.class)}"
+      self.send(datagrid_filter_method(filter), filter, options)
+    end
+
+    def datagrid_label(filter_or_attribute, options = {})
+      filter = get_filter(filter_or_attribute)
+      self.label(filter.name, filter.header, options = {})
     end
 
     protected
@@ -43,11 +48,23 @@ module Datagrid
     end
 
     def get_filter(attribute_or_filter)
-      attribute_or_filter.is_a?(Symbol) ? object.class.filter_by_name(attribute_or_filter) : attribute_or_filter
+      if attribute_or_filter.is_a?(Symbol) 
+        object.class.filter_by_name(attribute_or_filter) || 
+          raise(Error, "filter #{attribute_or_filter} not found")
+      else
+        attribute_or_filter
+      end
     end
 
-    def datagrid_filter_class(klass)
+    def datagrid_html_class(klass)
       klass.to_s.split("::").last.underscore
+    end
+
+    def datagrid_filter_method(filter)
+      :"datagrid_#{filter.class.to_s.underscore.split('/').last}"
+    end
+
+    class Error < StandardError
     end
   end
 end

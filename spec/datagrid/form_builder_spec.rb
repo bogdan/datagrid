@@ -61,6 +61,14 @@ describe Datagrid::FormBuilder do
       )}
     end
   end
+
+  describe ".datagrid_label" do
+    it "should generate label for filter" do
+      view.datagrid_label(:name).should equal_to_dom(
+        '<label for="report_name">Name</label>'
+      )
+    end
+  end
 end
 
 

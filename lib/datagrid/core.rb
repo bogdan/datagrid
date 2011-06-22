@@ -100,8 +100,14 @@ module Datagrid
         self.class.param_name
       end
 
+      # Required for ActionView form builder
       def to_key
         [self.class.param_name]
+      end
+
+      # Required for ActionView form builder
+      def persisted?
+        false
       end
       
       protected
