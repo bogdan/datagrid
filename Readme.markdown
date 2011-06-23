@@ -66,7 +66,14 @@ end
 Basic grid api:
 
 ``` ruby
-report = SimpleReport.new(:order => "group", :descending => true, :group_id => [1,2], :from_logins_count => 1, :category => "first")
+report = SimpleReport.new(
+        :order => "group", 
+        :descending => true, 
+        :group_id => [1,2], :from_logins_count => 1, 
+        :category => "first",
+        :order => :group,
+        :descending => true
+)
 
 report.assets # => Array of User instances: 
               # SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count >= 1 AND users.category = 'first' ORDER BY groups.name DESC
@@ -105,15 +112,15 @@ Datagrid supports different type of filters including:
 * eboolean - the select of "yes", "no" and any
 * enum
 
-Read more about filters here:
+[Read more about filters](http://rdoc.info/github/bogdan/datagrid/master/Datagrid/Filters/ClassMethods:filter)
 
 
 ### Columns
 
 Each column is represented by name and code block to calculate the value.
-Grids are sortable by it's columns. Ordering is controller by `#order` and `#descending` attributes.
+Each column is sortable.
 
-More information about columns here:
+[More about columns](http://rdoc.info/github/bogdan/datagrid/master/Datagrid/Columns/ClassMethods:column) 
 
 
 

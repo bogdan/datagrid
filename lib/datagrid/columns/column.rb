@@ -34,7 +34,7 @@ class Datagrid::Columns::Column
 
   def header
     self.options[:header] || 
-      I18n.translate(self.name, :scope => "reports.#{self.grid}.columns", :default => self.name.to_s.humanize )
+      I18n.translate(self.name, :scope => "reports.#{self.grid.param_name}.columns", :default => self.name.to_s.humanize )
   end
 
   def order

@@ -100,6 +100,15 @@ module Datagrid
       # * <tt>:allow_nil</tt> - determines if filter should be called if filter value is nil. Default: false.
       # * <tt>:allow_blank</tt> - determines if filter should be called if filter value is #blank?. Default: false.
       #
+      # = Localization
+      #
+      # Filter label in the form can be specified with <tt>:header</tt> option.
+      # By default it is generated from filter name.
+      # Also you can use localization file if you have multilanguage application.
+      #
+      # Example: In order to localize filter <tt>:group_name</tt> in <tt>SimpleReport</tt> 
+      # use the key <tt>datagrid.simple_report.filters.group_name</tt>
+      #
       def filter(attribute, type = :string, options = {}, &block)
 
         klass = type.is_a?(Class) ? type : FILTER_TYPES[type]

@@ -75,7 +75,7 @@ module Datagrid
       #
       #   column(:completed) { self.completed? }
       #
-      # If you don't like <tt>instance_eval</tt> you can use arguments:
+      # If you don't like <tt>instance_eval</tt> you can use asset as first argument:
       #
       #   column(:completed { |asset| asset.completed? }
       #
@@ -89,29 +89,35 @@ module Datagrid
       #     asset.category == grid.category
       #   end
       #
-      # = Column options
+      # = Ordering
       #
-      # The following options can be passed to column definition:
+      # Each column supports the following options that is used to specify SQL to sort data by the given column:
       #
       # * <tt>:order</tt> - an order SQL that should be used to sort by this column. 
       # Default: report column name if there is database column with this name.
       # * <tt>:order_desc</tt> - descending order expression from this column. Default: "#{order} desc".
       #
-      # Example: Suppose that assets with null priority should be always on bottom.
+      #   column(:group_name, :order => "groups.name)
       #
+      #   # Suppose that assets with null priority should be always on bottom.
       #   column(:priority, :order => "priority is not null desc, priority", :order_desc => "prioritty is not null desc, priority desc")
       #
-      # = Columns order
-      #
-      # Each column supports <tt>:order</tt> option that is used to specify SQL to sort data by the given column.
-      # In order to specify order the following attributes are used:
+      # In order to specify order the following attributes are used for <tt>Datagrid</tt> instance:
       #
       # * <tt>:order</tt> - column name to sort with as <tt>Symbol</tt>. Default: nil.
       # * <tt>:descending</tt> - if true descending suffix is added to specified order. Default: false.
       #
-      # Example:
-      #
       #   UserGrid.new(:order => :group, :descending => true).assets # => assets ordered by :group column descending
+      #
+      # = Localization
+      #
+      # Column header can be specified with <tt>:header</tt> option.
+      # By default it is generated from column name.
+      # Also you can use localization file if you have multilanguage application.
+      #
+      # Example: In order to localize column <tt>:name</tt> in <tt>SimpleReport</tt> 
+      # use the key <tt>datagrid.simple_report.columns.name</tt>
+      # 
       #
       def column(name, options = {}, &block)
         check_scope_defined!("Scope should be defined before columns")
