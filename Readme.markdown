@@ -112,7 +112,7 @@ Datagrid supports different type of filters including:
 * eboolean - the select of "yes", "no" and any
 * enum
 
-[Read more about filters](http://rdoc.info/github/bogdan/datagrid/master/Datagrid/Filters/ClassMethods:filter)
+[More about filters](http://rdoc.info/github/bogdan/datagrid/master/Datagrid/Filters/ClassMethods)
 
 
 ### Columns
@@ -120,7 +120,7 @@ Datagrid supports different type of filters including:
 Each column is represented by name and code block to calculate the value.
 Each column is sortable.
 
-[More about columns](http://rdoc.info/github/bogdan/datagrid/master/Datagrid/Columns/ClassMethods:column) 
+[More about columns](http://rdoc.info/github/bogdan/datagrid/master/Datagrid/Columns/ClassMethods) 
 
 
 

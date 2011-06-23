@@ -132,16 +132,19 @@ module Datagrid
 
     module InstanceMethods
 
+      # Returns <tt>Array</tt> of human readable column names. See also "Localization" section
       def header
         self.class.columns.map(&:header)
       end
 
+      # Returns <tt>Array</tt> column values for given asset
       def row_for(asset)
         self.class.columns.map do |column|
           column.value(asset, self)
         end
       end
 
+      # Returns <tt>Hash</tt> where keys are column names and values are column values for the given asset
       def hash_for(asset)
         result = {}
         self.class.columns.each do |column|
@@ -177,8 +180,14 @@ module Datagrid
       end
 
       def to_csv(options = {})
-        require "fastercsv"
-        FasterCSV.generate(
+        klass = if RUBY_VERSION >= "1.9"
+                  require 'csv'
+                  CSV
+                else
+                  require "fastercsv"
+                  FasterCSV
+                end
+        klass.generate(
           {:headers => self.header, :write_headers => true}.merge(options)
         ) do |csv|
           self.rows.each do |row|
