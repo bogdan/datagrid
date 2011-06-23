@@ -3,8 +3,8 @@ require "action_view"
 module Datagrid
   module Helper
 
-    def datagrid_format_value(column, asset)
-      value = column.value(asset)
+    def datagrid_format_value(report, column, asset)
+      value = column.value(asset, report)
       if column.options[:url]
         link_to(value, column.options[:url].call(asset))
       else
@@ -24,7 +24,7 @@ module Datagrid
       assets = report.assets
       paginate = options[:paginate]
       assets = assets.paginate(paginate) if paginate 
-      content = content_tag(:tr, datagrid_header(report, options)) + datagrid_rows(report.columns, assets, options)
+      content = content_tag(:tr, datagrid_header(report, options)) + datagrid_rows(report, assets, options)
       content_tag(:table, content, html)
     end
 
@@ -43,10 +43,11 @@ module Datagrid
       header
     end
 
-    def datagrid_rows(columns, assets, options)
+    def datagrid_rows(report, assets, options)
+      columns = report.columns
       result = assets.map do |asset|
         content = columns.map do |column|
-          content_tag(:td, datagrid_format_value(column, asset))
+          content_tag(:td, datagrid_format_value(report, column, asset))
         end.join(empty_string)
         content_tag(:tr, _safe(content), :class => cycle("odd", "even"))
       end.join(empty_string)

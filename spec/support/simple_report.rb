@@ -1,12 +1,12 @@
 
 
-def test_report(&block)
+def test_report(attributes = {}, &block)
   klass = Class.new
   klass.class_eval do
     include Datagrid
   end
   klass.class_eval(&block)
-  klass.new
+  klass.new(attributes)
 end
 
 class SimpleReport

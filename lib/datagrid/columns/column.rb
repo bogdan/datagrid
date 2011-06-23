@@ -10,15 +10,17 @@ class Datagrid::Columns::Column
     self.block = block
   end
 
-  def value(object)
-    value_for(object)
+  def value(model, report)
+    value_for(model, report)
   end
 
-  def value_for(object)
+  def value_for(model, report)
     if self.block.arity == 1
-      self.block.call(object)
+      self.block.call(model)
+    elsif self.block.arity == 2
+      self.block.call(model, report)
     else
-      object.instance_eval(&self.block)
+      model.instance_eval(&self.block)
     end
   end
 

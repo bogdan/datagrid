@@ -66,9 +66,28 @@ module Datagrid
       #
       # = Column value
       #
-      # Column value can be defined by passing a block to <tt>#column</tt> method.
+      # Column value can be defined by passing a block to <tt>Datagrid.column</tt> method.
       # If no block given column it is generated automatically by sending column name method to model.
-      # The block could have zero arguments(<tt>instance_eval</tt>) or one argument that is model object.
+      # 
+      #   column(:name) # => asset.name
+      #
+      # The block could have no arguments(<tt>instance_eval</tt> for each asset will be used). 
+      #
+      #   column(:completed) { self.completed? }
+      #
+      # If you don't like <tt>instance_eval</tt> you can use arguments:
+      #
+      #   column(:completed { |asset| asset.completed? }
+      #
+      # For the most complicated columns you can also pass datagrid object itself:
+      #
+      #   filter(:category) do |value|
+      #     where("category LIKE '%#{value}%'")
+      #   end
+      #
+      #   column(:exact_category) do |asset, grid|
+      #     asset.category == grid.category
+      #   end
       #
       # = Column options
       #
@@ -78,7 +97,9 @@ module Datagrid
       # Default: report column name if there is database column with this name.
       # * <tt>:order_desc</tt> - descending order expression from this column. Default: "#{order} desc".
       #
-      # TODO: frontend options description
+      # Example: Suppose that assets with null priority should be always on bottom.
+      #
+      #   column(:priority, :order => "priority is not null desc, priority", :order_desc => "prioritty is not null desc, priority desc")
       #
       # = Columns order
       #
@@ -90,8 +111,7 @@ module Datagrid
       #
       # Example:
       #
-      #   grid = UserGrid.new(:order => :group, :descending => true)
-      #   grid.assets # => Return assets ordered by :group column descending
+      #   UserGrid.new(:order => :group, :descending => true).assets # => assets ordered by :group column descending
       #
       def column(name, options = {}, &block)
         check_scope_defined!("Scope should be defined before columns")
@@ -112,7 +132,7 @@ module Datagrid
 
       def row_for(asset)
         self.class.columns.map do |column|
-          column.value(asset)
+          column.value(asset, self)
         end
       end
 
