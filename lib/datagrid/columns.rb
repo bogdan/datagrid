@@ -145,7 +145,7 @@ module Datagrid
       def hash_for(asset)
         result = {}
         self.class.columns.each do |column|
-          result[column.name] = column.value(asset)
+          result[column.name] = column.value(asset, self)
         end
         result
       end
