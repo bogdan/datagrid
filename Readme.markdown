@@ -41,9 +41,9 @@ class SimpleReport
   filter(:category, :enum, :select => ["first", "second"])
   filter(:disabled, :eboolean)
   filter(:confirmed, :boolean)
-  filter(:group_id, :multiple => true)
+  filter(:group_id, :integer, :multiple => true)
   integer_range_filter(:logins_count, :integer)
-  filter(:group_name, :header => "Group") do |value|
+  filter(:group_name, :string, :header => "Group") do |value|
     self.joins(:group).where(:groups => {:name => value})
   end
 
@@ -92,7 +92,13 @@ report.to_csv # => Yes, it is
 ### Scope
 
 Default scope of objects to filter and display.
-In common case it is `ActiveRecord::Base` subclass with some generic scopes like in example above.
+In common case it is `ActiveRecord::Base` subclass with some generic scopes like in example above:
+
+``` ruby
+  scope do
+    User.includes(:group)
+  end
+```
 
 ### Filters
 
@@ -111,16 +117,18 @@ Datagrid supports different type of filters including:
 * boolean
 * eboolean - the select of "yes", "no" and any
 * enum
+* string
 
-[More about filters](http://rdoc.info/github/bogdan/datagrid/master/Datagrid/Filters/ClassMethods)
+[More about filters](https://github.com/bogdan/datagrid/wiki/Filters)
 
 
 ### Columns
 
 Each column is represented by name and code block to calculate the value.
+Some formatting options are also available. 
 Each column is sortable.
 
-[More about columns](http://rdoc.info/github/bogdan/datagrid/master/Datagrid/Columns/ClassMethods) 
+[More about columns](https://github.com/bogdan/datagrid/wiki/Columns) 
 
 
 
