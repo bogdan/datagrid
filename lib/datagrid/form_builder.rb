@@ -43,6 +43,10 @@ module Datagrid
       text_field get_attribute(attribute_or_filter), options
     end
 
+    def datagrid_string_filter(attribute_or_filter, options = {})
+      datagrid_default_filter(attribute_or_filter, options)
+    end
+
     def get_attribute(attribute_or_filter)
       attribute_or_filter.is_a?(Symbol) ?  attribute_or_filter : attribute_or_filter.name 
     end

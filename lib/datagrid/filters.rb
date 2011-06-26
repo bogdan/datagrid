@@ -10,10 +10,11 @@ module Datagrid
     require "datagrid/filters/filter_eval"
     require "datagrid/filters/integer_filter"
     require "datagrid/filters/composite_filters"
+    require "datagrid/filters/string_filter"
 
     FILTER_TYPES = {
       :date => Filters::DateFilter,
-      :string => Filters::DefaultFilter,
+      :string => Filters::StringFilter,
       :default => Filters::DefaultFilter,
       :eboolean => Filters::BooleanEnumFilter ,
       :boolean => Filters::BooleanFilter ,

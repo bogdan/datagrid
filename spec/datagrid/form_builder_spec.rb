@@ -60,6 +60,18 @@ describe Datagrid::FormBuilder do
        <option value="YES">YES</option></select>'
       )}
     end
+    context "with string filter" do
+      let(:grid) do
+        test_report do
+          scope {Entry}
+          filter(:name, :string)
+        end
+      end
+
+      let(:_filter) { :name }
+
+    it {should equal_to_dom('<input class="name string_filter" id="report_name" name="report[name]" size="30" type="text">')}
+    end
   end
 
   describe ".datagrid_label" do
@@ -69,6 +81,7 @@ describe Datagrid::FormBuilder do
       )
     end
   end
+
 end
 
 
