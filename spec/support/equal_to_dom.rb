@@ -16,7 +16,7 @@ class IncludeDom
 
   def matches?(text)
     @matcher = Nokogiri::HTML::DocumentFragment.parse(text).to_s
-    @matcher.include?(@expectation)
+    @matcher == @expectation
   end
 
   def failure_message

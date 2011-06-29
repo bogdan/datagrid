@@ -28,7 +28,6 @@ module Datagrid
       content_tag(:table, content, html)
     end
 
-    protected
 
     def datagrid_header(grid, options = {})
       header = empty_string
@@ -49,7 +48,7 @@ module Datagrid
         content = columns.map do |column|
           content_tag(:td, datagrid_format_value(report, column, asset))
         end.join(empty_string)
-        content_tag(:tr, _safe(content), :class => cycle("odd", "even"))
+        content_tag(:tr, _safe(content), :class => options[:cycle] && cycle(*options[:cycle]))
       end.join(empty_string)
       _safe(result)
     end

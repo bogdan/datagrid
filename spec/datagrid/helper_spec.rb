@@ -34,11 +34,20 @@ describe Datagrid::Helper do
 </th>
 </tr>
 
-<tr class="odd">
+<tr>
 <td>Pop</td>
 <td>Star</td>
 </tr>
 </table>')
+    end
+
+    it "should support cycle option" do
+      subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"]).should equal_to_dom(
+'<tr class="odd">
+<td>Pop</td>
+<td>Star</td>
+</tr>'
+      )
     end
   end
   
