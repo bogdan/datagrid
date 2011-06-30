@@ -40,7 +40,11 @@ module Datagrid
     end
 
     def datagrid_integer_filter(attribute_or_filter, options = {})
-      text_field get_attribute(attribute_or_filter), options
+      filter = get_filter(attribute_or_filter)
+      if filter.multiple && self.object[filter.name].blank?
+        options[:value] = "" 
+      end
+      text_field filter.name, options
     end
 
     def datagrid_string_filter(attribute_or_filter, options = {})

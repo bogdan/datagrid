@@ -5,7 +5,6 @@ class Datagrid::Filters::BooleanEnumFilter < Datagrid::Filters::EnumFilter
   VALUES = {YES => true, NO => false}
 
   def initialize(report, attribute, options = {}, &block)
-    options[:allow_blank] = true unless options.has_key?(:allow_blank)
     options[:select] = VALUES.keys
     super(report, attribute, options, &block)
   end

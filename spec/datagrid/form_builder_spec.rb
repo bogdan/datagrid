@@ -56,9 +56,9 @@ describe Datagrid::FormBuilder do
       let(:_filter) { :disabled }
       it { should equal_to_dom(
         '<select class="disabled boolean_enum_filter" id="report_disabled" name="report[disabled][]"><option value=""></option>
-       <option value="NO">NO</option>
-       <option value="YES">YES</option></select>'
-      )}
+       <option value="YES">YES</option>
+       <option value="NO">NO</option></select>'
+      )} #TODO: review unwanted [] in name here
     end
     context "with string filter" do
       let(:grid) do
