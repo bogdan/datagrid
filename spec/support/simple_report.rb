@@ -5,7 +5,9 @@ def test_report(attributes = {}, &block)
   klass.class_eval do
     include Datagrid
   end
-  klass.class_eval(&block)
+  if block
+    klass.class_eval(&block)
+  end
   klass.new(attributes)
 end
 

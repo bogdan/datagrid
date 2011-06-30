@@ -44,4 +44,22 @@ describe Datagrid::Columns do
     report.rows.first.first.should be_true
     report.rows.last.first.should be_false
   end
+
+
+  it "should raise error if ordered by not existing column" do
+    lambda {
+      test_report(:order => :hello)
+    }.should raise_error(Datagrid::OrderUnsupported)
+  end
+
+  it "should raise error if ordered by column without order" do
+    lambda {
+      test_report(:order => :category) do
+        filter(:category, :default, :order => false) do |value|
+          self
+        end
+      end
+    }.should raise_error(Datagrid::OrderUnsupported)
+  end
+
 end

@@ -14,7 +14,24 @@ module Datagrid
 
         include Datagrid::Core
 
-        datagrid_attribute :order
+        datagrid_attribute :order do |value|
+          unless value.blank?
+            value = value.to_sym
+            column = column_by_name(value)
+            unless column 
+              order_unsupported(value, "no column #{value} in #{self.class}")
+            end
+            unless column.order
+              order_unsupported(
+                name, "#{self.class}##{name} don't support order" 
+              ) 
+            end
+            value
+          else
+            nil
+          end
+
+        end
         datagrid_attribute :descending do |value|
           Datagrid::Utils.booleanize(value)
         end
@@ -38,7 +55,15 @@ module Datagrid
         self.columns << Datagrid::Columns::Column.new(self, name, options, &block)
       end
 
+      def order_unsupported(name, reason)
+          raise Datagrid::OrderUnsupported, "Can not sort #{self.inspect} by ##{name}: #{reason}"
+      end
 
+      def column_by_name(name)
+        self.columns.find do |col|
+          col.name.to_sym == name.to_sym
+        end
+      end
     end # ClassMethods
 
     module InstanceMethods
@@ -84,7 +109,6 @@ module Datagrid
         result = super
         if self.order
           column = column_by_name(self.order)
-          raise Datagrid::OrderUnsupported, "Can not sort #{self.inspect} by #{name.inspect}" unless column
           result = result.order(self.descending ? column.desc_order : column.order)
         end
         result
@@ -112,9 +136,7 @@ module Datagrid
       end
 
       def column_by_name(name)
-        self.columns.find do |col|
-          col.name.to_sym == name.to_sym
-        end
+        self.class.column_by_name(name)
       end
 
     end # InstanceMethods
