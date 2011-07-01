@@ -65,12 +65,8 @@ module Datagrid
       protected
       def default_filter(attribute)
         check_scope_defined!("Scope should be defined before filters")
-        if self.scope.column_names.include?(attribute.to_s)
-          lambda do |value|
-            self.scoped(:conditions => {attribute => value})
-          end
-        else
-          raise ConfigurationError, "Not able to generate default filter. No column '#{attribute}' in #{self.scope.table_name}."
+        lambda do |value|
+          self.scoped(:conditions => {attribute => value})
         end
       end
 

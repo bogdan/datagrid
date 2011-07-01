@@ -19,5 +19,17 @@ describe Datagrid::Filters do
     }.should raise_error(Datagrid::ArgumentError)
   end
   
+
+  it "should initialize report Scope table not exists" do
+    class ModelWithoutTable < ActiveRecord::Base; end
+    class TheReport
+      include Datagrid
+
+      scope {ModelWithoutTable}
+
+      filter(:name)
+    end
+
+  end
   
 end

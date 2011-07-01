@@ -56,7 +56,7 @@ module Datagrid
       end
 
       def order_unsupported(name, reason)
-          raise Datagrid::OrderUnsupported, "Can not sort #{self.inspect} by ##{name}: #{reason}"
+        raise Datagrid::OrderUnsupported, "Can not sort #{self.inspect} by ##{name}: #{reason}"
       end
 
       def column_by_name(name)
