@@ -36,7 +36,10 @@ module Datagrid
 
     def datagrid_enum_filter(attribute_or_filter, options = {})
       filter = get_filter(attribute_or_filter)
-      select filter.name, filter.select || [], {:include_blank => filter.include_blank}, {:multiple => filter.multiple}.merge(options)
+      if !options.has_key?(:multiple) && filter.multiple
+        options[:multiple] = true
+      end
+      select filter.name, filter.select || [], {:include_blank => filter.include_blank}, options
     end
 
     def datagrid_integer_filter(attribute_or_filter, options = {})

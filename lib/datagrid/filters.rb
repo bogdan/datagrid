@@ -46,7 +46,9 @@ module Datagrid
       end
 
 
-      def filter(attribute, type = :default, options = {}, &block)
+      def filter(attribute, *args, &block)
+        options = args.extract_options!
+        type = args.shift || :default
 
         klass = type.is_a?(Class) ? type : FILTER_TYPES[type]
         raise ConfigurationError, "filter class #{type.inspect} not found" unless klass

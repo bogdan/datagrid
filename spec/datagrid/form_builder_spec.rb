@@ -36,7 +36,7 @@ describe Datagrid::FormBuilder do
     context "with enum filter type" do
       let(:_filter) { :category }
       it { should equal_to_dom(
-        '<select class="category enum_filter" id="report_category" name="report[category][]"><option value=""></option>
+        '<select class="category enum_filter" id="report_category" name="report[category]"><option value=""></option>
        <option value="first">first</option>
        <option value="second">second</option></select>'
       )}
@@ -45,7 +45,7 @@ describe Datagrid::FormBuilder do
           grid.category = "first"
         end
         it { should equal_to_dom(
-          '<select class="category enum_filter" id="report_category" name="report[category][]"><option value=""></option>
+          '<select class="category enum_filter" id="report_category" name="report[category]"><option value=""></option>
        <option value="first" selected="true">first</option>
        <option value="second">second</option></select>'
         )}
@@ -55,10 +55,10 @@ describe Datagrid::FormBuilder do
     context "with eboolean filter type" do
       let(:_filter) { :disabled }
       it { should equal_to_dom(
-        '<select class="disabled boolean_enum_filter" id="report_disabled" name="report[disabled][]"><option value=""></option>
+        '<select class="disabled boolean_enum_filter" id="report_disabled" name="report[disabled]"><option value=""></option>
        <option value="YES">YES</option>
        <option value="NO">NO</option></select>'
-      )} #TODO: review unwanted [] in name here
+      )}
     end
     context "with string filter" do
       let(:grid) do
@@ -70,7 +70,23 @@ describe Datagrid::FormBuilder do
 
       let(:_filter) { :name }
 
-    it {should equal_to_dom('<input class="name string_filter" id="report_name" name="report[name]" size="30" type="text">')}
+      it {should equal_to_dom('<input class="name string_filter" id="report_name" name="report[name]" size="30" type="text">')}
+    end
+
+    context "with non multiple filter" do
+      let(:grid) do
+        test_report do
+          scope {Entry}
+          filter(
+            :name, :enum, 
+            :include_blank => false, 
+            :multiple => false, 
+            :select => []
+          )
+        end
+      end
+      let(:_filter) { :name }
+      it {should equal_to_dom('<select class="name enum_filter" id="report_name" name="report[name]"></select>')}
     end
   end
 
@@ -81,6 +97,8 @@ describe Datagrid::FormBuilder do
       )
     end
   end
+
+  
 
 end
 
