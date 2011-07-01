@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{datagrid}
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = %q{2011-06-22}
+  s.date = %q{2011-07-01}
   s.description = %q{This allows you to easily build datagrid aka data tables with sortable columns and filters}
   s.email = %q{agresso@gmail.com}
   s.extra_rdoc_files = [
@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
     "lib/datagrid/filters/enum_filter.rb",
     "lib/datagrid/filters/filter_eval.rb",
     "lib/datagrid/filters/integer_filter.rb",
+    "lib/datagrid/filters/string_filter.rb",
     "lib/datagrid/form_builder.rb",
     "lib/datagrid/helper.rb",
     "lib/datagrid/rspec.rb",
@@ -56,11 +57,10 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/bogdan/datagrid}
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
+  s.rubygems_version = %q{1.6.2}
   s.summary = %q{Ruby gem to create datagrids}
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
