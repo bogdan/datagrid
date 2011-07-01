@@ -130,5 +130,39 @@ Each column is sortable.
 
 [More about columns](https://github.com/bogdan/datagrid/wiki/Columns) 
 
+### Front end
 
+In order to create form for your report you can use all set of rails built-in tools.
+
+More over Datagrid provides you two additional form helpers:
+
+* datagrid\_label
+* datagrid\_filter
+
+The easiest way to create a report form:
+
+(haml for readablity)
+
+``` haml
+- form_for @report do |f|
+  - @report.filters.each do |filter|
+    %div
+      = f.datagrid_label filter
+      = f.datagrid_filter filter
+  = f.submit
+```
+
+There is a simple helper set of helpers that allows you display report:
+
+(require will_paginate)
+
+``` haml
+- assets = @report.assets.paginate(:page => params[:page])
+
+%div== Total #{assets.total}
+= datagrid_table(@report, assets)
+= will_paginate assets
+```
+
+[More about frontend](https://github.com/bogdan/datagrid/wiki/Frontend)
 
