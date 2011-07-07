@@ -20,7 +20,7 @@ describe Datagrid::Helper do
   ) }
   let(:grid) { SimpleReport.new }
 
-  describe ".report_table" do
+  describe ".datagrid_table" do
     before(:each) do
       subject.stub!(:datagrid_order_for).and_return(subject.content_tag(:div, "", :class => "order"))
     end
@@ -49,6 +49,23 @@ describe Datagrid::Helper do
 </tr>'
       )
     end
+  end
+
+  describe ".datagrid_order_for" do
+    it "should render ordreing layout" do
+      class OrderedGrid
+        include Datagrid
+        scope { Entry }
+        column(:category)
+      end
+      report = OrderedGrid.new
+      subject.datagrid_order_for(report, report.column_by_name(:category)).should equal_to_dom(<<-HTML)
+<div class="order">
+<a href="ordered_grid%5Bdescending%5D=&amp;ordered_grid%5Border%5D=category" class="order asc">ASC</a> <a href="ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="order desc">DESC</a>
+</div>
+HTML
+    end
+      
   end
   
 
