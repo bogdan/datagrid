@@ -109,7 +109,7 @@ module Datagrid
         result = super
         if self.order
           column = column_by_name(self.order)
-          result = result.order(self.descending ? column.desc_order : column.order)
+          result = apply_order(result, self.descending ? column.desc_order : column.order)
         end
         result
       end
@@ -137,6 +137,14 @@ module Datagrid
 
       def column_by_name(name)
         self.class.column_by_name(name)
+      end
+
+      private
+
+      def apply_order(assets, order)
+        # Rails 3.0.x don't able to override already applied order
+        # Using #reorder instead
+        assets.respond_to?(:reorder) ? assets.reorder(order) : assets.order(order)
       end
 
     end # InstanceMethods
