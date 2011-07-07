@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{datagrid}
-  s.version = "0.3.0"
+  s.version = "0.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = %q{2011-07-01}
+  s.date = %q{2011-07-07}
   s.description = %q{This allows you to easily build datagrid aka data tables with sortable columns and filters}
   s.email = %q{agresso@gmail.com}
   s.extra_rdoc_files = [
