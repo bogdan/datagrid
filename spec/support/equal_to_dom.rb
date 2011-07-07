@@ -20,7 +20,7 @@ class IncludeDom
   end
 
   def failure_message
-    "Expected dom #{@matcher.inspect} to include #{@expectation.inspect}, but it wasn't"
+    "Expected dom \n#{@matcher.inspect}\n to include \n#{@expectation.inspect}\n, but it wasn't"
   end
 end
 

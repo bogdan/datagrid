@@ -57,7 +57,7 @@ module Datagrid
       content_tag(:div, :class => "order") do
         link_to(
           I18n.t("datagrid.table.order.asc", :default => "ASC"), 
-          url_for(grid.param_name => grid.attributes.merge(:order => column.name)),
+          url_for(grid.param_name => grid.attributes.merge(:order => column.name, :descending => false)),
           :class => "order asc"
         ) + " " + link_to(
           I18n.t("datagrid.table.order.desc", :default => "DESC"),

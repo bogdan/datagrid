@@ -58,10 +58,10 @@ describe Datagrid::Helper do
         scope { Entry }
         column(:category)
       end
-      report = OrderedGrid.new
+      report = OrderedGrid.new(:descending => true, :order => :category)
       subject.datagrid_order_for(report, report.column_by_name(:category)).should equal_to_dom(<<-HTML)
 <div class="order">
-<a href="ordered_grid%5Bdescending%5D=&amp;ordered_grid%5Border%5D=category" class="order asc">ASC</a> <a href="ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="order desc">DESC</a>
+<a href="ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="order asc">ASC</a> <a href="ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="order desc">DESC</a>
 </div>
 HTML
     end
