@@ -2,7 +2,9 @@ class Datagrid::Filters::BooleanEnumFilter < Datagrid::Filters::EnumFilter
 
   YES = "YES"
   NO = "NO"
-  VALUES = {YES => true, NO => false}
+  VALUES = ActiveSupport::OrderedHash.new
+  VALUES[YES] = YES
+  VALUES[NO] = NO
 
   def initialize(report, attribute, options = {}, &block)
     options[:select] = VALUES.keys
