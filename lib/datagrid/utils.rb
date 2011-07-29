@@ -2,7 +2,7 @@ module Datagrid
   module Utils
     class << self
 
-      TRUTH =["1", true, 1, "true", "yes"] 
+      TRUTH = [true, 1, "1", "true", "yes", "on"]
 
       def booleanize(value)
         TRUTH.include?(value)
