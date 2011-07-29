@@ -41,10 +41,6 @@ module Datagrid
         self
       end
 
-      def to_key
-        nil
-      end
-
       def to_param
         self.param_name
       end
