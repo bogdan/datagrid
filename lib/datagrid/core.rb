@@ -42,14 +42,6 @@ module Datagrid
         end
       end
 
-      def param_name
-        self.to_s.underscore.split('/').last
-      end
-
-      # Required for ActionView form builder
-      def model_name
-        self.param_name
-      end
 
       protected
       def check_scope_defined!(message = "Scope not defined")
@@ -103,19 +95,6 @@ module Datagrid
       end
 
 
-      def param_name
-        self.class.param_name
-      end
-
-      # Required for ActionView form builder
-      def to_key
-        [self.class.param_name]
-      end
-
-      # Required for ActionView form builder
-      def persisted?
-        false
-      end
       
       protected
 

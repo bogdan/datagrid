@@ -1,6 +1,7 @@
+require "datagrid/core"
+require "datagrid/conversion"
 require "datagrid/filters"
 require "datagrid/columns"
-require "datagrid/core"
 
 require "datagrid/helper"
 require "datagrid/form_builder"
@@ -12,6 +13,7 @@ module Datagrid
     base.class_eval do
 
       include ::Datagrid::Core
+      include ::Datagrid::Conversion
       include ::Datagrid::Filters
       include ::Datagrid::Columns
 
