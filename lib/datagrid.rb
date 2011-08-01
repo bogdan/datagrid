@@ -2,6 +2,7 @@ require "datagrid/core"
 require "datagrid/conversion"
 require "datagrid/filters"
 require "datagrid/columns"
+require "datagrid/ordering"
 
 require "datagrid/helper"
 require "datagrid/form_builder"
@@ -16,6 +17,7 @@ module Datagrid
       include ::Datagrid::Conversion
       include ::Datagrid::Filters
       include ::Datagrid::Columns
+      include ::Datagrid::Ordering
 
     end
     base.send :include, InstanceMethods

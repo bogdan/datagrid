@@ -2,8 +2,6 @@ require "datagrid/utils"
 
 module Datagrid
   
-  class OrderUnsupported < StandardError
-  end
   
   module Columns
     require "datagrid/columns/column"
@@ -13,28 +11,6 @@ module Datagrid
       base.class_eval do
 
         include Datagrid::Core
-
-        datagrid_attribute :order do |value|
-          unless value.blank?
-            value = value.to_sym
-            column = column_by_name(value)
-            unless column 
-              order_unsupported(value, "no column #{value} in #{self.class}")
-            end
-            unless column.order
-              order_unsupported(
-                name, "#{self.class}##{name} don't support order" 
-              ) 
-            end
-            value
-          else
-            nil
-          end
-
-        end
-        datagrid_attribute :descending do |value|
-          Datagrid::Utils.booleanize(value)
-        end
 
 
       end
@@ -53,10 +29,6 @@ module Datagrid
           model.send(name)
         end
         self.columns << Datagrid::Columns::Column.new(self, name, options, &block)
-      end
-
-      def order_unsupported(name, reason)
-        raise Datagrid::OrderUnsupported, "Can not sort #{self.inspect} by ##{name}: #{reason}"
       end
 
       def column_by_name(name)
@@ -105,15 +77,6 @@ module Datagrid
         end
       end
 
-      def assets
-        result = super
-        if self.order
-          column = column_by_name(self.order)
-          result = apply_order(result, self.descending ? column.desc_order : column.order)
-        end
-        result
-      end
-
       def to_csv(options = {})
         klass = if RUBY_VERSION >= "1.9"
                   require 'csv'
@@ -137,14 +100,6 @@ module Datagrid
 
       def column_by_name(name)
         self.class.column_by_name(name)
-      end
-
-      private
-
-      def apply_order(assets, order)
-        # Rails 3.0.x don't able to override already applied order
-        # Using #reorder instead
-        assets.respond_to?(:reorder) ? assets.reorder(order) : assets.order(order)
       end
 
     end # InstanceMethods
