@@ -1,6 +1,6 @@
 # Datagrid
 
-Ruby library that helps you to build and repsend table like data with:
+Ruby library that helps you to build and represent table-like data with:
 
 * Customizable filtering
 * Columns
@@ -9,18 +9,18 @@ Ruby library that helps you to build and repsend table like data with:
 * Export to CSV
 
 
-*NOTE:* This gem is still under heavy development. If you find a bug don't consider this a peace of shit, just report it and I'll fix it shortly. 
+*NOTE:* This gem is still under heavy development. If you find a bug, don't consider this a piece of shit; just report it and I'll fix it shortly. 
 
-*This is not trivial staff, so a really need your help guys.*
+*This is not trivial stuff, so I really need your help guys.*
 
 
 ### Grid DSL
 
-In order to create a report You need to define:
+In order to create a report, you need to define:
 
 * scope of ActiveRecord objects to look through
 * filters that will be used to filter data
-* columns that should be displayed and sortable(if possible)
+* columns that should be displayed and sortable (if possible)
 
 
 ### Working grid example
