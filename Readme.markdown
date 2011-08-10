@@ -9,11 +9,6 @@ Ruby library that helps you to build and represent table-like data with:
 * Export to CSV
 
 
-*NOTE:* This gem is still under heavy development. If you find a bug, don't consider this a piece of shit; just report it and I'll fix it shortly. 
-
-*This is not trivial stuff, so I really need your help guys.*
-
-
 ### Grid DSL
 
 In order to create a report, you need to define:
@@ -125,12 +120,20 @@ Datagrid supports different type of filters including:
 ### Columns
 
 Each column is represented by name and code block to calculate the value.
+
+``` ruby
+column(:activated, :header => "Active", :order => "activated") do
+  self.activated?
+end
+```
+
 Some formatting options are also available. 
 Each column is sortable.
 
 [More about columns](https://github.com/bogdan/datagrid/wiki/Columns) 
 
 ### Front end
+
 
 In order to create form for your report you can use all set of rails built-in tools.
 
@@ -163,6 +166,8 @@ There is a simple helper set of helpers that allows you display report:
 = datagrid_table(@report, assets)
 = will_paginate assets
 ```
+
+If you need a custom interface for your report you should probably build it yourself with datagrid helpers.
 
 [More about frontend](https://github.com/bogdan/datagrid/wiki/Frontend)
 
