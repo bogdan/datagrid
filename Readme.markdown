@@ -143,11 +143,10 @@ More over Datagrid provides you two additional form helpers:
 * datagrid\_filter
 
 The easiest way to create a report form:
-
 (haml for readablity)
 
 ``` haml
-- form_for @report do |f|
+- form_for @report, :html => {:method => :get} do |f|
   - @report.filters.each do |filter|
     %div
       = f.datagrid_label filter
@@ -155,8 +154,19 @@ The easiest way to create a report form:
   = f.submit
 ```
 
-There is a simple helper set of helpers that allows you display report:
+Your controller:
 
+``` ruby
+map.resources :simple_reports, :only => [:index]
+
+class SimpleReportsController < ApplicationController
+  def index
+    @report = SimpleReport.new(params[:simple_report])
+  end
+end
+```
+
+There is a simple helper set of helpers that allows you display report:
 (require will_paginate)
 
 ``` haml
