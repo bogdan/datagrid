@@ -136,16 +136,17 @@ Each column is sortable.
 
 
 In order to create form for your report you can use all set of rails built-in tools.
-
 More over Datagrid provides you two additional form helpers:
 
 * datagrid\_label
 * datagrid\_filter
 
+
 The easiest way to create a report form:
 (haml for readablity)
 
 ``` haml
+# Method `GET` is recommended for all report forms by default.
 - form_for @report, :html => {:method => :get} do |f|
   - @report.filters.each do |filter|
     %div
