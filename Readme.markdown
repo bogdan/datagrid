@@ -173,7 +173,7 @@ There is a simple helper set of helpers that allows you display report:
 ``` haml
 - assets = @report.assets.paginate(:page => params[:page])
 
-%div== Total #{assets.total}
+%div== Total #{assets.total_entries}
 = datagrid_table(@report, assets)
 = will_paginate assets
 ```
