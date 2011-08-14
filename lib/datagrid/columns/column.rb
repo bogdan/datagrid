@@ -5,7 +5,7 @@ class Datagrid::Columns::Column
 
   def initialize(grid, name, options = {}, &block)
     self.grid = grid
-    self.name = name
+    self.name = name.to_sym
     self.options = options
     self.block = block
   end
@@ -45,9 +45,9 @@ class Datagrid::Columns::Column
     end
   end
 
-  def desc_order
+  def order_desc
     return nil unless order
-    self.options[:desc_order]  
+    self.options[:order_desc]  
   end
 
 end

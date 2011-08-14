@@ -23,5 +23,6 @@ group :development do
   gem "fastercsv"
   gem "nokogiri"
   gem 'will_paginate', '2.3.15'
+  gem "accept_values_for"
 
 end

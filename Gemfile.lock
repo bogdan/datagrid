@@ -2,6 +2,9 @@ GEM
   remote: http://rubygems.org/
   specs:
     abstract (1.0.0)
+    accept_values_for (0.4.3)
+      activemodel (>= 3.0.0)
+      rspec
     actionmailer (3.0.7)
       actionpack (= 3.0.7)
       mail (~> 2.2.15)
@@ -97,6 +100,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  accept_values_for
   bundler (~> 1.0.0)
   fastercsv
   jeweler (~> 1.6.0)

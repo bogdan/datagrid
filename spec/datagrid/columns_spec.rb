@@ -49,37 +49,5 @@ describe Datagrid::Columns do
     report.rows.last.first.should be_false
   end
 
-  describe "ordering" do
-
-
-    it "should raise error if ordered by not existing column" do
-      lambda {
-        test_report(:order => :hello)
-      }.should raise_error(Datagrid::OrderUnsupported)
-    end
-
-    it "should raise error if ordered by column without order" do
-      lambda do
-        test_report(:order => :category) do
-          filter(:category, :default, :order => false) do |value|
-            self
-          end
-        end
-      end.should raise_error(Datagrid::OrderUnsupported)
-    end
-
-    it "should override default order" do
-      Entry.all.should be_empty
-      e1 = Entry.create!
-      e2 = Entry.create!
-      test_report(:order => :id) do
-        scope { Entry.order("id desc")}
-        column(:id) do
-          self.order("id asc")
-        end
-      end.assets.all.should == [e1, e2]
-    end
-
-  end
 
 end
