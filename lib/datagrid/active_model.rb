@@ -1,12 +1,17 @@
+
 module Datagrid
 
   # Required to be ActiveModel compatible
-  module Conversion
+  module ActiveModel
   
     def self.included(base)
       base.extend         ClassMethods
       base.class_eval do
-        
+        begin
+          require 'active_model/naming'
+          extend ::ActiveModel::Naming
+        rescue LoadError
+        end
       end
       base.send :include, InstanceMethods
     end # self.included
@@ -17,9 +22,6 @@ module Datagrid
         self.to_s.underscore.split('/').last
       end
 
-      def model_name
-        self.param_name
-      end
 
     end # ClassMethods
   
@@ -27,6 +29,10 @@ module Datagrid
   
       def param_name
         self.class.param_name
+      end
+
+      def param_key
+        param_name
       end
 
       def to_key

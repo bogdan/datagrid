@@ -1,5 +1,5 @@
 require "datagrid/core"
-require "datagrid/conversion"
+require "datagrid/active_model"
 require "datagrid/filters"
 require "datagrid/columns"
 require "datagrid/ordering"
@@ -14,7 +14,7 @@ module Datagrid
     base.class_eval do
 
       include ::Datagrid::Core
-      include ::Datagrid::Conversion
+      include ::Datagrid::ActiveModel
       include ::Datagrid::Filters
       include ::Datagrid::Columns
       include ::Datagrid::Ordering
