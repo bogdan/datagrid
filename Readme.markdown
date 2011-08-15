@@ -20,14 +20,14 @@ In order to create a report, you need to define:
 
 ### Working grid example
 
+[Datagrid DEMO application](https://github.com/bogdan/datagrid-demo) is available.
+
 In order to create a grid:
 
 ``` ruby
-
 class SimpleReport
 
   include Datagrid
-
 
   scope do
     User.includes(:group)
@@ -42,7 +42,6 @@ class SimpleReport
     self.joins(:group).where(:groups => {:name => value})
   end
 
-
   column(:name)
   column(:group, :order => "groups.name") do |user|
     user.name
@@ -51,11 +50,7 @@ class SimpleReport
     !user.disabled
   end
 
-
-
 end
-
-
 ```
 
 Basic grid api:
