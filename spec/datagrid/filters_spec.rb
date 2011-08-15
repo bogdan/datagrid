@@ -31,7 +31,6 @@ describe Datagrid::Filters do
       filter(:name)
     end
     TheReport.new(:name => 'hello')
-
   end
 
   describe "allow_blank and allow_nil options" do

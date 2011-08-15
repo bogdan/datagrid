@@ -11,7 +11,8 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
   end
 
   def select
-    self.options[:select]
+    option = self.options[:select]
+    option.respond_to?(:call) ? option.call : option
   end
 
 
