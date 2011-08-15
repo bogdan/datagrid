@@ -16,8 +16,11 @@ class Datagrid::Filters::BaseFilter
   end
 
   def apply(scope, value)
-    return scope if value.nil? && !options[:allow_nil]
-    return scope if value.blank? && !options[:allow_blank]
+    if value.nil?
+      return scope if !allow_nil?
+    else
+      return scope if value.blank? && !allow_blank?
+    end
     ::Datagrid::Filters::FilterEval.new(self, scope, value).run
   end
 
@@ -45,5 +48,14 @@ class Datagrid::Filters::BaseFilter
   def multiple
     self.options[:multiple]
   end
+
+  def allow_nil?
+    options.has_key?(:allow_nil) ? options[:allow_nil] : options[:allow_blank]
+  end
+
+  def allow_blank?
+    options[:allow_blank]
+  end
+
 end
 

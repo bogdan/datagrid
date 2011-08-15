@@ -33,5 +33,39 @@ describe Datagrid::Filters do
     TheReport.new(:name => 'hello')
 
   end
-  
+
+  describe "allow_blank and allow_nil options" do
+    before(:each) do
+      $FILTER_PERFORMED = false
+    end
+
+    def check_performed(value, result, options)
+      report = test_report(:name => value) do
+        scope {Entry}
+        filter(:name, options) do |value|
+          $FILTER_PERFORMED = true
+          self
+        end
+      end
+      report.name.should == value
+      report.assets
+      $FILTER_PERFORMED.should == result
+    end
+
+    it "should support allow_blank argument" do
+      [nil, "", " "].each do |value|
+        check_performed(value, true, :allow_blank => true)
+      end
+    end
+
+    it "should support allow_blank argument" do
+      check_performed(nil, true, :allow_nil => true)
+    end
+
+    it "should support combination on allow_nil and allow_blank" do
+      check_performed(nil, false, :allow_nil => false, :allow_blank => true)
+      check_performed("", true, :allow_nil => false, :allow_blank => true)
+      check_performed(nil, true, :allow_nil => true, :allow_blank => false)
+    end
+  end
 end
