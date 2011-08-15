@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{datagrid}
-  s.version = "0.3.4"
+  s.version = "0.3.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = %q{2011-08-10}
+  s.date = %q{2011-08-15}
   s.description = %q{This allows you to easily build datagrid aka data tables with sortable columns and filters}
   s.email = %q{agresso@gmail.com}
   s.extra_rdoc_files = [
@@ -26,9 +26,9 @@ Gem::Specification.new do |s|
     "VERSION",
     "datagrid.gemspec",
     "lib/datagrid.rb",
+    "lib/datagrid/active_model.rb",
     "lib/datagrid/columns.rb",
     "lib/datagrid/columns/column.rb",
-    "lib/datagrid/conversion.rb",
     "lib/datagrid/core.rb",
     "lib/datagrid/filters.rb",
     "lib/datagrid/filters/base_filter.rb",
@@ -46,10 +46,13 @@ Gem::Specification.new do |s|
     "lib/datagrid/ordering.rb",
     "lib/datagrid/rspec.rb",
     "lib/datagrid/utils.rb",
+    "spec/datagrid/active_model_spec.rb",
     "spec/datagrid/columns_spec.rb",
+    "spec/datagrid/filters/enum_filter_spec.rb",
     "spec/datagrid/filters_spec.rb",
     "spec/datagrid/form_builder_spec.rb",
     "spec/datagrid/helper_spec.rb",
+    "spec/datagrid/ordering_spec.rb",
     "spec/datagrid_spec.rb",
     "spec/spec_helper.rb",
     "spec/support/equal_to_dom.rb",
@@ -79,6 +82,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<fastercsv>, [">= 0"])
       s.add_development_dependency(%q<nokogiri>, [">= 0"])
       s.add_development_dependency(%q<will_paginate>, ["= 2.3.15"])
+      s.add_development_dependency(%q<accept_values_for>, [">= 0"])
     else
       s.add_dependency(%q<rails>, [">= 0"])
       s.add_dependency(%q<rake>, ["= 0.8.7"])
@@ -92,6 +96,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<fastercsv>, [">= 0"])
       s.add_dependency(%q<nokogiri>, [">= 0"])
       s.add_dependency(%q<will_paginate>, ["= 2.3.15"])
+      s.add_dependency(%q<accept_values_for>, [">= 0"])
     end
   else
     s.add_dependency(%q<rails>, [">= 0"])
@@ -106,6 +111,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<fastercsv>, [">= 0"])
     s.add_dependency(%q<nokogiri>, [">= 0"])
     s.add_dependency(%q<will_paginate>, ["= 2.3.15"])
+    s.add_dependency(%q<accept_values_for>, [">= 0"])
   end
 end
 
