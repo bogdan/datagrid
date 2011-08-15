@@ -18,7 +18,7 @@ describe Datagrid::Filters do
       report.group_id = [1,2]
     }.should raise_error(Datagrid::ArgumentError)
   end
-  
+
 
   it "should initialize report Scope table not exists" do
     class ModelWithoutTable < ActiveRecord::Base; end
