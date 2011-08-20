@@ -15,10 +15,10 @@ module Datagrid
 
         def date_range_filters(field, from_name = :"from_#{field}", to_name = :"to_#{field}")
           filter(from_name, :date) do |date|
-            self.from_date(date, field)
+            self.scoped(:conditions => ["#{field} >= ?", date])
           end
           filter(to_name, :date) do |date|
-            self.to_date(date, field)
+            self.scoped(:conditions => ["#{field} <= ?", date])
           end
         end
 

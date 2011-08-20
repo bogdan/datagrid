@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string :category
     t.boolean :disabled, :null => false, :default => false
     t.boolean :confirmed, :null => false, :default => false
+    t.date :shipping_date
     t.timestamps
   end
 
