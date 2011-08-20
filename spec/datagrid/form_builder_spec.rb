@@ -50,6 +50,22 @@ describe Datagrid::FormBuilder do
        <option value="second">second</option></select>'
         )}
       end
+      context "with include_blank option set to false" do
+        let(:_filter) { :category_without_include_blank }
+        it { should equal_to_dom(
+          '<select class="category_without_include_blank enum_filter" id="report_category_without_include_blank" name="report[category_without_include_blank]">
+         <option value="first">first</option>
+         <option value="second">second</option></select>'
+        )}
+      end
+      context "with prompt option" do
+        let(:_filter) { :category_with_prompt }
+        it { should equal_to_dom(
+          '<select class="category_with_prompt enum_filter" id="report_category_with_prompt" name="report[category_with_prompt]"><option value="">My Prompt</option>
+         <option value="first">first</option>
+         <option value="second">second</option></select>'
+        )}
+      end
     end
 
     context "with eboolean filter type" do
