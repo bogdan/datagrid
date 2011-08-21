@@ -34,11 +34,9 @@ describe Datagrid::Filters do
   end
 
   describe "allow_blank and allow_nil options" do
-    before(:each) do
-      $FILTER_PERFORMED = false
-    end
 
     def check_performed(value, result, options)
+      $FILTER_PERFORMED = false
       report = test_report(:name => value) do
         scope {Entry}
         filter(:name, options) do |value|
@@ -57,7 +55,7 @@ describe Datagrid::Filters do
       end
     end
 
-    it "should support allow_blank argument" do
+    it "should support allow_nil argument" do
       check_performed(nil, true, :allow_nil => true)
     end
 

@@ -17,4 +17,20 @@ describe Datagrid::Filters::CompositeFilters do
       assets.should_not include(e1, e3)
     end
   end
+  
+  describe ".integer_range_filters" do
+    
+    it "should generate from integer and to integer filters" do
+      e1 = Entry.create!(:group_id => 1)
+      e2 = Entry.create!(:group_id => 3)
+      e3 = Entry.create!(:group_id => 5)
+      assets = test_report(:from_group_id => 2, :to_group_id => 4) do
+        scope {Entry}
+        integer_range_filters(:group_id)
+      end.assets
+
+      assets.should include(e2)
+      assets.should_not include(e1, e3)
+    end
+  end
 end
