@@ -20,7 +20,8 @@ In order to create a report, you need to define:
 
 ### Working grid example
 
-[Datagrid DEMO application](https://github.com/bogdan/datagrid-demo) is available.
+[Datagrid DEMO application](http://datagrid.heroku.com) is available live!
+[Demo source code](https://github.com/bogdan/datagrid-demo).
 
 In order to create a grid:
 
