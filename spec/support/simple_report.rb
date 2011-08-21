@@ -21,8 +21,6 @@ class SimpleReport
 
   filter(:group_id, :integer, :multiple => true)
   filter(:category, :enum, :select => ["first", "second"])
-  filter(:category_without_include_blank, :enum, :select => ["first", "second"], :include_blank => false)
-  filter(:category_with_prompt, :enum, :select => ["first", "second"], :prompt => "My Prompt")
   filter(:disabled, :eboolean)
   filter(:confirmed, :boolean)
 

@@ -25,8 +25,8 @@ describe Datagrid::Helper do
       subject.stub!(:datagrid_order_for).and_return(subject.content_tag(:div, "", :class => "order"))
     end
     it "should return data table html" do
-      subject.datagrid_table(grid).should equal_to_dom(
-'<table class="datagrid">
+      subject.datagrid_table(grid).should equal_to_dom(<<-HTML)
+<table class="datagrid">
 <tr>
 <th>Group<div class="order"></div>
 </th>
@@ -38,16 +38,17 @@ describe Datagrid::Helper do
 <td>Pop</td>
 <td>Star</td>
 </tr>
-</table>')
+</table>
+HTML
     end
 
     it "should support cycle option" do
-      subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"]).should equal_to_dom(
-'<tr class="odd">
+      subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"]).should equal_to_dom(<<-HTML)
+<tr class="odd">
 <td>Pop</td>
 <td>Star</td>
-</tr>'
-      )
+</tr>
+HTML
     end
   end
 
