@@ -40,13 +40,8 @@ describe SimpleReport do
       
 
     context "when not defined on class level" do
-      before(:each) do
-        @scope = SimpleReport.instance_variable_get("@scope")
-        SimpleReport.instance_variable_set("@scope", nil)
-      end
-
-      after(:each) do
-        SimpleReport.instance_variable_set("@scope", @scope)
+      subject do
+        test_report {}
       end
 
       it "should raise ConfigurationError" do
