@@ -20,11 +20,18 @@ describe Datagrid::Columns do
       subject.header.should == ["Group", "Name"]
     end
 
-    it "should generate data" do
+    it "should generate table data" do
       subject.data.should == [
         subject.header,
         subject.row_for(entry)
       ]
+    end
+
+    it "should generate hash for given asset" do
+      subject.hash_for(entry).should == {
+        :group => "Pop",
+        :name => "Star"
+      }
     end
 
   it "should support csv export" do
