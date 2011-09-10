@@ -15,6 +15,10 @@ module Datagrid
       end
       base.send :include, InstanceMethods
     end # self.included
+    
+    class Name < ::ActiveModel::Name
+      
+    end
   
     module ClassMethods
   
