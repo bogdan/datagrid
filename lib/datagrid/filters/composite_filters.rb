@@ -11,7 +11,7 @@ module Datagrid
       end # self.included
 
       module ClassMethods
-
+        #TODO: decide what to do with cross-orm
 
         def date_range_filters(field, from_name = :"from_#{field}", to_name = :"to_#{field}")
           filter(from_name, :date) do |date|

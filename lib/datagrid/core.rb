@@ -1,4 +1,4 @@
-require "active_record"
+require "datagrid/drivers/active_record_driver"
 
 module Datagrid
   module Core
@@ -77,7 +77,7 @@ module Datagrid
       end
 
       def assets
-        scope.scoped({})
+        scope.datagrid_scope
       end
 
       def attributes=(attributes)
