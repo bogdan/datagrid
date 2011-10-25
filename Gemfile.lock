@@ -106,7 +106,7 @@ DEPENDENCIES
   jeweler (~> 1.6.0)
   mocha
   nokogiri
-  rails
+  rails (>= 3.0)
   rake
   rcov
   rspec (= 2.6.0)
