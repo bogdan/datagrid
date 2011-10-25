@@ -61,23 +61,18 @@ module Datagrid
 
       def apply_order(assets, column)
 
-        # Rails 3.0.x don't able to override already applied order
+        # Rails 3.x.x don't able to override already applied order
         # Using #reorder instead
-        order_method = assets.respond_to?(:reorder) ? :reorder : :order # Rails 3?
 
         order = column.order
         if self.descending?
           if column.order_desc
-            assets.send(order_method, column.order_desc) 
+            assets.reorder(column.order_desc) 
           else
-            if assets.respond_to?(:reverse_order) # Rails 3?
-              assets.reorder(order).reverse_order
-            else
-              assets.order(ActiveRecord::Base.send(:reverse_sql_order, order))
-            end
+            assets.reorder(order).reverse_order
           end
         else
-          assets.send(order_method, order)
+          assets.reorder(order)
         end
       end
 
