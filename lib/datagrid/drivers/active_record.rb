@@ -1,6 +1,6 @@
 module Datagrid
   module Drivers
-    module ActiveRecordDriver
+    module ActiveRecord
 
       def self.included(base)
         base.extend         ClassMethods
@@ -37,7 +37,9 @@ module Datagrid
 
     end
 
-    ActiveRecord::Base.send(:include, ActiveRecordDriver) if defined?(ActiveRecord)
 
   end
+end
+if defined?(::ActiveRecord)
+  ::ActiveRecord::Base.send(:include, Datagrid::Drivers::ActiveRecord)
 end

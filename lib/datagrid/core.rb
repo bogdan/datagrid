@@ -1,4 +1,4 @@
-require "datagrid/drivers/active_record_driver"
+require "datagrid/drivers"
 
 module Datagrid
   module Core
