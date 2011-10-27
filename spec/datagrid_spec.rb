@@ -35,7 +35,7 @@ describe SimpleReport do
 
   describe ".scope" do
     it "should return defined scope of objects" do
-      subject.scope.should respond_to(:table_name)
+      subject.scope.should respond_to(:each)
     end
       
 

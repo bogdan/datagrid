@@ -1,10 +1,8 @@
-require "logger"
 
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
 ActiveRecord::Base.configurations = true
 
-File.open('spec.log', "w").close
-ActiveRecord::Base.logger = Logger.new('spec.log')
+ActiveRecord::Base.logger = TEST_LOGGER
 
 
 
