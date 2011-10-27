@@ -16,7 +16,6 @@ class MongoidEntry
 
   include Mongoid::Document
   include Mongoid::Timestamps
-  #include Datagrid::Drivers::Mongoid
 
   field :group_id, :type => Integer
   field :name, :type => String
