@@ -33,5 +33,10 @@ class MongoidGrid
   scope do
     MongoidEntry
   end
+
+  column :name
+  column :group_id
+  column :disabled
+
 end
 

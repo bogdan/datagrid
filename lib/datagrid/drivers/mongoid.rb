@@ -1,4 +1,3 @@
-
 module Datagrid
   module Drivers
     module Mongoid
@@ -37,6 +36,7 @@ module Datagrid
     end
   end
 end
+
 if defined?(::Mongoid)
   ::Mongoid::Document.included do
     include Datagrid::Drivers::Mongoid
