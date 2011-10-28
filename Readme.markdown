@@ -18,10 +18,19 @@ In order to create a report, you need to define:
 * columns that should be displayed and sortable (if possible)
 
 
-### Working grid example
+### ORM Support
+
+* ActiveRecord
+* Mongoid (beta)
+
+[Create an issue](https://github.com/bogdan/datagrid/issues/new) if you want more.
+
+### Live Demo
 
 [Datagrid DEMO application](http://datagrid.heroku.com) is available live!
 [Demo source code](https://github.com/bogdan/datagrid-demo).
+
+### Example
 
 In order to create a grid:
 
