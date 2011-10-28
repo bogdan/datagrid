@@ -1,45 +1,40 @@
 module Datagrid
   module Drivers
-    module ActiveRecord
+    class ActiveRecord < AbstractDriver
 
-      def self.included(base)
-        base.extend         ClassMethods
-        base.class_eval do
-          base.send :include, InstanceMethods
-        end # self.included
+      def self.match?(scope)
+        if scope.is_a?(Class) 
+          scope.ancestors.include?(::ActiveRecord::Base)
+        else
+          scope.is_a?(::ActiveRecord::Relation) 
+        end
       end
 
-      module ClassMethods
-        def datagrid_scope
-          scoped({})
-        end
+      def to_scope(scope)
+        scope.scoped({})
+      end
 
-        def datagrid_where(condition)
-          where(condition)
-        end
+      def where(scope, condition)
+        scope.where(condition)
+      end
 
-        def datagrid_asc(order)
-          reorder(order)
-        end
+      def asc(scope, order)
+        scope.reorder(order)
+      end
 
-        def datagrid_desc(order)
-          # Rails 3.x.x don't able to override already applied order
-          # Using #reorder instead
-          reorder(order).reverse_order
-        end
+      def desc(scope, order)
+        # Rails 3.x.x don't able to override already applied order
+        # Using #reorder instead
+        scope.reorder(order).reverse_order
+      end
 
-      end # ClassMethods
+      def table_name(scope)
+        scope.table_name
+      end
 
-      module InstanceMethods
-
-      end # InstanceMethods
-
-
+      def default_order(scope, column_name)
+        scope.column_names.include?(column_name.to_s) ? [scope.table_name, column_name].join(".") : nil
+      end
     end
-
-
   end
-end
-if defined?(::ActiveRecord)
-  ::ActiveRecord::Base.send(:include, Datagrid::Drivers::ActiveRecord)
 end

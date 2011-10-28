@@ -64,12 +64,12 @@ module Datagrid
         order = column.order
         if self.descending?
           if column.order_desc
-            assets.datagrid_asc(column.order_desc) 
+            driver.asc(assets, column.order_desc) 
           else
-            assets.datagrid_desc(order)
+            driver.desc(assets, order)
           end
         else
-          assets.datagrid_asc(order)
+          driver.asc(assets, order) 
         end
       end
 

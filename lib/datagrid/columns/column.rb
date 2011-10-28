@@ -41,7 +41,7 @@ class Datagrid::Columns::Column
     if options.has_key?(:order)
       self.options[:order]
     else
-      grid.scope.column_names.include?(name.to_s) ? [grid.scope.table_name, name].join(".") : nil
+      grid.driver.default_order(grid.scope, name)
     end
   end
 

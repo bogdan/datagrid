@@ -33,6 +33,12 @@ class MongoidGrid
     MongoidEntry
   end
 
+  filter :name
+  filter :group_id do |value|
+    where(:group_id => value)
+  end
+  filter :disabled, :eboolean
+
   column :name
   column :group_id
   column :disabled

@@ -1,44 +1,36 @@
+
 module Datagrid
   module Drivers
-    module Mongoid
-    
-      def self.included(base)
-        base.extend         ClassMethods
-        base.class_eval do
-        end
-        base.send :include, InstanceMethods
-      end # self.included
-    
-      module ClassMethods
+    class Mongoid < AbstractDriver
 
-        def datagrid_scope
-          scoped
+      def self.match?(scope)
+        if scope.is_a?(Class) 
+          scope.ancestors.include?(::Mongoid::Document)
+        else
+          scope.is_a?(::Mongoid::Collection)
         end
+      end
 
-        def datagrid_where(condition)
-          where(condition)
-        end
+      def to_scope(scope)
+        scope.scoped
+      end
 
-        def datagrid_asc(order)
-          asc(order)
-        end
+      def where(scope, condition)
+        scope.where(condition)
+      end
 
-        def datagrid_desc(order)
-          desc(order)
-        end
-    
-      end # ClassMethods
-    
-      module InstanceMethods
-    
-      end # InstanceMethods
-    
+      def asc(scope, order)
+        scope.asc(order)
+      end
+
+      def desc(scope, order)
+        scope.desc(order)
+      end
+
+      def default_order(scope, column_name)
+        column_name
+      end
+
     end
-  end
-end
-
-if defined?(::Mongoid)
-  ::Mongoid::Document.included do
-    include Datagrid::Drivers::Mongoid
   end
 end

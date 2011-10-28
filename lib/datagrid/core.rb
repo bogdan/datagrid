@@ -42,6 +42,9 @@ module Datagrid
         end
       end
 
+      def driver
+        @driver ||= Drivers::AbstractDriver.guess_driver(scope).new
+      end
 
       protected
       def check_scope_defined!(message = "Scope not defined")
@@ -77,7 +80,7 @@ module Datagrid
       end
 
       def assets
-        scope.datagrid_scope
+        driver.to_scope(scope)
       end
 
       def attributes=(attributes)
@@ -94,9 +97,9 @@ module Datagrid
         self.class.scope
       end
 
-
-      
-      protected
+      def driver
+        self.class.driver
+      end
 
       def check_scope_defined!(message)
         self.class.check_scope_defined!(message)
