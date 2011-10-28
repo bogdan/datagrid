@@ -1,12 +1,20 @@
 describe Datagrid::Drivers::Mongoid do
 
+  describe ".match?" do
+    
+    subject { described_class }
+
+    it {should be_match(MongoidEntry)}
+    it {should be_match(MongoidEntry.scoped)}
+    it {should_not be_match(Entry.scoped)}
+
+  end
   describe "api" do
 
     subject do
-      MongoidGrid.new({
-        :group_id => 2,
-        :order => :name
-      }.merge(defined?(_attributes) ? _attributes : {})) 
+      MongoidGrid.new(
+        defined?(_attributes) ? _attributes : {}
+      )
     end
 
     let!(:first) do
@@ -18,15 +26,8 @@ describe Datagrid::Drivers::Mongoid do
     end
     let!(:second) do
       MongoidEntry.create!(
-        :group_id => 2,
-        :name => "Main Second",
-        :disabled => false
-      )
-    end
-    let!(:another_entry) do
-      MongoidEntry.create!(
         :group_id => 3,
-        :name => "Alternative",
+        :name => "Main Second",
         :disabled => true
       )
     end
@@ -34,10 +35,22 @@ describe Datagrid::Drivers::Mongoid do
 
     its(:assets) {should include(first, second)}
 
-    its(:rows) {should == [["Main First", 2, false], ["Main Second", 2, false]]}
+    its(:"assets.size") {should == 2}
+    its(:rows) {should == [["Main First", 2, false], ["Main Second", 3, true]]}
     its(:header) {should ==[ "Name", "Group", "Disabled"]}
 
-    its(:data) {should == [[ "Name", "Group", "Disabled"], ["Main First", 2, false], ["Main Second", 2, false]]}
+    its(:data) {should == [[ "Name", "Group", "Disabled"], ["Main First", 2, false], ["Main Second", 3, true]]}
 
+
+    describe "when some filters specified" do
+      let(:_attributes) { {:group_id => 2} }
+      its(:assets) {should include(first)}
+      its(:assets) {should_not include(second)}
+    end
+
+    describe "when reverse ordering is specified" do
+      let(:_attributes) { {:order => :name, :descending => true} }
+      its(:rows) {should == [["Main Second", 3, true], ["Main First", 2, false]]}
+    end
   end
 end

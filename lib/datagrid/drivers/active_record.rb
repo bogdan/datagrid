@@ -19,12 +19,12 @@ module Datagrid
       end
 
       def asc(scope, order)
+        # Rails 3.x.x don't able to override already applied order
+        # Using #reorder instead
         scope.reorder(order)
       end
 
       def desc(scope, order)
-        # Rails 3.x.x don't able to override already applied order
-        # Using #reorder instead
         scope.reorder(order).reverse_order
       end
 

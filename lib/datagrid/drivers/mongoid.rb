@@ -1,4 +1,3 @@
-
 module Datagrid
   module Drivers
     class Mongoid < AbstractDriver
@@ -7,7 +6,7 @@ module Datagrid
         if scope.is_a?(Class) 
           scope.ancestors.include?(::Mongoid::Document)
         else
-          scope.is_a?(::Mongoid::Collection)
+          scope.is_a?(::Mongoid::Criteria)
         end
       end
 
