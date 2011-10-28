@@ -13,7 +13,7 @@ Ruby library that helps you to build and represent table-like data with:
 
 In order to create a report, you need to define:
 
-* scope of ActiveRecord objects to look through
+* scope of objects to look through
 * filters that will be used to filter data
 * columns that should be displayed and sortable (if possible)
 
@@ -92,7 +92,7 @@ report.to_csv # => Yes, it is
 ### Scope
 
 Default scope of objects to filter and display.
-In common case it is `ActiveRecord::Base` subclass with some generic scopes like in example above:
+In common case it is `ActiveRecord::Base` (or any other supported ORM) subclass with some generic scopes like in example above:
 
 ``` ruby
   scope do
