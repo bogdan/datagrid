@@ -37,7 +37,7 @@ module Datagrid
         if options[:order] && column.order
           data << datagrid_order_for(grid, column)
         end
-        header << content_tag(:th, data)
+        header << content_tag(:th, data, :class => column.name)
       end
       header
     end
@@ -46,7 +46,7 @@ module Datagrid
       columns = report.columns
       result = assets.map do |asset|
         content = columns.map do |column|
-          content_tag(:td, datagrid_format_value(report, column, asset))
+          content_tag(:td, datagrid_format_value(report, column, asset), :class => column.name)
         end.join(empty_string)
         content_tag(:tr, _safe(content), :class => options[:cycle] && cycle(*options[:cycle]))
       end.join(empty_string)

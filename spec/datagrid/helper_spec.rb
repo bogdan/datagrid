@@ -28,33 +28,33 @@ describe Datagrid::Helper do
       subject.datagrid_table(grid).should equal_to_dom(<<-HTML)
 <table class="datagrid">
 <tr>
-<th>Group<div class="order"></div>
+<th class="group">Group<div class="order"></div>
 </th>
-<th>Name<div class="order"></div>
+<th class="name">Name<div class="order"></div>
 </th>
 </tr>
 
 <tr>
-<td>Pop</td>
-<td>Star</td>
+<td class="group">Pop</td>
+<td class="name">Star</td>
 </tr>
 </table>
 HTML
     end
-    it "should support giving assets implicitly" do
+    it "should support giving assets explicitly" do
       other_entry = Entry.create!(entry.attributes)
       subject.datagrid_table(grid, [entry]).should equal_to_dom(<<-HTML)
 <table class="datagrid">
 <tr>
-<th>Group<div class="order"></div>
+<th class="group">Group<div class="order"></div>
 </th>
-<th>Name<div class="order"></div>
+<th class="name">Name<div class="order"></div>
 </th>
 </tr>
 
 <tr>
-<td>Pop</td>
-<td>Star</td>
+<td class="group">Pop</td>
+<td class="name">Star</td>
 </tr>
 </table>
 HTML
@@ -63,8 +63,8 @@ HTML
     it "should support cycle option" do
       subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"]).should equal_to_dom(<<-HTML)
 <tr class="odd">
-<td>Pop</td>
-<td>Star</td>
+<td class="group">Pop</td>
+<td class="name">Star</td>
 </tr>
 HTML
     end
