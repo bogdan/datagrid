@@ -11,7 +11,7 @@ module Datagrid
       end
 
       def to_scope(scope)
-        scope.scoped
+        scope.where
       end
 
       def where(scope, condition)
