@@ -173,7 +173,7 @@ end
 ```
 
 There is a simple helper set of helpers that allows you display report:
-(require will\_paginate)
+(require any pagination gem, will\_paginate is used as an example)
 
 ``` haml
 - assets = @report.assets.paginate(:page => params[:page])
