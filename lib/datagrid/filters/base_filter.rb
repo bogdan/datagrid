@@ -37,7 +37,7 @@ class Datagrid::Filters::BaseFilter
 
   def header
     options[:header] || 
-      I18n.translate(self.name, :scope => "reports.#{grid.param_name}.filters", :default => self.name.to_s.humanize)
+      I18n.translate(self.name, :scope => "datagrid.#{grid.param_name}.filters", :default => self.name.to_s.humanize)
   end
 
   def default
