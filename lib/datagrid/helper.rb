@@ -25,7 +25,4 @@ module Datagrid
     end
 
   end
-
-  ::ActionView::Base.send(:include, ::Datagrid::Helper)
-
 end
