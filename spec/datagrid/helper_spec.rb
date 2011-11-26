@@ -6,7 +6,11 @@ require "active_support/core_ext/object"
 require 'datagrid/renderer'
 
 describe Datagrid::Helper do
-  subject {ActionView::Base.new}
+  subject do
+    template = ActionView::Base.new
+    template.view_paths << File.expand_path("../../support/test_partials", __FILE__)
+    template
+  end
 
   before(:each) do
     subject.stub!(:params).and_return({})
