@@ -26,3 +26,10 @@ group :development do
 
   gem "fastercsv", :platform => "mri_18"
 end
+
+group :test do
+  gem "autotest"
+  gem "autotest-growl"
+  gem "tilt"
+  gem "json"
+end
