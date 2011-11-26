@@ -1,6 +1,8 @@
-<% report.columns.each do |column| %>
-  <th class="<%= column.name %>">
-    <%= column.header %>
-    <%= datagrid_order_for(report, column) if column.order && options[:order]%>
-  </th>
-<% end %>
+<tr>
+  <% report.columns.each do |column| %>
+    <th class="<%= column.name %>">
+      <%= column.header %>
+      <%= datagrid_order_for(report, column) if column.order && options[:order]%>
+    </th>
+  <% end %>
+</tr>
