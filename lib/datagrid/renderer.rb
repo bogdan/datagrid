@@ -44,7 +44,7 @@ module Datagrid
 
     def rows(report, assets, options)
       result = assets.map do |asset|
-        @template.render :partial => "datagrid/row", :locals => {:report => report, :columns => report.columns, :asset => asset, :options => options }
+        @template.render :partial => "datagrid/row", :locals => {:report => report, :options => options, :asset => asset}
       end.join
 
       _safe(result)
