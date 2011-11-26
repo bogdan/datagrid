@@ -51,12 +51,11 @@ module Datagrid
 
     def rows(report, assets, options)
       columns = report.columns
+
       result = assets.map do |asset|
-        content = columns.map do |column|
-          @template.content_tag(:td, format_value(report, column, asset), :class => column.name)
-        end.join(empty_string)
-        @template.content_tag(:tr, _safe(content), :class => options[:cycle] && @template.cycle(*options[:cycle]))
-      end.join(empty_string)
+        @template.render :partial => "datagrid/row", :locals => {:report => report, :columns => columns, :asset => asset, :options => options }
+      end.join
+
       _safe(result)
     end
 
