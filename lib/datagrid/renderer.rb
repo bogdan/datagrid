@@ -36,24 +36,15 @@ module Datagrid
       @template.content_tag(:table, content, html)
     end
 
-    def header(grid, options = {})
-      header = empty_string
+    def header(report, options = {})
       options[:order] = true unless options.has_key?(:order)
-      grid.columns.each do |column|
-        data = _safe(column.header)
-        if options[:order] && column.order
-          data << order_for(grid, column)
-        end
-        header << @template.content_tag(:th, data, :class => column.name)
-      end
-      header
+
+      @template.render :partial => "datagrid/head", :locals => {:report => report, :options => options}
     end
 
     def rows(report, assets, options)
-      columns = report.columns
-
       result = assets.map do |asset|
-        @template.render :partial => "datagrid/row", :locals => {:report => report, :columns => columns, :asset => asset, :options => options }
+        @template.render :partial => "datagrid/row", :locals => {:report => report, :columns => report.columns, :asset => asset, :options => options }
       end.join
 
       _safe(result)
