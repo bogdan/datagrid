@@ -32,8 +32,10 @@ module Datagrid
       assets = args.any? ? args.shift : report.assets
       paginate = options[:paginate]
       assets = assets.paginate(paginate) if paginate 
-      content = @template.content_tag(:tr, header(report, options)) + rows(report, assets, options)
-      @template.content_tag(:table, content, html)
+
+      header = header(report, options)
+      rows = rows(report, assets, options)
+      @template.render :partial => "datagrid/table", :locals => {:report => report, :header => header, :rows => rows, :options => options}
     end
 
     def header(report, options = {})
