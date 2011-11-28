@@ -6,6 +6,9 @@ require "datagrid/ordering"
 
 require "datagrid/helper"
 require "datagrid/form_builder"
+require "datagrid/renderer"
+
+require "datagrid/engine"
 
 module Datagrid
 

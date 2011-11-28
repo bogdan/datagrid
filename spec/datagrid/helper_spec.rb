@@ -3,8 +3,14 @@ require "will_paginate"
 require "active_support/core_ext/hash"
 require "active_support/core_ext/object"
 
+require 'datagrid/renderer'
+
 describe Datagrid::Helper do
-  subject {ActionView::Base.new}
+  subject do
+    template = ActionView::Base.new
+    template.view_paths << File.expand_path("../../support/test_partials", __FILE__)
+    template
+  end
 
   before(:each) do
     subject.stub!(:params).and_return({})
@@ -21,52 +27,38 @@ describe Datagrid::Helper do
   let(:grid) { SimpleReport.new }
 
   describe ".datagrid_table" do
-    before(:each) do
-      subject.stub!(:datagrid_order_for).and_return(subject.content_tag(:div, "", :class => "order"))
-    end
     it "should return data table html" do
-      subject.datagrid_table(grid).should equal_to_dom(<<-HTML)
-<table class="datagrid">
-<tr>
-<th class="group">Group<div class="order"></div>
-</th>
-<th class="name">Name<div class="order"></div>
-</th>
-</tr>
+      datagrid_table = subject.datagrid_table(grid)
 
-<tr>
-<td class="group">Pop</td>
-<td class="name">Star</td>
-</tr>
-</table>
-HTML
+      datagrid_table.should match_css_pattern({
+        "table.datagrid tr th.group div.order" => 1,
+        "table.datagrid tr th.group" => /Group.*/,
+        "table.datagrid tr th.name div.order" => 1,
+        "table.datagrid tr th.name" => /Name.*/,
+        "table.datagrid tr td.group" => "Pop",
+        "table.datagrid tr td.name" => "Star"
+      })
     end
+
     it "should support giving assets explicitly" do
       other_entry = Entry.create!(entry.attributes)
-      subject.datagrid_table(grid, [entry]).should equal_to_dom(<<-HTML)
-<table class="datagrid">
-<tr>
-<th class="group">Group<div class="order"></div>
-</th>
-<th class="name">Name<div class="order"></div>
-</th>
-</tr>
+      datagrid_table = subject.datagrid_table(grid, [entry])
 
-<tr>
-<td class="group">Pop</td>
-<td class="name">Star</td>
-</tr>
-</table>
-HTML
+      datagrid_table.should match_css_pattern({
+        "table.datagrid tr th.group div.order" => 1,
+        "table.datagrid tr th.group" => /Group.*/,
+        "table.datagrid tr th.name div.order" => 1,
+        "table.datagrid tr th.name" => /Name.*/,
+        "table.datagrid tr td.group" => "Pop",
+        "table.datagrid tr td.name" => "Star"
+      })
     end
 
     it "should support cycle option" do
-      subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"]).should equal_to_dom(<<-HTML)
-<tr class="odd">
-<td class="group">Pop</td>
-<td class="name">Star</td>
-</tr>
-HTML
+      subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"]).should match_css_pattern({
+        "tr.odd td.group" => "Pop",
+        "tr.odd td.name" => "Star"
+      })
     end
   end
 

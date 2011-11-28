@@ -5,4 +5,4 @@ rdoc
 spec.log
 pkg
 wiki
-
+.rvmrc
