@@ -1,7 +1,6 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    ZenTest (4.6.2)
     accept_values_for (0.4.3)
       activemodel (>= 3.0.0)
       rspec
@@ -34,9 +33,6 @@ GEM
     activesupport (3.1.3)
       multi_json (~> 1.0)
     arel (2.2.1)
-    autotest (4.4.6)
-      ZenTest (>= 4.4.1)
-    autotest-growl (0.2.16)
     bson (1.4.0)
     bson_ext (1.4.0)
     builder (3.0.0)
@@ -132,13 +128,10 @@ PLATFORMS
 
 DEPENDENCIES
   accept_values_for
-  autotest
-  autotest-growl
   bson_ext
   bundler (~> 1.0.0)
   fastercsv
   jeweler (~> 1.6.0)
-  json
   mocha
   mongoid (= 2.2.3)
   nokogiri
@@ -147,5 +140,4 @@ DEPENDENCIES
   rspec (= 2.6.0)
   ruby-debug
   sqlite3-ruby
-  tilt
   will_paginate (= 2.3.15)
