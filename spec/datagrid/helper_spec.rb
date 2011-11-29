@@ -68,6 +68,25 @@ HTML
 </tr>
 HTML
     end
+
+    it "should support urls" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :url => lambda {|model| model.name})
+      end
+      subject.datagrid_rows(rp, [entry], {}).should equal_to_dom(<<-HTML)
+<tr><td><a href="Star">Star</a></td></tr>
+HTML
+    end
+    it "should support conditional urls" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :url => lambda {false})
+      end
+      subject.datagrid_rows(rp, [entry], {}).should equal_to_dom(<<-HTML)
+<tr><td>Star</td></tr>
+HTML
+    end
   end
 
   describe ".datagrid_order_for" do
