@@ -21,8 +21,9 @@ group :development do
   gem "sqlite3-ruby"
   gem 'will_paginate', '2.3.15'
 
-  gem "mongoid", "2.2.3"
-  gem "bson_ext"
+  gem "mongoid", "2.2.2"
+  gem "bson", "1.4.0"
+  gem "bson_ext", "1.4.0"
 
   gem "fastercsv", :platform => "mri_18"
 end

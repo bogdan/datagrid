@@ -69,7 +69,7 @@ module Datagrid
         check_scope_defined!("Scope should be defined before filters")
         grid = self
         lambda do |value|
-          grid.driver.where(grid.scope, attribute => value)
+          grid.driver.where(scope, attribute => value)
         end
       end
 
