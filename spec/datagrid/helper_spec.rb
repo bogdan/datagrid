@@ -59,6 +59,24 @@ HTML
 </table>
 HTML
     end
+    it "should support giving assets implicitly" do
+      other_entry = Entry.create!(entry.attributes)
+      subject.datagrid_table(grid, [entry]).should equal_to_dom(<<-HTML)
+<table class="datagrid">
+<tr>
+<th>Group<div class="order"></div>
+</th>
+<th>Name<div class="order"></div>
+</th>
+</tr>
+
+<tr>
+<td>Pop</td>
+<td>Star</td>
+</tr>
+</table>
+HTML
+    end
 
     it "should support cycle option" do
       subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"]).should equal_to_dom(<<-HTML)
@@ -66,6 +84,25 @@ HTML
 <td class="group">Pop</td>
 <td class="name">Star</td>
 </tr>
+HTML
+    end
+
+    it "should support urls" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :url => lambda {|model| model.name})
+      end
+      subject.datagrid_rows(rp, [entry], {}).should equal_to_dom(<<-HTML)
+<tr><td><a href="Star">Star</a></td></tr>
+HTML
+    end
+    it "should support conditional urls" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :url => lambda {false})
+      end
+      subject.datagrid_rows(rp, [entry], {}).should equal_to_dom(<<-HTML)
+<tr><td>Star</td></tr>
 HTML
     end
   end

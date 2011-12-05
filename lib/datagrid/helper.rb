@@ -5,8 +5,9 @@ module Datagrid
 
     def datagrid_format_value(report, column, asset)
       value = column.value(asset, report)
-      if column.options[:url]
-        link_to(value, column.options[:url].call(asset))
+      url = column.options[:url] && column.options[:url].call(asset)
+      if url
+        link_to(value, url)
       else
         case column.format
         when :url
