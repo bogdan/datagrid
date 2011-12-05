@@ -64,15 +64,15 @@ HTML
       subject.datagrid_table(grid, [entry]).should equal_to_dom(<<-HTML)
 <table class="datagrid">
 <tr>
-<th>Group<div class="order"></div>
+<th class="group">Group<div class="order"></div>
 </th>
-<th>Name<div class="order"></div>
+<th class="name">Name<div class="order"></div>
 </th>
 </tr>
 
 <tr>
-<td>Pop</td>
-<td>Star</td>
+<td class="group">Pop</td>
+<td class="name">Star</td>
 </tr>
 </table>
 HTML
@@ -93,7 +93,7 @@ HTML
         column(:name, :url => lambda {|model| model.name})
       end
       subject.datagrid_rows(rp, [entry], {}).should equal_to_dom(<<-HTML)
-<tr><td><a href="Star">Star</a></td></tr>
+<tr><td class="name"><a href="Star">Star</a></td></tr>
 HTML
     end
     it "should support conditional urls" do
@@ -102,7 +102,7 @@ HTML
         column(:name, :url => lambda {false})
       end
       subject.datagrid_rows(rp, [entry], {}).should equal_to_dom(<<-HTML)
-<tr><td>Star</td></tr>
+<tr><td class="name">Star</td></tr>
 HTML
     end
   end
