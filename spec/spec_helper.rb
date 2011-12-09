@@ -27,6 +27,7 @@ require "logger"
 File.open('spec.log', "w").close
 TEST_LOGGER = Logger.new('spec.log')
 
+
 RSpec.configure do |config|
 
 

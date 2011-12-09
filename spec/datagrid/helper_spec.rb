@@ -4,7 +4,7 @@ require "active_support/core_ext/hash"
 require "active_support/core_ext/object"
 
 describe Datagrid::Helper do
-  subject {ActionView::Base.new}
+  subject {ActionView::Base.new("spec/support")}
 
   before(:each) do
     subject.stub!(:params).and_return({})
@@ -32,11 +32,13 @@ describe Datagrid::Helper do
 </th>
 <th class="name">Name<div class="order"></div>
 </th>
+<th class="actions">Actions</th>
 </tr>
 
 <tr>
 <td class="group">Pop</td>
 <td class="name">Star</td>
+<td class="actions">No action for Star</td>
 </tr>
 </table>
 HTML
@@ -50,29 +52,14 @@ HTML
 </th>
 <th class="name">Name<div class="order"></div>
 </th>
+<th class="actions">Actions</th>
+</tr>
 </tr>
 
 <tr>
 <td class="group">Pop</td>
 <td class="name">Star</td>
-</tr>
-</table>
-HTML
-    end
-    it "should support giving assets implicitly" do
-      other_entry = Entry.create!(entry.attributes)
-      subject.datagrid_table(grid, [entry]).should equal_to_dom(<<-HTML)
-<table class="datagrid">
-<tr>
-<th class="group">Group<div class="order"></div>
-</th>
-<th class="name">Name<div class="order"></div>
-</th>
-</tr>
-
-<tr>
-<td class="group">Pop</td>
-<td class="name">Star</td>
+<td class="actions">No action for Star</td>
 </tr>
 </table>
 HTML
@@ -83,6 +70,7 @@ HTML
 <tr class="odd">
 <td class="group">Pop</td>
 <td class="name">Star</td>
+<td class="actions">No action for Star</td>
 </tr>
 HTML
     end

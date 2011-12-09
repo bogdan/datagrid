@@ -1,10 +1,11 @@
 require "action_view"
 
+
 module Datagrid
   module Helper
 
     def datagrid_format_value(report, column, asset)
-      value = column.value(asset, report)
+      value = column.html? ? datagrid_render_column(column, asset) : column.value(asset, report)
       url = column.options[:url] && column.options[:url].call(asset)
       if url
         link_to(value, url)
@@ -20,6 +21,7 @@ module Datagrid
     end
 
     def datagrid_table(report, *args)
+
       options = args.extract_options!
       html = options[:html] || {}
       html[:class] ||= "datagrid"
@@ -76,6 +78,11 @@ module Datagrid
 
     def _safe(string)
       string.respond_to?(:html_safe) ? string.html_safe : string
+    end
+
+    def datagrid_render_column(column, asset)
+      options = {:object => asset, :locals => {:entity => asset}}.deep_merge!(column.html)
+      render(options)
     end
   end
 
