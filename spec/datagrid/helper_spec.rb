@@ -45,13 +45,11 @@ HTML
     end
     it "should support giving assets explicitly" do
       other_entry = Entry.create!(entry.attributes)
-      subject.datagrid_table(grid, [entry]).should equal_to_dom(<<-HTML)
+      subject.datagrid_table(grid, [entry], :order => false).should equal_to_dom(<<-HTML)
 <table class="datagrid">
 <tr>
-<th class="group">Group<div class="order"></div>
-</th>
-<th class="name">Name<div class="order"></div>
-</th>
+<th class="group">Group</th>
+<th class="name">Name</th>
 <th class="actions">Actions</th>
 </tr>
 </tr>
