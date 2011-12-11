@@ -81,8 +81,7 @@ module Datagrid
     end
 
     def datagrid_render_column(column, asset)
-      options = {:object => asset, :locals => {:entity => asset}}.deep_merge!(column.html)
-      render(options)
+      render(:partial => column.partial, :object => asset, :locals => {:model => asset})
     end
   end
 

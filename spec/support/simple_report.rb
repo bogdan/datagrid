@@ -36,7 +36,7 @@ class SimpleReport
     user.name
   end
 
-  column(:actions, :html => {:template => "actions.html.erb"})
+  column(:actions, :partial => "actions")
 
   def param_name
     :report

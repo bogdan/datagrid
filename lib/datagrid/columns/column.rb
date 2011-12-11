@@ -7,9 +7,6 @@ class Datagrid::Columns::Column
     self.name = name.to_sym
     self.options = options
     self.block = block
-    if html && !html.is_a?(Hash)
-      raise Datagrid::ConfigurationError, ":html option should be a Hash"
-    end
   end
 
   def value(model, report)
@@ -52,12 +49,12 @@ class Datagrid::Columns::Column
     self.options[:order_desc]  
   end
 
-  def html
-    self.options[:html]
+  def partial
+    self.options[:partial]
   end
 
   def html?
-    !! self.options[:html]
+    !! self.options[:partial]
   end
 
 end
