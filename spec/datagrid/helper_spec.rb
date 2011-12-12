@@ -26,7 +26,7 @@ describe Datagrid::Helper do
     end
     it "should return data table html" do
       subject.datagrid_table(grid).should equal_to_dom(<<-HTML)
-<table class="datagrid">
+<table class="datagrid simple_report">
 <tr>
 <th class="group">Group<div class="order"></div>
 </th>
@@ -46,7 +46,7 @@ HTML
     it "should support giving assets explicitly" do
       other_entry = Entry.create!(entry.attributes)
       subject.datagrid_table(grid, [entry], :order => false).should equal_to_dom(<<-HTML)
-<table class="datagrid">
+<table class="datagrid simple_report">
 <tr>
 <th class="group">Group</th>
 <th class="name">Name</th>

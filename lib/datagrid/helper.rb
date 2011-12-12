@@ -24,7 +24,7 @@ module Datagrid
 
       options = args.extract_options!
       html = options[:html] || {}
-      html[:class] ||= "datagrid"
+      html[:class] ||= "datagrid #{report.class.to_s.underscore.demodulize}"
       assets = args.any? ? args.shift : report.assets
       paginate = options[:paginate]
       assets = assets.paginate(paginate) if paginate 
