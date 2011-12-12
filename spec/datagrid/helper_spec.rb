@@ -110,6 +110,19 @@ HTML
   <tr><td class="name ordered desc">Star</td></tr>
   HTML
        end
+
+       it "should render html columns" do
+
+        rp = test_report do
+          scope { Entry }
+          column(:name, :html => true) do |model|
+            content_tag(:span, model.name)
+          end
+        end
+        subject.datagrid_rows(rp, [entry]).should equal_to_dom(<<-HTML)
+  <tr><td class="name"><span>Star</span></td></tr>
+  HTML
+       end
     end
 
   end

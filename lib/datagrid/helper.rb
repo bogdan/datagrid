@@ -81,7 +81,7 @@ module Datagrid
     end
 
     def datagrid_render_column(column, asset)
-      render(:partial => column.partial, :object => asset, :locals => {:model => asset})
+      instance_exec(asset, &column.block)
     end
 
     def datagrid_column_classes(grid, column)

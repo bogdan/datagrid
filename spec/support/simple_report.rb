@@ -36,7 +36,9 @@ class SimpleReport
     user.name
   end
 
-  column(:actions, :partial => "actions")
+  column(:actions, :html => true) do |model|
+    render :partial => "actions", :locals => {:model => model}
+  end
 
   def param_name
     :report

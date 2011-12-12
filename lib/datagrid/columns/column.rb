@@ -49,12 +49,10 @@ class Datagrid::Columns::Column
     self.options[:order_desc]  
   end
 
-  def partial
-    self.options[:partial]
-  end
 
   def html?
-    !! self.options[:partial]
+    !! self.options[:html]
   end
+  
 
 end
