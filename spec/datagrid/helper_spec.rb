@@ -63,34 +63,55 @@ HTML
 HTML
     end
 
-    it "should support cycle option" do
-      subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"]).should equal_to_dom(<<-HTML)
+    describe ".datagrid_rows" do
+      it "should support cycle option" do
+        subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"]).should equal_to_dom(<<-HTML)
 <tr class="odd">
 <td class="group">Pop</td>
 <td class="name">Star</td>
 <td class="actions">No action for Star</td>
 </tr>
 HTML
+      end
+
+      it "should support urls" do
+        rp = test_report do
+          scope { Entry }
+          column(:name, :url => lambda {|model| model.name})
+        end
+        subject.datagrid_rows(rp, [entry]).should equal_to_dom(<<-HTML)
+  <tr><td class="name"><a href="Star">Star</a></td></tr>
+  HTML
+      end
+      it "should support conditional urls" do
+        rp = test_report do
+          scope { Entry }
+          column(:name, :url => lambda {false})
+        end
+        subject.datagrid_rows(rp, [entry]).should equal_to_dom(<<-HTML)
+  <tr><td class="name">Star</td></tr>
+  HTML
+      end
+       it "should add ordering classes to column" do
+        rp = test_report(:order => :name) do
+          scope { Entry }
+          column(:name)
+        end
+        subject.datagrid_rows(rp, [entry]).should equal_to_dom(<<-HTML)
+  <tr><td class="name ordered asc">Star</td></tr>
+  HTML
+       end
+       it "should add ordering classes to column" do
+        rp = test_report(:order => :name, :descending => true) do
+          scope { Entry }
+          column(:name)
+        end
+        subject.datagrid_rows(rp, [entry]).should equal_to_dom(<<-HTML)
+  <tr><td class="name ordered desc">Star</td></tr>
+  HTML
+       end
     end
 
-    it "should support urls" do
-      rp = test_report do
-        scope { Entry }
-        column(:name, :url => lambda {|model| model.name})
-      end
-      subject.datagrid_rows(rp, [entry], {}).should equal_to_dom(<<-HTML)
-<tr><td class="name"><a href="Star">Star</a></td></tr>
-HTML
-    end
-    it "should support conditional urls" do
-      rp = test_report do
-        scope { Entry }
-        column(:name, :url => lambda {false})
-      end
-      subject.datagrid_rows(rp, [entry], {}).should equal_to_dom(<<-HTML)
-<tr><td class="name">Star</td></tr>
-HTML
-    end
   end
 
   describe ".datagrid_order_for" do

@@ -11,11 +11,11 @@ end
 
 class IncludeDom
   def initialize(expectation)
-    @expectation = Nokogiri::HTML::DocumentFragment.parse(expectation).to_s
+    @expectation = Nokogiri::HTML::DocumentFragment.parse(expectation.strip).to_s
   end
 
   def matches?(text)
-    @matcher = Nokogiri::HTML::DocumentFragment.parse(text).to_s
+    @matcher = Nokogiri::HTML::DocumentFragment.parse(text.strip).to_s
     @matcher == @expectation
   end
 
@@ -28,11 +28,11 @@ end
 class EqualToDom
 
   def initialize(expectation)
-    @expectation = Nokogiri::HTML::DocumentFragment.parse(expectation).to_s
+    @expectation = Nokogiri::HTML::DocumentFragment.parse(expectation.strip).to_s
   end
 
   def matches?(text)
-    @matcher = Nokogiri::HTML::DocumentFragment.parse(text).to_s
+    @matcher = Nokogiri::HTML::DocumentFragment.parse(text.strip).to_s
     @matcher == @expectation
   end
 

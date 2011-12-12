@@ -41,16 +41,16 @@ module Datagrid
         if options[:order] && column.order
           data << datagrid_order_for(grid, column)
         end
-        header << content_tag(:th, data, :class => column.name)
+        header << content_tag(:th, data, :class => datagrid_column_classes(grid, column))
       end
       header
     end
 
-    def datagrid_rows(report, assets, options)
-      columns = report.columns
+    def datagrid_rows(grid, assets, options = {})
+      columns = grid.columns
       result = assets.map do |asset|
         content = columns.map do |column|
-          content_tag(:td, datagrid_format_value(report, column, asset), :class => column.name)
+          content_tag(:td, datagrid_format_value(grid, column, asset), :class => datagrid_column_classes(grid, column))
         end.join(empty_string)
         content_tag(:tr, _safe(content), :class => options[:cycle] && cycle(*options[:cycle]))
       end.join(empty_string)
@@ -82,6 +82,11 @@ module Datagrid
 
     def datagrid_render_column(column, asset)
       render(:partial => column.partial, :object => asset, :locals => {:model => asset})
+    end
+
+    def datagrid_column_classes(grid, column)
+        order_class = grid.order == column.name ? ["ordered", grid.descending ? "desc" : "asc"] : nil
+      [column.name, order_class].compact
     end
   end
 
