@@ -28,7 +28,7 @@ describe Datagrid::Helper do
   let(:grid) { SimpleReport.new }
 
   describe ".datagrid_table" do
-    it "should have report class as html class on table" do
+    it "should have grid class as html class on table" do
       subject.datagrid_table(grid).should match_css_pattern(
         "table.datagrid.simple_report" => 1
       )
@@ -134,8 +134,8 @@ describe Datagrid::Helper do
           scope { Entry }
           column(:category)
         end
-        report = OrderedGrid.new(:descending => true, :order => :category)
-        subject.datagrid_order_for(report, report.column_by_name(:category)).should equal_to_dom(<<-HTML)
+        grid = OrderedGrid.new(:descending => true, :order => :category)
+        subject.datagrid_order_for(grid, grid.column_by_name(:category)).should equal_to_dom(<<-HTML)
 <div class="order">
 <a href="ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="order asc">ASC</a> <a href="ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="order desc">DESC</a>
 </div>

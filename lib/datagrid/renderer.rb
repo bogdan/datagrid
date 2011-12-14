@@ -11,8 +11,8 @@ module Datagrid
       @template = template
     end
 
-    def format_value(report, column, asset)
-      value = column.html? ? @template.instance_exec(asset, &column.block) : column.value(asset, report)
+    def format_value(grid, column, asset)
+      value = column.html? ? @template.instance_exec(asset, &column.block) : column.value(asset, grid)
       url = column.options[:url] && column.options[:url].call(asset)
       if url
         @template.link_to(value, url)
@@ -26,28 +26,28 @@ module Datagrid
       end
     end
 
-    def table(report, *args)
+    def table(grid, *args)
       options = args.extract_options!
       html = options[:html] || {}
       html[:class] ||= "datagrid"
-      assets = args.any? ? args.shift : report.assets
+      assets = args.any? ? args.shift : grid.assets
       paginate = options[:paginate]
       assets = assets.paginate(paginate) if paginate 
 
-      header = header(report, options)
-      rows = rows(report, assets, options)
-      @template.render :partial => "datagrid/table", :locals => {:report => report, :header => header, :rows => rows, :options => options}
+      header = header(grid, options)
+      rows = rows(grid, assets, options)
+      @template.render :partial => "datagrid/table", :locals => {:grid => grid, :header => header, :rows => rows, :options => options}
     end
 
-    def header(report, options = {})
+    def header(grid, options = {})
       options[:order] = true unless options.has_key?(:order)
 
-      @template.render :partial => "datagrid/head", :locals => {:report => report, :options => options}
+      @template.render :partial => "datagrid/head", :locals => {:grid => grid, :options => options}
     end
 
-    def rows(report, assets, options = {})
+    def rows(grid, assets, options = {})
       result = assets.map do |asset|
-        @template.render :partial => "datagrid/row", :locals => {:report => report, :options => options, :asset => asset}
+        @template.render :partial => "datagrid/row", :locals => {:grid => grid, :options => options, :asset => asset}
       end.join
 
       _safe(result)

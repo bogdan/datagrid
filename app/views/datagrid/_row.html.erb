@@ -1,5 +1,5 @@
 <tr class="<%= options[:cycle] && cycle(*options[:cycle]) %>">
-  <% report.columns.each do |column| %>
-    <td class="<%= datagrid_column_classes(report, column)  %>"><%= datagrid_format_value(report, column, asset) %> </td>
+  <% grid.columns.each do |column| %>
+    <td class="<%= datagrid_column_classes(grid, column)  %>"><%= datagrid_format_value(grid, column, asset) %> </td>
   <% end %>
 </tr>
