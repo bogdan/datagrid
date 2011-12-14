@@ -28,6 +28,11 @@ describe Datagrid::Helper do
   let(:grid) { SimpleReport.new }
 
   describe ".datagrid_table" do
+    it "should have report class as html class on table" do
+      subject.datagrid_table(grid).should match_css_pattern(
+        "table.datagrid.simple_report" => 1
+      )
+    end
     it "should return data table html" do
       datagrid_table = subject.datagrid_table(grid)
 
