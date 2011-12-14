@@ -5,6 +5,8 @@
 # That is why we need thi helper class
 class Datagrid::Filters::FilterEval
 
+  attr_accessor :filter, :scope, :value
+
   def initialize(filter, scope, value)
     @filter = filter
     @scope = scope

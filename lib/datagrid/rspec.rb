@@ -1,5 +1,6 @@
 require "datagrid"
 
+#TODO: refactor this experimental shit
 shared_examples_for "Datagrid" do
   describe "as Datagrid" do
 
@@ -9,7 +10,7 @@ shared_examples_for "Datagrid" do
 
     its(:data) {should_not be_empty}
 
-    described_class.columns.each do |column|
+    described_class.columns(:data => true).each do |column|
       describe "column ##{column.name}" do
 
         it "should has value in #data_hash" do

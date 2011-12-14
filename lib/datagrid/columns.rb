@@ -12,15 +12,16 @@ module Datagrid
 
         include Datagrid::Core
 
-
       end
       base.send :include, InstanceMethods
     end # self.included
 
     module ClassMethods
 
-      def columns
-        @columns ||= []
+      def columns(options = {})
+        (@columns ||= []).reject do |column|
+          options[:data] && column.html?
+        end
       end
 
       def column(name, options = {}, &block)
@@ -28,7 +29,8 @@ module Datagrid
         block ||= lambda do |model|
           model.send(name)
         end
-        self.columns << Datagrid::Columns::Column.new(self, name, options, &block)
+        @columns ||= []
+        @columns << Datagrid::Columns::Column.new(self, name, options, &block)
       end
 
       def column_by_name(name)
@@ -42,12 +44,12 @@ module Datagrid
 
       # Returns <tt>Array</tt> of human readable column names. See also "Localization" section
       def header
-        self.class.columns.map(&:header)
+        self.data_columns.map(&:header)
       end
 
       # Returns <tt>Array</tt> column values for given asset
       def row_for(asset)
-        self.class.columns.map do |column|
+        self.data_columns.map do |column|
           column.value(asset, self)
         end
       end
@@ -55,7 +57,7 @@ module Datagrid
       # Returns <tt>Hash</tt> where keys are column names and values are column values for the given asset
       def hash_for(asset)
         result = {}
-        self.class.columns.each do |column|
+        self.data_columns.each do |column|
           result[column.name] = column.value(asset, self)
         end
         result
@@ -94,8 +96,12 @@ module Datagrid
         end
       end
 
-      def columns
-        self.class.columns
+      def columns(options ={})
+        self.class.columns(options)
+      end
+
+      def data_columns
+        self.columns(:data => true)
       end
 
       def column_by_name(name)

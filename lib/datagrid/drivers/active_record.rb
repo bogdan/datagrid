@@ -3,6 +3,7 @@ module Datagrid
     class ActiveRecord < AbstractDriver
 
       def self.match?(scope)
+        return false unless defined?(::ActiveRecord)
         if scope.is_a?(Class) 
           scope.ancestors.include?(::ActiveRecord::Base)
         else

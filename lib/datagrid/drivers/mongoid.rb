@@ -3,6 +3,7 @@ module Datagrid
     class Mongoid < AbstractDriver
 
       def self.match?(scope)
+        return false unless defined?(::Mongoid)
         if scope.is_a?(Class) 
           scope.ancestors.include?(::Mongoid::Document)
         else

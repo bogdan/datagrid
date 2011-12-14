@@ -12,9 +12,10 @@ module Datagrid
     end
 
     def format_value(report, column, asset)
-      value = column.value(asset, report)
-      if column.options[:url]
-        @template.link_to(value, column.options[:url].call(asset))
+      value = column.html? ? @template.instance_exec(asset, &column.block) : column.value(asset, report)
+      url = column.options[:url] && column.options[:url].call(asset)
+      if url
+        @template.link_to(value, url)
       else
         case column.format
         when :url
@@ -44,7 +45,7 @@ module Datagrid
       @template.render :partial => "datagrid/head", :locals => {:report => report, :options => options}
     end
 
-    def rows(report, assets, options)
+    def rows(report, assets, options = {})
       result = assets.map do |asset|
         @template.render :partial => "datagrid/row", :locals => {:report => report, :options => options, :asset => asset}
       end.join

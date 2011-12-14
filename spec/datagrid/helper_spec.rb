@@ -8,6 +8,7 @@ require 'datagrid/renderer'
 describe Datagrid::Helper do
   subject do
     template = ActionView::Base.new
+    template.view_paths << File.expand_path("../../../app/views", __FILE__)
     template.view_paths << File.expand_path("../../support/test_partials", __FILE__)
     template
   end
@@ -17,7 +18,7 @@ describe Datagrid::Helper do
     subject.stub(:url_for) do |options|
       options.to_param
     end
-    
+
   end
 
   let(:group) { Group.create!(:name => "Pop") }
@@ -59,25 +60,82 @@ describe Datagrid::Helper do
         "tr.odd td.group" => "Pop",
         "tr.odd td.name" => "Star"
       })
-    end
-  end
 
-  describe ".datagrid_order_for" do
-    it "should render ordreing layout" do
-      class OrderedGrid
-        include Datagrid
-        scope { Entry }
-        column(:category)
+    end
+
+    it "should support no order given" do
+      subject.datagrid_table(grid, [entry], :order => false).should match_css_pattern("table.datagrid th .order" => 0)
+    end
+
+    describe ".datagrid_rows" do
+
+      it "should support urls" do
+        rp = test_report do
+          scope { Entry }
+          column(:name, :url => lambda {|model| model.name})
+        end
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name a[href=Star]" => "Star"
+        )
       end
-      report = OrderedGrid.new(:descending => true, :order => :category)
-      subject.datagrid_order_for(report, report.column_by_name(:category)).should equal_to_dom(<<-HTML)
+      it "should support conditional urls" do
+        rp = test_report do
+          scope { Entry }
+          column(:name, :url => lambda {false})
+        end
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name" => "Star"
+        )
+        
+      end
+      it "should add ordering classes to column" do
+        rp = test_report(:order => :name) do
+          scope { Entry }
+          column(:name)
+        end
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name.ordered.asc" => "Star"
+        )
+        
+      end
+      it "should add ordering classes to column" do
+        rp = test_report(:order => :name, :descending => true) do
+          scope { Entry }
+          column(:name)
+        end
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name.ordered.desc" => "Star"
+        )
+      end
+
+      it "should render html columns" do
+
+        rp = test_report do
+          scope { Entry }
+          column(:name, :html => true) do |model|
+            content_tag(:span, model.name)
+          end
+        end
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name span" => "Star"
+        )
+      end
+    end
+
+    describe ".datagrid_order_for" do
+      it "should render ordreing layout" do
+        class OrderedGrid
+          include Datagrid
+          scope { Entry }
+          column(:category)
+        end
+        report = OrderedGrid.new(:descending => true, :order => :category)
+        subject.datagrid_order_for(report, report.column_by_name(:category)).should equal_to_dom(<<-HTML)
 <div class="order">
 <a href="ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="order asc">ASC</a> <a href="ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="order desc">DESC</a>
 </div>
-HTML
+        HTML
+      end
     end
-      
   end
-  
-
 end

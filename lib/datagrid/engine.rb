@@ -1,5 +1,7 @@
+require "rails/engine"
+
 module Datagrid
-  class Engine < Rails::Engine
+  class Engine < ::Rails::Engine
     initializer "datagrid.helpers" do
       ActiveSupport.on_load :action_view do
         include Datagrid::Helper

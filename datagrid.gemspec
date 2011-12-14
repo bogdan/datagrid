@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "datagrid"
-  s.version = "0.4.0"
+  s.version = "0.4.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = "2011-11-03"
+  s.date = "2011-12-06"
   s.description = "This allows you to easily build datagrid aka data tables with sortable columns and filters"
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
@@ -54,6 +54,7 @@ Gem::Specification.new do |s|
     "spec/datagrid/columns_spec.rb",
     "spec/datagrid/drivers/active_record_spec.rb",
     "spec/datagrid/drivers/mongoid_spec.rb",
+    "spec/datagrid/filters/boolean_enum_filter_spec.rb",
     "spec/datagrid/filters/composite_filters_spec.rb",
     "spec/datagrid/filters/enum_filter_spec.rb",
     "spec/datagrid/filters_spec.rb",
@@ -88,8 +89,9 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<nokogiri>, [">= 0"])
       s.add_development_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_development_dependency(%q<will_paginate>, ["= 2.3.15"])
-      s.add_development_dependency(%q<mongoid>, ["= 2.2.3"])
-      s.add_development_dependency(%q<bson_ext>, [">= 0"])
+      s.add_development_dependency(%q<mongoid>, ["= 2.2.2"])
+      s.add_development_dependency(%q<bson>, ["= 1.4.0"])
+      s.add_development_dependency(%q<bson_ext>, ["= 1.4.0"])
       s.add_development_dependency(%q<fastercsv>, [">= 0"])
     else
       s.add_dependency(%q<rails>, [">= 3.0"])
@@ -103,8 +105,9 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<nokogiri>, [">= 0"])
       s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_dependency(%q<will_paginate>, ["= 2.3.15"])
-      s.add_dependency(%q<mongoid>, ["= 2.2.3"])
-      s.add_dependency(%q<bson_ext>, [">= 0"])
+      s.add_dependency(%q<mongoid>, ["= 2.2.2"])
+      s.add_dependency(%q<bson>, ["= 1.4.0"])
+      s.add_dependency(%q<bson_ext>, ["= 1.4.0"])
       s.add_dependency(%q<fastercsv>, [">= 0"])
     end
   else
@@ -119,8 +122,9 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<nokogiri>, [">= 0"])
     s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
     s.add_dependency(%q<will_paginate>, ["= 2.3.15"])
-    s.add_dependency(%q<mongoid>, ["= 2.2.3"])
-    s.add_dependency(%q<bson_ext>, [">= 0"])
+    s.add_dependency(%q<mongoid>, ["= 2.2.2"])
+    s.add_dependency(%q<bson>, ["= 1.4.0"])
+    s.add_dependency(%q<bson_ext>, ["= 1.4.0"])
     s.add_dependency(%q<fastercsv>, [">= 0"])
   end
 end

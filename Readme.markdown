@@ -67,8 +67,6 @@ Basic grid api:
 
 ``` ruby
 report = SimpleReport.new(
-        :order => "group", 
-        :descending => true, 
         :group_id => [1,2], :from_logins_count => 1, 
         :category => "first",
         :order => :group,

@@ -7,6 +7,16 @@ module Datagrid
       def booleanize(value)
         TRUTH.include?(value)
       end
+
+      def warn_once(message)
+        @warnings ||= {}
+        if @warnings[message] 
+          false
+        else
+          warn message
+          @warnings[message] = true
+        end
+      end
     end
   end
 end
