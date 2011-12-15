@@ -65,9 +65,6 @@ module Datagrid
       end
     end
 
-    def empty_string
-      _safe("")
-    end
 
     def _safe(string)
       string.respond_to?(:html_safe) ? string.html_safe : string

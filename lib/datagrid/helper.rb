@@ -25,13 +25,7 @@ module Datagrid
     end
 
     protected
-    def empty_string
-      _safe("")
-    end
 
-    def _safe(string)
-      string.respond_to?(:html_safe) ? string.html_safe : string
-    end
 
     def datagrid_render_column(column, asset)
       instance_exec(asset, &column.block)
