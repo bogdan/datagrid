@@ -28,8 +28,8 @@ module Datagrid
 
     def table(grid, *args)
       options = args.extract_options!
-      html = options[:html] || {}
-      html[:class] ||= "datagrid"
+      options[:html] ||= {}
+      options[:html][:class] ||= "datagrid #{grid.class.to_s.underscore.demodulize}"
       assets = args.any? ? args.shift : grid.assets
       paginate = options[:paginate]
       assets = assets.paginate(paginate) if paginate 
