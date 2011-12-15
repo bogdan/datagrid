@@ -30,10 +30,6 @@ module Datagrid
       Renderer.for(self)
     end
 
-    def datagrid_render_column(column, asset)
-      instance_exec(asset, &column.block)
-    end
-
     def datagrid_column_classes(grid, column)
         order_class = grid.order == column.name ? ["ordered", grid.descending ? "desc" : "asc"] : nil
       [column.name, order_class].compact.join(" ")
