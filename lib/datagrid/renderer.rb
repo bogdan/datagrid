@@ -19,7 +19,6 @@ module Datagrid
       else
         case column.format
         when :url
-          ::Datagrid::Utils.warn_once(":format => :url column option is deprecated. Use :url option instead.")
           @template.link_to(column.label  ? asset.send(column.label) : I18n.t("datagrid.table.url_label", :default => "URL"), value)
         else
           _safe(value)

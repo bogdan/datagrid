@@ -7,17 +7,20 @@ class Datagrid::Columns::Column
     self.name = name.to_sym
     self.options = options
     self.block = block
+    if format
+      ::Datagrid::Utils.warn_once(":format column option is deprecated. Use :url or :html option instead.")
+    end
   end
 
-  def value(model, report)
-    value_for(model, report)
+  def value(model, grid)
+    value_for(model, grid)
   end
 
-  def value_for(model, report)
+  def value_for(model, grid)
     if self.block.arity == 1
       self.block.call(model)
     elsif self.block.arity == 2
-      self.block.call(model, report)
+      self.block.call(model, grid)
     else
       model.instance_eval(&self.block)
     end
