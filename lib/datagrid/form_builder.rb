@@ -7,7 +7,7 @@ module Datagrid
       filter = get_filter(filter_or_attribute)
       options[:class] ||= ""
       options[:class] += " " unless options[:class].blank?
-      options[:class] += "#{filter.name} #{datagrid_html_class(filter.class)}"
+      options[:class] += "#{filter.name} #{datagrid_filter_html_class(filter)}"
       self.send(datagrid_filter_method(filter), filter, options)
     end
 
@@ -67,12 +67,12 @@ module Datagrid
       end
     end
 
-    def datagrid_html_class(klass)
-      klass.to_s.split("::").last.underscore
+    def datagrid_filter_html_class(filter)
+      filter.class.to_s.demodulize.underscore
     end
 
     def datagrid_filter_method(filter)
-      :"datagrid_#{filter.class.to_s.underscore.split('/').last}"
+      :"datagrid_#{filter.class.to_s.demodulize.underscore}"
     end
 
     class Error < StandardError
