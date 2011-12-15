@@ -1,6 +1,5 @@
 namespace :datagrid do
 
-
   desc "Copy table partials into rails application"
   task :copy_partials do
     def copy_template(path)
