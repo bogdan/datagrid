@@ -34,9 +34,7 @@ module Datagrid
       paginate = options[:paginate]
       assets = assets.paginate(paginate) if paginate 
 
-      header = header(grid, options)
-      rows = rows(grid, assets, options)
-      @template.render :partial => "datagrid/table", :locals => {:grid => grid, :header => header, :rows => rows, :options => options}
+      @template.render :partial => "datagrid/table", :locals => {:grid => grid, :options => options, :assets => assets}
     end
 
     def header(grid, options = {})

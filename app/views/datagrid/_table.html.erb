@@ -1,4 +1,10 @@
+<!-- 
+Local variables: 
+* grid - instance of Datagrid
+* assets - Array of database Entities
+* options - passed options Hash
+-->
 <table class="datagrid <%= grid.class.to_s.underscore.demodulize %>">
-  <%= header %>
-  <%= rows %>
+  <%= datagrid_header(grid, options) %>
+  <%= datagrid_rows(grid, assets, options) %>
 </table>
