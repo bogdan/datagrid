@@ -30,7 +30,7 @@ describe Datagrid::Filters do
   end
 
 
-  it "should initialize report Scope table not exists" do
+  it "should initialize when report Scope table not exists" do
     class ModelWithoutTable < ActiveRecord::Base; end
     ModelWithoutTable.should_not be_table_exists
     class TheReport
