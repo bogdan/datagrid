@@ -9,6 +9,16 @@ describe Datagrid::Filters do
     end.created_at.should == Date.today
   end
 
+  it "should stack with other filters" do
+    Entry.create(:name => "ZZ", :category => "first")
+    report = test_report(:name => "Pop", :category => "first") do
+      scope  { Entry }
+      filter(:name)
+      filter(:category, :enum, :select => ["first", "second"])
+    end
+    report.assets.should be_empty
+  end
+
   it "should not support array argument for not multiple filter" do
     report = test_report do
       scope {Entry}
