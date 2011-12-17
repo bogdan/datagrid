@@ -62,6 +62,7 @@ class CssPattern
   end
 
   def matches?(text)
+    text = text.clone.force_encoding("UTF-8")
     @matcher = Nokogiri::HTML::DocumentFragment.parse(text)
     @css_pattern.each do |css, amount_or_pattern_or_string_or_proc|
       path = @matcher.css(css)

@@ -86,7 +86,7 @@ describe Datagrid::Helper do
       it "should support conditional urls" do
         rp = test_report do
           scope { Entry }
-          column(:name, :url => lambda {false})
+          column(:name, :url => lambda {|model| false})
         end
         subject.datagrid_rows(rp, [entry]).should match_css_pattern(
           "tr td.name" => "Star"
