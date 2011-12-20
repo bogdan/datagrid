@@ -19,7 +19,7 @@ require 'datagrid'
 require "discover"
 begin
   require 'ruby-debug'
-rescue
+rescue LoadError
 end
 require 'rspec'
 require "logger"
