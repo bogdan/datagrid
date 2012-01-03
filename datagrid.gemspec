@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "datagrid"
-  s.version = "0.4.1"
+  s.version = "0.5.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = "2011-12-06"
+  s.date = "2012-01-03"
   s.description = "This allows you to easily build datagrid aka data tables with sortable columns and filters"
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
@@ -24,6 +24,9 @@ Gem::Specification.new do |s|
     "Rakefile",
     "Readme.markdown",
     "VERSION",
+    "app/views/datagrid/_head.html.erb",
+    "app/views/datagrid/_row.html.erb",
+    "app/views/datagrid/_table.html.erb",
     "datagrid.gemspec",
     "lib/datagrid.rb",
     "lib/datagrid/active_model.rb",
@@ -34,6 +37,7 @@ Gem::Specification.new do |s|
     "lib/datagrid/drivers/abstract_driver.rb",
     "lib/datagrid/drivers/active_record.rb",
     "lib/datagrid/drivers/mongoid.rb",
+    "lib/datagrid/engine.rb",
     "lib/datagrid/filters.rb",
     "lib/datagrid/filters/base_filter.rb",
     "lib/datagrid/filters/boolean_enum_filter.rb",
@@ -48,8 +52,10 @@ Gem::Specification.new do |s|
     "lib/datagrid/form_builder.rb",
     "lib/datagrid/helper.rb",
     "lib/datagrid/ordering.rb",
+    "lib/datagrid/renderer.rb",
     "lib/datagrid/rspec.rb",
     "lib/datagrid/utils.rb",
+    "lib/tasks/datagrid_tasks.rake",
     "spec/datagrid/active_model_spec.rb",
     "spec/datagrid/columns_spec.rb",
     "spec/datagrid/drivers/active_record_spec.rb",
@@ -61,12 +67,14 @@ Gem::Specification.new do |s|
     "spec/datagrid/form_builder_spec.rb",
     "spec/datagrid/helper_spec.rb",
     "spec/datagrid/ordering_spec.rb",
+    "spec/datagrid/utils_spec.rb",
     "spec/datagrid_spec.rb",
     "spec/spec_helper.rb",
-    "spec/support/equal_to_dom.rb",
+    "spec/support/active_record.rb",
+    "spec/support/matchers.rb",
     "spec/support/mongoid.rb",
-    "spec/support/schema.rb",
-    "spec/support/simple_report.rb"
+    "spec/support/simple_report.rb",
+    "spec/support/test_partials/_actions.html.erb"
   ]
   s.homepage = "http://github.com/bogdan/datagrid"
   s.licenses = ["MIT"]
