@@ -17,7 +17,37 @@ module Datagrid
       end
 
 
-      #TODO api declaration
+      def self.match?(scope)
+        raise NotImplementedError
+      end
+
+      def to_scope(scope)
+        raise NotImplementedError
+      end
+
+      def where(scope, condition)
+        raise NotImplementedError
+      end
+
+      def asc(scope, order)
+        raise NotImplementedError
+      end
+
+      def desc(scope, order)
+        raise NotImplementedError
+      end
+
+      def default_order(scope, column_name)
+        raise NotImplementedError
+      end
+
+      def greater_equal(scope, field, value)
+        raise NotImplementedError
+      end
+
+      def less_equal(scope, field, value)
+        raise NotImplementedError
+      end
       
     end
   end
