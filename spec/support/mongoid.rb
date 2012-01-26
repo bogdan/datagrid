@@ -34,9 +34,7 @@ class MongoidGrid
   end
 
   filter :name
-  filter :group_id do |value|
-    where(:group_id => value)
-  end
+  integer_range_filters(:group_id)
   filter :disabled, :eboolean
 
   column :name

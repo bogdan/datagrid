@@ -43,9 +43,9 @@ describe Datagrid::Drivers::Mongoid do
 
 
     describe "when some filters specified" do
-      let(:_attributes) { {:group_id => 2} }
-      its(:assets) {should include(first)}
-      its(:assets) {should_not include(second)}
+      let(:_attributes) { {:from_group_id => 3} }
+      its(:assets) {should_not include(first)}
+      its(:assets) {should include(second)}
     end
 
     describe "when reverse ordering is specified" do

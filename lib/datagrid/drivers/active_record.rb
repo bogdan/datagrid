@@ -29,12 +29,16 @@ module Datagrid
         scope.reorder(order).reverse_order
       end
 
-      def table_name(scope)
-        scope.table_name
-      end
-
       def default_order(scope, column_name)
         scope.column_names.include?(column_name.to_s) ? [scope.table_name, column_name].join(".") : nil
+      end
+
+      def greater_equal(scope, field, value)
+        scope.where(["#{field} >= ?", value])
+      end
+
+      def less_equal(scope, field, value)
+        scope.where(["#{field} <= ?", value])
       end
     end
   end

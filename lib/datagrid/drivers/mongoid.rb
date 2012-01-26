@@ -31,6 +31,13 @@ module Datagrid
         column_name
       end
 
+      def greater_equal(scope, field, value)
+        scope.where(field => {"$gte" => value})
+      end
+
+      def less_equal(scope, field, value)
+        scope.where(field => {"$lte" => value})
+      end
     end
   end
 end

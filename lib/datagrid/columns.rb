@@ -1,8 +1,7 @@
 require "datagrid/utils"
 
 module Datagrid
-  
-  
+
   module Columns
     require "datagrid/columns/column"
 

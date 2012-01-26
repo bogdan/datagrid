@@ -2,7 +2,7 @@
 # We can not call instance_eval on ActiveRecord::Relation class
 # because it will automatically convert it to an array because #instance_eval
 # is not included in the method list that do not cause force result loading
-# That is why we need thi helper class
+# That is why we need this helper class
 class Datagrid::Filters::FilterEval
 
   attr_accessor :filter, :scope, :value
@@ -15,6 +15,10 @@ class Datagrid::Filters::FilterEval
 
   def run
     instance_exec @value, &(@filter.block)
+  end
+
+  def driver
+    @filter.grid.driver
   end
 
   def method_missing(meth, *args, &blk)

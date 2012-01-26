@@ -15,19 +15,19 @@ module Datagrid
 
         def date_range_filters(field, from_name = :"from_#{field}", to_name = :"to_#{field}")
           filter(from_name, :date) do |date|
-            self.scoped(:conditions => ["#{field} >= ?", date])
+            driver.greater_equal(self, field, date)
           end
           filter(to_name, :date) do |date|
-            self.scoped(:conditions => ["#{field} <= ?", date])
+            driver.less_equal(self, field, date)
           end
         end
 
         def integer_range_filters(field, from_name = :"from_#{field}", to_name = :"to_#{field}")
           filter(from_name, :integer) do |value|
-            self.scoped(:conditions => "#{field} >= #{value}")
+            driver.greater_equal(self, field, value)
           end
           filter(to_name, :integer) do |value|
-            self.scoped(:conditions => "#{field} <= #{value}")
+            driver.less_equal(self, field, value)
           end
         end
       end # ClassMethods
