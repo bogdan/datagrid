@@ -16,6 +16,14 @@ describe Datagrid::Filters::CompositeFilters do
       assets.should include(e2)
       assets.should_not include(e1, e3)
     end
+
+    it "should support options" do
+      report = test_report do
+        report = date_range_filters(:shipping_date, {:default => 10.days.ago.to_date}, {:default => Date.today})
+      end
+      report.from_shipping_date.should == 10.days.ago.to_date
+      report.to_shipping_date.should == Date.today
+    end
   end
   
   describe ".integer_range_filters" do
@@ -31,6 +39,13 @@ describe Datagrid::Filters::CompositeFilters do
 
       assets.should include(e2)
       assets.should_not include(e1, e3)
+    end
+    it "should support options" do
+      report = test_report do
+        report = integer_range_filters(:group_id, {:default => 0}, {:default => 100})
+      end
+      report.from_group_id.should == 0
+      report.to_group_id.should == 100
     end
   end
 end
