@@ -34,7 +34,7 @@ class MongoidGrid
   end
 
   filter :name
-  integer_range_filters(:group_id)
+  integer_range_filters(:group_id, {:default => 0}, {:default => 100})
   filter :disabled, :eboolean
 
   column :name

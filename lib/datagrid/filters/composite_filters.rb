@@ -11,28 +11,40 @@ module Datagrid
       end # self.included
 
       module ClassMethods
-        #TODO: decide what to do with cross-orm
 
-        def date_range_filters(field, from_name = :"from_#{field}", to_name = :"to_#{field}")
-          filter(from_name, :date) do |date|
+        def date_range_filters(field, from_options = {}, to_options = {})
+          from_options = normalize_composite_filter_options(from_options, field)
+          to_options = normalize_composite_filter_options(to_options, field)
+
+          filter(from_options[:name] || :"from_#{field}", :date) do |date|
             driver.greater_equal(self, field, date)
           end
-          filter(to_name, :date) do |date|
+          filter(to_options[:name] || :"to_#{field}", :date) do |date|
             driver.less_equal(self, field, date)
           end
         end
 
-        def integer_range_filters(field, from_name = :"from_#{field}", to_name = :"to_#{field}")
-          filter(from_name, :integer) do |value|
+        def integer_range_filters(field, from_options = {}, to_options = {})
+          from_options = normalize_composite_filter_options(from_options, field)
+          to_options = normalize_composite_filter_options(to_options, field)
+          filter(from_options[:name] || :"from_#{field}", :integer) do |value|
             driver.greater_equal(self, field, value)
           end
-          filter(to_name, :integer) do |value|
+          filter(to_options[:name] || :"to_#{field}", :integer) do |value|
             driver.less_equal(self, field, value)
           end
+        end
+
+        def normalize_composite_filter_options(options, field)
+          if options.is_a?(String) || options.is_a?(Symbol)
+            options = {:name => options}
+          end
+          options
         end
       end # ClassMethods
 
       module InstanceMethods
+
 
       end # InstanceMethods
 
