@@ -15,6 +15,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require "active_record"
 require "will_paginate"
 require "mongoid"
+require "mongo_mapper"
 require 'datagrid'
 require "discover"
 begin
@@ -36,6 +37,7 @@ RSpec.configure do |config|
     Group.delete_all
     Entry.delete_all
     MongoidEntry.delete_all
+    MongoMapperEntry.delete_all
 
   end
 
@@ -48,4 +50,5 @@ end
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/schema.rb"].each {|f| require f}
 Dir["#{File.dirname(__FILE__)}/support/mongoid.rb"].each {|f| require f}
+Dir["#{File.dirname(__FILE__)}/support/mongo_mapper.rb"].each {|f| require f}
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
