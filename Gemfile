@@ -22,6 +22,7 @@ group :development do
   gem 'will_paginate', '2.3.15'
 
   gem "mongoid", "2.2.2"
+  gem "mongo_mapper", ">=0.11.0"
   gem "bson", "1.4.0"
   gem "bson_ext", "1.4.0"
 
