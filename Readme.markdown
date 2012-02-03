@@ -8,16 +8,6 @@ Ruby library that helps you to build and represent table-like data with:
 * Localization
 * Export to CSV
 
-
-### Grid DSL
-
-In order to create a report, you need to define:
-
-* scope of objects to look through
-* filters that will be used to filter data
-* columns that should be displayed and sortable (if possible)
-
-
 ### ORM Support
 
 * ActiveRecord
@@ -87,6 +77,15 @@ report.data   # => [ header, *rows]
 
 report.to_csv # => Yes, it is
 ```
+
+### Grid DSL
+
+In order to create a report, you need to define:
+
+* scope of objects to look through
+* filters that will be used to filter data
+* columns that should be displayed and sortable (if possible)
+
 
 ### Scope
 
