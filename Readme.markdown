@@ -21,7 +21,7 @@ In order to create a report, you need to define:
 ### ORM Support
 
 * ActiveRecord
-* Mongoid (beta)
+* Mongoid
 * MongoMapper (beta)
 
 [Create an issue](https://github.com/bogdan/datagrid/issues/new) if you want more.
