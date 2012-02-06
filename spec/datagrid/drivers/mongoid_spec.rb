@@ -52,5 +52,14 @@ describe Datagrid::Drivers::Mongoid do
       let(:_attributes) { {:order => :name, :descending => true} }
       its(:rows) {should == [["Main Second", 3, true], ["Main First", 2, false]]}
     end
+
+    it "should not provide default order for non declared fields" do
+      proc {
+        test_report(:order => :test) do
+          scope { MongoidEntry }
+          column(:test)
+        end
+      }.should raise_error(Datagrid::OrderUnsupported)
+    end
   end
 end
