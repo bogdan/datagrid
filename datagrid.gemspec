@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "datagrid"
-  s.version = "0.5.2"
+  s.version = "0.5.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = "2012-01-26"
+  s.date = "2012-02-13"
   s.description = "This allows you to easily build datagrid aka data tables with sortable columns and filters"
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
     "lib/datagrid/drivers.rb",
     "lib/datagrid/drivers/abstract_driver.rb",
     "lib/datagrid/drivers/active_record.rb",
+    "lib/datagrid/drivers/mongo_mapper.rb",
     "lib/datagrid/drivers/mongoid.rb",
     "lib/datagrid/engine.rb",
     "lib/datagrid/filters.rb",
@@ -59,6 +60,7 @@ Gem::Specification.new do |s|
     "spec/datagrid/active_model_spec.rb",
     "spec/datagrid/columns_spec.rb",
     "spec/datagrid/drivers/active_record_spec.rb",
+    "spec/datagrid/drivers/mongo_mapper_spec.rb",
     "spec/datagrid/drivers/mongoid_spec.rb",
     "spec/datagrid/filters/boolean_enum_filter_spec.rb",
     "spec/datagrid/filters/composite_filters_spec.rb",
@@ -72,6 +74,7 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb",
     "spec/support/active_record.rb",
     "spec/support/matchers.rb",
+    "spec/support/mongo_mapper.rb",
     "spec/support/mongoid.rb",
     "spec/support/simple_report.rb",
     "spec/support/test_partials/_actions.html.erb"
@@ -98,6 +101,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_development_dependency(%q<will_paginate>, ["= 2.3.15"])
       s.add_development_dependency(%q<mongoid>, ["= 2.2.2"])
+      s.add_development_dependency(%q<mongo_mapper>, [">= 0.11.0"])
       s.add_development_dependency(%q<bson>, ["= 1.4.0"])
       s.add_development_dependency(%q<bson_ext>, ["= 1.4.0"])
       s.add_development_dependency(%q<fastercsv>, [">= 0"])
@@ -114,6 +118,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_dependency(%q<will_paginate>, ["= 2.3.15"])
       s.add_dependency(%q<mongoid>, ["= 2.2.2"])
+      s.add_dependency(%q<mongo_mapper>, [">= 0.11.0"])
       s.add_dependency(%q<bson>, ["= 1.4.0"])
       s.add_dependency(%q<bson_ext>, ["= 1.4.0"])
       s.add_dependency(%q<fastercsv>, [">= 0"])
@@ -131,6 +136,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
     s.add_dependency(%q<will_paginate>, ["= 2.3.15"])
     s.add_dependency(%q<mongoid>, ["= 2.2.2"])
+    s.add_dependency(%q<mongo_mapper>, [">= 0.11.0"])
     s.add_dependency(%q<bson>, ["= 1.4.0"])
     s.add_dependency(%q<bson_ext>, ["= 1.4.0"])
     s.add_dependency(%q<fastercsv>, [">= 0"])
