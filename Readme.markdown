@@ -185,3 +185,10 @@ If you need a custom interface for your report you should probably build it your
 
 [More about frontend](https://github.com/bogdan/datagrid/wiki/Frontend)
 
+## Self-Promotion
+
+Like datagrid? 
+
+Follow the repository on [GitHub](https://github.com/bogdan/datagrid/toggle_watch). 
+
+Read [author blog](http://gusiev.com).
