@@ -19,7 +19,7 @@ module Datagrid
     module ClassMethods
   
       def param_name
-        self.to_s.underscore.split('/').last
+        self.to_s.underscore.tr('/', '_')
       end
 
 
