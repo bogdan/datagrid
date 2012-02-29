@@ -32,7 +32,10 @@ module Datagrid
       options[:html][:class] ||= "datagrid #{grid.class.to_s.underscore.demodulize}"
       assets = args.any? ? args.shift : grid.assets
       paginate = options[:paginate]
-      assets = assets.paginate(paginate) if paginate 
+      if paginate 
+        ::Datagrid::Utils.warn_once(":paginate option is deprecated. Looks to https://github.com/bogdan/datagrid/wiki/Frontend.")
+        assets = assets.paginate(paginate)
+      end
 
       @template.render :partial => "datagrid/table", :locals => {:grid => grid, :options => options, :assets => assets}
     end

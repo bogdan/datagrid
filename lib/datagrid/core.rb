@@ -90,6 +90,7 @@ module Datagrid
       end
 
       def paginate(*args, &block)
+        ::Datagrid::Utils.warn_once("#paginate is deprecated. Call it like object.assets.paginate(...).")
         self.assets.paginate(*args, &block)
       end
 
