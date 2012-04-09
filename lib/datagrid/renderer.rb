@@ -12,7 +12,7 @@ module Datagrid
     end
 
     def format_value(grid, column, asset)
-      value = column.html? ? @template.instance_exec(asset, &column.block) : column.value(asset, grid)
+      value = column.html? ? @template.instance_exec(asset, grid, &column.block) : column.value(asset, grid)
       url = column.options[:url] && column.options[:url].call(asset)
       if url
         @template.link_to(value, url)

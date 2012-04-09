@@ -125,6 +125,19 @@ describe Datagrid::Helper do
           "tr td.name span" => "Star"
         )
       end
+
+      it "should render html columns with double arguments for column" do
+        rp = test_report do
+          scope { Entry }
+          column(:name, :html => true) do |model, grid|
+            content_tag(:span, "#{model.name}-#{grid.assets.klass}" )
+          end
+        end
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name span" => "Star-Entry"
+        )
+      end
+
     end
 
     describe ".datagrid_order_for" do
