@@ -12,7 +12,7 @@ Ruby library that helps you to build and represent table-like data with:
 
 * ActiveRecord
 * Mongoid
-* MongoMapper (beta)
+* MongoMapper
 
 [Create an issue](https://github.com/bogdan/datagrid/issues/new) if you want more.
 
