@@ -7,14 +7,14 @@ gem "rails", ">= 3.0"
 group :development do
 
   gem "rake"
-  gem "bundler", "~> 1.0.0"
+  gem "bundler", "~> 1.1.0"
   gem "jeweler", "~> 1.6.0"
 
   gem "ruby-debug", :platform => "mri_18"
   #gem "ruby-debug19", :platform => "mri_19"
 
   gem "mocha"
-  gem "rspec", "2.6.0"
+  gem "rspec"
   gem "accept_values_for"
   gem "nokogiri" # used to test html output
 
