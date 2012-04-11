@@ -2,7 +2,7 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
 
   def initialize(*args)
     super(*args)
-    raise Datagrid::ConfigurationError, ":select option not specified" unless select
+    raise Datagrid::ConfigurationError, ":select option not specified" unless options[:select]
   end
 
   def format(value)

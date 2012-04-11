@@ -16,4 +16,11 @@ describe Datagrid::Filters::EnumFilter do
     end.class.filter_by_name(:group_id).select.should == [1,2]
   end
   
+  it "should initialize select option only on instanciation" do
+    class ReportWithLazySelect
+      include Datagrid
+      scope {Entry}
+      filter(:group_id, :enum, :select => proc { raise 'hello' })
+    end
+  end
 end
