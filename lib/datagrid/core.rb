@@ -42,6 +42,10 @@ module Datagrid
         end
       end
 
+      def current_scope
+        @scope
+      end
+
       def driver
         @driver ||= Drivers::AbstractDriver.guess_driver(scope).new
       end
@@ -95,15 +99,16 @@ module Datagrid
       end
 
       def scope
-        self.class.scope
+        check_scope_defined!
+        instance_eval(&self.class.current_scope)
       end
 
       def driver
         self.class.driver
       end
 
-      def check_scope_defined!(message)
-        self.class.check_scope_defined!(message)
+      def check_scope_defined!(message = nil )
+        self.class.send :check_scope_defined!, message
       end
 
     end # InstanceMethods
