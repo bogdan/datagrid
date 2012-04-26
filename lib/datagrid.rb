@@ -1,16 +1,18 @@
-require "datagrid/core"
-require "datagrid/active_model"
-require "datagrid/filters"
-require "datagrid/columns"
-require "datagrid/ordering"
-
-require "datagrid/helper"
-require "datagrid/form_builder"
-require "datagrid/renderer"
-
-require "datagrid/engine"
-
 module Datagrid
+
+  extend ActiveSupport::Autoload
+
+  autoload :Core
+  autoload :ActiveModel
+  autoload :Filters
+  autoload :Columns
+  autoload :Ordering
+
+  autoload :Helper
+  autoload :FormBuilder
+  autoload :Renderer
+
+  autoload :Engine
 
   def self.included(base)
     base.extend         ClassMethods
