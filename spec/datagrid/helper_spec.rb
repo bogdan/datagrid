@@ -1,5 +1,4 @@
 require 'spec_helper'
-require "will_paginate"
 require "active_support/core_ext/hash"
 require "active_support/core_ext/object"
 

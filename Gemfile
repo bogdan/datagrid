@@ -19,7 +19,6 @@ group :development do
   gem "nokogiri" # used to test html output
 
   gem "sqlite3-ruby"
-  gem 'will_paginate', '2.3.15'
 
   gem "mongoid", "2.2.2"
   gem "mongo_mapper", ">=0.11.0"
