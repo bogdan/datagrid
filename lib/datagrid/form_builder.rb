@@ -80,5 +80,4 @@ module Datagrid
   end
 end
 
-ActionView::Helpers::FormBuilder.send(:include, Datagrid::FormBuilder)
 
