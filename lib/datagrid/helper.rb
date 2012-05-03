@@ -36,4 +36,4 @@ module Datagrid
     end
   end
 end
-ActionView::Base.send(:include, Datagrid::Helper)
+
