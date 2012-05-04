@@ -28,7 +28,7 @@ module Datagrid
       end
 
       def default_order(scope, column_name)
-        scope.fields.keys.include?(column_name.to_s) ? column_name : nil
+        to_scope(scope).klass.fields.keys.include?(column_name.to_s) ? column_name : nil
       end
 
       def greater_equal(scope, field, value)
