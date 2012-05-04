@@ -6,10 +6,10 @@ Mongoid.from_hash({
   "host" => "localhost",
   "database" =>"datagrid_mongoid",
   "autocreate_indexes" => true,
+  "logger" => nil,
 })
 
 #Mongoid.logger = TEST_LOGGER #TODO: understand why still output to STDOUT
-Mongoid.logger = nil
 
 
 class MongoidEntry
