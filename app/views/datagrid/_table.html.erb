@@ -1,9 +1,9 @@
-<!--
+<%#
 Local variables:
 * grid - instance of Datagrid
 * assets - Array of database Entities
 * options - passed options Hash
--->
+%>
 <%= content_tag :table, options[:html] do %>
   <%= datagrid_header(grid, options) %>
   <%= datagrid_rows(grid, assets, options) %>
