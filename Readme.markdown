@@ -189,6 +189,6 @@ If you need a custom interface for your report you should probably build it your
 
 Like datagrid? 
 
-Follow the repository on [GitHub](https://github.com/bogdan/datagrid/toggle_watch). 
+Follow the repository on [GitHub](https://github.com/bogdan/datagrid). 
 
 Read [author blog](http://gusiev.com).
