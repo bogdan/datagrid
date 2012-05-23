@@ -119,9 +119,9 @@ describe Datagrid::FormBuilder do
         test_report do
           scope {Entry}
           filter(
-            :name, :enum, 
-            :include_blank => false, 
-            :multiple => false, 
+            :name, :enum,
+            :include_blank => false,
+            :multiple => false,
             :select => []
           )
         end
@@ -143,10 +143,12 @@ describe Datagrid::FormBuilder do
         '<label for="report_name">Name</label>'
       )
     end
+    it "should pass options through to the helper" do
+      view.datagrid_label(:name, :class => 'foo').should equal_to_dom(
+        '<label for="report_name" class="foo">Name</label>'
+      )
+    end
   end
-
-  
-
 end
 
 
