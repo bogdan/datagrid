@@ -7,7 +7,6 @@ module Datagrid
     require "datagrid/filters/boolean_filter"
     require "datagrid/filters/date_filter"
     require "datagrid/filters/default_filter"
-    require "datagrid/filters/filter_eval"
     require "datagrid/filters/integer_filter"
     require "datagrid/filters/composite_filters"
     require "datagrid/filters/string_filter"
@@ -67,9 +66,8 @@ module Datagrid
       protected
       def default_filter(attribute)
         check_scope_defined!("Scope should be defined before filters")
-        grid = self
-        lambda do |value|
-          grid.driver.where(scope, attribute => value)
+        lambda do |value, grid|
+          grid.driver.where(self, attribute => value)
         end
       end
 
@@ -87,7 +85,7 @@ module Datagrid
       def assets
         result = super
         self.class.filters.each do |filter|
-          result = filter.apply(result, filter_value(filter))
+          result = filter.apply(self, result, filter_value(filter))
         end
         result
       end

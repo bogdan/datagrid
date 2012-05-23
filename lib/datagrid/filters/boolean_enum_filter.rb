@@ -11,8 +11,8 @@ class Datagrid::Filters::BooleanEnumFilter < Datagrid::Filters::EnumFilter
     super(report, attribute, options, &block)
   end
 
-  def apply(scope, value)
-    super(scope, to_boolean(value))
+  def apply(grid_object, scope, value)
+    super(grid_object, scope, to_boolean(value))
   end
 
   def to_boolean(value)

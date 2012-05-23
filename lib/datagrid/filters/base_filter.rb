@@ -1,4 +1,3 @@
-require "datagrid/filters/filter_eval"
 
 class Datagrid::Filters::BaseFilter
 
@@ -15,13 +14,18 @@ class Datagrid::Filters::BaseFilter
     raise NotImplementedError, "#format(value) suppose to be overwritten"
   end
 
-  def apply(scope, value)
+  def apply(grid_object, scope, value)
     if value.nil?
       return scope if !allow_nil?
     else
       return scope if value.blank? && !allow_blank?
     end
-    ::Datagrid::Filters::FilterEval.new(self, scope, value).run
+
+    if block.arity >= 2 || block.arity < 0
+      scope.instance_exec(value, grid_object, &block)
+    else
+      scope.instance_exec(value, &block)
+    end
   end
 
   def format_values(value)

@@ -16,22 +16,22 @@ module Datagrid
           from_options = normalize_composite_filter_options(from_options, field)
           to_options = normalize_composite_filter_options(to_options, field)
 
-          filter(from_options[:name] || :"from_#{field}", :date, from_options) do |date|
-            driver.greater_equal(self, field, date)
+          filter(from_options[:name] || :"from_#{field}", :date, from_options) do |date, grid|
+            grid.driver.greater_equal(self, field, date)
           end
-          filter(to_options[:name] || :"to_#{field}", :date, to_options) do |date|
-            driver.less_equal(self, field, date)
+          filter(to_options[:name] || :"to_#{field}", :date, to_options) do |date, grid|
+            grid.driver.less_equal(self, field, date)
           end
         end
 
         def integer_range_filters(field, from_options = {}, to_options = {})
           from_options = normalize_composite_filter_options(from_options, field)
           to_options = normalize_composite_filter_options(to_options, field)
-          filter(from_options[:name] || :"from_#{field}", :integer, from_options) do |value|
-            driver.greater_equal(self, field, value)
+          filter(from_options[:name] || :"from_#{field}", :integer, from_options) do |value, grid|
+            grid.driver.greater_equal(self, field, value)
           end
-          filter(to_options[:name] || :"to_#{field}", :integer, to_options) do |value|
-            driver.less_equal(self, field, value)
+          filter(to_options[:name] || :"to_#{field}", :integer, to_options) do |value, grid|
+            grid.driver.less_equal(self, field, value)
           end
         end
 
