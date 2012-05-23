@@ -5,6 +5,10 @@ Local variables:
 * options - passed options Hash
 %>
 <%= content_tag :table, options[:html] do %>
-  <%= datagrid_header(grid, options) %>
-  <%= datagrid_rows(grid, assets, options) %>
+  <thead>
+    <%= datagrid_header(grid, options) %>
+  </thead>
+  <tbody>
+    <%= datagrid_rows(grid, assets, options) %>
+  </tbody>
 <% end %>
