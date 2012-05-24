@@ -76,7 +76,7 @@ describe SimpleReportWithContext, "with context" do
   it "should call " do
     current_user = Object.new
     current_user.should_receive(:things).and_return([])
-    SimpleReportWithContext.new(current_user: current_user).scope
+    SimpleReportWithContext.new(:current_user => current_user).scope
   end
 
 end
