@@ -33,12 +33,12 @@ module Datagrid
         scope.column_names.include?(column_name.to_s) ? [scope.table_name, column_name].join(".") : nil
       end
 
-      def greater_equal(scope, field, value)
-        scope.where(["#{field} >= ?", value])
+      def greater_equal(scope, table, field, value)
+        scope.where(["#{table}.#{field} >= ?", value])
       end
 
-      def less_equal(scope, field, value)
-        scope.where(["#{field} <= ?", value])
+      def less_equal(scope, table, field, value)
+        scope.where(["#{table}.#{field} <= ?", value])
       end
     end
   end
