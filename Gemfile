@@ -12,7 +12,6 @@ group :development do
 
   gem "debugger"
 
-  gem "mocha"
   gem "rspec"
   gem "accept_values_for"
   gem "nokogiri" # used to test html output
