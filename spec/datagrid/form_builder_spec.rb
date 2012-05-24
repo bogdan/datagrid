@@ -145,7 +145,7 @@ describe Datagrid::FormBuilder do
     end
     it "should pass options through to the helper" do
       view.datagrid_label(:name, :class => 'foo').should equal_to_dom(
-        '<label for="report_name" class="foo">Name</label>'
+        '<label class="foo" for="report_name">Name</label>'
       )
     end
   end
