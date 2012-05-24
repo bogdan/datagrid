@@ -21,8 +21,10 @@ class Datagrid::Filters::BaseFilter
       return scope if value.blank? && !allow_blank?
     end
 
-    if block.arity >= 2 || block.arity < 0
-      scope.instance_exec(value, grid_object, &block)
+    if block.arity >= 3 || block.arity < 0
+      scope.instance_exec(value, scope, grid_object, &block)
+    elsif block.arity == 2
+      scope.instance_exec(value, scope, &block)
     else
       scope.instance_exec(value, &block)
     end

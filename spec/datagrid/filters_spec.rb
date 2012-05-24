@@ -29,6 +29,18 @@ describe Datagrid::Filters do
     }.should raise_error(Datagrid::ArgumentError)
   end
 
+  it "should filter block with 2 arguments" do
+    report = test_report do
+      scope {Entry}
+      filter(:group_id, :integer) do |value, scope|
+        scope.where(group_id: value)
+      end
+    end
+    lambda {
+      report.group_id = [1,2]
+    }.should raise_error(Datagrid::ArgumentError)
+  end
+
 
   it "should initialize when report Scope table not exists" do
     class ModelWithoutTable < ActiveRecord::Base; end
