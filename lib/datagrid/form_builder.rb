@@ -13,7 +13,7 @@ module Datagrid
 
     def datagrid_label(filter_or_attribute, options = {})
       filter = get_filter(filter_or_attribute)
-      self.label(filter.name, filter.header, options = {})
+      self.label(filter.name, filter.header, options)
     end
 
     protected
@@ -45,7 +45,7 @@ module Datagrid
     def datagrid_integer_filter(attribute_or_filter, options = {})
       filter = get_filter(attribute_or_filter)
       if filter.multiple && self.object[filter.name].blank?
-        options[:value] = "" 
+        options[:value] = ""
       end
       text_field filter.name, options
     end
@@ -55,12 +55,12 @@ module Datagrid
     end
 
     def get_attribute(attribute_or_filter)
-      attribute_or_filter.is_a?(Symbol) ?  attribute_or_filter : attribute_or_filter.name 
+      attribute_or_filter.is_a?(Symbol) ?  attribute_or_filter : attribute_or_filter.name
     end
 
     def get_filter(attribute_or_filter)
-      if attribute_or_filter.is_a?(Symbol) 
-        object.class.filter_by_name(attribute_or_filter) || 
+      if attribute_or_filter.is_a?(Symbol)
+        object.class.filter_by_name(attribute_or_filter) ||
           raise(Error, "filter #{attribute_or_filter} not found")
       else
         attribute_or_filter
