@@ -24,6 +24,13 @@ describe Datagrid::Filters::CompositeFilters do
       report.from_shipping_date.should == 10.days.ago.to_date
       report.to_shipping_date.should == Date.today
     end
+    it "should support table name in field" do
+      report = test_report do
+        report = date_range_filters("entries.shipping_date", {:default => 10.days.ago.to_date}, {:default => Date.today})
+      end
+      report.from_entries_shipping_date.should == 10.days.ago.to_date
+      report.to_entries_shipping_date.should == Date.today
+    end
   end
   
   describe ".integer_range_filters" do
@@ -46,6 +53,13 @@ describe Datagrid::Filters::CompositeFilters do
       end
       report.from_group_id.should == 0
       report.to_group_id.should == 100
+    end
+    it "should table name in field name" do
+      report = test_report do
+        report = integer_range_filters("entries.group_id", {:default => 0}, {:default => 100})
+      end
+      report.from_entries_group_id.should == 0
+      report.to_entries_group_id.should == 100
     end
   end
 end
