@@ -12,7 +12,15 @@ module Datagrid
     end
 
     def format_value(grid, column, asset)
-      value = column.html? ? @template.instance_exec(asset, grid, &column.block) : column.value(asset, grid)
+      value = if column.html?
+        if column.block.arity > 1
+          @template.instance_exec(asset, grid, &column.block)
+        else
+          @template.instance_exec(asset, &column.block)
+        end
+      else
+        column.value(asset, grid)
+      end
       url = column.options[:url] && column.options[:url].call(asset)
       if url
         @template.link_to(value, url)
@@ -32,7 +40,7 @@ module Datagrid
       options[:html][:class] ||= "datagrid #{grid.class.to_s.underscore.demodulize}"
       assets = args.any? ? args.shift : grid.assets
       paginate = options[:paginate]
-      if paginate 
+      if paginate
         ::Datagrid::Utils.warn_once(":paginate option is deprecated. Looks to https://github.com/bogdan/datagrid/wiki/Frontend.")
         assets = assets.paginate(paginate)
       end
@@ -57,7 +65,7 @@ module Datagrid
     def order_for(grid, column)
       @template.content_tag(:div, :class => "order") do
         @template.link_to(
-          I18n.t("datagrid.table.order.asc", :default => "ASC"), 
+          I18n.t("datagrid.table.order.asc", :default => "ASC"),
           @template.url_for(grid.param_name => grid.attributes.merge(:order => column.name, :descending => false)),
           :class => "order asc"
         ) + " " + @template.link_to(
