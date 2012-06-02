@@ -10,6 +10,7 @@ module Datagrid
     require "datagrid/filters/integer_filter"
     require "datagrid/filters/composite_filters"
     require "datagrid/filters/string_filter"
+    require "datagrid/filters/float_filter"
 
     FILTER_TYPES = {
       :date => Filters::DateFilter,
@@ -19,6 +20,7 @@ module Datagrid
       :boolean => Filters::BooleanFilter ,
       :integer => Filters::IntegerFilter,
       :enum => Filters::EnumFilter,
+      :float => Filters::FloatFilter,
     }
 
     def self.included(base)

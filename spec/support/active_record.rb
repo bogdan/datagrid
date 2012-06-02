@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 1) do
 
   create_table :groups do |t|
     t.string :name
+    t.float :rating 
     t.timestamps
   end
 

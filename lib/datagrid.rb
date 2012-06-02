@@ -44,7 +44,7 @@ module Datagrid
   end # InstanceMethods
 
   class ConfigurationError < StandardError; end
-  class ArgumentError < StandardError; end
+  class ArgumentError < ::ArgumentError; end
 
 
 end
