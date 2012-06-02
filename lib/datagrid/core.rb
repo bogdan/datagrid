@@ -94,8 +94,12 @@ module Datagrid
         self.assets.paginate(*args, &block)
       end
 
-      def scope
-        self.class.scope
+      def scope(&block)
+        if block_given?
+          @current_scope = block
+        else
+          @current_scope ? @current_scope.call : self.class.scope
+        end
       end
 
       def driver
