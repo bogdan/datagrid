@@ -10,6 +10,6 @@ describe Datagrid::Core do
       Entry.limit(1)
     end
     2.times { Entry.create }
-    report.assets.size.should == 1
+    report.assets.to_a.size.should == 1
   end
 end
