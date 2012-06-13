@@ -98,6 +98,8 @@ In common case it is `ActiveRecord::Base` (or any other supported ORM) subclass 
   end
 ```
 
+[More about scope](https://github.com/bogdan/datagrid/wiki/Scope)
+
 ### Filters
 
 Each filter definition consists of:
