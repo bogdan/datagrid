@@ -63,5 +63,13 @@ class Datagrid::Filters::BaseFilter
     options[:allow_blank]
   end
 
+  def form_builder_helper_name
+    self.class.form_builder_helper_name
+  end
+
+  def self.form_builder_helper_name
+    :"datagrid_#{self.to_s.demodulize.underscore}"
+  end
+
 end
 

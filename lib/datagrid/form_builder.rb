@@ -8,7 +8,7 @@ module Datagrid
       options[:class] ||= ""
       options[:class] += " " unless options[:class].blank?
       options[:class] += "#{filter.name} #{datagrid_filter_html_class(filter)}"
-      self.send(datagrid_filter_method(filter), filter, options)
+      self.send(filter.form_builder_helper_name, filter, options)
     end
 
     def datagrid_label(filter_or_attribute, options = {})
@@ -54,6 +54,10 @@ module Datagrid
       datagrid_default_filter(attribute_or_filter, options)
     end
 
+    def datagrid_float_filter(attribute_or_filter, options = {})
+      datagrid_default_filter(attribute_or_filter, options)
+    end
+
     def get_attribute(attribute_or_filter)
       attribute_or_filter.is_a?(Symbol) ?  attribute_or_filter : attribute_or_filter.name
     end
@@ -72,7 +76,7 @@ module Datagrid
     end
 
     def datagrid_filter_method(filter)
-      :"datagrid_#{filter.class.to_s.demodulize.underscore}"
+      :"datagrid_#{filter.form_builder_helper_name}"
     end
 
     class Error < StandardError
