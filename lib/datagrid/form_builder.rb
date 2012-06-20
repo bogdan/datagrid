@@ -75,10 +75,6 @@ module Datagrid
       filter.class.to_s.demodulize.underscore
     end
 
-    def datagrid_filter_method(filter)
-      :"datagrid_#{filter.form_builder_helper_name}"
-    end
-
     class Error < StandardError
     end
   end
