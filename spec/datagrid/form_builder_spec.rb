@@ -19,6 +19,12 @@ describe Datagrid::FormBuilder do
 
   describe ".datagrid_filter" do
 
+    it "should work for every filter type" do
+      Datagrid::Filters::FILTER_TYPES.each do |type, klass|
+        Datagrid::FormBuilder.instance_methods.should include(klass.form_builder_helper_name)
+      end
+    end
+
     subject { view.datagrid_filter(_filter)}
     context "with default filter type" do
       let(:_grid) {
@@ -128,6 +134,19 @@ describe Datagrid::FormBuilder do
       end
       let(:_filter) { :name }
       it {should equal_to_dom('<select class="name enum_filter" id="report_name" name="report[name]"></select>')}
+    end
+    context "with float filter type" do
+      let(:_grid) {
+        test_report do
+          scope {Entry}
+          filter(:group_id, :float)
+        end
+      }
+      let(:_filter) { :group_id }
+      it { should equal_to_dom(
+        '<input class="group_id float_filter" id="report_group_id" name="report[group_id]" size="30" type="text"/>'
+      )}
+
     end
   end
 
