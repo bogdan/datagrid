@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "datagrid"
-  s.version = "0.6.0"
+  s.version = "0.6.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = "2012-05-24"
+  s.date = "2012-06-22"
   s.description = "This allows you to easily build datagrid aka data tables with sortable columns and filters"
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
@@ -46,6 +46,7 @@ Gem::Specification.new do |s|
     "lib/datagrid/filters/date_filter.rb",
     "lib/datagrid/filters/default_filter.rb",
     "lib/datagrid/filters/enum_filter.rb",
+    "lib/datagrid/filters/float_filter.rb",
     "lib/datagrid/filters/integer_filter.rb",
     "lib/datagrid/filters/string_filter.rb",
     "lib/datagrid/form_builder.rb",
@@ -57,12 +58,14 @@ Gem::Specification.new do |s|
     "lib/tasks/datagrid_tasks.rake",
     "spec/datagrid/active_model_spec.rb",
     "spec/datagrid/columns_spec.rb",
+    "spec/datagrid/core_spec.rb",
     "spec/datagrid/drivers/active_record_spec.rb",
     "spec/datagrid/drivers/mongo_mapper_spec.rb",
     "spec/datagrid/drivers/mongoid_spec.rb",
     "spec/datagrid/filters/boolean_enum_filter_spec.rb",
     "spec/datagrid/filters/composite_filters_spec.rb",
     "spec/datagrid/filters/enum_filter_spec.rb",
+    "spec/datagrid/filters/float_filter_spec.rb",
     "spec/datagrid/filters_spec.rb",
     "spec/datagrid/form_builder_spec.rb",
     "spec/datagrid/helper_spec.rb",
