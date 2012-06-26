@@ -19,6 +19,7 @@ module Datagrid
 
       def columns(*args)
         options = args.extract_options!
+        args.compact!
         args.map!(&:to_sym)
         (@columns ||= []).select do |column|
           (!options[:data] || column.data?) && (args.empty? || args.include?(column.name))

@@ -76,7 +76,7 @@ describe Datagrid::Helper do
         "table.datagrid th.name" => 1,
         "table.datagrid td.name" => 1,
         "table.datagrid th.group" => 0,
-        "table.datagrid td.group" => 0,
+        "table.datagrid td.group" => 0
       )
     end
 
@@ -152,10 +152,10 @@ describe Datagrid::Helper do
           column(:name)
           column(:category)
         end
-        subject.datagrid_rows(rp, [entry], columns: [:name]).should match_css_pattern(
+        subject.datagrid_rows(rp, [entry], :columns => [:name]).should match_css_pattern(
           "tr td.name" => "Star"
         )
-        subject.datagrid_rows(rp, [entry], columns: [:name]).should match_css_pattern(
+        subject.datagrid_rows(rp, [entry], :columns => [:name]).should match_css_pattern(
           "tr td.category" => 0
         )
       end

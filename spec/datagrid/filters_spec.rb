@@ -33,7 +33,7 @@ describe Datagrid::Filters do
     report = test_report do
       scope {Entry}
       filter(:group_id, :integer) do |value, scope|
-        scope.where(group_id: value)
+        scope.where(:group_id => value)
       end
     end
     lambda {

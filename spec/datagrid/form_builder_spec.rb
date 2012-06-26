@@ -21,7 +21,7 @@ describe Datagrid::FormBuilder do
 
     it "should work for every filter type" do
       Datagrid::Filters::FILTER_TYPES.each do |type, klass|
-        Datagrid::FormBuilder.instance_methods.should include(klass.form_builder_helper_name)
+        Datagrid::FormBuilder.instance_methods.map(&:to_sym).should include(klass.form_builder_helper_name)
       end
     end
 
