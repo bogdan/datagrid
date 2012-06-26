@@ -10,7 +10,7 @@ group :development do
   gem "bundler", "~> 1.1.0"
   gem "jeweler", "~> 1.6.0"
 
-  gem "debugger"
+  gem "debugger", :platform => "ruby_19"
 
   gem "rspec"
   gem "accept_values_for"
