@@ -64,16 +64,19 @@ module Datagrid
         result
       end
 
+      # Returns Array of Arrays with data for each row in datagrid assets without header.
       def rows
         self.assets.map do |asset|
           self.row_for(asset)
         end
       end
 
+      # Returns Array of Arrays with data for each row in datagrid assets with header.
       def data
         self.rows.unshift(self.header)
       end
 
+      # Return Array of Hashes where keys are column names and values are column values for each row in datagrid <tt>#assets</tt>
       def data_hash
         self.assets.map do |asset|
           hash_for(asset)
