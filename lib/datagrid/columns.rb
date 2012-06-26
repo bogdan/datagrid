@@ -17,9 +17,11 @@ module Datagrid
 
     module ClassMethods
 
-      def columns(options = {})
-        (@columns ||= []).reject do |column|
-          options[:data] && column.html?
+      def columns(*args)
+        options = args.extract_options!
+        args.map!(&:to_sym)
+        (@columns ||= []).select do |column|
+          (!options[:data] || column.data?) && (args.empty? || args.include?(column.name))
         end
       end
 
@@ -95,8 +97,8 @@ module Datagrid
         end
       end
 
-      def columns(options ={})
-        self.class.columns(options)
+      def columns(*args)
+        self.class.columns(*args)
       end
 
       def data_columns

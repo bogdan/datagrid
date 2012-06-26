@@ -27,6 +27,7 @@ class IncludeDom
   def failure_message
     "Expected dom \n#{@matcher.inspect}\n to include \n#{@expectation.inspect}\n, but it wasn't"
   end
+  
 end
 
 
@@ -90,4 +91,7 @@ class CssPattern
     end 
   end
 
+  def negative_failure_message
+    "Expected do not match dom pattern. But it was"
+  end
 end
