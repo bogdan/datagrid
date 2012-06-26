@@ -52,10 +52,12 @@ class Datagrid::Columns::Column
     self.options[:order_desc]  
   end
 
-
   def html?
     !! self.options[:html]
   end
   
+  def data?
+    !html?
+  end
 
 end

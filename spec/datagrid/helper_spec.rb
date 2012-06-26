@@ -71,6 +71,15 @@ describe Datagrid::Helper do
       subject.datagrid_table(grid, [entry], :order => false).should match_css_pattern("table.datagrid th .order" => 0)
     end
 
+    it "should support columns option" do
+      subject.datagrid_table(grid, [entry], :columns => [:name]).should match_css_pattern(
+        "table.datagrid th.name" => 1,
+        "table.datagrid td.name" => 1,
+        "table.datagrid th.group" => 0,
+        "table.datagrid td.group" => 0,
+      )
+    end
+
     describe ".datagrid_rows" do
 
       it "should support urls" do
@@ -134,6 +143,20 @@ describe Datagrid::Helper do
         end
         subject.datagrid_rows(rp, [entry]).should match_css_pattern(
           "tr td.name span" => "Star-Entry"
+        )
+      end
+
+      it "should support columns option" do
+        rp = test_report do
+          scope { Entry }
+          column(:name)
+          column(:category)
+        end
+        subject.datagrid_rows(rp, [entry], columns: [:name]).should match_css_pattern(
+          "tr td.name" => "Star"
+        )
+        subject.datagrid_rows(rp, [entry], columns: [:name]).should match_css_pattern(
+          "tr td.category" => 0
         )
       end
 
