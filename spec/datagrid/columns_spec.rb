@@ -60,5 +60,18 @@ describe Datagrid::Columns do
     report.rows.last.first.should be_false
   end
 
+  it "should inherit columns correctly" do
+    parent = Class.new do
+      include Datagrid
+      scope { Entry }
+      column(:name)
+    end
+
+    child = Class.new(parent) do
+      column(:group_id)
+    end
+    child.column_by_name(:name).should_not be_nil
+    child.column_by_name(:group_id).should_not be_nil
+  end
 
 end

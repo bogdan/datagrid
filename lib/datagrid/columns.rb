@@ -1,4 +1,5 @@
 require "datagrid/utils"
+require "active_support/core_ext/class/attribute"
 
 module Datagrid
 
@@ -10,6 +11,8 @@ module Datagrid
       base.class_eval do
 
         include Datagrid::Core
+        class_attribute :columns_array
+        self.columns_array = []
 
       end
       base.send :include, InstanceMethods
@@ -21,7 +24,7 @@ module Datagrid
         options = args.extract_options!
         args.compact!
         args.map!(&:to_sym)
-        (@columns ||= []).select do |column|
+        columns_array.select do |column|
           (!options[:data] || column.data?) && (args.empty? || args.include?(column.name))
         end
       end
@@ -31,8 +34,7 @@ module Datagrid
         block ||= lambda do |model|
           model.send(name)
         end
-        @columns ||= []
-        @columns << Datagrid::Columns::Column.new(self, name, options, &block)
+        columns_array << Datagrid::Columns::Column.new(self, name, options, &block)
       end
 
       def column_by_name(name)
