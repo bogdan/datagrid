@@ -1,4 +1,5 @@
 require "datagrid/drivers"
+require "active_support/core_ext/class/attribute"
 
 module Datagrid
   module Core
@@ -6,7 +7,7 @@ module Datagrid
     def self.included(base)
       base.extend         ClassMethods
       base.class_eval do
-
+        class_attribute :scope_value
       end
       base.send :include, InstanceMethods
     end # self.included
@@ -35,10 +36,10 @@ module Datagrid
 
       def scope(&block)
         if block
-          @scope = block
+          self.scope_value = block
         else
           check_scope_defined!
-          @scope.call
+          scope_value.call
         end
       end
 
@@ -47,8 +48,9 @@ module Datagrid
       end
 
       protected
-      def check_scope_defined!(message = "Scope not defined")
-        raise(Datagrid::ConfigurationError, message) unless @scope
+      def check_scope_defined!(message = nil)
+        message ||= "Scope not defined"
+        raise(Datagrid::ConfigurationError, message) unless scope_value
       end
 
     end # ClassMethods
@@ -96,9 +98,10 @@ module Datagrid
 
       def scope(&block)
         if block_given?
-          @current_scope = block
+          self.scope_value = block
         else
-          @current_scope ? @current_scope.call : self.class.scope
+          check_scope_defined!
+          scope_value.call
         end
       end
 
@@ -106,8 +109,8 @@ module Datagrid
         self.class.driver
       end
 
-      def check_scope_defined!(message)
-        self.class.check_scope_defined!(message)
+      def check_scope_defined!(message = nil)
+        self.class.send :check_scope_defined!, message
       end
 
     end # InstanceMethods
