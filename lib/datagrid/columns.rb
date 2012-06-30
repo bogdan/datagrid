@@ -42,6 +42,12 @@ module Datagrid
           col.name.to_sym == name.to_sym
         end
       end
+
+      def inherited(child_class)
+        super(child_class)
+        child_class.columns_array = self.columns_array.clone
+      end
+
     end # ClassMethods
 
     module InstanceMethods

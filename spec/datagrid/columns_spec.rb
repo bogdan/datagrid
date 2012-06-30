@@ -70,6 +70,8 @@ describe Datagrid::Columns do
     child = Class.new(parent) do
       column(:group_id)
     end
+    parent.column_by_name(:name).should_not be_nil
+    parent.column_by_name(:group_id).should be_nil
     child.column_by_name(:name).should_not be_nil
     child.column_by_name(:group_id).should_not be_nil
   end

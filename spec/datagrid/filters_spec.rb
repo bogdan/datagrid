@@ -55,6 +55,19 @@ describe Datagrid::Filters do
     TheReport.new(:name => 'hello')
   end
 
+  it "should support inheritence" do
+    parent = Class.new do
+      include Datagrid
+      scope {Entry}
+      filter(:name)
+    end
+    child = Class.new(parent) do
+      filter(:group_id)
+    end
+    parent.filters.size.should == 1
+    child.filters.size.should == 2
+  end
+
   describe "allow_blank and allow_nil options" do
 
     def check_performed(value, result, options)
