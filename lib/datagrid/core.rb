@@ -8,6 +8,8 @@ module Datagrid
       base.extend         ClassMethods
       base.class_eval do
         class_attribute :scope_value
+        class_attribute :datagrid_attributes
+        self.datagrid_attributes = []
       end
       base.send :include, InstanceMethods
     end # self.included
@@ -30,10 +32,6 @@ module Datagrid
         end
       end
 
-      def datagrid_attributes
-        @datagrid_attributes ||= []
-      end
-
       def scope(&block)
         if block
           self.scope_value = block
@@ -53,6 +51,11 @@ module Datagrid
         raise(Datagrid::ConfigurationError, message) unless scope_value
       end
 
+      def inherited(child_class)
+        super(child_class)
+        child_class.datagrid_attributes = self.datagrid_attributes.clone
+      end
+
     end # ClassMethods
 
     module InstanceMethods
@@ -67,7 +70,7 @@ module Datagrid
 
       def attributes
         result = {}
-        self.class.datagrid_attributes.each do |name|
+        self.datagrid_attributes.each do |name|
           result[name] = self[name]
         end
         result
