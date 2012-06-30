@@ -1,3 +1,5 @@
+require "active_support/core_ext/class/attribute"
+
 module Datagrid
   module Filters
 
@@ -29,6 +31,8 @@ module Datagrid
 
         include Datagrid::Core
         include Datagrid::Filters::CompositeFilters
+        class_attribute :filters
+        self.filters = []
 
       end
       base.send :include, InstanceMethods
@@ -36,16 +40,11 @@ module Datagrid
 
     module ClassMethods
 
-      def filters
-        @filters ||= []
-      end
-
       def filter_by_name(attribute)
         self.filters.find do |filter|
           filter.name.to_sym == attribute.to_sym
         end
       end
-
 
       def filter(attribute, *args, &block)
         options = args.extract_options!
@@ -71,6 +70,11 @@ module Datagrid
         lambda do |value, scope, grid|
           grid.driver.where(scope, attribute => value)
         end
+      end
+
+      def inherited(child_class)
+        super(child_class)
+        child_class.filters = self.filters.clone
       end
 
     end # ClassMethods
