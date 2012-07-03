@@ -43,6 +43,8 @@ module Datagrid
 
       def has_column?(scope, column_name)
         scope.column_names.include?(column_name.to_s)
+      rescue ::ActiveRecord::StatementInvalid
+        false
       end
     end
   end
