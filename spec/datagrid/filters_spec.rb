@@ -100,4 +100,17 @@ describe Datagrid::Filters do
       check_performed(nil, true, :allow_nil => true, :allow_blank => false)
     end
   end
+
+  describe "default filter as scope" do
+    it "should create default filter if scope respond to filter name method" do
+      Entry.create!
+      Entry.create!
+      grid = test_report(:limit => 1) do
+        scope {Entry}
+        filter(:limit)
+      end
+      grid.assets.to_a.size.should == 1
+    end
+    
+  end
 end
