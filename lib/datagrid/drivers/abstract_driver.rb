@@ -49,6 +49,9 @@ module Datagrid
         raise NotImplementedError
       end
       
+      def has_column?(scope, column_name)
+        raise NotImplementedError
+      end
     end
   end
 end

@@ -30,7 +30,7 @@ module Datagrid
       end
 
       def default_order(scope, column_name)
-        scope.column_names.include?(column_name.to_s) ? [scope.table_name, column_name].join(".") : nil
+        has_column?(scope, column_name) ? [scope.table_name, column_name].join(".") : nil
       end
 
       def greater_equal(scope, field, value)
@@ -39,6 +39,10 @@ module Datagrid
 
       def less_equal(scope, field, value)
         scope.where(["#{field} <= ?", value])
+      end
+
+      def has_column?(scope, column_name)
+        scope.column_names.include?(column_name.to_s)
       end
     end
   end
