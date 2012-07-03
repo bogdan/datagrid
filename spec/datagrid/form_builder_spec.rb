@@ -103,8 +103,8 @@ describe Datagrid::FormBuilder do
       end
       it { should equal_to_dom(
         '<select class="disabled boolean_enum_filter" id="report_disabled" name="report[disabled]"><option value=""></option>
-       <option value="YES">YES</option>
-       <option value="NO">NO</option></select>'
+       <option value="YES">Yes</option>
+       <option value="NO">No</option></select>'
       )}
     end
     context "with string filter" do
