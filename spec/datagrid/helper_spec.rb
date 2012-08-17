@@ -26,6 +26,22 @@ describe Datagrid::Helper do
   ) }
   let(:grid) { SimpleReport.new }
 
+  context "when grid has no records" do
+    let(:grid) do
+      test_report do
+        scope { Entry.where("1 != 1") }
+      end
+    end
+
+    it "should show an empty table with dashes" do
+      datagrid_table = subject.datagrid_table(grid)
+
+      datagrid_table.should match_css_pattern(
+        "table.datagrid tr td.noresults" => 1
+      )
+    end
+  end
+
   describe ".datagrid_table" do
     it "should have grid class as html class on table" do
       subject.datagrid_table(grid).should match_css_pattern(
