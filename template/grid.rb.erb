@@ -1,0 +1,10 @@
+class <%= class_name %>Grid
+
+  include Datagrid
+
+  scope do
+    <%= class_name.singularize %>
+  end
+
+  column(:id)
+end
