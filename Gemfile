@@ -10,6 +10,7 @@ group :development do
   gem "bundler"
   gem "jeweler"
 
+
   gem "debugger", :platform => "ruby_19"
 
   gem "rspec"
