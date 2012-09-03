@@ -7,7 +7,7 @@ gem "rails", ">= 3.0"
 group :development do
 
   gem "rake"
-  gem "bundler", "~> 1.1.0"
+  gem "bundler"
   gem "jeweler", "~> 1.6.0"
 
   gem "debugger", :platform => "ruby_19"
