@@ -10,9 +10,13 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
     value
   end
 
-  def select
+  def select(object = nil)
     option = self.options[:select]
-    option.respond_to?(:call) ? option.call : option
+    if option.respond_to?(:call)
+      option.arity == 1 ? option.call(object) : option.call
+    else
+      option
+    end
   end
 
   def include_blank
