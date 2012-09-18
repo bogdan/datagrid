@@ -8,7 +8,7 @@ group :development do
 
   gem "rake"
   gem "bundler"
-  gem "jeweler", "~> 1.6.0"
+  gem "jeweler"
 
   gem "debugger", :platform => "ruby_19"
 
