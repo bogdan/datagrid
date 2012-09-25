@@ -34,11 +34,11 @@ module Datagrid
       end
 
       def greater_equal(scope, field, value)
-        scope.where(["#{field} >= ?", value])
+        scope.where(["#{scope.table_name}.#{field} >= ?", value])
       end
 
       def less_equal(scope, field, value)
-        scope.where(["#{field} <= ?", value])
+        scope.where(["#{scope.table_name}.#{field} <= ?", value])
       end
 
       def has_column?(scope, column_name)
