@@ -51,8 +51,9 @@ describe Datagrid::Filters do
       scope {ModelWithoutTable}
 
       filter(:name)
+      filter(:limit)
     end
-    TheReport.new(:name => 'hello')
+    TheReport.new(:name => 'hello').should_not be_nil
   end
 
   it "should support inheritence" do
