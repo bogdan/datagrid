@@ -20,6 +20,13 @@ module Datagrid
 
     module ClassMethods
 
+      # Returns a list of columns defined.
+      # You can limit the output with only columns you need like:
+      #
+      #   grid.columns(:id, :name)
+      #
+      # Supported options:
+      # * :data - if true returns only non-html columns. Default: false.
       def columns(*args)
         options = args.extract_options!
         args.compact!
@@ -29,6 +36,7 @@ module Datagrid
         end
       end
 
+      # Defines new datagrid column
       def column(name, options = {}, &block)
         check_scope_defined!("Scope should be defined before columns")
         block ||= lambda do |model|
@@ -53,13 +61,13 @@ module Datagrid
     module InstanceMethods
 
       # Returns <tt>Array</tt> of human readable column names. See also "Localization" section
-      def header
-        self.data_columns.map(&:header)
+      def header(*column_names)
+        data_columns(*column_names).map(&:header)
       end
 
       # Returns <tt>Array</tt> column values for given asset
-      def row_for(asset)
-        self.data_columns.map do |column|
+      def row_for(asset, *column_names)
+        data_columns(*column_names).map do |column|
           column.value(asset, self)
         end
       end
@@ -74,9 +82,10 @@ module Datagrid
       end
 
       # Returns Array of Arrays with data for each row in datagrid assets without header.
-      def rows
+      def rows(*column_names)
+        #TODO: find in batches
         self.assets.map do |asset|
-          self.row_for(asset)
+          self.row_for(asset, *column_names)
         end
       end
 
@@ -92,7 +101,8 @@ module Datagrid
         end
       end
 
-      def to_csv(options = {})
+      def to_csv(*column_names)
+        options = columns.extract_options!
         klass = if RUBY_VERSION >= "1.9"
                   require 'csv'
                   CSV
@@ -101,9 +111,9 @@ module Datagrid
                   FasterCSV
                 end
         klass.generate(
-          {:headers => self.header, :write_headers => true}.merge(options)
+          {:headers => self.header(*column_names), :write_headers => true}.merge(options)
         ) do |csv|
-          self.rows.each do |row|
+          self.rows(*column_names).each do |row|
             csv << row
           end
         end
@@ -113,8 +123,8 @@ module Datagrid
         self.class.columns(*args)
       end
 
-      def data_columns
-        self.columns(:data => true)
+      def data_columns(*names)
+        self.columns(*names, :data => true)
       end
 
       def column_by_name(name)

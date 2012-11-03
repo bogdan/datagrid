@@ -41,6 +41,10 @@ describe Datagrid::Columns do
     it "should support csv export" do
       subject.to_csv.should == "Group,Name\nPop,Star\n"
     end
+
+    it "should support csv export of particular columns" do
+      subject.to_csv(:name).should == "Name\nStar\n"
+    end
   end
 
   it "should support columns with model and report arguments" do
@@ -50,8 +54,8 @@ describe Datagrid::Columns do
         where("category LIKE '%#{value}%'")
       end
 
-      column(:exact_category) do |entry, report|
-        entry.category == report.category
+      column(:exact_category) do |entry, grid|
+        entry.category == grid.category
       end
     end
     Entry.create!(:category => "foo")
