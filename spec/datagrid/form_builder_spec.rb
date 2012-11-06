@@ -50,6 +50,48 @@ describe Datagrid::FormBuilder do
         '<input class="group_id integer_filter" id="report_group_id" name="report[group_id]" size="30" type="text"/>'
       )}
     end
+
+    context "with date filter type" do
+      let(:_filter) { :created_at }
+      let(:_grid) {
+        test_report do
+          scope {Entry}
+          filter(:created_at, :date)
+        end
+      }
+      it { should equal_to_dom(
+        '<input class="created_at date_filter" id="report_created_at" name="report[created_at]" size="30" type="text"/>'
+      )}
+    end
+
+    context "with date filter type and range option" do
+      let(:_filter) { :created_at }
+      let(:_grid) {
+        test_report(:created_at => _range) do
+          scope {Entry}
+          filter(:created_at, :date, :range => true)
+        end
+      }
+      context "with infinite range value" do
+        
+        let(:_range) { ["2012-01-03", nil]}
+        it { should equal_to_dom(
+          '<input class="created_at date_filter from" id="report_created_at" multiple name="report[created_at][]" size="30" type="text" value="2012-01-03"/>' +
+          '<div class="separator"> - </div>' +
+          '<input class="created_at date_filter to" id="report_created_at" multiple name="report[created_at][]" size="30" type="text"/>'
+        )}
+        it { should be_html_safe }
+      end
+
+      context "with invalid range value" do
+        let(:_range) { Date.parse('2012-01-02')..Date.parse('2012-01-01') }
+        it { should equal_to_dom(
+          '<input class="created_at date_filter from" id="report_created_at" multiple name="report[created_at][]" size="30" type="text" value="2012-01-02"/>' +
+          '<div class="separator"> - </div>' +
+          '<input class="created_at date_filter to" id="report_created_at" multiple name="report[created_at][]" size="30" type="text" value="2012-01-01"/>'
+        )}
+      end
+    end
     context "with enum filter type" do
       let(:_filter) { :category }
       let(:_grid) {

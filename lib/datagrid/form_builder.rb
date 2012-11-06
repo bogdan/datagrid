@@ -5,9 +5,7 @@ module Datagrid
 
     def datagrid_filter(filter_or_attribute, options = {})
       filter = datagrid_get_filter(filter_or_attribute)
-      options[:class] ||= ""
-      options[:class] += " " unless options[:class].blank?
-      options[:class] += "#{filter.name} #{datagrid_filter_html_class(filter)}"
+      options = Datagrid::Utils.add_html_classes(options, filter.name, datagrid_filter_html_class(filter))
       self.send(filter.form_builder_helper_name, filter, options)
     end
 
@@ -26,8 +24,27 @@ module Datagrid
     end
 
     def datagrid_date_filter(attribute_or_filter, options = {})
-      attribute = datagrid_get_attribute(attribute_or_filter)
-      text_field(attribute, options)
+      filter = datagrid_get_filter(attribute_or_filter)
+      if filter.range?
+        options = options.merge(:multiple => true)
+
+        from_options = Datagrid::Utils.add_html_classes(options, "from")
+        from_value = object[filter.name].try(:first)
+        from_value = nil if from_value == Datagrid::Filters::DateFilter::MIN_DATE
+
+        to_options = Datagrid::Utils.add_html_classes(options, "to")
+        to_value = object[filter.name].try(:last)
+        to_value = nil if to_value == Datagrid::Filters::DateFilter::MAX_DATE
+        # 2 inputs: "from date" and "to date" to specify a range
+        [
+          text_field(filter.name, from_options.merge!(:value => from_value)),
+          I18n.t("datagrid.date_range_separator", :default => '<div class="separator"> - </div>'),
+          text_field(filter.name, to_options.merge!(:value => to_value))
+        ].join.html_safe
+      else
+        text_field(filter.name, options)
+      end
+
     end
 
     def datagrid_default_filter(attribute_or_filter, options = {})
