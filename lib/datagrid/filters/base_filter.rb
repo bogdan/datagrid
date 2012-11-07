@@ -7,7 +7,7 @@ class Datagrid::Filters::BaseFilter
     self.grid = grid
     self.name = name
     self.options = options
-    self.block = block
+    self.block = block || default_filter
   end
 
   def format(value)
@@ -35,8 +35,8 @@ class Datagrid::Filters::BaseFilter
       raise Datagrid::ArgumentError, "#{grid.class}.#{name} filter can not accept Array argument. Use :multiple option." 
     end
     values = Array.wrap(value)
-    values.map! do |value|
-      self.format(value)
+    values.map! do |v|
+      self.format(v)
     end
     self.multiple ? values : values.first
   end
@@ -69,6 +69,18 @@ class Datagrid::Filters::BaseFilter
 
   def self.form_builder_helper_name
     :"datagrid_#{self.to_s.demodulize.underscore}"
+  end
+
+  def default_filter
+    filter_name = name
+    lambda do |value, scope, grid|
+      driver = grid.driver
+      if !driver.has_column?(scope, filter_name) && driver.to_scope(scope).respond_to?(filter_name)
+        driver.to_scope(scope).send(filter_name, value)
+      else
+        driver.where(scope, filter_name => value)
+      end
+    end
   end
 
 end
