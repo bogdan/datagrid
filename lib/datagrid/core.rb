@@ -47,7 +47,7 @@ module Datagrid
 
       protected
       def check_scope_defined!(message = nil)
-        message ||= "Scope not defined"
+        message ||= "#{self}.scope is not defined"
         raise(Datagrid::ConfigurationError, message) unless scope_value
       end
 

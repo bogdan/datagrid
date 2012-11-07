@@ -44,7 +44,6 @@ module Datagrid
       else
         text_field(filter.name, options)
       end
-
     end
 
     def datagrid_default_filter(attribute_or_filter, options = {})

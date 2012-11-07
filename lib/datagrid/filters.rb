@@ -66,7 +66,6 @@ module Datagrid
 
       protected
       def default_filter(attribute)
-        check_scope_defined!("Scope should be defined before filters")
 
         lambda do |value, scope, grid|
           driver = grid.driver
