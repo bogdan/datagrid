@@ -21,6 +21,8 @@ Ruby library that helps you to build and represent table-like data with:
 [Datagrid DEMO application](http://datagrid.heroku.com) is available live!
 [Demo source code](https://github.com/bogdan/datagrid-demo).
 
+<img src="http://datagrid.heroku.com/datagrid_demo_screenshot.png" style="margin: 7px">
+
 ### Example
 
 In order to create a grid:
