@@ -71,7 +71,6 @@ class Datagrid::Filters::BaseFilter
     :"datagrid_#{self.to_s.demodulize.underscore}"
   end
 
-
   def default_filter_block
     filter = self
     lambda do |value, scope, grid| 
@@ -80,13 +79,16 @@ class Datagrid::Filters::BaseFilter
   end
 
   def default_filter(value, scope, grid)
-    filter_name = name
     driver = grid.driver
-    if !driver.has_column?(scope, filter_name) && driver.to_scope(scope).respond_to?(filter_name)
-      driver.to_scope(scope).send(filter_name, value)
+    if !driver.has_column?(scope, name) && driver.to_scope(scope).respond_to?(name)
+      driver.to_scope(scope).send(name, value)
     else
-      driver.where(scope, filter_name => value)
+      default_filter_where(driver, scope, value)
     end
+  end
+
+  def default_filter_where(driver, scope, value)
+    driver.where(scope, name => value)
   end
 
 end

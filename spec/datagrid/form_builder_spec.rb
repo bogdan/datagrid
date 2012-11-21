@@ -72,13 +72,23 @@ describe Datagrid::FormBuilder do
           filter(:created_at, :date, :range => true)
         end
       }
-      context "with infinite range value" do
+      context "with only left bound" do
         
         let(:_range) { ["2012-01-03", nil]}
         it { should equal_to_dom(
           '<input class="created_at date_filter from" id="report_created_at" multiple name="report[created_at][]" size="30" type="text" value="2012-01-03"/>' +
           '<div class="separator"> - </div>' +
           '<input class="created_at date_filter to" id="report_created_at" multiple name="report[created_at][]" size="30" type="text"/>'
+        )}
+        it { should be_html_safe }
+      end
+      context "with only right bound" do
+        
+        let(:_range) { [nil, "2012-01-03"]}
+        it { should equal_to_dom(
+          '<input class="created_at date_filter from" id="report_created_at" multiple name="report[created_at][]" size="30" type="text"/>' +
+          '<div class="separator"> - </div>' +
+          '<input class="created_at date_filter to" id="report_created_at" multiple name="report[created_at][]" size="30" type="text" value="2012-01-03"/>'
         )}
         it { should be_html_safe }
       end

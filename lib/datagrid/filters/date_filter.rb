@@ -1,12 +1,5 @@
 class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
 
-  # ActiveRecord Postgresql adapter can not handle BC dates
-  # https://github.com/rails/rails/pull/6245
-  MIN_DATE = Date.new(0) + 1.year
-  # PostgreSQL/MySQL don't want to accept bigger date
-  # TODO: determine why
-  MAX_DATE = Date.parse('9999-12-31')
-
   def initialize(grid, name, options, &block)
     super(grid, name, options, &block)
     if range?
@@ -42,7 +35,7 @@ class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
         when 1
           result.first
         when 2
-          (result.first || MIN_DATE)..(result.last || MAX_DATE)
+          result
         else
           raise ArgumentError, "Can not create a date range from array of more than two: #{result.inspect}"
         end
@@ -58,6 +51,21 @@ class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
 
   def range?
     options[:range]
+  end
+
+  def default_filter_where(driver, scope, value)
+    if range? && value.is_a?(Array)
+      left, right = value
+      if left
+        scope = driver.greater_equal(scope, name, left)
+      end
+      if right
+        scope = driver.less_equal(scope, name, right)
+      end
+      scope
+    else 
+      super(driver, scope, value)
+    end
   end
 end
 

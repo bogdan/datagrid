@@ -30,11 +30,9 @@ module Datagrid
 
         from_options = Datagrid::Utils.add_html_classes(options, "from")
         from_value = object[filter.name].try(:first)
-        from_value = nil if from_value == Datagrid::Filters::DateFilter::MIN_DATE
 
         to_options = Datagrid::Utils.add_html_classes(options, "to")
         to_value = object[filter.name].try(:last)
-        to_value = nil if to_value == Datagrid::Filters::DateFilter::MAX_DATE
         # 2 inputs: "from date" and "to date" to specify a range
         [
           text_field(filter.name, from_options.merge!(:value => from_value)),
