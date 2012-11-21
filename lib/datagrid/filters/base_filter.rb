@@ -3,11 +3,11 @@ class Datagrid::Filters::BaseFilter
 
   attr_accessor :grid, :options, :block, :name
 
-  def initialize(grid, name, options = {}, &block)
-    self.grid = grid
+  def initialize(grid_class, name, options = {}, &block)
+    self.grid = grid_class
     self.name = name
     self.options = options
-    self.block = block || default_filter
+    self.block = block || default_filter_block 
   end
 
   def format(value)
@@ -71,15 +71,21 @@ class Datagrid::Filters::BaseFilter
     :"datagrid_#{self.to_s.demodulize.underscore}"
   end
 
-  def default_filter
+
+  def default_filter_block
+    filter = self
+    lambda do |value, scope, grid| 
+      filter.default_filter(value, scope, grid)
+    end                                         
+  end
+
+  def default_filter(value, scope, grid)
     filter_name = name
-    lambda do |value, scope, grid|
-      driver = grid.driver
-      if !driver.has_column?(scope, filter_name) && driver.to_scope(scope).respond_to?(filter_name)
-        driver.to_scope(scope).send(filter_name, value)
-      else
-        driver.where(scope, filter_name => value)
-      end
+    driver = grid.driver
+    if !driver.has_column?(scope, filter_name) && driver.to_scope(scope).respond_to?(filter_name)
+      driver.to_scope(scope).send(filter_name, value)
+    else
+      driver.where(scope, filter_name => value)
     end
   end
 
