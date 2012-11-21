@@ -1,5 +1,13 @@
 module RangedFilter
   
+
+  def initialize(grid, name, options, &block)
+    super(grid, name, options, &block)
+    if range?
+      options[:multiple] = true
+    end
+  end
+
   def format_values(value)
     result = super(value)
     if range? 
@@ -10,7 +18,7 @@ module RangedFilter
         when 1
           result.first
         when 2
-          (result.first || MIN_DATE)..(result.last || MAX_DATE)
+          result
         else
           raise ArgumentError, "Can not create a date range from array of more than two: #{result.inspect}"
         end
@@ -24,12 +32,24 @@ module RangedFilter
     end
   end
 
-  def minimum_value
-    raise NotImplementedError, "#{self.class}#minimal_value suppose to be overwritten"
+  def range?
+    options[:range]
   end
 
-  def maximum_value
-    raise NotImplementedError, "#{self.class}#maximum_value suppose to be overwritten"
+  def default_filter_where(driver, scope, value)
+    if range? && value.is_a?(Array)
+      left, right = value
+      if left
+        scope = driver.greater_equal(scope, name, left)
+      end
+      if right
+        scope = driver.less_equal(scope, name, right)
+      end
+      scope
+    else 
+      super(driver, scope, value)
+    end
   end
+
 
 end

@@ -1,6 +1,12 @@
+require "datagrid/filters/ranged_filter"
+
 class Datagrid::Filters::IntegerFilter < Datagrid::Filters::BaseFilter
+
+  include RangedFilter
+
   def format(value)
     return nil if value.blank?
+    return value if value.is_a?(Range)
     value.to_i
   end
 end
