@@ -3,11 +3,13 @@ class Datagrid::Filters::BooleanEnumFilter < Datagrid::Filters::EnumFilter
   YES = "YES"
   NO = "NO"
   VALUES = ActiveSupport::OrderedHash.new
-  VALUES[YES] = YES
-  VALUES[NO] = NO
+  VALUES[YES] = true
+  VALUES[NO] = false
 
   def initialize(report, attribute, options = {}, &block)
     options[:select] = VALUES.keys
+    options[:allow_blank] = true
+    options[:allow_nil] = false
     super(report, attribute, options, &block)
   end
 
@@ -16,7 +18,7 @@ class Datagrid::Filters::BooleanEnumFilter < Datagrid::Filters::EnumFilter
   end
 
   def to_boolean(value)
-    VALUES[value]
+    value.blank? ? nil : VALUES[value]
   end
 
 end
