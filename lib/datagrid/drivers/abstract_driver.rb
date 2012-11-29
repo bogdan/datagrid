@@ -52,6 +52,10 @@ module Datagrid
       def has_column?(scope, column_name)
         raise NotImplementedError
       end
+
+      def reverse_order(scope)
+        raise NotImplementedError
+      end
     end
   end
 end

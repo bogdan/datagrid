@@ -25,8 +25,6 @@ describe Datagrid::Ordering do
       end
       column :name
     end.assets.should discover(third, second, first).with_exact_order
-
-
   end
 
 
@@ -47,13 +45,25 @@ describe Datagrid::Ordering do
   end
 
   it "should override default order" do
-
-    test_report(:order => :id) do
-      scope { Entry.order("id desc")}
-      column(:id) do
-        self.order("id asc")
-      end
+    test_report(:order => :name) do
+      scope { Entry.order("name desc")}
+      column(:name, :order => "name asc")
     end.assets.should discover(first, second, third).with_exact_order
   end
+
+  it "should support order given as block" do
+    test_report(:order => :name) do
+      scope { Entry }
+      column(:name, :order => proc { order("name desc") })
+    end.assets.should discover(third, second, first).with_exact_order
+  end
+
+  it "should support order desc given as block" do
+    test_report(:order => :name, :descending => true) do
+      scope { Entry }
+      column(:name,  :order_desc => proc { order("name desc")})
+    end.assets.should discover(third, second, first).with_exact_order
+  end
+  
 
 end
