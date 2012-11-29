@@ -13,7 +13,6 @@ group :development do
   gem "debugger", :platform => "ruby_19"
 
   gem "rspec"
-  gem "accept_values_for"
   gem "nokogiri" # used to test html output
 
   gem "sqlite3-ruby"

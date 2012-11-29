@@ -14,7 +14,7 @@ describe Datagrid::Ordering do
         Entry
       end
       column :name
-    end.assets.should discover(first, second, third).with_exact_order
+    end.assets.should == [first, second, third]
 
   end
 
@@ -24,7 +24,7 @@ describe Datagrid::Ordering do
         Entry
       end
       column :name
-    end.assets.should discover(third, second, first).with_exact_order
+    end.assets.should == [third, second, first]
   end
 
 
@@ -48,21 +48,21 @@ describe Datagrid::Ordering do
     test_report(:order => :name) do
       scope { Entry.order("name desc")}
       column(:name, :order => "name asc")
-    end.assets.should discover(first, second, third).with_exact_order
+    end.assets.should == [first, second, third]
   end
 
   it "should support order given as block" do
     test_report(:order => :name) do
       scope { Entry }
       column(:name, :order => proc { order("name desc") })
-    end.assets.should discover(third, second, first).with_exact_order
+    end.assets.should == [third, second, first]
   end
 
   it "should support order desc given as block" do
     test_report(:order => :name, :descending => true) do
       scope { Entry }
       column(:name,  :order_desc => proc { order("name desc")})
-    end.assets.should discover(third, second, first).with_exact_order
+    end.assets.should == [third, second, first]
   end
   
 

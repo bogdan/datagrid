@@ -17,7 +17,6 @@ require 'action_view'
 require "mongoid"
 require "mongo_mapper"
 require 'datagrid'
-require "discover"
 begin
   require 'ruby-debug'
 rescue LoadError
