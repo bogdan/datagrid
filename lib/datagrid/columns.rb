@@ -124,7 +124,8 @@ module Datagrid
       end
 
       def data_columns(*names)
-        self.columns(*names, :data => true)
+        names << {:data => true}
+        self.columns(*names)
       end
 
       def column_by_name(name)
