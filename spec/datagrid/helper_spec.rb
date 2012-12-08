@@ -141,7 +141,7 @@ describe Datagrid::Helper do
 
         rp = test_report do
           scope { Entry }
-          column(:name, :html => true) do |model|
+          column(:name, :html => true, :data => lambda {'something else entirely'}) do |model|
             content_tag(:span, model.name)
           end
         end

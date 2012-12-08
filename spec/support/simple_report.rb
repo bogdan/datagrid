@@ -40,6 +40,10 @@ class SimpleReport
     render :partial => "actions", :locals => {:model => model}
   end
 
+  column(:access_level, :html => true, :data => proc { self.access_level }) do |model|
+    "<h1>#{model.access_level}</h1>"
+  end
+
   def param_name
     :report
   end

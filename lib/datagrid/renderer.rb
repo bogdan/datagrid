@@ -13,10 +13,10 @@ module Datagrid
 
     def format_value(grid, column, asset)
       value = if column.html?
-        if column.block.arity > 1
-          @template.instance_exec(asset, grid, &column.block)
+        if column.html_block.arity > 1
+          @template.instance_exec(asset, grid, &column.html_block)
         else
-          @template.instance_exec(asset, &column.block)
+          @template.instance_exec(asset, &column.html_block)
         end
       else
         column.value(asset, grid)
