@@ -40,8 +40,10 @@ class SimpleReport
     render :partial => "actions", :locals => {:model => model}
   end
 
-  column(:access_level, :html => true, :data => proc { self.access_level }) do |model|
-    "<h1>#{model.access_level}</h1>"
+  column(:access_level, :html => lambda {|data| content_tag :h1, data})
+
+  column(:pet, :html => lambda {|data| content_tag :em, data}) do
+    self.pet.try(:upcase)
   end
 
   def param_name

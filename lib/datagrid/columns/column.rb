@@ -6,10 +6,12 @@ class Datagrid::Columns::Column
     self.grid = grid
     self.name = name.to_sym
     self.options = options
-    if options[:html]
+    if options[:html] == true
       self.html_block = block
-      self.block = options[:data]
     else
+      if options[:html].is_a? Proc
+        self.html_block = options[:html]
+      end
       self.block = block
     end
     if format

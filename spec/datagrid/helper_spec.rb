@@ -141,12 +141,34 @@ describe Datagrid::Helper do
 
         rp = test_report do
           scope { Entry }
-          column(:name, :html => true, :data => lambda {'something else entirely'}) do |model|
+          column(:name, :html => true) do |model|
             content_tag(:span, model.name)
           end
         end
         subject.datagrid_rows(rp, [entry]).should match_css_pattern(
           "tr td.name span" => "Star"
+        )
+      end
+
+      it "should render block-based html columns" do
+        rp = test_report do
+          scope { Entry }
+          column(:name, :html => lambda {|data| content_tag :h1, data})
+        end
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name h1" => "Star"
+        )
+      end
+
+      it "should render block-based html columns with custom data" do
+        rp = test_report do
+          scope { Entry }
+          column(:name, :html => lambda {|data| content_tag :em, data}) do
+            self.name.upcase
+          end
+        end
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name em" => "STAR"
         )
       end
 

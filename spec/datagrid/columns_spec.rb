@@ -11,17 +11,23 @@ describe Datagrid::Columns do
   describe "basic methods" do
 
     let!(:entry) {  Entry.create!(
-      :group => group, :name => "Star", :disabled => false, :confirmed => false, :category => "first", :access_level => 'admin'
+      :group => group,
+      :name => "Star",
+      :disabled => false,
+      :confirmed => false,
+      :category => "first",
+      :access_level => 'admin',
+      :pet => 'rottweiler'
     ) }
 
     it "should have data columns without html columns" do
       subject.data_columns.size.should == subject.columns.size - 1
     end
     it "should build rows of data" do
-      subject.rows.should == [["Pop", "Star", "admin"]]
+      subject.rows.should == [["Pop", "Star", "admin", "ROTTWEILER"]]
     end
     it  "should generate header" do
-      subject.header.should == ["Group", "Name", "Access level"]
+      subject.header.should == ["Group", "Name", "Access level", "Pet"]
     end
 
     it "should generate table data" do
@@ -35,12 +41,13 @@ describe Datagrid::Columns do
       subject.hash_for(entry).should == {
         :group => "Pop",
         :name => "Star",
-        :access_level => 'admin'
+        :access_level => 'admin',
+        :pet => 'ROTTWEILER'
       }
     end
 
     it "should support csv export" do
-      subject.to_csv.should == "Group,Name,Access level\nPop,Star,admin\n"
+      subject.to_csv.should == "Group,Name,Access level,Pet\nPop,Star,admin,ROTTWEILER\n"
     end
 
     it "should support csv export of particular columns" do
