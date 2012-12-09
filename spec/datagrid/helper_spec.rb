@@ -97,7 +97,6 @@ describe Datagrid::Helper do
     end
 
     describe ".datagrid_rows" do
-
       it "should support urls" do
         rp = test_report do
           scope { Entry }
@@ -107,6 +106,7 @@ describe Datagrid::Helper do
           "tr td.name a[href=Star]" => "Star"
         )
       end
+
       it "should support conditional urls" do
         rp = test_report do
           scope { Entry }
@@ -114,9 +114,9 @@ describe Datagrid::Helper do
         end
         subject.datagrid_rows(rp, [entry]).should match_css_pattern(
           "tr td.name" => "Star"
-        )
-        
+        )  
       end
+
       it "should add ordering classes to column" do
         rp = test_report(:order => :name) do
           scope { Entry }
@@ -125,8 +125,8 @@ describe Datagrid::Helper do
         subject.datagrid_rows(rp, [entry]).should match_css_pattern(
           "tr td.name.ordered.asc" => "Star"
         )
-        
       end
+
       it "should add ordering classes to column" do
         rp = test_report(:order => :name, :descending => true) do
           scope { Entry }
@@ -138,7 +138,6 @@ describe Datagrid::Helper do
       end
 
       it "should render html columns" do
-
         rp = test_report do
           scope { Entry }
           column(:name, :html => true) do |model|
@@ -150,7 +149,7 @@ describe Datagrid::Helper do
         )
       end
 
-      it "should render block-based html columns" do
+      it "should render argument-based html columns" do
         rp = test_report do
           scope { Entry }
           column(:name, :html => lambda {|data| content_tag :h1, data})
@@ -160,7 +159,7 @@ describe Datagrid::Helper do
         )
       end
 
-      it "should render block-based html columns with custom data" do
+      it "should render argument-based html columns with custom data" do
         rp = test_report do
           scope { Entry }
           column(:name, :html => lambda {|data| content_tag :em, data}) do
@@ -181,6 +180,58 @@ describe Datagrid::Helper do
         end
         subject.datagrid_rows(rp, [entry]).should match_css_pattern(
           "tr td.name span" => "Star-Entry"
+        )
+      end
+
+      it "should render argument-based html blocks with double arguments" do
+        rp = test_report do
+          scope { Entry }
+          column(:name, :html => lambda { |data, model| 
+            content_tag :h1, "#{data}-#{model.name.downcase}"
+          })            
+        end
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name h1" => "Star-star"
+        )
+      end
+
+      it "should render argument-based html blocks with triple arguments" do
+        rp = test_report do
+          scope { Entry }
+          column(:name, :html => lambda { |data, model, grid| 
+            content_tag :h1, "#{data}-#{model.name.downcase}-#{grid.assets.klass}"
+          })            
+        end
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name h1" => "Star-star-Entry"
+        )
+      end
+
+      it "should render argument-based html blocks with double arguments and custom data" do
+        rp = test_report do
+          scope { Entry }
+          column(:name, :html => lambda { |data, model| 
+            content_tag :h1, "#{data}-#{model.name}"
+          }) do
+            self.name.upcase
+          end            
+        end
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name h1" => "STAR-Star"
+        )
+      end
+
+      it "should render argument-based html blocks with triple arguments and custom data" do
+        rp = test_report do
+          scope { Entry }
+          column(:name, :html => lambda { |data, model, grid| 
+            content_tag :h1, "#{data}-#{model.name}-#{grid.assets.klass}"
+          }) do
+            self.name.upcase
+          end            
+        end
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name h1" => "STAR-Star-Entry"
         )
       end
 

@@ -12,16 +12,24 @@ module Datagrid
     end
 
     def format_value(grid, column, asset)
+
       value = if column.html?
-        html_asset = column.data? ? column.value(asset, grid) : asset
-        if column.html_block.arity > 1
-          @template.instance_exec(html_asset, grid, &column.html_block)
-        else
-          @template.instance_exec(html_asset, &column.html_block)
+        args = []
+        remaining_arity = column.html_block.arity
+
+        if column.data?
+          args << column.value(asset,grid)
+          remaining_arity -= 1
         end
+
+        args << asset if remaining_arity > 0
+        args << grid if remaining_arity > 1
+
+        @template.instance_exec(*args, &column.html_block)
       else
-        column.value(asset, grid)
+        column.value(asset,grid)
       end
+
       url = column.options[:url] && column.options[:url].call(asset)
       if url
         @template.link_to(value, url)
