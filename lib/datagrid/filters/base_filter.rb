@@ -32,7 +32,7 @@ class Datagrid::Filters::BaseFilter
 
   def format_values(value)
     if !self.multiple && value.is_a?(Array) 
-      raise Datagrid::ArgumentError, "#{grid.class}.#{name} filter can not accept Array argument. Use :multiple option." 
+      raise Datagrid::ArgumentError, "#{grid}##{name} filter can not accept Array argument. Use :multiple option." 
     end
     values = Array.wrap(value)
     values.map! do |v|

@@ -24,24 +24,7 @@ module Datagrid
     end
 
     def datagrid_date_filter(attribute_or_filter, options = {})
-      filter = datagrid_get_filter(attribute_or_filter)
-      if filter.range?
-        options = options.merge(:multiple => true)
-
-        from_options = Datagrid::Utils.add_html_classes(options, "from")
-        from_value = object[filter.name].try(:first)
-
-        to_options = Datagrid::Utils.add_html_classes(options, "to")
-        to_value = object[filter.name].try(:last)
-        # 2 inputs: "from date" and "to date" to specify a range
-        [
-          text_field(filter.name, from_options.merge!(:value => from_value)),
-          I18n.t("datagrid.date_range_separator", :default => '<div class="separator"> - </div>'),
-          text_field(filter.name, to_options.merge!(:value => to_value))
-        ].join.html_safe
-      else
-        text_field(filter.name, options)
-      end
+      datagrid_range_filter(:date, attribute_or_filter, options)
     end
 
     def datagrid_default_filter(attribute_or_filter, options = {})
@@ -61,7 +44,28 @@ module Datagrid
       if filter.multiple && self.object[filter.name].blank?
         options[:value] = ""
       end
-      text_field filter.name, options
+      datagrid_range_filter(:integer, filter, options)
+    end
+
+    def datagrid_range_filter(type, attribute_or_filter, options = {})
+      filter = datagrid_get_filter(attribute_or_filter)
+      if filter.range?
+        options = options.merge(:multiple => true)
+
+        from_options = Datagrid::Utils.add_html_classes(options, "from")
+        from_value = object[filter.name].try(:first)
+
+        to_options = Datagrid::Utils.add_html_classes(options, "to")
+        to_value = object[filter.name].try(:last)
+        # 2 inputs: "from date" and "to date" to specify a range
+        [
+          text_field(filter.name, from_options.merge!(:value => from_value)),
+          I18n.t("datagrid.misc.#{type}_range_separator", :default => "<span class=\"separator #{type}\"> - </span>"),
+          text_field(filter.name, to_options.merge!(:value => to_value))
+        ].join.html_safe
+      else
+        text_field(filter.name, options)
+      end
     end
 
     def datagrid_string_filter(attribute_or_filter, options = {})
