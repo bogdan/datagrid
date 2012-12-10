@@ -31,8 +31,8 @@ module Datagrid
     end
 
     def datagrid_column_classes(grid, column)
-        order_class = grid.order == column.name ? ["ordered", grid.descending ? "desc" : "asc"] : nil
-      [column.name, order_class].compact.join(" ")
+      order_class = grid.order == column.name ? ["ordered", grid.descending ? "desc" : "asc"] : nil
+      [column.name, order_class, column.options[:class]].compact.join(" ")
     end
   end
 end

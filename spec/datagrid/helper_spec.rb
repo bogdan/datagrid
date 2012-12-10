@@ -176,6 +176,17 @@ describe Datagrid::Helper do
         )
       end
 
+      it "should allow CSS classes to be specified for a column" do
+        rp = test_report do
+          scope { Entry }
+          column(:name, :class => 'my_class')
+        end
+
+        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+          "tr td.name.my_class" => "Star"
+        )
+      end
+
     end
 
     describe ".datagrid_order_for" do
