@@ -1,12 +1,19 @@
 class Datagrid::Columns::Column
 
-  attr_accessor :grid, :options, :block, :name
+  attr_accessor :grid, :options, :block, :name, :html_block
 
   def initialize(grid, name, options = {}, &block)
     self.grid = grid
     self.name = name.to_sym
     self.options = options
-    self.block = block
+    if options[:html] == true
+      self.html_block = block
+    else
+      if options[:html].is_a? Proc
+        self.html_block = options[:html]
+      end
+      self.block = block
+    end
     if format
       ::Datagrid::Utils.warn_once(":format column option is deprecated. Use :url or :html option instead.")
     end
@@ -53,11 +60,11 @@ class Datagrid::Columns::Column
   end
 
   def html?
-    !! self.options[:html]
+    self.html_block != nil
   end
   
   def data?
-    !html?
+    self.block != nil
   end
 
 end
