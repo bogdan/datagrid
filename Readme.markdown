@@ -40,7 +40,7 @@ class SimpleReport
   filter(:disabled, :eboolean)
   filter(:confirmed, :boolean)
   filter(:group_id, :integer, :multiple => true)
-  integer_range_filter(:logins_count, :integer)
+  filter(:logins_count, :integer, :range => true)
   filter(:group_name, :string, :header => "Group") do |value|
     self.joins(:group).where(:groups => {:name => value})
   end
@@ -69,11 +69,11 @@ report = SimpleReport.new(
 report.assets # => Array of User instances: 
               # SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count >= 1 AND users.category = 'first' ORDER BY groups.name DESC
 
-report.header # => ["Group", "Name", "Activated"]
+report.header # => ["Name", "Group", "Activated"]
 report.rows   # => [
-              #      ["Steve", "Spammers", true],
-              #      [ "John", "Spoilers", true],
-              #      ["Berry", "Good people", false]
+              #      ["Steve", "Spammers", false],
+              #      [ "John", "Spoilers", false],
+              #      ["Berry", "Good people", true]
               #    ]
 report.data   # => [ header, *rows]
 
