@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "datagrid"
-  s.version = "0.6.4"
+  s.version = "0.7.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = "2012-09-17"
+  s.date = "2012-12-15"
   s.description = "This allows you to easily build datagrid aka data tables with sortable columns and filters"
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
@@ -48,6 +48,7 @@ Gem::Specification.new do |s|
     "lib/datagrid/filters/enum_filter.rb",
     "lib/datagrid/filters/float_filter.rb",
     "lib/datagrid/filters/integer_filter.rb",
+    "lib/datagrid/filters/ranged_filter.rb",
     "lib/datagrid/filters/string_filter.rb",
     "lib/datagrid/form_builder.rb",
     "lib/datagrid/helper.rb",
@@ -64,8 +65,10 @@ Gem::Specification.new do |s|
     "spec/datagrid/drivers/mongoid_spec.rb",
     "spec/datagrid/filters/boolean_enum_filter_spec.rb",
     "spec/datagrid/filters/composite_filters_spec.rb",
+    "spec/datagrid/filters/date_filter_spec.rb",
     "spec/datagrid/filters/enum_filter_spec.rb",
     "spec/datagrid/filters/float_filter_spec.rb",
+    "spec/datagrid/filters/integer_filter_spec.rb",
     "spec/datagrid/filters_spec.rb",
     "spec/datagrid/form_builder_spec.rb",
     "spec/datagrid/helper_spec.rb",
@@ -96,7 +99,6 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<jeweler>, [">= 0"])
       s.add_development_dependency(%q<debugger>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
-      s.add_development_dependency(%q<accept_values_for>, [">= 0"])
       s.add_development_dependency(%q<nokogiri>, [">= 0"])
       s.add_development_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_development_dependency(%q<mongoid>, ["= 2.2.2"])
@@ -111,7 +113,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<jeweler>, [">= 0"])
       s.add_dependency(%q<debugger>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
-      s.add_dependency(%q<accept_values_for>, [">= 0"])
       s.add_dependency(%q<nokogiri>, [">= 0"])
       s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_dependency(%q<mongoid>, ["= 2.2.2"])
@@ -127,7 +128,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<jeweler>, [">= 0"])
     s.add_dependency(%q<debugger>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 0"])
-    s.add_dependency(%q<accept_values_for>, [">= 0"])
     s.add_dependency(%q<nokogiri>, [">= 0"])
     s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
     s.add_dependency(%q<mongoid>, ["= 2.2.2"])
