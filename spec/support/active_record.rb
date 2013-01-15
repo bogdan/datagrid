@@ -32,5 +32,6 @@ ActiveRecord::Schema.define(:version => 1) do
     belongs_to :group
   end
   class ::Group < ActiveRecord::Base
+    has_many :entries
   end
 end
