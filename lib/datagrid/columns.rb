@@ -101,8 +101,15 @@ module Datagrid
         end
       end
 
+      # Returns a CSV representation of the data in the table
+      #
+      # Example:
+      #
+      #     grid.to_csv
+      #     grid.to_csv(:id, :name)
+      #     grid.to_csv(:col_sep => ';')
       def to_csv(*column_names)
-        options = columns.extract_options!
+        options = column_names.extract_options!
         klass = if RUBY_VERSION >= "1.9"
                   require 'csv'
                   CSV

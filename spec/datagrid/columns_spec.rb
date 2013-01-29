@@ -53,6 +53,10 @@ describe Datagrid::Columns do
     it "should support csv export of particular columns" do
       subject.to_csv(:name).should == "Name\nStar\n"
     end
+    
+    it "should support csv export options" do
+      subject.to_csv(:col_sep => ";").should == "Group;Name;Access level;Pet\nPop;Star;admin;ROTTWEILER\n"
+    end
   end
 
   it "should support columns with model and report arguments" do
