@@ -1,0 +1,9 @@
+class <%= grid_controller_name %> < ApplicationController
+
+  def index
+    @grid = <%= grid_class_name %>.new(params[:<%= grid_ivar_name %>])
+    @assets = @grid.assets.<%= paginate_code %>
+  end
+
+end
+

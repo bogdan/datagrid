@@ -1,0 +1,13 @@
+<%%= form_for @grid, :method => :get, :url => <%= grid_route_name %> do |f| %>
+  <%% @grid.filters.each do |filter| %>
+    <div class="field">
+      <%%= f.datagrid_label filter %>
+      <%%= f.datagrid_filter filter %>
+    </div>
+  <%% end %>
+  <%%= f.submit %>
+<%% end %>
+
+<%%= <%=pagination_helper_code%> %>
+<%%= datagrid_table @grid, @assets %>
+<%%= <%=pagination_helper_code%> %>

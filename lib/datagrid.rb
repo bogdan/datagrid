@@ -31,23 +31,16 @@ module Datagrid
       include ::Datagrid::Ordering
 
     end
-    base.send :include, InstanceMethods
   end # self.included
 
   module ClassMethods
-
-
   end # ClassMethods
-
-  module InstanceMethods
-
-  end # InstanceMethods
 
   class ConfigurationError < StandardError; end
   class ArgumentError < ::ArgumentError; end
 
-
 end
 
+require "datagrid/generator"
 
 
