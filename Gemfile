@@ -11,6 +11,7 @@ group :development do
   gem "jeweler"
 
   gem "debugger", :platform => "ruby_19"
+  gem "ruby-debug", :platform => "ruby_18"
 
   gem "rspec"
   gem "nokogiri" # used to test html output
