@@ -21,11 +21,13 @@ module Datagrid
     module ClassMethods
 
       # Returns a list of columns defined.
+      # All column definistion are returned by default
       # You can limit the output with only columns you need like:
       #
       #   grid.columns(:id, :name)
       #
       # Supported options:
+      #
       # * :data - if true returns only non-html columns. Default: false.
       def columns(*args)
         options = args.extract_options!
@@ -94,7 +96,8 @@ module Datagrid
         self.rows.unshift(self.header)
       end
 
-      # Return Array of Hashes where keys are column names and values are column values for each row in datagrid <tt>#assets</tt>
+      # Return Array of Hashes where keys are column names and values are column values 
+      # for each row in datagrid <tt>#assets</tt>
       def data_hash
         self.assets.map do |asset|
           hash_for(asset)
@@ -102,12 +105,16 @@ module Datagrid
       end
 
       # Returns a CSV representation of the data in the table
+      # You are able to specify which columns you want to see in CSV.
+      # All data columns are included by default
+      # Also you can specify options hash as last argument that is proxied to
+      # Ruby CSV library.
       #
       # Example:
       #
-      #     grid.to_csv
-      #     grid.to_csv(:id, :name)
-      #     grid.to_csv(:col_sep => ';')
+      #   grid.to_csv
+      #   grid.to_csv(:id, :name)
+      #   grid.to_csv(:col_sep => ';')
       def to_csv(*column_names)
         options = column_names.extract_options!
         klass = if RUBY_VERSION >= "1.9"
