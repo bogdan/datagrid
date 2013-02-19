@@ -272,7 +272,8 @@ describe Datagrid::Helper do
         grid = OrderedGrid.new(:descending => true, :order => :category)
         subject.datagrid_order_for(grid, grid.column_by_name(:category)).should equal_to_dom(<<-HTML)
 <div class="order">
-<a href="ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="order asc">&uarr;</a> <a href="ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="order desc">&darr;</a>
+  <a href="ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="order asc">&uarr;</a>
+  <a href="ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="order desc">&darr;</a>
 </div>
         HTML
       end

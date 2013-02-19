@@ -34,16 +34,23 @@ end
 class EqualToDom
 
   def initialize(expectation)
-    @expectation = Nokogiri::HTML::DocumentFragment.parse(expectation.strip).to_s
+    @expectation = Nokogiri::HTML::DocumentFragment.parse(force_encoding(expectation).strip).to_s
   end
 
   def matches?(text)
-    @matcher = Nokogiri::HTML::DocumentFragment.parse(text.strip).to_s
+
+    @matcher = Nokogiri::HTML::DocumentFragment.parse(force_encoding(text).strip).to_s
     @matcher == @expectation
   end
 
   def failure_message
     "Expected dom #{@matcher} to match #{@expectation}, but it wasn't"
+  end
+
+  private
+
+  def force_encoding(text)
+    text.clone.force_encoding("UTF-8") if "1.9.3".respond_to? :force_encoding
   end
 end
 
