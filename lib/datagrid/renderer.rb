@@ -72,17 +72,7 @@ module Datagrid
     end
 
     def order_for(grid, column)
-      @template.content_tag(:div, :class => "order") do
-        @template.link_to(
-          I18n.t("datagrid.table.order.asc", :default => "&uarr;".html_safe).html_safe,
-          @template.url_for(grid.param_name => grid.attributes.merge(:order => column.name, :descending => false)),
-          :class => "order asc"
-        ) + " " + @template.link_to(
-          I18n.t("datagrid.table.order.desc", :default => "&darr;".html_safe).html_safe,
-          @template.url_for(grid.param_name => grid.attributes.merge(:order => column.name, :descending => true )),
-          :class => "order desc"
-        )
-      end
+      @template.render :partial => "datagrid/order_for", :locals => { :grid => grid, :column => column }
     end
 
 
