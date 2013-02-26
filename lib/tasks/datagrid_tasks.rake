@@ -13,6 +13,7 @@ namespace :datagrid do
     end
     copy_template "views/datagrid/_table.html.erb"
     copy_template "views/datagrid/_head.html.erb"
+    copy_template "views/datagrid/_order_for.html.erb"
     copy_template "views/datagrid/_row.html.erb"
   end
 
