@@ -50,7 +50,7 @@ class EqualToDom
   private
 
   def force_encoding(text)
-    text.clone.force_encoding("UTF-8") if "1.9.3".respond_to? :force_encoding
+    "1.9.3".respond_to?(:force_encoding) ? text.clone.force_encoding("UTF-8") : text
   end
 end
 
