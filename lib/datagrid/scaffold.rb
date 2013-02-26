@@ -1,9 +1,9 @@
 require "rails/generators"
 
-class Datagrid::Scaffold < Rails::Generators::Base
+class Datagrid::Scaffold < Rails::Generators::NamedBase
   source_root File.expand_path(__FILE__ + "/../../../templates")
 
-  def create_uploader_file
+  def create_scaffold
     template "grid.rb.erb", "app/grids/#{grid_class_name.underscore}.rb"
     template "controller.rb.erb", "app/controllers/#{grid_controller_name.underscore}.rb"
     template "index.html.erb", "app/views/#{grid_controller_short_name}/index.html.erb"
