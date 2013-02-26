@@ -1,6 +1,6 @@
 require "rails/generators"
 
-class Datagrid::Generator < Rails::Generators::NamedBase
+class Datagrid::Generator < Rails::Generators::Base
   source_root File.expand_path(__FILE__ + "/../../../templates")
 
   def create_uploader_file
