@@ -41,6 +41,6 @@ module Datagrid
 
 end
 
-require "datagrid/generator"
+require "datagrid/scaffold"
 
 
