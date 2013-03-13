@@ -84,7 +84,8 @@ module Datagrid
       def assets
         result = super
         self.class.filters.each do |filter|
-          result = filter.apply(self, result, filter_value(filter))
+          result_filter = filter.apply(self, result, filter_value(filter))
+          result = result_filter if result_filter
         end
         result
       end
