@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "datagrid"
-  s.version = "0.7.1"
+  s.version = "0.8.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = "2013-01-15"
+  s.date = "2013-04-07"
   s.description = "This allows you to easily build datagrid aka data tables with sortable columns and filters"
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
     "Readme.markdown",
     "VERSION",
     "app/views/datagrid/_head.html.erb",
+    "app/views/datagrid/_order_for.html.erb",
     "app/views/datagrid/_row.html.erb",
     "app/views/datagrid/_table.html.erb",
     "datagrid.gemspec",
@@ -55,6 +56,7 @@ Gem::Specification.new do |s|
     "lib/datagrid/ordering.rb",
     "lib/datagrid/renderer.rb",
     "lib/datagrid/rspec.rb",
+    "lib/datagrid/scaffold.rb",
     "lib/datagrid/utils.rb",
     "lib/tasks/datagrid_tasks.rake",
     "spec/datagrid/active_model_spec.rb",
@@ -81,7 +83,12 @@ Gem::Specification.new do |s|
     "spec/support/mongo_mapper.rb",
     "spec/support/mongoid.rb",
     "spec/support/simple_report.rb",
-    "spec/support/test_partials/_actions.html.erb"
+    "spec/support/test_partials/_actions.html.erb",
+    "template/controller.rb.erb",
+    "template/grid.rb.erb",
+    "templates/controller.rb.erb",
+    "templates/grid.rb.erb",
+    "templates/index.html.erb"
   ]
   s.homepage = "http://github.com/bogdan/datagrid"
   s.licenses = ["MIT"]
@@ -98,6 +105,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<bundler>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, [">= 0"])
       s.add_development_dependency(%q<debugger>, [">= 0"])
+      s.add_development_dependency(%q<ruby-debug>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_development_dependency(%q<nokogiri>, [">= 0"])
       s.add_development_dependency(%q<sqlite3-ruby>, [">= 0"])
@@ -112,6 +120,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<bundler>, [">= 0"])
       s.add_dependency(%q<jeweler>, [">= 0"])
       s.add_dependency(%q<debugger>, [">= 0"])
+      s.add_dependency(%q<ruby-debug>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<nokogiri>, [">= 0"])
       s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
@@ -127,6 +136,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<bundler>, [">= 0"])
     s.add_dependency(%q<jeweler>, [">= 0"])
     s.add_dependency(%q<debugger>, [">= 0"])
+    s.add_dependency(%q<ruby-debug>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<nokogiri>, [">= 0"])
     s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
