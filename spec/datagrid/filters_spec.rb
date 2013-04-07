@@ -114,4 +114,19 @@ describe Datagrid::Filters do
     end
     
   end
+  describe "default filter as scope" do
+    it "should create default filter if scope respond to filter name method" do
+      Entry.create!
+      grid = test_report(:custom => 'skip') do
+        scope {Entry}
+        filter(:custom) do |value|
+          if value != 'skip'
+            where(:custom => value)
+          end
+        end
+      end
+      grid.assets.should_not be_empty
+    end
+    
+  end
 end
