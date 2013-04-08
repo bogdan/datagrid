@@ -141,6 +141,26 @@ Each column is sortable.
 
 ### Front end
 
+### Using Generator
+
+Datagrid has a builtin generator:
+
+```
+rails g datagrid:scaffold skills
+```
+
+That gives you some code to play with out of the box:
+
+```
+create  app/grids/skills_grid.rb
+create  app/controllers/skills_controller.rb
+create  app/views/skills/index.html.erb
+route  resources :skills
+```
+
+### Manually
+
+If you want to be a true ninja you can build everything from scratch on your own.
 
 In order to create form for your report you can use all set of rails built-in tools.
 More over Datagrid provides you two additional form helpers:
@@ -149,8 +169,7 @@ More over Datagrid provides you two additional form helpers:
 * datagrid\_filter
 
 
-The easiest way to create a report form:
-(haml for readablity)
+The easiest way to create a report form (haml for readablity):
 
 ``` haml
 # Method `GET` is recommended for all report forms by default.
