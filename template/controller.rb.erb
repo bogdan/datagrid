@@ -1,9 +1,0 @@
-class <%= class_name %>Controller < ApplicationController
-
-  def index
-    @grid = <%= class_name %>Grid.new(params[:<%= (class_name + "Grid").underscore %>])
-    @assets = @grid.assets.page(params[:page])
-  end
-
-end
-
