@@ -1,3 +1,5 @@
+class Datagrid::FilteringError < StandardError
+end
 
 class Datagrid::Filters::BaseFilter
 
@@ -7,7 +9,7 @@ class Datagrid::Filters::BaseFilter
     self.grid = grid_class
     self.name = name
     self.options = options
-    self.block = block || default_filter_block 
+    self.block = block || default_filter_block
   end
 
   def format(value)
@@ -21,18 +23,17 @@ class Datagrid::Filters::BaseFilter
       return scope if value.blank? && !allow_blank?
     end
 
-    if block.arity >= 3 || block.arity < 0
-      scope.instance_exec(value, scope, grid_object, &block)
-    elsif block.arity == 2
-      scope.instance_exec(value, scope, &block)
-    else
-      scope.instance_exec(value, &block)
+    result = execute(value, scope, grid_object, &block)
+    return scope unless result
+    unless grid_object.driver.match?(result)
+      raise Datagrid::FilteringError, "Can not apply #{name.inspect} filter: result #{result.inspect} no longer match #{grid_object.driver.class}."
     end
+    result
   end
 
   def format_values(value)
-    if !self.multiple && value.is_a?(Array) 
-      raise Datagrid::ArgumentError, "#{grid}##{name} filter can not accept Array argument. Use :multiple option." 
+    if !self.multiple && value.is_a?(Array)
+      raise Datagrid::ArgumentError, "#{grid}##{name} filter can not accept Array argument. Use :multiple option."
     end
     values = Array.wrap(value)
     values.map! do |v|
@@ -42,7 +43,7 @@ class Datagrid::Filters::BaseFilter
   end
 
   def header
-    options[:header] || 
+    options[:header] ||
       I18n.translate(self.name, :scope => "datagrid.#{grid.param_name}.filters", :default => self.name.to_s.humanize)
   end
 
@@ -73,9 +74,9 @@ class Datagrid::Filters::BaseFilter
 
   def default_filter_block
     filter = self
-    lambda do |value, scope, grid| 
+    lambda do |value, scope, grid|
       filter.default_filter(value, scope, grid)
-    end                                         
+    end
   end
 
   def default_filter(value, scope, grid)
@@ -87,8 +88,20 @@ class Datagrid::Filters::BaseFilter
     end
   end
 
+  protected
+
   def default_filter_where(driver, scope, value)
-    driver.where(scope, name => value)
+    driver.where(scope, name, value)
+  end
+
+  def execute(value, scope, grid_object, &block)
+    if block.arity >= 3 || block.arity < 0
+      scope.instance_exec(value, scope, grid_object, &block)
+    elsif block.arity == 2
+      scope.instance_exec(value, scope, &block)
+    else
+      scope.instance_exec(value, &block)
+    end
   end
 
 end

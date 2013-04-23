@@ -15,8 +15,8 @@ module Datagrid
         scope.where(nil)
       end
 
-      def where(scope, condition)
-        scope.where(condition)
+      def where(scope, attribute, value)
+        scope.where(attribute => value)
       end
 
       def asc(scope, order)

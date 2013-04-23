@@ -11,21 +11,24 @@ module Datagrid
       end
 
       def self.guess_driver(scope)
-        klass = self.subclasses.find do |driver_class|
+        self.subclasses.find do |driver_class|
           driver_class.match?(scope)
         end || raise(Datagrid::ConfigurationError, "ORM Driver not found for scope: #{scope.inspect}.")
       end
 
-
       def self.match?(scope)
         raise NotImplementedError
+      end
+
+      def match?(scope)
+        self.class.match?(scope)
       end
 
       def to_scope(scope)
         raise NotImplementedError
       end
 
-      def where(scope, condition)
+      def where(scope, attribute, value)
         raise NotImplementedError
       end
 

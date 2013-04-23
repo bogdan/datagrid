@@ -102,6 +102,7 @@ module Datagrid
       def scope(&block)
         if block_given?
           self.scope_value = block
+          self
         else
           check_scope_defined!
           scope_value.call
