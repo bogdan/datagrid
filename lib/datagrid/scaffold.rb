@@ -33,7 +33,7 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
   def paginate_code
     if defined?(Kaminari)
       "page(params[:page])"
-    elsif defned?(WillPaginate)
+    elsif defined?(WillPaginate)
       "paginate(:page => params[:page])"
     else
       "paginate_somehow"
@@ -43,7 +43,7 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
   def pagination_helper_code
     if defined?(Kaminari)
       "paginate(@assets)"
-    elsif defned?(WillPaginate)
+    elsif defined?(WillPaginate)
       "will_paginate(@assets)"
     else
       "some_pagination_helper(@assets)"
