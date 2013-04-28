@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "datagrid"
-  s.version = "0.8.0"
+  s.version = "0.8.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = "2013-04-07"
+  s.date = "2013-04-28"
   s.description = "This allows you to easily build datagrid aka data tables with sortable columns and filters"
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
     "lib/datagrid/drivers.rb",
     "lib/datagrid/drivers/abstract_driver.rb",
     "lib/datagrid/drivers/active_record.rb",
+    "lib/datagrid/drivers/array.rb",
     "lib/datagrid/drivers/mongo_mapper.rb",
     "lib/datagrid/drivers/mongoid.rb",
     "lib/datagrid/engine.rb",
@@ -63,6 +64,7 @@ Gem::Specification.new do |s|
     "spec/datagrid/columns_spec.rb",
     "spec/datagrid/core_spec.rb",
     "spec/datagrid/drivers/active_record_spec.rb",
+    "spec/datagrid/drivers/array_spec.rb",
     "spec/datagrid/drivers/mongo_mapper_spec.rb",
     "spec/datagrid/drivers/mongoid_spec.rb",
     "spec/datagrid/filters/boolean_enum_filter_spec.rb",
@@ -75,6 +77,7 @@ Gem::Specification.new do |s|
     "spec/datagrid/form_builder_spec.rb",
     "spec/datagrid/helper_spec.rb",
     "spec/datagrid/ordering_spec.rb",
+    "spec/datagrid/scaffold_spec.rb",
     "spec/datagrid/utils_spec.rb",
     "spec/datagrid_spec.rb",
     "spec/spec_helper.rb",
@@ -84,8 +87,6 @@ Gem::Specification.new do |s|
     "spec/support/mongoid.rb",
     "spec/support/simple_report.rb",
     "spec/support/test_partials/_actions.html.erb",
-    "template/controller.rb.erb",
-    "template/grid.rb.erb",
     "templates/controller.rb.erb",
     "templates/grid.rb.erb",
     "templates/index.html.erb"
