@@ -278,5 +278,22 @@ describe Datagrid::Helper do
         HTML
       end
     end
+    describe ".datagrid_form_for" do
+      it "should render ordering layout" do
+        class FormForGrid
+          include Datagrid
+          scope { Entry }
+          filter(:category)
+        end
+        grid = FormForGrid.new(:category => "hello")
+        subject.datagrid_form_for(grid, :url => "/grid").should match_css_pattern(
+          "form.datagrid-form.form_for_grid[action='/grid']" => 1,
+          "form input[name=utf8]" => 1,
+          "form .filter label" => "Category",
+          "form .filter input.category.default_filter[name='form_for_grid[category]'][value=hello]" => 1,
+          "form input[name=commit][value=Search]" => 1
+        )
+      end
+    end
   end
 end

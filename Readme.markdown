@@ -162,24 +162,10 @@ route  resources :skills
 
 If you want to be a true ninja you can build everything from scratch on your own.
 
-In order to create form for your report you can use all set of rails built-in tools.
-More over Datagrid provides you two additional form helpers:
+In order to build frontend datagrid provides you with a number of helper:
 
-* datagrid\_label
-* datagrid\_filter
-
-
-The easiest way to create a report form (haml for readablity):
-
-``` haml
-# Method `GET` is recommended for all report forms by default.
-- form_for @report, :html => {:method => :get} do |f|
-  - @report.filters.each do |filter|
-    %div
-      = f.datagrid_label filter
-      = f.datagrid_filter filter
-  = f.submit
-```
+* datagrid\_form\_for
+* datagrid\_table
 
 Your controller:
 
@@ -197,6 +183,9 @@ There is a simple helper set of helpers that allows you display report:
 (require any pagination gem, will\_paginate is used as an example)
 
 ``` haml
+# Method `GET` is recommended for all report forms by default.
+= datagrid_form_for @report, :url => simple_reports_path, :html => {:method => :get}
+
 - assets = @report.assets.paginate(:page => params[:page])
 
 %div== Total #{assets.total_entries}

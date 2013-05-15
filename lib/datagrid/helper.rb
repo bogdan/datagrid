@@ -24,6 +24,10 @@ module Datagrid
       datagrid_renderer.order_for(grid, column)
     end
 
+    def datagrid_form_for(grid, options = {})
+      datagrid_renderer.form_for(grid, options)
+    end
+
     protected
 
     def datagrid_renderer

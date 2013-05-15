@@ -43,10 +43,17 @@ module Datagrid
       end
     end
 
+    def form_for(grid, options = {})
+      options[:method] ||= :get
+      options[:html] ||= {}
+      options[:html][:class] ||= "datagrid-form #{html_class(grid)}"
+      @template.render :partial => "datagrid/form", :locals => {:grid => grid, :options => options}
+    end
+
     def table(grid, *args)
       options = args.extract_options!
       options[:html] ||= {}
-      options[:html][:class] ||= "datagrid #{grid.class.to_s.underscore.demodulize}"
+      options[:html][:class] ||= "datagrid #{html_class(grid)}"
       assets = args.any? ? args.shift : grid.assets
       paginate = options[:paginate]
       if paginate
@@ -75,6 +82,9 @@ module Datagrid
       @template.render :partial => "datagrid/order_for", :locals => { :grid => grid, :column => column }
     end
 
+    def html_class(grid)
+      grid.class.to_s.underscore.demodulize
+    end
 
     def _safe(string)
       string.respond_to?(:html_safe) ? string.html_safe : string
