@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "datagrid"
-  s.version = "0.8.1"
+  s.version = "0.8.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = "2013-04-28"
+  s.date = "2013-05-15"
   s.description = "This allows you to easily build datagrid aka data tables with sortable columns and filters"
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "Readme.markdown",
     "VERSION",
+    "app/views/datagrid/_form.html.erb",
     "app/views/datagrid/_head.html.erb",
     "app/views/datagrid/_order_for.html.erb",
     "app/views/datagrid/_row.html.erb",
@@ -32,6 +33,7 @@ Gem::Specification.new do |s|
     "lib/datagrid/active_model.rb",
     "lib/datagrid/columns.rb",
     "lib/datagrid/columns/column.rb",
+    "lib/datagrid/configuration.rb",
     "lib/datagrid/core.rb",
     "lib/datagrid/drivers.rb",
     "lib/datagrid/drivers/abstract_driver.rb",
@@ -94,7 +96,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/bogdan/datagrid"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.24"
+  s.rubygems_version = "1.8.25"
   s.summary = "Ruby gem to create datagrids"
 
   if s.respond_to? :specification_version then
