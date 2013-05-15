@@ -1,4 +1,5 @@
 require "action_view"
+require "datagrid/configuration"
 
 module Datagrid
 
@@ -9,6 +10,7 @@ module Datagrid
   autoload :Filters
   autoload :Columns
   autoload :Ordering
+  autoload :Configuration
 
   autoload :Helper
   ActionView::Base.send(:include, Datagrid::Helper)

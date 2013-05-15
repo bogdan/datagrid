@@ -93,4 +93,20 @@ describe Datagrid::Filters::DateFilter do
     report.assets.should include(Entry.create!(:created_at => DateTime.now))
   end
   
+  it "should have configurable date format" do
+    begin
+      Datagrid.configure do |config|
+        config.date_formats = "%m/%d/%Y"
+      end
+      report = test_report(:created_at => "10/01/2013") do
+        scope  {Entry}
+        filter(:created_at, :date)
+      end
+      report.created_at.should == Date.new(2013,10,01)
+    ensure
+      Datagrid.configure do |config|
+        config.date_formats = nil
+      end
+    end
+  end
 end
