@@ -52,20 +52,36 @@ module Datagrid
       if filter.range?
         options = options.merge(:multiple => true)
 
-        from_options = Datagrid::Utils.add_html_classes(options, "from")
-        from_value = object[filter.name].try(:first)
 
-        to_options = Datagrid::Utils.add_html_classes(options, "to")
-        to_value = object[filter.name].try(:last)
+        from_options = datagrid_range_filter_options(object, filter, :from, options)
+        to_options = datagrid_range_filter_options(object, filter, :to, options) 
         # 2 inputs: "from date" and "to date" to specify a range
         [
-          text_field(filter.name, from_options.merge!(:value => from_value)),
+          text_field(filter.name, from_options),
           I18n.t("datagrid.misc.#{type}_range_separator", :default => "<span class=\"separator #{type}\"> - </span>"),
-          text_field(filter.name, to_options.merge!(:value => to_value))
+          text_field(filter.name, to_options)
         ].join.html_safe
       else
         text_field(filter.name, options)
       end
+    end
+
+
+    def datagrid_range_filter_options(object, filter, type, options)
+      type_method_map = {:from => :first, :to => :last}
+      options = Datagrid::Utils.add_html_classes(options, type)
+      options[:value] = object[filter.name].try(type_method_map[type])
+      #options[:id] = if !options.key?(:id) 
+        # Rails provides it's own default id for all inputs
+        # In case of datagrid ranged filter 
+        # from and to input will have same id
+        # In order to prevent that
+        # We assign 
+        #options[:id] = [type, object.to_param, filter.name].join("_")
+      #elsif options[:id].present?
+        #options[:id] = [type, options[:id]].join("_")
+      #end
+      options
     end
 
     def datagrid_string_filter(attribute_or_filter, options = {})
