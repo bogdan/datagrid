@@ -11,7 +11,7 @@ class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
     super(grid_object, scope, value)
   end
 
-  def format(value)
+  def parse(value)
     return nil if value.blank?
     return value if value.is_a?(Range)
     if formats = Datagrid.configuration.date_formats

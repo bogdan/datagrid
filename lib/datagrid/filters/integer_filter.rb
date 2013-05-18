@@ -4,7 +4,7 @@ class Datagrid::Filters::IntegerFilter < Datagrid::Filters::BaseFilter
 
   include RangedFilter
 
-  def format(value)
+  def parse(value)
     return nil if value.blank?
     return value if value.is_a?(Range)
     value.to_i

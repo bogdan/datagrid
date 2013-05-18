@@ -12,8 +12,8 @@ class Datagrid::Filters::BaseFilter
     self.block = block || default_filter_block
   end
 
-  def format(value)
-    raise NotImplementedError, "#format(value) suppose to be overwritten"
+  def parse(value)
+    raise NotImplementedError, "#parse(value) suppose to be overwritten"
   end
 
   def apply(grid_object, scope, value)
@@ -37,7 +37,7 @@ class Datagrid::Filters::BaseFilter
     end
     values = Array.wrap(value)
     values.map! do |v|
-      self.format(v)
+      self.parse(v)
     end
     self.multiple ? values : values.first
   end

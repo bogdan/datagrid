@@ -5,7 +5,7 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
     raise Datagrid::ConfigurationError, ":select option not specified" unless options[:select]
   end
 
-  def format(value)
+  def parse(value)
     return nil if self.strict && !select.include?(value)
     value
   end

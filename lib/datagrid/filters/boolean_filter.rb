@@ -1,7 +1,7 @@
 require "datagrid/utils"
 class Datagrid::Filters::BooleanFilter < Datagrid::Filters::BaseFilter
 
-  def format(value)
+  def parse(value)
     Datagrid::Utils.booleanize(value)
   end
 

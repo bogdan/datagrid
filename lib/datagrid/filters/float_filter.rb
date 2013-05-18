@@ -1,5 +1,5 @@
 class Datagrid::Filters::FloatFilter < Datagrid::Filters::BaseFilter
-  def format(value)
+  def parse(value)
     return nil if value.blank?
     value.to_f
   end
