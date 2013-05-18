@@ -71,16 +71,17 @@ module Datagrid
       type_method_map = {:from => :first, :to => :last}
       options = Datagrid::Utils.add_html_classes(options, type)
       options[:value] = object[filter.name].try(type_method_map[type])
-      #options[:id] = if !options.key?(:id) 
-        # Rails provides it's own default id for all inputs
-        # In case of datagrid ranged filter 
-        # from and to input will have same id
-        # In order to prevent that
-        # We assign 
-        #options[:id] = [type, object.to_param, filter.name].join("_")
-      #elsif options[:id].present?
-        #options[:id] = [type, options[:id]].join("_")
-      #end
+      # In case of datagrid ranged filter 
+      # from and to input will have same id
+      options[:id] = if !options.key?(:id) 
+         # Rails provides it's own default id for all inputs
+         # In order to prevent that we assign no id by default 
+        options[:id] = nil
+      elsif options[:id].present?
+        # If the id was given we prefix it
+        # with from_ and to_ accordingly
+        options[:id] = [type, options[:id]].join("_")
+      end
       options
     end
 
