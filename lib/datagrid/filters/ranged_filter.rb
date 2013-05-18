@@ -8,7 +8,7 @@ module RangedFilter
     end
   end
 
-  def format_values(value)
+  def parse_values(value)
     result = super(value)
     if range? 
       if result.is_a?(Array)

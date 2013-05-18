@@ -31,7 +31,7 @@ class Datagrid::Filters::BaseFilter
     result
   end
 
-  def format_values(value)
+  def parse_values(value)
     if !self.multiple && value.is_a?(Array)
       raise Datagrid::ArgumentError, "#{grid}##{name} filter can not accept Array argument. Use :multiple option."
     end

@@ -58,7 +58,7 @@ module Datagrid
         self.filters << filter
 
         datagrid_attribute(attribute) do |value|
-          filter.format_values(value)
+          filter.parse_values(value)
         end
 
       end
