@@ -18,7 +18,12 @@ module RangedFilter
         when 1
           result.first
         when 2
-          result
+          if result.first && result.last && result.first > result.last
+            # If wrong range is given - reverse it to be always valid
+            result.reverse
+          else
+            result
+          end
         else
           raise ArgumentError, "Can not create a date range from array of more than two: #{result.inspect}"
         end

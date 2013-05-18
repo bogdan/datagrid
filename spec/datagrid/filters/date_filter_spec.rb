@@ -102,4 +102,12 @@ describe Datagrid::Filters::DateFilter do
       report.created_at.should == Date.new(2013,10,01)
     end
   end
+
+  it "should automatically reverse Array if first more than last" do
+    report = test_report(:created_at => ["2013-01-01", "2012-01-01"]) do
+      scope  {Entry}
+      filter(:created_at, :date, :range => true)
+    end
+    report.created_at.should == [Date.new(2012, 01, 01), Date.new(2013, 01, 01)]
+  end
 end
