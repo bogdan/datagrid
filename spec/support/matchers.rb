@@ -44,7 +44,7 @@ class EqualToDom
   end
 
   def failure_message
-    "Expected dom #{@matcher} to match #{@expectation}, but it wasn't"
+    "Expected dom \n#{@matcher}\n to match \n#{@expectation}\n, but it wasn't"
   end
 
   private

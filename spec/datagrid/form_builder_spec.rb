@@ -131,6 +131,19 @@ describe Datagrid::FormBuilder do
         )}
         it { should be_html_safe }
       end
+      context "when special date format specified" do
+        around(:each) do |example|
+          with_date_format do
+            example.run
+          end
+        end
+        let(:_range) { ["2013/01/01", '2013/02/02']}
+        it { should equal_to_dom(
+          '<input class="created_at date_filter from" multiple name="report[created_at][]" size="30" type="text" value="01/01/2013"/>' +
+          '<span class="separator date"> - </span>' +
+          '<input class="created_at date_filter to" multiple name="report[created_at][]" size="30" type="text" value="02/02/2013"/>'
+        )}
+      end
       context "with only right bound" do
         
         let(:_range) { [nil, "2012-01-03"]}

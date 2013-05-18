@@ -88,6 +88,10 @@ class Datagrid::Filters::BaseFilter
     end
   end
 
+  def format(value)
+    value.nil? ? nil : value.to_s
+  end
+
   protected
 
   def default_filter_where(driver, scope, value)

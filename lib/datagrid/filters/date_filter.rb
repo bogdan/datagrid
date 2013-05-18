@@ -14,8 +14,8 @@ class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
   def parse(value)
     return nil if value.blank?
     return value if value.is_a?(Range)
-    if formats = Datagrid.configuration.date_formats
-      Array(formats).each do |format|
+    if formats.any?
+      formats.each do |format|
         begin
           return Date.strptime(value, format)
         rescue ArgumentError
@@ -29,5 +29,16 @@ class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
     nil
   end
 
+  def formats
+    Array(Datagrid.configuration.date_formats)
+  end
+
+  def format(value)
+    if formats.any?
+      value.strftime(formats.first)
+    else
+      super
+    end
+  end
 end
 

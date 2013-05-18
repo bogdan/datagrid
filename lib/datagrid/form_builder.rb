@@ -70,7 +70,7 @@ module Datagrid
     def datagrid_range_filter_options(object, filter, type, options)
       type_method_map = {:from => :first, :to => :last}
       options = Datagrid::Utils.add_html_classes(options, type)
-      options[:value] = object[filter.name].try(type_method_map[type])
+      options[:value] = filter.format(object[filter.name].try(type_method_map[type]))
       # In case of datagrid ranged filter 
       # from and to input will have same id
       options[:id] = if !options.key?(:id) 
