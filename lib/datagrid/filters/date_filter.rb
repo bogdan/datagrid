@@ -14,10 +14,12 @@ class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
   def parse(value)
     return nil if value.blank?
     return value if value.is_a?(Range)
-    formats.each do |format|
-      begin
-        return Date.strptime(value, format)
-      rescue ArgumentError
+    if value.is_a?(String)
+      formats.each do |format|
+        begin
+          return Date.strptime(value, format)
+        rescue ArgumentError
+        end
       end
     end
     return value.to_date if value.respond_to?(:to_date)

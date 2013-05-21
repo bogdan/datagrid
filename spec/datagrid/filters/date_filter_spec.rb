@@ -93,9 +93,24 @@ describe Datagrid::Filters::DateFilter do
     report.assets.should include(Entry.create!(:created_at => DateTime.now))
   end
   
-  it "should have configurable date format" do
-    with_date_format do
+
+  context "when date format is configured" do
+    around(:each) do |example|
+      with_date_format do
+        example.run
+      end
+    end
+
+    it "should have configurable date format" do
       report = test_report(:created_at => "10/01/2013") do
+        scope  {Entry}
+        filter(:created_at, :date)
+      end
+      report.created_at.should == Date.new(2013,10,01)
+    end
+
+    it "should support default explicit date" do
+      report = test_report(:created_at => Date.parse("2013-10-01")) do
         scope  {Entry}
         filter(:created_at, :date)
       end
@@ -103,6 +118,14 @@ describe Datagrid::Filters::DateFilter do
     end
   end
 
+
+  it "should automatically reverse Array if first more than last" do
+    report = test_report(:created_at => ["2013-01-01", "2012-01-01"]) do
+      scope  {Entry}
+      filter(:created_at, :date, :range => true)
+    end
+    report.created_at.should == [Date.new(2012, 01, 01), Date.new(2013, 01, 01)]
+  end
   it "should automatically reverse Array if first more than last" do
     report = test_report(:created_at => ["2013-01-01", "2012-01-01"]) do
       scope  {Entry}
