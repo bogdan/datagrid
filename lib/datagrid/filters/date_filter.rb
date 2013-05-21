@@ -40,5 +40,26 @@ class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
       super
     end
   end
+
+  def default_filter_where(driver, scope, value)
+    if driver.is_timestamp?(scope, name)
+      value = format_value_timestamp(value)
+    end
+    super(driver, scope, value)
+  end
+
+  protected
+  def format_value_timestamp(value)
+    if !value
+      value
+    elsif (range? && value.is_a?(Array))
+      [value.first.try(:beginning_of_day), value.last.try(:end_of_day)]
+    elsif value.is_a?(Range)
+      (value.first.beginning_of_day..value.last.end_of_day)
+    else
+      value.beginning_of_day..value.end_of_day
+    end
+  end
+
 end
 

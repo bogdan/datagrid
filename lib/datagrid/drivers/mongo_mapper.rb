@@ -42,6 +42,11 @@ module Datagrid
       def has_column?(scope, column_name)
         scope.key?(column_name)
       end
+
+      def is_timestamp?(scope, column_name)
+        #TODO implement the support
+        false
+      end
     end
   end
 end

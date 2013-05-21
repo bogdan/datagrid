@@ -2,6 +2,8 @@ module Datagrid
   module Drivers
     class AbstractDriver
 
+      TIMESTAMP_CLASSES = [DateTime, Time, ActiveSupport::TimeWithZone]
+
       class_attribute :subclasses
 
       def self.inherited(base)
@@ -58,6 +60,15 @@ module Datagrid
 
       def reverse_order(scope)
         raise NotImplementedError
+      end
+
+      def is_timestamp?(scope, field)
+        raise NotImplementedError
+      end
+
+      protected
+      def timestamp_class?(klass)
+        TIMESTAMP_CLASSES.include?(klass)
       end
     end
   end

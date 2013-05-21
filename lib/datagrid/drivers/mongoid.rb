@@ -16,7 +16,10 @@ module Datagrid
       end
 
       def where(scope, attribute, value)
-        scope.where(attribute => value)
+        if value.is_a?(Range)
+          value = {"$lte" => value.first, "$gte" => value.last}
+        end
+          scope.where(attribute => value)
       end
 
       def asc(scope, order)
@@ -41,6 +44,11 @@ module Datagrid
 
       def has_column?(scope, column_name)
         to_scope(scope).klass.fields.keys.include?(column_name.to_s)
+      end
+
+      def is_timestamp?(scope, column_name)
+        has_column?(scope, column_name) &&
+          timestamp_class?(to_scope(scope).klass.fields[column_name.to_s].type)
       end
     end
   end

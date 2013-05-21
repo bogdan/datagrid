@@ -15,6 +15,43 @@ describe Datagrid::Filters::DateFilter do
     report.assets.should_not include(e3)
   end
 
+  {:active_record => Entry, :mongoid => MongoidEntry}.each do |orm, klass|
+    describe "with orm #{orm}" do
+      describe "date to timestamp conversion" do
+        let(:klass) { klass }
+        subject do
+          test_report(:created_at => _created_at) do
+            scope { klass } 
+            filter(:created_at, :date, :range => true)
+          end.assets.to_a
+        end
+
+        def entry_dated(date)
+          klass.create(:created_at => date)
+        end
+
+        context "when single date paramter given" do
+          let(:_created_at) { Date.today }
+          it { should include(entry_dated(1.second.ago))}
+          it { should include(entry_dated(Date.today.end_of_day))}
+          it { should_not include(entry_dated(Date.today.beginning_of_day - 1.second))}
+          it { should_not include(entry_dated(Date.today.end_of_day + 1.second))}
+        end
+
+        context "when range date range given" do
+          let(:_created_at) { [Date.yesterday, Date.today] }
+          it { should include(entry_dated(1.second.ago))}
+          it { should include(entry_dated(1.day.ago))}
+          it { should include(entry_dated(Date.today.end_of_day))}
+          it { should include(entry_dated(Date.yesterday.beginning_of_day))}
+          it { should_not include(entry_dated(Date.yesterday.beginning_of_day - 1.second))}
+          it { should_not include(entry_dated(Date.today.end_of_day + 1.second))}
+        end
+      end
+
+    end
+  end
+
   it "should support date range given as array argument" do
     e1 = Entry.create!(:created_at => 7.days.ago)
     e2 = Entry.create!(:created_at => 4.days.ago)

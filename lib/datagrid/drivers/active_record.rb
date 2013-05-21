@@ -57,6 +57,10 @@ module Datagrid
       rescue ::ActiveRecord::StatementInvalid
         false
       end
+
+      def is_timestamp?(scope, field)
+        has_column?(scope, field) && scope.columns_hash[field.to_s].type == :datetime
+      end
     end
   end
 end
