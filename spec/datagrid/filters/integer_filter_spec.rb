@@ -92,5 +92,16 @@ describe Datagrid::Filters::IntegerFilter do
     report.assets.should_not include(Entry.create!(:group_id => 1))
     report.assets.should include(Entry.create!(:group_id => 5))
   end
+
+
+  it "should not prefix table name if column is joined" do
+    report = test_report(:rating => [4,nil]) do
+      scope { Entry.joins(:group) } 
+      filter(:rating, :integer, :range => true)
+    end
+    report.assets.should_not include(Entry.create!(:group => Group.create!(:rating => 3)))
+    report.assets.should include(Entry.create!(:group => Group.create!(:rating => 5)))
+  end
+
   
 end

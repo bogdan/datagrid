@@ -45,11 +45,11 @@ module Datagrid
       end
 
       def greater_equal(scope, field, value)
-        scope.where(["#{scope.table_name}.#{field} >= ?", value])
+        scope.where(["#{prefix_table_name(scope, field)} >= ?", value])
       end
 
       def less_equal(scope, field, value)
-        scope.where(["#{scope.table_name}.#{field} <= ?", value])
+        scope.where(["#{prefix_table_name(scope, field)} <= ?", value])
       end
 
       def has_column?(scope, column_name)
@@ -60,6 +60,12 @@ module Datagrid
 
       def is_timestamp?(scope, field)
         has_column?(scope, field) && scope.columns_hash[field.to_s].type == :datetime
+      end
+      
+      protected
+
+      def prefix_table_name(scope, field)
+        has_column?(scope, field) ?  [scope.table_name, field].join(".") : field
       end
     end
   end
