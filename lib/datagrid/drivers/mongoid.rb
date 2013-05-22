@@ -17,7 +17,7 @@ module Datagrid
 
       def where(scope, attribute, value)
         if value.is_a?(Range)
-          value = {"$lte" => value.first, "$gte" => value.last}
+          value = {"$gte" => value.first, "$lte" => value.last}
         end
           scope.where(attribute => value)
       end
