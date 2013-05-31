@@ -295,5 +295,14 @@ describe Datagrid::Helper do
         )
       end
     end
+    describe ".datagrid_format_value" do
+      it "should format value by column name" do
+        report = test_report do
+          scope {Entry}
+          column(:name)
+        end
+        subject.datagrid_format_value(report, :name, entry).should == "Star"
+      end
+    end
   end
 end
