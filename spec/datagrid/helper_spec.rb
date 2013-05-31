@@ -299,9 +299,11 @@ describe Datagrid::Helper do
       it "should format value by column name" do
         report = test_report do
           scope {Entry}
-          column(:name)
+          column(:name) do |e|
+            "<b>#{e.name}</b>"
+          end
         end
-        subject.datagrid_format_value(report, :name, entry).should == "Star"
+        subject.datagrid_format_value(report, :name, entry).should == "<b>Star</b>"
       end
     end
   end
