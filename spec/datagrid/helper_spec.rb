@@ -295,5 +295,39 @@ describe Datagrid::Helper do
         )
       end
     end
+    describe ".datagrid_row" do
+      let(:grid) do
+        test_report do
+          scope { Entry }
+          column(:name)
+          column(:category)
+        end
+      end
+
+      let(:entry) do
+        Entry.create!(:name => "Hello", :category => "greetings")
+      end
+
+      it "should provide access to row data" do
+        r = subject.datagrid_row(grid, entry)
+        r.name.should == "Hello"
+        r.category.should == "greetings"
+      end
+      it "should yield block" do
+        subject.datagrid_row(grid, entry) do |row|
+          row.name.should == "Hello"
+          row.category.should == "greetings"
+        end
+      end
+
+      it "should output data from block" do
+        name = subject.datagrid_row(grid, entry) do |row|
+          subject.concat(row.name)
+          subject.concat(",")
+          subject.concat(row.category)
+        end
+        name.should == "Hello,greetings"
+      end
+    end
   end
 end

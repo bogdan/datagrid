@@ -28,6 +28,30 @@ module Datagrid
       datagrid_renderer.form_for(grid, options)
     end
 
+    def datagrid_row(report, asset, &block)
+      HtmlRow.new(self, report, asset).tap do |row|
+        if block_given?
+          return capture(row, &block)
+        end
+      end
+    end
+
+    class HtmlRow
+      def initialize(context, grid, asset)
+        @context = context
+        @grid = grid
+        @asset = asset
+      end 
+
+      def method_missing(method, *args, &blk)
+        if column = @grid.column_by_name(method)
+          @context.datagrid_format_value(@grid, column, @asset)
+        else
+          super
+        end
+      end
+    end
+
     protected
 
     def datagrid_renderer
