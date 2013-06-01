@@ -114,7 +114,7 @@ describe Datagrid::Helper do
         end
         subject.datagrid_rows(rp, [entry]).should match_css_pattern(
           "tr td.name" => "Star"
-        )  
+        )
       end
 
       it "should add ordering classes to column" do
@@ -186,9 +186,9 @@ describe Datagrid::Helper do
       it "should render argument-based html blocks with double arguments" do
         rp = test_report do
           scope { Entry }
-          column(:name, :html => lambda { |data, model| 
+          column(:name, :html => lambda { |data, model|
             content_tag :h1, "#{data}-#{model.name.downcase}"
-          })            
+          })
         end
         subject.datagrid_rows(rp, [entry]).should match_css_pattern(
           "tr td.name h1" => "Star-star"
@@ -198,9 +198,9 @@ describe Datagrid::Helper do
       it "should render argument-based html blocks with triple arguments" do
         rp = test_report do
           scope { Entry }
-          column(:name, :html => lambda { |data, model, grid| 
+          column(:name, :html => lambda { |data, model, grid|
             content_tag :h1, "#{data}-#{model.name.downcase}-#{grid.assets.klass}"
-          })            
+          })
         end
         subject.datagrid_rows(rp, [entry]).should match_css_pattern(
           "tr td.name h1" => "Star-star-Entry"
@@ -210,11 +210,11 @@ describe Datagrid::Helper do
       it "should render argument-based html blocks with double arguments and custom data" do
         rp = test_report do
           scope { Entry }
-          column(:name, :html => lambda { |data, model| 
+          column(:name, :html => lambda { |data, model|
             content_tag :h1, "#{data}-#{model.name}"
           }) do
             self.name.upcase
-          end            
+          end
         end
         subject.datagrid_rows(rp, [entry]).should match_css_pattern(
           "tr td.name h1" => "STAR-Star"
@@ -224,11 +224,11 @@ describe Datagrid::Helper do
       it "should render argument-based html blocks with triple arguments and custom data" do
         rp = test_report do
           scope { Entry }
-          column(:name, :html => lambda { |data, model, grid| 
+          column(:name, :html => lambda { |data, model, grid|
             content_tag :h1, "#{data}-#{model.name}-#{grid.assets.klass}"
           }) do
             self.name.upcase
-          end            
+          end
         end
         subject.datagrid_rows(rp, [entry]).should match_css_pattern(
           "tr td.name h1" => "STAR-Star-Entry"
@@ -295,6 +295,7 @@ describe Datagrid::Helper do
         )
       end
     end
+
     describe ".datagrid_row" do
       let(:grid) do
         test_report do
@@ -328,6 +329,18 @@ describe Datagrid::Helper do
         end
         name.should == "Hello,greetings"
       end
+    end
+  end
+
+  describe ".datagrid_format_value" do
+    it "should format value by column name" do
+      report = test_report do
+        scope {Entry}
+        column(:name) do |e|
+          "<b>#{e.name}</b>"
+        end
+      end
+      subject.datagrid_format_value(report, :name, entry).should == "<b>Star</b>"
     end
   end
 end

@@ -12,6 +12,9 @@ module Datagrid
     end
 
     def format_value(grid, column, asset)
+      if column.is_a?(String) || column.is_a?(Symbol)
+        column = grid.column_by_name(column)
+      end
 
       value = if column.html?
         args = []
