@@ -95,6 +95,25 @@ describe Datagrid::Helper do
         "table.datagrid td.group" => 0
       )
     end
+    context "with column_names attribute" do
+      let(:grid) do
+        test_report(:column_names => "name") do
+          scope { Entry }
+          column(:name)
+          column(:category)
+        end
+      end
+
+      it "should output only given column names" do
+        subject.datagrid_table(grid, [entry]).should match_css_pattern(
+          "table.datagrid th.name" => 1,
+          "table.datagrid td.name" => 1,
+          "table.datagrid th.category" => 0,
+          "table.datagrid td.category" => 0
+        )
+      end
+    end
+
 
     describe ".datagrid_rows" do
       it "should support urls" do

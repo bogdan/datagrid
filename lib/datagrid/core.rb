@@ -94,6 +94,14 @@ module Datagrid
         end
       end
 
+      def as_query
+        attributes = self.attributes.clone
+        attributes.each do |key, value|
+          attributes.delete(key) if value.nil?
+        end
+        attributes
+      end
+
       def paginate(*args, &block)
         ::Datagrid::Utils.warn_once("#paginate is deprecated. Call it like object.assets.paginate(...).")
         self.assets.paginate(*args, &block)

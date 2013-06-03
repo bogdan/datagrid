@@ -53,7 +53,7 @@ describe Datagrid::Columns do
     it "should support csv export of particular columns" do
       subject.to_csv(:name).should == "Name\nStar\n"
     end
-    
+
     it "should support csv export options" do
       subject.to_csv(:col_sep => ";").should == "Group;Name;Access level;Pet\nPop;Star;admin;ROTTWEILER\n"
     end
@@ -90,6 +90,35 @@ describe Datagrid::Columns do
     parent.column_by_name(:group_id).should be_nil
     child.column_by_name(:name).should_not be_nil
     child.column_by_name(:group_id).should_not be_nil
+  end
+
+  describe ".column_names attributes" do
+    let(:grid) do
+      test_report(:column_names => ["id", "name"]) do
+        scope { Entry }
+        column(:id)
+        column(:name)
+        column(:category)
+      end
+    end
+    let!(:entry) do
+      Entry.create!(:name => 'hello')
+    end
+    it "should be suppored in header" do
+      grid.header.should == ["Id", "Name"]
+    end
+    it "should be suppored in rows" do
+      grid.rows.should == [[entry.id, "hello"]]
+    end
+
+    it "should be suppored in csv" do
+      grid.to_csv.should == "Id,Name\n#{entry.id},hello\n"
+    end
+
+    it "should support explicit overwrite" do
+      grid.header(:id, :name, :category).should == %w(Id Name Category)
+    end
+
   end
 
 end

@@ -11,8 +11,17 @@ module Datagrid
       base.class_eval do
 
         include Datagrid::Core
+
         class_attribute :columns_array
         self.columns_array = []
+
+        datagrid_attribute :column_names do |names|
+          if names.blank?
+            columns.map(&:name)
+          else
+            Array(names)
+          end
+        end
 
       end
       base.send :include, InstanceMethods
@@ -47,6 +56,7 @@ module Datagrid
         columns_array << Datagrid::Columns::Column.new(self, name, options, &block)
       end
 
+      # Returns column definition with given name
       def column_by_name(name)
         self.columns.find do |col|
           col.name.to_sym == name.to_sym
@@ -133,17 +143,35 @@ module Datagrid
         end
       end
 
+
       def columns(*args)
-        self.class.columns(*args)
+        options = args.extract_options!
+        column_names = selected_column_names(*args)
+        column_names << options
+        self.class.columns(*column_names)
       end
 
       def data_columns(*names)
-        names << {:data => true}
+        options = names.extract_options!
+        options[:data] = true
+        names << options
         self.columns(*names)
       end
 
       def column_by_name(name)
         self.class.column_by_name(name)
+      end
+
+      protected
+
+      def selected_column_names(*args)
+        if args.any?
+          args.compact!
+          args.map!(&:to_sym)
+          args
+        else
+          column_names ? column_names.clone : []
+        end
       end
 
     end # InstanceMethods
