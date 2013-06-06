@@ -18,7 +18,7 @@ module Datagrid
 
     module ClassMethods
       def column_names_filter
-        filter(:column_names, :enum, :select => proc { UserReport.columns.map(&:name)}, :multiple => true ) do |value|
+        filter(:column_names, :enum, :select => proc { |grid| grid.class.columns.map {|c| [c.header, c.name] }}, :multiple => true ) do |value|
           scoped
         end
       end

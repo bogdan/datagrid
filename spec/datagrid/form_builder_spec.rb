@@ -277,6 +277,26 @@ describe Datagrid::FormBuilder do
 HTML
 
     end
+
+    context "with column names filter" do
+      let(:_grid) do
+        test_report(:column_names => [:id, :name]) do
+          scope {Entry}
+
+          column_names_filter
+
+          column(:id)
+          column(:name)
+          column(:category)
+        end       
+      end
+      let(:_filter) { :column_names }
+      it { should equal_to_dom(<<HTML)}
+<input name="report[column_names][]" type="hidden" value=""><select class="column_names enum_filter" id="report_column_names" multiple name="report[column_names][]"><option value="id" selected>Id</option>
+<option value="name" selected>Name</option>
+<option value="category">Category</option></select>
+HTML
+    end
   end
 
   describe ".datagrid_label" do
