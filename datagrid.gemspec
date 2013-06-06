@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "datagrid"
-  s.version = "0.8.4"
+  s.version = "0.9.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = "2013-05-22"
+  s.date = "2013-06-06"
   s.description = "This allows you to easily build datagrid aka data tables with sortable columns and filters"
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
     "datagrid.gemspec",
     "lib/datagrid.rb",
     "lib/datagrid/active_model.rb",
+    "lib/datagrid/column_names_attribute.rb",
     "lib/datagrid/columns.rb",
     "lib/datagrid/columns/column.rb",
     "lib/datagrid/configuration.rb",
@@ -63,6 +64,7 @@ Gem::Specification.new do |s|
     "lib/datagrid/utils.rb",
     "lib/tasks/datagrid_tasks.rake",
     "spec/datagrid/active_model_spec.rb",
+    "spec/datagrid/column_names_attribute_spec.rb",
     "spec/datagrid/columns_spec.rb",
     "spec/datagrid/core_spec.rb",
     "spec/datagrid/drivers/active_record_spec.rb",
