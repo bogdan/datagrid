@@ -5,8 +5,8 @@ module Datagrid
   module Helper
 
     # Format an value from datagrid column with given name and for given model
-    def datagrid_format_value(report, column, model)
-      datagrid_renderer.format_value(report, column, model)
+    def datagrid_format_value(report, column_name, model)
+      datagrid_renderer.format_value(report, column_name, model)
     end
 
     # Renders html table with columns defined in grid class.

@@ -262,6 +262,21 @@ describe Datagrid::FormBuilder do
       )}
 
     end
+
+    context "with enum multiple filter" do
+      let(:_grid) do
+        test_report do
+          scope {Entry}
+          filter(:group_id, :enum, :select => ['hello'], :multiple => true)
+        end
+      end
+      let(:_filter) { :group_id }
+      it { should equal_to_dom(<<HTML) }
+<input name="report[group_id][]" type="hidden" value=""><select class="group_id enum_filter" id="report_group_id" multiple name="report[group_id][]">
+<option value="hello">hello</option></select>
+HTML
+
+    end
   end
 
   describe ".datagrid_label" do

@@ -32,4 +32,5 @@ describe Datagrid::Filters::EnumFilter do
       filter(:group_id, :enum, :select => proc { raise 'hello' })
     end
   end
+
 end

@@ -16,10 +16,11 @@ module Datagrid
         self.columns_array = []
 
         datagrid_attribute :column_names do |names|
-          if names.blank?
+          names = Array(names).reject(&:blank?)
+          if names.reject(&:blank?).blank?
             columns.map(&:name)
           else
-            Array(names)
+            names
           end
         end
 
