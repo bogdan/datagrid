@@ -12,7 +12,6 @@ module Datagrid
 
         include Datagrid::Core
 
-
       end
       base.send :include, InstanceMethods
     end # self.included
@@ -53,7 +52,7 @@ module Datagrid
         end
       end
 
-      def inherited(child_class)
+      def inherited(child_class) #:nodoc:
         super(child_class)
         child_class.columns_array = self.columns_array.clone
       end
@@ -134,6 +133,14 @@ module Datagrid
       end
 
 
+      # Returns all columns selected in grid instance
+      #
+      # Examples:
+      # 
+      #   MyGrid.new.columns # => all defined columns
+      #   grid = MyGrid.new(:column_names => [:id, :name])
+      #   grid.columns # => id and name columsn
+      #   grid.columns(:id, :category) # => id and category column
       def columns(*args)
         self.class.columns(*args)
       end
