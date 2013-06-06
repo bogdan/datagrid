@@ -9,6 +9,7 @@ module Datagrid
   autoload :ActiveModel
   autoload :Filters
   autoload :Columns
+  autoload :ColumnNamesAttribute
   autoload :Ordering
   autoload :Configuration
 
@@ -30,6 +31,7 @@ module Datagrid
       include ::Datagrid::ActiveModel
       include ::Datagrid::Filters
       include ::Datagrid::Columns
+      include ::Datagrid::ColumnNamesAttribute
       include ::Datagrid::Ordering
 
     end
