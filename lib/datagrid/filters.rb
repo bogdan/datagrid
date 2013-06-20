@@ -97,6 +97,11 @@ module Datagrid
         self[filter.name]
       end
 
+      # Returns filter object with the given name
+      def filter_by_name(name)
+        self.class.filter_by_name(name)
+      end
+
     end # InstanceMethods
 
   end

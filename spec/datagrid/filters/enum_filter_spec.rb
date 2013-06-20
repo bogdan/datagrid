@@ -33,4 +33,17 @@ describe Datagrid::Filters::EnumFilter do
     end
   end
 
+
+  it "should support select given as symbol" do
+    report = test_report do 
+      scope {Entry}
+      filter(:group_id, :enum, :select => :selectable_group_ids)
+      def selectable_group_ids
+        [1,3,5]
+      end
+    end
+
+    report.filter_by_name(:group_id).select(report).should == [1,3,5]
+  end
+
 end

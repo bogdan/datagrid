@@ -32,7 +32,9 @@ module Datagrid
         options
       end
 
-
+      def string_like?(value)
+        value.is_a?(Symbol) || value.is_a?(String)
+      end
     end
   end
 end

@@ -11,11 +11,13 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
   end
 
   def select(object = nil)
-    option = self.options[:select]
-    if option.respond_to?(:call)
-      option.arity == 1 ? option.call(object) : option.call
+    select = self.options[:select]
+    if select.is_a?(Symbol)
+      object.send(select)
+    elsif select.respond_to?(:call)
+      select.arity == 1 ? select.call(object) : select.call
     else
-      option
+      select
     end
   end
 
