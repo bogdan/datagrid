@@ -1,6 +1,6 @@
 class Datagrid::Columns::Column
 
-  attr_accessor :grid, :options, :block, :name, :html_block
+  attr_accessor :grid, :options, :data_block, :name, :html_block
 
   def initialize(grid, name, options = {}, &block)
     self.grid = grid
@@ -12,7 +12,7 @@ class Datagrid::Columns::Column
       if options[:html].is_a? Proc
         self.html_block = options[:html]
       end
-      self.block = block
+      self.data_block = block
     end
     if format
       ::Datagrid::Utils.warn_once(":format column option is deprecated. Use :url or :html option instead.")
@@ -24,12 +24,12 @@ class Datagrid::Columns::Column
   end
 
   def value_for(model, grid)
-    if self.block.arity == 1
-      self.block.call(model)
-    elsif self.block.arity == 2
-      self.block.call(model, grid)
+    if self.data_block.arity == 1
+      self.data_block.call(model)
+    elsif self.data_block.arity == 2
+      self.data_block.call(model, grid)
     else
-      model.instance_eval(&self.block)
+      model.instance_eval(&self.data_block)
     end
   end
 
@@ -64,7 +64,12 @@ class Datagrid::Columns::Column
   end
   
   def data?
-    self.block != nil
+    self.data_block != nil
+  end
+
+  def block
+    Datagrid::Utils.warn_once("Datagrid::Columns::Column#block is deprecated. Use #html_block or #data_block instead")
+    data_block
   end
 
 end
