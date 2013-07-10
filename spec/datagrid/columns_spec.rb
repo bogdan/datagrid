@@ -29,6 +29,15 @@ describe Datagrid::Columns do
     it  "should generate header" do
       subject.header.should == ["Group", "Name", "Access level", "Pet"]
     end
+    
+    it "should return html_columns" do
+      report = test_report do
+        scope {Entry}
+        column(:id)
+        column(:name, :html => false)
+      end
+      report.html_columns.map(&:name).should == [:id]
+    end
 
     it "should generate table data" do
       subject.data.should == [

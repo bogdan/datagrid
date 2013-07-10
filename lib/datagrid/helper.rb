@@ -21,8 +21,6 @@ module Datagrid
     # * <tt>:html</tt> - hash of attributes for <table> tag
     # * <tt>:order</tt> - If false do not generate ordering controlls. 
     #   Default: true.
-    # * <tt>:cycle</tt> - Used as arguments for cycle for each row. 
-    #   Default: false. Example: <tt>["odd", "even"]</tt>.
     # * <tt>:columns</tt> - Array of column names to display. 
     #   Used in case when same grid class is used in different places 
     #   and needs different columns. Default: all defined columns.
@@ -57,7 +55,7 @@ module Datagrid
       datagrid_renderer.form_for(grid, options)
     end
 
-    # Provides access to datagrid column data.
+    # Provides access to datagrid columns data.
     #
     #   <%= datagrid_row(grid, user) do |row| %>
     #     <tr>
@@ -66,7 +64,7 @@ module Datagrid
     #     </tr>
     #   <% end %>
     #
-    # Used in case you want to build datagrid table completelly manually
+    # Used in case you want to build html table completelly manually
     def datagrid_row(grid, asset, &block)
       HtmlRow.new(self, grid, asset).tap do |row|
         if block_given?

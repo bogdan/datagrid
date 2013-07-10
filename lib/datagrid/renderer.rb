@@ -57,10 +57,13 @@ module Datagrid
       options = args.extract_options!
       options[:html] ||= {}
       options[:html][:class] ||= "datagrid #{html_class(grid)}"
+      if options[:cycle]
+        ::Datagrid::Utils.warn_once("datagrid_table cycle option is deprecated. Use css to stylee odd/even rows instead.")
+      end
       assets = args.any? ? args.shift : grid.assets
       paginate = options[:paginate]
       if paginate
-        ::Datagrid::Utils.warn_once(":paginate option is deprecated. Looks to https://github.com/bogdan/datagrid/wiki/Frontend.")
+        ::Datagrid::Utils.warn_once(":paginate option is deprecated. Look to https://github.com/bogdan/datagrid/wiki/Frontend.")
         assets = assets.paginate(paginate)
       end
 

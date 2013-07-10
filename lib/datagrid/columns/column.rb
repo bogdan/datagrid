@@ -9,10 +9,16 @@ class Datagrid::Columns::Column
     if options[:html] == true
       self.html_block = block
     else
+      self.data_block = block
+
       if options[:html].is_a? Proc
         self.html_block = options[:html]
+      elsif options[:html] != false
+        column = self
+        self.html_block = proc {|value, model|
+          column.value_for(model, column.grid)
+        }
       end
-      self.data_block = block
     end
     if format
       ::Datagrid::Utils.warn_once(":format column option is deprecated. Use :url or :html option instead.")

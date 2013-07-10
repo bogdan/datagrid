@@ -1,5 +1,5 @@
 <tr>
-  <% grid.columns(*options[:columns]).each do |column| %>
+  <% grid.html_columns(*options[:columns]).each do |column| %>
     <th class="<%= datagrid_column_classes(grid, column) %>">
       <%= column.header %>
       <%= datagrid_order_for(grid, column) if column.order && options[:order]%>

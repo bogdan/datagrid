@@ -32,11 +32,26 @@ module Datagrid
         args.compact!
         args.map!(&:to_sym)
         columns_array.select do |column|
-          (!options[:data] || column.data?) && (args.empty? || args.include?(column.name))
+          (!options[:data] || column.data?) && (!options[:html] || column.html?)&& (args.empty? || args.include?(column.name))
         end
       end
 
       # Defines new datagrid column
+      # 
+      # Arguments:
+      #
+      #   * <tt>name</tt> - column name
+      #   * <tt>options</tt> - hash of options
+      #   * <tt>block</tt> - proc to calculate a column value
+      #
+      # Available options:
+      #   
+      #   * <tt>:html</tt> - determines if current column should be present in html table and how is it formatted
+      #   * <tt>:order</tt> - determines if this column could be sortable and how
+      #   * <tt>:order_desc</tt> - determines a descending order for given column (only in case when <tt>:order</tt> can not be easily inverted
+      #   * <tt>:url</tt> - a proc with one argument, pass this option to easily convert the value into an URL
+      #
+      # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
       def column(name, options = {}, &block)
         check_scope_defined!("Scope should be defined before columns")
         block ||= lambda do |model|
@@ -52,6 +67,11 @@ module Datagrid
         end
       end
 
+      # Returns an array of all defined column names
+      def column_names
+        columns.map(&:name)
+      end
+
       def inherited(child_class) #:nodoc:
         super(child_class)
         child_class.columns_array = self.columns_array.clone
@@ -62,11 +82,19 @@ module Datagrid
     module InstanceMethods
 
       # Returns <tt>Array</tt> of human readable column names. See also "Localization" section
+      #
+      # Arguments:
+      #
+      #   * <tt>column_names</tt> - list of column names if you want to limit data only to specified columns
       def header(*column_names)
         data_columns(*column_names).map(&:header)
       end
 
       # Returns <tt>Array</tt> column values for given asset
+      #
+      # Arguments:
+      #
+      #   * <tt>column_names</tt> - list of column names if you want to limit data only to specified columns
       def row_for(asset, *column_names)
         data_columns(*column_names).map do |column|
           column.value(asset, self)
@@ -83,6 +111,10 @@ module Datagrid
       end
 
       # Returns Array of Arrays with data for each row in datagrid assets without header.
+      #
+      # Arguments:
+      #
+      #   * <tt>column_names</tt> - list of column names if you want to limit data only to specified columns
       def rows(*column_names)
         #TODO: find in batches
         self.assets.map do |asset|
@@ -91,8 +123,12 @@ module Datagrid
       end
 
       # Returns Array of Arrays with data for each row in datagrid assets with header.
-      def data
-        self.rows.unshift(self.header)
+      #
+      # Arguments:
+      #
+      #   * <tt>column_names</tt> - list of column names if you want to limit data only to specified columns
+      def data(*column_names)
+        self.rows(*column_names).unshift(self.header(*column_names))
       end
 
       # Return Array of Hashes where keys are column names and values are column values 
@@ -139,12 +175,13 @@ module Datagrid
       # 
       #   MyGrid.new.columns # => all defined columns
       #   grid = MyGrid.new(:column_names => [:id, :name])
-      #   grid.columns # => id and name columsn
+      #   grid.columns # => id and name columns
       #   grid.columns(:id, :category) # => id and category column
       def columns(*args)
         self.class.columns(*args)
       end
 
+      # Returns all columns that can be represented in plain data(non-html) way
       def data_columns(*names)
         options = names.extract_options!
         options[:data] = true
@@ -152,9 +189,19 @@ module Datagrid
         self.columns(*names)
       end
 
+      # Returns all columns that can be represented in HTML table
+      def html_columns(*names)
+        options = names.extract_options!
+        options[:html] = true
+        names << options
+        self.columns(*names)
+      end
+
+      # Finds a column by name
       def column_by_name(name)
         self.class.column_by_name(name)
       end
+
     end # InstanceMethods
 
   end
