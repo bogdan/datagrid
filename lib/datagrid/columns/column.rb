@@ -15,8 +15,8 @@ class Datagrid::Columns::Column
         self.html_block = options[:html]
       elsif options[:html] != false
         column = self
-        self.html_block = proc {|value, model|
-          column.value_for(model, column.grid)
+        self.html_block = proc {|value, model, grid_instance|
+          column.value_for(model, grid_instance)
         }
       end
     end

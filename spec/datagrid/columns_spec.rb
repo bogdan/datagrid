@@ -39,6 +39,18 @@ describe Datagrid::Columns do
       report.html_columns.map(&:name).should == [:id]
     end
 
+    it "should return html_columns when column definition has 2 arguments" do
+      report = test_report(:name => "Hello") do
+        scope {Entry}
+        filter(:name)
+        column(:id)
+        column(:name, :html => false) do |model, grid|
+          "'#{model.name}' filtered by '#{grid.name}'"
+        end
+      end
+      report.row_for(Entry.create!(:name => "Hello World")).should == [8, "'Hello World' filtered by 'Hello'"]
+    end
+
     it "should generate table data" do
       subject.data.should == [
         subject.header,

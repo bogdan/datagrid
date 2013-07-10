@@ -95,6 +95,7 @@ describe Datagrid::Helper do
         "table.datagrid td.group" => 0
       )
     end
+
     context "with column_names attribute" do
       let(:grid) do
         test_report(:column_names => "name") do
@@ -279,6 +280,22 @@ describe Datagrid::Helper do
         )
       end
 
+      context "when grid has complicated columns" do
+        let(:grid) do
+          test_report(:name => 'Hello') do
+            scope {Entry}
+            filter(:name)
+            column(:name) do |model, grid|
+              "'#{model.name}' filtered by '#{grid.name}'"
+            end
+          end
+        end
+        it "should ignore them" do
+          subject.datagrid_rows(grid, [entry]).should match_css_pattern(
+            "td.name" => 1
+          )
+        end
+    end
     end
 
     describe ".datagrid_order_for" do
