@@ -16,22 +16,7 @@ module Datagrid
         column = grid.column_by_name(column)
       end
 
-      value = if column.html?
-        args = []
-        remaining_arity = column.html_block.arity
-
-        if column.data?
-          args << column.value(asset,grid)
-          remaining_arity -= 1
-        end
-
-        args << asset if remaining_arity > 0
-        args << grid if remaining_arity > 1
-
-        @template.instance_exec(*args, &column.html_block)
-      else
-        column.value(asset,grid)
-      end
+      value = column.html_value(@template, asset, grid)
 
       url = column.options[:url] && column.options[:url].call(asset)
       if url

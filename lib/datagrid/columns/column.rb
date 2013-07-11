@@ -13,11 +13,6 @@ class Datagrid::Columns::Column
 
       if options[:html].is_a? Proc
         self.html_block = options[:html]
-      elsif options[:html] != false
-        column = self
-        self.html_block = proc {|value, model, grid_instance|
-          column.value_for(model, grid_instance)
-        }
       end
     end
     if format
@@ -66,11 +61,30 @@ class Datagrid::Columns::Column
   end
 
   def html?
-    self.html_block != nil
+    options[:html] != false
   end
   
   def data?
     self.data_block != nil
+  end
+
+  def html_value(context, asset, grid)
+    if html? && html_block
+      args = []
+      remaining_arity = html_block.arity
+
+      if data?
+        args << value(asset,grid)
+        remaining_arity -= 1
+      end
+
+      args << asset if remaining_arity > 0
+      args << grid if remaining_arity > 1
+
+      context.instance_exec(*args, &html_block)
+    else
+      value(asset,grid)
+    end
   end
 
   def block
