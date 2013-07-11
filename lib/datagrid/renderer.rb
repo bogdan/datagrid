@@ -22,12 +22,7 @@ module Datagrid
       if url
         @template.link_to(value, url)
       else
-        case column.format
-        when :url
-          @template.link_to(column.label  ? asset.send(column.label) : I18n.t("datagrid.table.url_label", :default => "URL"), value)
-        else
-          _safe(value)
-        end
+        _safe(value)
       end
     end
 

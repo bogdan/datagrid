@@ -15,9 +15,6 @@ class Datagrid::Columns::Column
         self.html_block = options[:html]
       end
     end
-    if format
-      ::Datagrid::Utils.warn_once(":format column option is deprecated. Use :url or :html option instead.")
-    end
   end
 
   def value(model, grid)
@@ -32,10 +29,6 @@ class Datagrid::Columns::Column
     else
       model.instance_eval(&self.data_block)
     end
-  end
-
-  def format
-    self.options[:format]
   end
 
   def label
