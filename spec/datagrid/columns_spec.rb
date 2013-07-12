@@ -142,4 +142,20 @@ describe Datagrid::Columns do
 
   end
 
+
+  context "when grid has respond_to column" do
+    it "should output correct data" do
+      report = test_report do
+        scope {Entry}
+        column(:name) do |entry|
+          respond_to do |f|
+            f.data { entry.name }
+            f.html { "<strong>#{name}</strong" }
+          end
+        end
+      end
+      Entry.create!(:name => "Hello World")
+      report.rows.should == [["Hello World"]]
+    end
+  end
 end

@@ -17,6 +17,7 @@ module Datagrid
     end
 
     module ClassMethods
+      # Adds a filter that acts like a column selection
       def column_names_filter
         filter(:column_names, :enum, :select => proc { |grid| grid.class.columns.map {|c| [c.header, c.name] }}, :multiple => true ) do |value|
           scoped
@@ -24,7 +25,7 @@ module Datagrid
       end
     end
 
-    def columns(*args)
+    def columns(*args) #:nodoc:
       options = args.extract_options!
       column_names = selected_column_names(*args)
       column_names << options

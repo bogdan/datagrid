@@ -16,7 +16,7 @@ module Datagrid
 
     module ClassMethods
 
-      def datagrid_attribute(name, &block)
+      def datagrid_attribute(name, &block) #:nodoc:
         unless datagrid_attributes.include?(name)
           block ||= lambda do |value|
             value
@@ -32,6 +32,7 @@ module Datagrid
         end
       end
 
+      # Defines a scope at class level
       def scope(&block)
         if block
           self.scope_value = block
@@ -41,7 +42,7 @@ module Datagrid
         end
       end
 
-      def driver
+      def driver #:nodoc:
         @driver ||= Drivers::AbstractDriver.guess_driver(scope).new
       end
 
@@ -117,11 +118,11 @@ module Datagrid
         end
       end
 
-      def driver
+      def driver #:nodoc:
         self.class.driver
       end
 
-      def check_scope_defined!(message = nil)
+      def check_scope_defined!(message = nil) #:nodoc:
         self.class.send :check_scope_defined!, message
       end
 

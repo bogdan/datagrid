@@ -72,6 +72,10 @@ module Datagrid
         columns.map(&:name)
       end
 
+      def respond_to(&block)
+        Datagrid::Columns::Column::ResponseFormat.new(&block)
+      end
+
       def inherited(child_class) #:nodoc:
         super(child_class)
         child_class.columns_array = self.columns_array.clone
@@ -133,6 +137,20 @@ module Datagrid
 
       # Return Array of Hashes where keys are column names and values are column values 
       # for each row in datagrid <tt>#assets</tt>
+      #
+      # Example:
+      #
+      #     class MyGrid
+      #       scope { Model }
+      #       column(:id)
+      #       column(:name)
+      #     end
+      #
+      #     Model.create!(:name => "One")
+      #     Model.create!(:name => "Two")
+      #
+      #     MyGrid.new.data_hash # => [{:name => "One"}, {:name => "Two"}]
+      #
       def data_hash
         self.assets.map do |asset|
           hash_for(asset)
@@ -201,6 +219,7 @@ module Datagrid
       def column_by_name(name)
         self.class.column_by_name(name)
       end
+
 
     end # InstanceMethods
 

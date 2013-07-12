@@ -1,5 +1,30 @@
 class Datagrid::Columns::Column
 
+  class ResponseFormat # :nodoc:
+
+    attr_accessor :data_block, :html_block
+
+    def initialize
+      yield(self)
+    end
+
+    def data(&block)
+      self.data_block = block
+    end
+
+    def html(&block)
+      self.html_block = block
+    end
+
+    def data_value
+      data_block.call
+    end
+
+    def html_value(context)
+      context.instance_eval(&html_block)
+    end
+  end
+
   attr_accessor :grid, :options, :data_block, :name, :html_block
 
   def initialize(grid, name, options = {}, &block)
@@ -18,14 +43,10 @@ class Datagrid::Columns::Column
   end
 
   def data_value(model, grid)
-    if self.data_block.arity == 1
-      self.data_block.call(model)
-    elsif self.data_block.arity == 2
-      self.data_block.call(model, grid)
-    else
-      model.instance_eval(&self.data_block)
-    end
+    result = generic_value(model,grid)
+    result.is_a?(ResponseFormat) ? result.data_value : result
   end
+
 
   def label
     self.options[:label]
@@ -61,10 +82,10 @@ class Datagrid::Columns::Column
     if html? && html_block
       value_from_html_block(context, asset, grid)
     else
-      data_value(asset,grid)
+      result = generic_value(asset,grid)
+      result.is_a?(ResponseFormat) ? result.html_value(context) : result
     end
   end
-
 
   def value_from_html_block(context, asset, grid)
     args = []
@@ -84,6 +105,16 @@ class Datagrid::Columns::Column
   def block
     Datagrid::Utils.warn_once("Datagrid::Columns::Column#block is deprecated. Use #html_block or #data_block instead")
     data_block
+  end
+
+  def generic_value(model, grid)
+    if self.data_block.arity == 1
+      self.data_block.call(model)
+    elsif self.data_block.arity == 2
+      self.data_block.call(model, grid)
+    else
+      model.instance_eval(&self.data_block)
+    end
   end
 
 end
