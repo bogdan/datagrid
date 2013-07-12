@@ -17,7 +17,7 @@ class Datagrid::Columns::Column
     end
   end
 
-  def value(model, grid)
+  def data_value(model, grid)
     if self.data_block.arity == 1
       self.data_block.call(model)
     elsif self.data_block.arity == 2
@@ -61,16 +61,17 @@ class Datagrid::Columns::Column
     if html? && html_block
       value_from_html_block(context, asset, grid)
     else
-      value(asset,grid)
+      data_value(asset,grid)
     end
   end
+
 
   def value_from_html_block(context, asset, grid)
     args = []
     remaining_arity = html_block.arity
 
     if data?
-      args << value(asset,grid)
+      args << data_value(asset,grid)
       remaining_arity -= 1
     end
 

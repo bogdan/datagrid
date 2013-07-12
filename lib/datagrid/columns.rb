@@ -97,7 +97,7 @@ module Datagrid
       #   * <tt>column_names</tt> - list of column names if you want to limit data only to specified columns
       def row_for(asset, *column_names)
         data_columns(*column_names).map do |column|
-          column.value(asset, self)
+          column.data_value(asset, self)
         end
       end
 
@@ -105,7 +105,7 @@ module Datagrid
       def hash_for(asset)
         result = {}
         self.data_columns.each do |column|
-          result[column.name] = column.value(asset, self)
+          result[column.name] = column.data_value(asset, self)
         end
         result
       end
