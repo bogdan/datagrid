@@ -89,11 +89,14 @@ module Datagrid
         driver.to_scope(scope)
       end
 
-      def attributes=(attributes)
+
+      def assign_attributes(attributes)
         attributes.each do |name, value|
           self[name] = value
         end
+        self
       end
+      alias attributes= assign_attributes
 
       def as_query
         attributes = self.attributes.clone
