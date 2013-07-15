@@ -378,13 +378,12 @@ describe Datagrid::Helper do
       end
       subject.datagrid_format_value(report, :name, entry).should == "<b>Star</b>"
     end
-    it "should support respond_to in column" do
+    it "should support format in column" do
       report = test_report do
         scope {Entry}
         column(:name) do |e|
-          respond_to do |f|
-            f.data { e.name }
-            f.html { link_to e.name, "/profile" }
+          format(e.name) do |value|
+             link_to value, "/profile" 
           end
         end
       end

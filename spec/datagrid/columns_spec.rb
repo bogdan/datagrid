@@ -143,14 +143,13 @@ describe Datagrid::Columns do
   end
 
 
-  context "when grid has respond_to column" do
+  context "when grid has formatted column" do
     it "should output correct data" do
       report = test_report do
         scope {Entry}
         column(:name) do |entry|
-          respond_to do |f|
-            f.data { entry.name }
-            f.html { "<strong>#{name}</strong" }
+          format(entry.name) do |value|
+            "<strong>#{value}</strong" 
           end
         end
       end

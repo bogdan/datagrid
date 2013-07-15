@@ -72,8 +72,17 @@ module Datagrid
         columns.map(&:name)
       end
 
-      def respond_to(&block)
+      def respond_to(&block) #:nodoc:
         Datagrid::Columns::Column::ResponseFormat.new(&block)
+      end
+
+      def format(value, &block)
+        respond_to do |f|
+          f.data { value }
+          f.html do
+            instance_exec(value, &block)
+          end
+        end
       end
 
       def inherited(child_class) #:nodoc:
