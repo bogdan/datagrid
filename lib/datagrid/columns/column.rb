@@ -25,10 +25,10 @@ class Datagrid::Columns::Column
     end
   end
 
-  attr_accessor :grid, :options, :data_block, :name, :html_block
+  attr_accessor :grid_class, :options, :data_block, :name, :html_block
 
-  def initialize(grid, name, options = {}, &block)
-    self.grid = grid
+  def initialize(grid_class, name, options = {}, &block)
+    self.grid_class = grid_class
     self.name = name.to_sym
     self.options = options
     if options[:html] == true
@@ -54,14 +54,14 @@ class Datagrid::Columns::Column
 
   def header
     self.options[:header] || 
-      I18n.translate(self.name, :scope => "datagrid.#{self.grid.param_name}.columns", :default => self.name.to_s.humanize )
+      I18n.translate(self.name, :scope => "datagrid.#{self.grid_class.param_name}.columns", :default => self.name.to_s.humanize )
   end
 
   def order
     if options.has_key?(:order)
       self.options[:order]
     else
-      grid.driver.default_order(grid.scope, name)
+      grid_class.driver.default_order(grid_class.scope, name)
     end
   end
 

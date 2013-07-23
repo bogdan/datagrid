@@ -3,10 +3,10 @@ end
 
 class Datagrid::Filters::BaseFilter
 
-  attr_accessor :grid, :options, :block, :name
+  attr_accessor :grid_class, :options, :block, :name
 
   def initialize(grid_class, name, options = {}, &block)
-    self.grid = grid_class
+    self.grid_class = grid_class
     self.name = name
     self.options = options
     self.block = block || default_filter_block
@@ -33,7 +33,7 @@ class Datagrid::Filters::BaseFilter
 
   def parse_values(value)
     if !self.multiple && value.is_a?(Array)
-      raise Datagrid::ArgumentError, "#{grid}##{name} filter can not accept Array argument. Use :multiple option."
+      raise Datagrid::ArgumentError, "#{grid_class}##{name} filter can not accept Array argument. Use :multiple option."
     end
     values = Array.wrap(value)
     values.map! do |v|
@@ -44,7 +44,7 @@ class Datagrid::Filters::BaseFilter
 
   def header
     options[:header] ||
-      I18n.translate(self.name, :scope => "datagrid.#{grid.param_name}.filters", :default => self.name.to_s.humanize)
+      I18n.translate(self.name, :scope => "datagrid.#{grid_class.param_name}.filters", :default => self.name.to_s.humanize)
   end
 
   def default
