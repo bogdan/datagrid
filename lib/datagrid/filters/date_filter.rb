@@ -34,7 +34,7 @@ class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
   end
 
   def format(value)
-    if formats.any?
+    if formats.any? && value
       value.strftime(formats.first)
     else
       super

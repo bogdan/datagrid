@@ -163,6 +163,19 @@ describe Datagrid::FormBuilder do
           '<input class="created_at date_filter to" multiple name="report[created_at][]" size="30" type="text" value="2012-01-01"/>'
         )}
       end
+      context "with blank range value" do
+        around(:each) do |example|
+          with_date_format do
+            example.run
+          end
+        end
+        let(:_range) { [nil, nil] }
+        it { should equal_to_dom(
+          '<input class="created_at date_filter from" multiple name="report[created_at][]" size="30" type="text"/>' +
+          '<span class="separator date"> - </span>' +
+          '<input class="created_at date_filter to" multiple name="report[created_at][]" size="30" type="text"/>'
+        )}
+      end
     end
     context "with enum filter type" do
       let(:_filter) { :category }
