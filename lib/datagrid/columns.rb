@@ -77,11 +77,17 @@ module Datagrid
       end
 
       def format(value, &block)
-        respond_to do |f|
-          f.data { value }
-          f.html do
-            instance_exec(value, &block)
+        if block_given?
+          respond_to do |f|
+            f.data { value }
+            f.html do
+              instance_exec(value, &block)
+            end
           end
+        else
+          # Ruby Object#format exists. 
+          # We don't want to change the behaviour and overwrite it.
+          super
         end
       end
 
@@ -229,6 +235,14 @@ module Datagrid
         self.class.column_by_name(name)
       end
 
+
+      def format(value, &block)
+        if block_given?
+          self.class.format(value, &block)
+        else
+          super
+        end
+      end
 
     end # InstanceMethods
 
