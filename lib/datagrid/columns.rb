@@ -50,6 +50,7 @@ module Datagrid
       #   * <tt>:order</tt> - determines if this column could be sortable and how
       #   * <tt>:order_desc</tt> - determines a descending order for given column (only in case when <tt>:order</tt> can not be easily inverted
       #   * <tt>:url</tt> - a proc with one argument, pass this option to easily convert the value into an URL
+      #   * <tt>:position</tt> - determines the position of this column
       #
       # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
       def column(name, options = {}, &block)
@@ -57,7 +58,8 @@ module Datagrid
         block ||= lambda do |model|
           model.send(name)
         end
-        columns_array << Datagrid::Columns::Column.new(self, name, options, &block)
+        position = options.delete(:position) || -1
+        columns_array.insert(position, Datagrid::Columns::Column.new(self, name, options, &block))
       end
 
       # Returns column definition with given name

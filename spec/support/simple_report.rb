@@ -46,6 +46,8 @@ class SimpleReport
     self.pet.try(:upcase)
   end
 
+  column(:shipping_date, :position => 0)
+
   def param_name
     :report
   end
