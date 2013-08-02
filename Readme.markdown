@@ -129,7 +129,7 @@ Datagrid supports different type of filters including:
 Each column is represented by name and code block to calculate the value.
 
 ``` ruby
-column(:activated, :header => "Active", :order => "activated") do
+column(:activated, :header => "Active", :order => "activated", :after => :name) do
   self.activated?
 end
 ```

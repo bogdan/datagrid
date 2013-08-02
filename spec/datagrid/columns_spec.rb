@@ -17,17 +17,19 @@ describe Datagrid::Columns do
       :confirmed => false,
       :category => "first",
       :access_level => 'admin',
-      :pet => 'rottweiler'
+      :pet => 'rottweiler',
+      :shipping_date => Date.new(2013, 8, 1)
     ) }
+    let(:date) { Date.new(2013, 8, 1) }
 
     it "should have data columns without html columns" do
       subject.data_columns.size.should == subject.columns.size - 1
     end
     it "should build rows of data" do
-      subject.rows.should == [["Pop", "Star", "admin", "ROTTWEILER"]]
+      subject.rows.should == [[date, "Pop", "Star", "admin", "ROTTWEILER"]]
     end
     it  "should generate header" do
-      subject.header.should == ["Group", "Name", "Access level", "Pet"]
+      subject.header.should == ["Shipping date", "Group", "Name", "Access level", "Pet"]
     end
     
     it "should return html_columns" do
@@ -63,12 +65,13 @@ describe Datagrid::Columns do
         :group => "Pop",
         :name => "Star",
         :access_level => 'admin',
-        :pet => 'ROTTWEILER'
+        :pet => 'ROTTWEILER',
+        :shipping_date => date
       }
     end
 
     it "should support csv export" do
-      subject.to_csv.should == "Group,Name,Access level,Pet\nPop,Star,admin,ROTTWEILER\n"
+      subject.to_csv.should == "Shipping date,Group,Name,Access level,Pet\n#{date},Pop,Star,admin,ROTTWEILER\n"
     end
 
     it "should support csv export of particular columns" do
@@ -76,7 +79,7 @@ describe Datagrid::Columns do
     end
 
     it "should support csv export options" do
-      subject.to_csv(:col_sep => ";").should == "Group;Name;Access level;Pet\nPop;Star;admin;ROTTWEILER\n"
+      subject.to_csv(:col_sep => ";").should == "Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n"
     end
   end
 
@@ -149,7 +152,7 @@ describe Datagrid::Columns do
         scope {Entry}
         column(:name) do |entry|
           format(entry.name) do |value|
-            "<strong>#{value}</strong" 
+            "<strong>#{value}</strong"
           end
         end
       end
