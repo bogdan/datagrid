@@ -50,7 +50,8 @@ module Datagrid
       #   * <tt>:order</tt> - determines if this column could be sortable and how
       #   * <tt>:order_desc</tt> - determines a descending order for given column (only in case when <tt>:order</tt> can not be easily inverted
       #   * <tt>:url</tt> - a proc with one argument, pass this option to easily convert the value into an URL
-      #   * <tt>:position</tt> - determines the position of this column
+      #   * <tt>:before</tt> - determines the position of this column, by adding it before the column passed here
+      #   * <tt>:after</tt> - determines the position of this column, by adding it after the column passed here
       #
       # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
       def column(name, options = {}, &block)
@@ -58,8 +59,7 @@ module Datagrid
         block ||= lambda do |model|
           model.send(name)
         end
-        position = options.delete(:position) || -1
-        columns_array.insert(position, Datagrid::Columns::Column.new(self, name, options, &block))
+        columns_array.insert(extract_position_for_column(options), Datagrid::Columns::Column.new(self, name, options, &block))
       end
 
       # Returns column definition with given name
@@ -96,6 +96,18 @@ module Datagrid
       def inherited(child_class) #:nodoc:
         super(child_class)
         child_class.columns_array = self.columns_array.clone
+      end
+      
+      protected
+      def extract_position_for_column(options)
+        position = options.extract!(:before, :after)
+        if position[:before]
+           columns.index {|c| c.name.to_sym == position[:before].to_sym }
+         elsif position[:after]
+           columns.index {|c| c.name.to_sym == position[:after].to_sym } + 1
+         else
+           -1
+         end
       end
 
     end # ClassMethods
