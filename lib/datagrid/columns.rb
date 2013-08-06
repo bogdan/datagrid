@@ -59,7 +59,9 @@ module Datagrid
         block ||= lambda do |model|
           model.send(name)
         end
-        columns_array.insert(extract_position_for_column(options), Datagrid::Columns::Column.new(self, name, options, &block))
+        position = Datagrid::Utils.extract_position_from_options(columns_array, options)
+        column = Datagrid::Columns::Column.new(self, name, options, &block)
+        columns_array.insert(position, column)
       end
 
       # Returns column definition with given name
@@ -96,18 +98,6 @@ module Datagrid
       def inherited(child_class) #:nodoc:
         super(child_class)
         child_class.columns_array = self.columns_array.clone
-      end
-      
-      protected
-      def extract_position_for_column(options)
-        position = options.extract!(:before, :after)
-        if position[:before]
-           columns.index {|c| c.name.to_sym == position[:before].to_sym }
-         elsif position[:after]
-           columns.index {|c| c.name.to_sym == position[:after].to_sym } + 1
-         else
-           -1
-         end
       end
 
     end # ClassMethods
