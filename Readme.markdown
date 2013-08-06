@@ -40,8 +40,8 @@ class SimpleReport
   filter(:disabled, :eboolean)
   filter(:confirmed, :boolean)
   filter(:group_id, :integer, :multiple => true)
-  filter(:logins_count, :integer, :range => true)
-  filter(:group_name, :string, :header => "Group") do |value|
+  filter(:logins_count, :integer, :range => true, :before => :group_id)
+  filter(:group_name, :string, :header => "Group", :after => :category_id) do |value|
     self.joins(:group).where(:groups => {:name => value})
   end
 

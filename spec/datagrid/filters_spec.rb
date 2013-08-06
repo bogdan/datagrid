@@ -127,6 +127,29 @@ describe Datagrid::Filters do
       end
       grid.assets.should_not be_empty
     end
-    
+
+  end
+
+  describe "positioning filter before another" do
+    it "should insert the filter before the specified element" do
+      grid = test_report do
+        scope {Entry}
+        filter(:limit)
+        filter(:name, :before => :limit)
+      end
+      grid.filters.index {|f| f.name == :name}.should == 0
+    end
+  end
+
+  describe "positioning filter after another" do
+    it "should insert the filter before the specified element" do
+      grid = test_report do
+        scope {Entry}
+        filter(:limit)
+        filter(:name)
+        filter(:group_id, :after => :limit)
+      end
+      grid.filters.index {|f| f.name == :group_id}.should == 1
+    end
   end
 end

@@ -35,6 +35,17 @@ module Datagrid
       def string_like?(value)
         value.is_a?(Symbol) || value.is_a?(String)
       end
+
+      def extract_position_from_options(array, options)
+        position = options.extract!(:before, :after)
+        if position[:before]
+          array.index {|c| c.name.to_sym == position[:before].to_sym }
+        elsif position[:after]
+          array.index {|c| c.name.to_sym == position[:after].to_sym } + 1
+        else
+          -1
+        end
+      end
     end
   end
 end
