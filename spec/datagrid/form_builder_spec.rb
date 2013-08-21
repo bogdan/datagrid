@@ -284,11 +284,21 @@ describe Datagrid::FormBuilder do
         end
       end
       let(:_filter) { :group_id }
-      it { should equal_to_dom(<<HTML) }
+      let(:expected_html) do
+        if ActionPack::VERSION::MAJOR == 3 && ActionPack::VERSION::MINOR < 2
+          <<-HTML
+<select class="group_id enum_filter" id="report_group_id" multiple name="report[group_id][]">
+<option value="hello">hello</option></select>
+          HTML
+        else
+          <<-HTML
 <input name="report[group_id][]" type="hidden" value=""><select class="group_id enum_filter" id="report_group_id" multiple name="report[group_id][]">
 <option value="hello">hello</option></select>
-HTML
+          HTML
+        end
+      end
 
+      it { should equal_to_dom(expected_html) }
     end
 
     context "with column names filter" do
@@ -304,11 +314,23 @@ HTML
         end       
       end
       let(:_filter) { :column_names }
-      it { should equal_to_dom(<<HTML)}
+      let(:expected_html) do
+        if ActionPack::VERSION::MAJOR == 3 && ActionPack::VERSION::MINOR < 2
+          <<-HTML
+<select class="column_names enum_filter" id="report_column_names" multiple name="report[column_names][]"><option value="id" selected>Id</option>
+<option value="name" selected>Name</option>
+<option value="category">Category</option></select>
+          HTML
+        else
+          <<-HTML
 <input name="report[column_names][]" type="hidden" value=""><select class="column_names enum_filter" id="report_column_names" multiple name="report[column_names][]"><option value="id" selected>Id</option>
 <option value="name" selected>Name</option>
 <option value="category">Category</option></select>
-HTML
+          HTML
+        end
+      end
+
+      it { should equal_to_dom(expected_html) }
     end
   end
 
@@ -331,7 +353,3 @@ HTML
     end
   end
 end
-
-
-
-
