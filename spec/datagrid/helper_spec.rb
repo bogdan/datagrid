@@ -7,13 +7,14 @@ require 'datagrid/renderer'
 describe Datagrid::Helper do
   subject do
     template = ActionView::Base.new
+    template.stub(:protect_against_forgery?).and_return(false)
     template.view_paths << File.expand_path("../../../app/views", __FILE__)
     template.view_paths << File.expand_path("../../support/test_partials", __FILE__)
     template
   end
 
   before(:each) do
-    subject.stub!(:params).and_return({})
+    subject.stub(:params).and_return({})
     subject.stub(:url_for) do |options|
       options.to_param
     end
