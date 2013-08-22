@@ -1,14 +1,19 @@
 
 
 def test_report(attributes = {}, &block)
-  klass = Class.new
-  klass.class_eval do
-    include Datagrid
-  end
-  if block
-    klass.class_eval(&block)
-  end
+  klass = test_report_class(&block)
   klass.new(attributes)
+end
+
+def test_report_class(&block)
+  Class.new.tap do |klass|
+    klass.class_eval do
+      include Datagrid
+    end
+    if block
+      klass.class_eval(&block)
+    end
+  end
 end
 
 class SimpleReport

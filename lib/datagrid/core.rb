@@ -61,11 +61,15 @@ module Datagrid
 
     module InstanceMethods
 
-      def initialize(attributes = nil)
+      def initialize(attributes = nil, &block)
         super()
 
         if attributes
           self.attributes = attributes
+        end
+
+        if block_given?
+          self.scope_value = block
         end
       end
 
@@ -115,6 +119,8 @@ module Datagrid
         if block_given?
           self.scope_value = block
           self
+        elsif scope_value
+          scope_value.call
         else
           check_scope_defined!
           scope_value.call
