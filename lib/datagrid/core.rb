@@ -73,6 +73,8 @@ module Datagrid
         end
       end
 
+      # Returns a hash of grid attributes including filter values 
+      # and ordering values
       def attributes
         result = {}
         self.datagrid_attributes.each do |name|
@@ -81,6 +83,7 @@ module Datagrid
         result
       end
 
+      # Alias for <tt>send</tt> method
       def [](attribute)
         self.send(attribute)
       end
@@ -89,6 +92,7 @@ module Datagrid
         self.send(:"#{attribute}=", value)
       end
 
+      # Returns a scope(e.g ActiveRecord::Relation) with all applied filters
       def assets
         driver.to_scope(scope)
       end
@@ -110,11 +114,25 @@ module Datagrid
         attributes
       end
 
-      def paginate(*args, &block)
+      def paginate(*args, &block) # :nodoc:
         ::Datagrid::Utils.warn_once("#paginate is deprecated. Call it like object.assets.paginate(...).")
         self.assets.paginate(*args, &block)
       end
 
+      # Redefines scope at instance level
+      # 
+      #   class MyGrid
+      #     scope { Article.order('created_at desc') }
+      #   end
+      # 
+      #   grid = MyGrid.new
+      #   grid.scope do |scope|
+      #     scope.where(:author_id => current_user.id)
+      #   end
+      #   grid.assets 
+      #       # => SELECT * FROM articles WHERE author_id = ? 
+      #       #    ORDER BY created_at desc
+      #
       def scope(&block)
         if block_given?
           current_scope = scope
@@ -128,6 +146,7 @@ module Datagrid
         end
       end
 
+      # Resets current instance scope to default scope defined in a class
       def reset_scope
         scope(&self.class.scope_value)
       end
