@@ -50,7 +50,8 @@ describe Datagrid::Columns do
           "'#{model.name}' filtered by '#{grid.name}'"
         end
       end
-      report.row_for(Entry.create!(:name => "Hello World")).should == [8, "'Hello World' filtered by 'Hello'"]
+      entry = Entry.create!(:name => "Hello World")
+      report.row_for(entry).should == [entry.id, "'Hello World' filtered by 'Hello'"]
     end
 
     it "should generate table data" do
