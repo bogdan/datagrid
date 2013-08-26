@@ -25,7 +25,7 @@ module Datagrid
       :float => Filters::FloatFilter,
     }
 
-    def self.included(base)
+    def self.included(base) #:nodoc:
       base.extend         ClassMethods
       base.class_eval do
 
@@ -40,6 +40,7 @@ module Datagrid
 
     module ClassMethods
 
+      # Returns filter definition object by name
       def filter_by_name(attribute)
         self.filters.find do |filter|
           filter.name.to_sym == attribute.to_sym
@@ -102,14 +103,14 @@ module Datagrid
 
     module InstanceMethods
 
-      def initialize(*args, &block)
+      def initialize(*args, &block) # :nodoc:
         self.filters.each do |filter|
           self[filter.name] = filter.default
         end
         super(*args, &block)
       end
 
-      def assets
+      def assets # :nodoc:
         result = super
         self.class.filters.each do |filter|
           result = filter.apply(self, result, filter_value(filter))
@@ -117,10 +118,12 @@ module Datagrid
         result
       end
 
+      # Returns all defined filters Array
       def filters
         self.class.filters
       end
 
+      # Returns filter valur for given filter definition
       def filter_value(filter)
         self[filter.name]
       end

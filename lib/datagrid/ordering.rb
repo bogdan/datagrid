@@ -48,7 +48,7 @@ module Datagrid
 
     module InstanceMethods
 
-      def assets
+      def assets # :nodoc:
         result = super
         if order
           column = column_by_name(order)
