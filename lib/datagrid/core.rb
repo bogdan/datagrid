@@ -117,14 +117,19 @@ module Datagrid
 
       def scope(&block)
         if block_given?
-          self.scope_value = block
+          current_scope = scope
+          self.scope_value = proc {
+            Datagrid::Utils.apply_args(current_scope, &block)
+          }
           self
-        elsif scope_value
-          scope_value.call
         else
           check_scope_defined!
           scope_value.call
         end
+      end
+
+      def reset_scope
+        scope(&self.class.scope_value)
       end
 
       def driver #:nodoc:
