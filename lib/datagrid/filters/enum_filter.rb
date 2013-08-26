@@ -15,7 +15,7 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
     if select.is_a?(Symbol)
       object.send(select)
     elsif select.respond_to?(:call)
-      select.arity == 1 ? select.call(object) : select.call
+      Datagrid::Utils.apply_args(object, &select)
     else
       select
     end

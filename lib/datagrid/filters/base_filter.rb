@@ -99,12 +99,10 @@ class Datagrid::Filters::BaseFilter
   end
 
   def execute(value, scope, grid_object, &block)
-    if block.arity >= 3 || block.arity < 0
-      scope.instance_exec(value, scope, grid_object, &block)
-    elsif block.arity == 2
-      scope.instance_exec(value, scope, &block)
-    else
+    if block.arity == 1
       scope.instance_exec(value, &block)
+    else
+      Datagrid::Utils.apply_args(value, scope, grid_object, &block)
     end
   end
 

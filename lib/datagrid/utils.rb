@@ -46,6 +46,15 @@ module Datagrid
           -1
         end
       end
+
+      def apply_args(*args, &block)
+        return block.call(*args) if block.arity < 0
+        args = args.clone
+        (args.size - block.arity).times do
+          args.pop
+        end
+        block.call(*args)
+      end
     end
   end
 end

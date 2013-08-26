@@ -69,7 +69,7 @@ module Datagrid
         end
 
         if block_given?
-          self.scope_value = block
+          self.scope(&block)
         end
       end
 
