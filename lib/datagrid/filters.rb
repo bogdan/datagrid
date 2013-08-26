@@ -72,9 +72,11 @@ module Datagrid
       #     and will just be displayed in form. In case you may want to apply it manually.
       #
       # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
-      def filter(name, *args, &block)
-        options = args.extract_options!
-        type = args.shift || :default
+      def filter(name, type = :default, options = {}, &block)
+        if type.is_a?(Hash)
+          options = type
+          type = :default
+        end
 
         klass = type.is_a?(Class) ? type : FILTER_TYPES[type]
         raise ConfigurationError, "filter class #{type.inspect} not found" unless klass
