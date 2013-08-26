@@ -75,7 +75,7 @@ class Datagrid::Filters::BaseFilter
   def default_filter_block
     filter = self
     lambda do |value, scope, grid|
-      filter.default_filter(value, scope, grid)
+      filter.dummy? ? nil : filter.default_filter(value, scope, grid)
     end
   end
 
@@ -90,6 +90,10 @@ class Datagrid::Filters::BaseFilter
 
   def format(value)
     value.nil? ? nil : value.to_s
+  end
+  
+  def dummy?
+    options[:dummy]
   end
 
   protected

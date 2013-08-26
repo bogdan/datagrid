@@ -46,26 +46,33 @@ module Datagrid
         end
       end
 
-      # Defines new datagrid filter
+      # Defines new datagrid filter.
+      # This method automatically generates <tt>attr_accessor</tt> for filter name
+      # and adds it to the list of datagrid attributes.
       # 
       # Arguments:
       #
       #   * <tt>name</tt> - filter name
+      #   * <tt>type</tt> - filter type that defines type case and GUI representation of a filter
       #   * <tt>options</tt> - hash of options
       #   * <tt>block</tt> - proc to apply the filter
       #
       # Available options:
       #   
       #   * <tt>:header</tt> - determines the header of the filter
-      #   * <tt>:default</tt> - the default filter value
+      #   * <tt>:default</tt> - the default filter value. Able to accept a <tt>Proc</tt> in case default should be recalculated
       #   * <tt>:multiple</tt> - determines if more than one option can be selected
       #   * <tt>:allow_nil</tt> - determines if the value can be nil
       #   * <tt>:allow_blank</tt> - determines if the value can be blank
-      #   * <tt>:before</tt> - determines the position of this filter, by adding it before the filter passed here (when using datagrid_form_for helper)
-      #   * <tt>:after</tt> - determines the position of this filter, by adding it after the filter passed here (when using datagrid_form_for helper)
+      #   * <tt>:before</tt> - determines the position of this filter, 
+      #     by adding it before the filter passed here (when using datagrid_form_for helper)
+      #   * <tt>:after</tt> - determines the position of this filter, 
+      #     by adding it after the filter passed here (when using datagrid_form_for helper)
+      #   * <tt>:dummy</tt> - if true, this filter will not be applied automatically 
+      #     and will just be displayed in form. In case you may want to apply it manually.
       #
       # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
-      def filter(attribute, *args, &block)
+      def filter(name, *args, &block)
         options = args.extract_options!
         type = args.shift || :default
 
@@ -73,10 +80,10 @@ module Datagrid
         raise ConfigurationError, "filter class #{type.inspect} not found" unless klass
 
         position = Datagrid::Utils.extract_position_from_options(self.filters, options)
-        filter = klass.new(self, attribute, options, &block)
+        filter = klass.new(self, name, options, &block)
         self.filters.insert(position, filter)
 
-        datagrid_attribute(attribute) do |value|
+        datagrid_attribute(name) do |value|
           filter.parse_values(value)
         end
 

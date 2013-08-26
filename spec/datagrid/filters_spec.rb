@@ -152,4 +152,13 @@ describe Datagrid::Filters do
       grid.filters.index {|f| f.name == :group_id}.should == 1
     end
   end
+
+  it "should support dummy filter" do
+    grid = test_report do
+      scope { Entry }
+      filter(:period, :date, :dummy => true, :default => proc { Date.today })
+    end
+    Entry.create!(:created_at => 3.days.ago)
+    grid.assets.should_not be_empty
+  end
 end
