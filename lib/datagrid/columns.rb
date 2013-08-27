@@ -32,7 +32,7 @@ module Datagrid
         args.compact!
         args.map!(&:to_sym)
         columns_array.select do |column|
-          (!options[:data] || column.data?) && (!options[:html] || column.html?)&& (args.empty? || args.include?(column.name))
+          (!options[:data] || column.data?) && (!options[:html] || column.html?) && (column.mandatory? || args.empty? || args.include?(column.name))
         end
       end
 

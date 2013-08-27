@@ -77,6 +77,14 @@ class Datagrid::Columns::Column
   def data?
     self.data_block != nil
   end
+  
+  def mandatory?
+    !! options[:mandatory]
+  end
+
+  def to_s
+    header
+  end
 
   def html_value(context, asset, grid)
     if html? && html_block

@@ -19,9 +19,12 @@ module Datagrid
     module ClassMethods
       # Adds a filter that acts like a column selection
       def column_names_filter
-        filter(:column_names, :enum, :select => proc { |grid| grid.class.columns.map {|c| [c.header, c.name] }}, :multiple => true ) do |value|
-          scoped
-        end
+        filter(
+          :column_names, :enum, 
+          :select => :optional_columns_select,
+          :multiple => true,
+          :dummy => true
+        )
       end
     end
 
@@ -32,7 +35,21 @@ module Datagrid
       super(*column_names)
     end
 
+    # Returns a list of columns with <tt>:mandatory => true</tt> option
+    def mandatory_columns
+      self.class.columns.select(&:mandatory?)
+    end
+
+    # Returns a list of columns without <tt>:mandatory => true</tt> option
+    def optional_columns
+      self.class.columns.reject(&:mandatory?)
+    end
+
     protected
+
+    def optional_columns_select #:nodoc:
+      optional_columns.map {|c| [c.header, c.name] }
+    end
 
     def selected_column_names(*args)
       if args.any?
@@ -40,9 +57,10 @@ module Datagrid
         args.map!(&:to_sym)
         args
       else
-        column_names ? column_names.clone : []
+        column_names ? column_names + mandatory_columns.map(&:name) : []
       end
     end
+
   end
 end
 
