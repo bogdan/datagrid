@@ -36,7 +36,7 @@ module Datagrid
       if !options.has_key?(:multiple) && filter.multiple
         options[:multiple] = true
       end
-      select filter.name, filter.select(object) || [], {:include_blank => filter.include_blank, :prompt => filter.prompt}, options
+      select filter.name, filter.select(object) || [], {:include_blank => filter.include_blank, :prompt => filter.prompt, :include_hidden => false}, options
     end
 
     def datagrid_integer_filter(attribute_or_filter, options = {})
