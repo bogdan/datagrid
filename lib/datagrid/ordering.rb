@@ -18,9 +18,7 @@ module Datagrid
               order_unsupported(value, "no column #{value} in #{self.class}")
             end
             unless column.order
-              order_unsupported(
-                name, "#{self.class}##{name} don't support order" 
-              ) 
+              order_unsupported(name, "#{self.class}##{name} don't support order" ) 
             end
             value
           else
@@ -90,7 +88,7 @@ module Datagrid
       def reverse_order(assets)
         driver.reverse_order(assets)
       rescue NotImplementedError
-        self.class.order_unsupported("Your ORM do not support reverse order: please specify :order_desc option manually")
+        self.class.order_unsupported("Reverse", "Your ORM do not support reverse order: please specify :order_desc option manually")
       end
 
       def apply_block_order(assets, order)
@@ -100,7 +98,7 @@ module Datagrid
         when 1
           order.call(assets)
         else
-          self.class.order_unsupported("Order option proc can not handle more than one argument")
+          self.class.order_unsupported("Proc", "Order option proc can not handle more than one argument")
         end
       end
     end # InstanceMethods
