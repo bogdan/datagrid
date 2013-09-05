@@ -82,6 +82,26 @@ describe Datagrid::Columns do
     it "should support csv export options" do
       subject.to_csv(:col_sep => ";").should == "Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n"
     end
+
+    it "should apply presenter" do
+      decorator = Struct.new(:group, :name, :access_level, :pet, :shipping_date)
+      subject.presenter_value = proc do |r|
+        decorator.new(
+          double(:group, :name => r.group.name[0]),
+          r.name[0],
+          r.access_level[0],
+          r.pet[0],
+          r.shipping_date.year
+        )
+      end
+      expect(subject.hash_for(entry)).to eq(
+        :group => "P",
+        :name => "S",
+        :access_level => "a",
+        :pet => "R",
+        :shipping_date => 2013
+      )
+    end
   end
 
   it "should support columns with model and report arguments" do
@@ -146,6 +166,19 @@ describe Datagrid::Columns do
 
   end
 
+  describe "#row_for" do
+    it "should apply presenter" do
+      decorator = Struct.new(:id, :greeting)
+      report = test_report do
+        scope { Entry }
+        presenter { |r| decorator.new(r.id, "Hello, #{r.name}") }
+        column(:id)
+        column(:greeting)
+      end
+      entry = Entry.create!(:name => "World")
+      report.row_for(entry).should == [entry.id, "Hello, World"]
+    end
+  end
 
   context "when grid has formatted column" do
     it "should output correct data" do

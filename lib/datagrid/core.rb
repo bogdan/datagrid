@@ -8,6 +8,7 @@ module Datagrid
       base.extend         ClassMethods
       base.class_eval do
         class_attribute :scope_value
+        class_attribute :presenter_value
         class_attribute :datagrid_attributes
         self.datagrid_attributes = []
       end
@@ -40,6 +41,21 @@ module Datagrid
           check_scope_defined!
           scope_value.call
         end
+      end
+
+      # Define a presenter for wrapping each record
+      #
+      #   grid = MyGrid.new
+      #   grid.presenter { |asset| MyDecorator.new(asset) }
+      #
+      # The block should return an object that responds to all required column
+      # reader methods. This is best done by delegating to the wrapped object.
+      #
+      def presenter(&block)
+        unless block_given? && block.arity == 1
+          raise ArgumentError "presenter needs a block with 1 argument for passing each record"
+        end
+        self.presenter_value = block
       end
 
       def driver #:nodoc:
@@ -144,6 +160,21 @@ module Datagrid
           check_scope_defined!
           scope_value.call
         end
+      end
+
+      # Define a presenter for wrapping each record
+      #
+      #   grid = MyGrid.new
+      #   grid.presenter { |asset| MyDecorator.new(asset) }
+      #
+      # The block should return an object that responds to all required column
+      # reader methods. This is best done by delegating to the wrapped object.
+      #
+      def presenter(&block)
+        unless block_given? && block.arity == 1
+          raise ArgumentError "presenter needs a block with 1 argument for passing each record"
+        end
+        self.presenter_value = block
       end
 
       # Resets current instance scope to default scope defined in a class

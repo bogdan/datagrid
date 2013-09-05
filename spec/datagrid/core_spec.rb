@@ -48,4 +48,23 @@ describe Datagrid::Core do
       end
     end
   end
+
+  describe "presenter" do
+    it "sets a row value mapping block on the class" do
+      decorator = Struct.new(:original_asset)
+      report_class = test_report_class do
+        presenter { |r| decorator.new(r) }
+      end
+      decorated_asset = report_class.presenter_value.call(:example)
+      expect(decorated_asset).to eq decorator.new(:example)
+    end
+
+    it "is settable on the instance" do
+      decorator = Struct.new(:original_asset)
+      report = test_report
+      report.presenter { |r| decorator.new(r) }
+      decorated_asset = report.presenter_value.call(:example)
+      expect(decorated_asset).to eq decorator.new(:example)
+    end
+  end
 end
