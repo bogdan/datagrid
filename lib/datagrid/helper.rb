@@ -57,6 +57,7 @@ module Datagrid
 
     # Provides access to datagrid columns data.
     #
+    #   # Suppose that <tt>grid</tt> has first_name and last_name columns
     #   <%= datagrid_row(grid, user) do |row| %>
     #     <tr>
     #       <td><%= row.first_name %></td>
@@ -73,7 +74,7 @@ module Datagrid
       end
     end
 
-    class HtmlRow
+    class HtmlRow #:nodoc:
       def initialize(context, grid, asset)
         @context = context
         @grid = grid

@@ -3,12 +3,14 @@ require "action_view"
 module Datagrid
   module FormBuilder
 
+    # Returns a form input html for the corresponding filter name
     def datagrid_filter(filter_or_attribute, options = {})
       filter = datagrid_get_filter(filter_or_attribute)
       options = Datagrid::Utils.add_html_classes(options, filter.name, datagrid_filter_html_class(filter))
       self.send(filter.form_builder_helper_name, filter, options)
     end
 
+    # Returns a form label html for the corresponding filter name
     def datagrid_label(filter_or_attribute, options = {})
       filter = datagrid_get_filter(filter_or_attribute)
       self.label(filter.name, filter.header, options)

@@ -57,7 +57,7 @@ module Datagrid
       #     column(:id)
       #     column(:name)
       #   end
-      #   MyGrid.new(:order => "name").order_column # => #<Column ... name: "name">
+      #   MyGrid.new(:order => "name").order_column # => #<Column name: "name", ...>
       #
       def order_column
         column_by_name(order)
