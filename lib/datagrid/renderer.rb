@@ -58,6 +58,7 @@ module Datagrid
 
     def rows(grid, assets, options = {})
       result = assets.map do |asset|
+        asset = grid.presenter_value_for(asset)
         @template.render :partial => "datagrid/row", :locals => {:grid => grid, :options => options, :asset => asset}
       end.join
 

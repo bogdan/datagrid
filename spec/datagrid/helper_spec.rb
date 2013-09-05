@@ -76,6 +76,19 @@ describe Datagrid::Helper do
       })
     end
 
+    it "should apply presenter to implicit assets" do
+      grid.presenter do |r|
+        double(:asset, name: "T1", group: double(name: "T2"), pet: "T3", access_level: "T4", shipping_date: "T5")
+      end
+      subject.datagrid_table(grid).should match_css_pattern(
+        "td.name" => "T1",
+        "td.group" => "T2",
+        "td.pet" => "T3",
+        "td.access_level" => "T4",
+        "td.shipping_date" => "T5"
+      )
+    end
+
     it "should support cycle option" do
       subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"]).should match_css_pattern({
         "tr.odd td.group" => "Pop",
