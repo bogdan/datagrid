@@ -23,7 +23,7 @@ class Datagrid::Filters::BaseFilter
       return scope if value.blank? && !allow_blank?
     end
 
-    result = execute(value, scope, grid_object, &block)
+    result = execute(value, scope, grid_object)
     return scope unless result
     unless grid_object.driver.match?(result)
       raise Datagrid::FilteringError, "Can not apply #{name.inspect} filter: result #{result.inspect} no longer match #{grid_object.driver.class}."
@@ -102,7 +102,7 @@ class Datagrid::Filters::BaseFilter
     driver.where(scope, name, value)
   end
 
-  def execute(value, scope, grid_object, &block)
+  def execute(value, scope, grid_object)
     if block.arity == 1
       scope.instance_exec(value, &block)
     else
