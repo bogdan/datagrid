@@ -18,7 +18,7 @@ module Datagrid
               order_unsupported(value, "no column #{value} in #{self.class}")
             end
             unless column.order
-              order_unsupported(name, "#{self.class}##{name} don't support order" ) 
+              order_unsupported(column.name, "column don't support order" ) 
             end
             value
           else

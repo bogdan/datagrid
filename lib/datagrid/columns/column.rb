@@ -58,7 +58,7 @@ class Datagrid::Columns::Column
   end
 
   def order
-    if options.has_key?(:order)
+    if options.has_key?(:order) && options[:order] != true
       self.options[:order]
     else
       grid_class.driver.default_order(grid_class.scope, name)

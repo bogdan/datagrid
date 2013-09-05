@@ -12,11 +12,38 @@ module Datagrid
 
         include Datagrid::Core
 
+        class_attribute :default_column_options
+        self.default_column_options = {}
+
       end
       base.send :include, InstanceMethods
     end # self.included
 
     module ClassMethods
+
+
+      ##
+      # :method: default_column_options=
+      #
+      # :call-seq: default_column_options=(options)
+      #
+      # Specifies default options for `column` method.
+      # They still can be overwritten at column level.
+      #
+      #   # Disable default order
+      #   self.default_column_options = { :order => false }
+      #   # Makes entire report HTML
+      #   self.default_column_options = { :html => true }
+      #
+
+      ##
+      # :method: default_column_options
+      #
+      # :call-seq: default_column_options
+      #
+      # Returns specified default column options hash
+      # See <tt>default_column_options=</tt> for more information
+      #
 
       # Returns a list of columns defined.
       # All column definistion are returned by default
@@ -60,7 +87,7 @@ module Datagrid
           model.send(name)
         end
         position = Datagrid::Utils.extract_position_from_options(columns_array, options)
-        column = Datagrid::Columns::Column.new(self, name, options, &block)
+        column = Datagrid::Columns::Column.new(self, name, default_column_options.merge(options), &block)
         columns_array.insert(position, column)
       end
 

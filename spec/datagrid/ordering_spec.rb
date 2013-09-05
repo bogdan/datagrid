@@ -71,6 +71,12 @@ describe Datagrid::Ordering do
       column(:name,  :order_desc => proc { order("name desc")})
     end.assets.should == [third, second, first]
   end
-  
+
+  it "should treat true order as default" do
+    test_report(:order => :name) do
+      scope { Entry }
+      column(:name,  :order => true)
+    end.assets.should == [first, second, third]
+  end
 
 end

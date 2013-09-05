@@ -161,4 +161,20 @@ describe Datagrid::Columns do
       report.rows.should == [["Hello World"]]
     end
   end
+
+  describe ".default_column_options" do
+    it "should pass default options to each column definition" do
+      report = test_report do
+        scope {Entry}
+        self.default_column_options = {:order => false}
+        column(:id)
+        column(:name, :order => "name")
+      end
+      first = Entry.create(:name => '1st')
+      second = Entry.create(:name => '2nd')
+      proc { report.attributes = {:order => :id} }.should raise_error(Datagrid::OrderUnsupported)
+      report.attributes = {:order => :name, :descending => true}
+      report.assets.should == [second, first]
+    end
+  end
 end
