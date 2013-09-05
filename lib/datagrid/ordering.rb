@@ -47,25 +47,34 @@ module Datagrid
     module InstanceMethods
 
       def assets # :nodoc:
-        result = super
-        if order
-          column = column_by_name(order)
-          result = apply_order(result, column)
-        end
-        result
+        apply_order(super)
+      end
+
+      # Returns a column definition that is currently used to order assets
+      # 
+      #   class MyGrid
+      #     scope { Model }
+      #     column(:id)
+      #     column(:name)
+      #   end
+      #   MyGrid.new(:order => "name").order_column # => #<Column ... name: "name">
+      #
+      def order_column
+        column_by_name(order)
       end
 
       private
 
-      def apply_order(assets, column)
+      def apply_order(assets)
+        return assets unless order
         if descending?
-          if column.order_desc
-            apply_asc_order(assets, column.order_desc)
+          if order_column.order_desc
+            apply_asc_order(assets, order_column.order_desc)
           else
-            apply_desc_order(assets, column.order)
+            apply_desc_order(assets, order_column.order)
           end
         else
-          apply_asc_order(assets, column.order)
+          apply_asc_order(assets, order_column.order)
         end
       end
 
@@ -88,7 +97,7 @@ module Datagrid
       def reverse_order(assets)
         driver.reverse_order(assets)
       rescue NotImplementedError
-        self.class.order_unsupported("Reverse", "Your ORM do not support reverse order: please specify :order_desc option manually")
+        self.class.order_unsupported(order_column.name, "Your ORM do not support reverse order: please specify :order_desc option manually")
       end
 
       def apply_block_order(assets, order)
@@ -98,7 +107,7 @@ module Datagrid
         when 1
           order.call(assets)
         else
-          self.class.order_unsupported("Proc", "Order option proc can not handle more than one argument")
+          self.class.order_unsupported(order_column.name, "Order option proc can not handle more than one argument")
         end
       end
     end # InstanceMethods

@@ -40,10 +40,9 @@ module Datagrid
         scope.reorder(order).reverse_order
       end
 
-      # TODO: implement reverse_order
-      # def reverse_order(scope)
-      #   scope.reverse_order
-      # end
+      def reverse_order(scope)
+        scope.reverse_order
+      end
 
       def default_order(scope, column_name)
         has_column?(scope, column_name) ? [scope.table_name, column_name].join(".") : nil

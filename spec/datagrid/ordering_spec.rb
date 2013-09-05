@@ -58,6 +58,13 @@ describe Datagrid::Ordering do
     end.assets.should == [third, second, first]
   end
 
+  it "should support reversing order given as block" do
+    test_report(:order => :name, :descending => true) do
+      scope { Entry }
+      column(:name, :order => proc { order("name desc") })
+    end.assets.should == [first, second, third]
+  end
+
   it "should support order desc given as block" do
     test_report(:order => :name, :descending => true) do
       scope { Entry }
