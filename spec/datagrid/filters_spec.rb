@@ -75,7 +75,7 @@ describe Datagrid::Filters do
       $FILTER_PERFORMED = false
       report = test_report(:name => value) do
         scope {Entry}
-        filter(:name, options) do |value|
+        filter(:name, options) do |_|
           $FILTER_PERFORMED = true
           self
         end
@@ -160,5 +160,19 @@ describe Datagrid::Filters do
     end
     Entry.create!(:created_at => 3.days.ago)
     grid.assets.should_not be_empty
+  end
+
+  describe "#filter_by" do
+    it "should allow partial filtering" do
+      grid = test_report do
+        scope {Entry}
+        filter(:id)
+        filter(:name)
+      end
+      e = Entry.create!(:name => 'hello')
+      grid.attributes = {:id => -1, :name => 'hello'}
+      grid.assets.should be_empty
+      grid.filter_by(:name).should_not be_empty
+    end
   end
 end

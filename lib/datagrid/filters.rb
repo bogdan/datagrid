@@ -111,11 +111,7 @@ module Datagrid
       end
 
       def assets # :nodoc:
-        result = super
-        self.class.filters.each do |filter|
-          result = filter.apply(self, result, filter_value(filter))
-        end
-        result
+        apply_filters(super, self.class.filters)
       end
 
       # Returns all defined filters Array
@@ -133,6 +129,19 @@ module Datagrid
         self.class.filter_by_name(name)
       end
 
+      # Returns assets filtered only by specified filters
+      # Allows partial filtering
+      def filter_by(*filters)
+        apply_filters(scope, filters.map{|f| filter_by_name(f)})
+      end
+
+      protected
+
+      def apply_filters(current_scope, filters)
+        filters.inject(current_scope) do |result, filter|
+          filter.apply(self, result, filter_value(filter))
+        end
+      end
     end # InstanceMethods
 
   end
