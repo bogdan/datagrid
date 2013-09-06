@@ -141,10 +141,18 @@ module Datagrid
         data_columns(*column_names).map(&:header)
       end
 
+      # Returns a row asset with the decorator option applied, or else the
+      # original value. This value is used to output each row of the grid.
+      #
+      # Arguments:
+      #
+      #   * <tt>asset</tt> - an instance of one of the grid's assets
       def decorate(asset)
         decorator_value ? decorator_value.call(asset) : asset
       end
 
+      # Returns an array of all grid assets with the decorator option applied,
+      # or else the original values.
       def decorated_assets
         decorator_value ? assets.map(&decorator_value) : assets.to_a
       end
