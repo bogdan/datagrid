@@ -83,10 +83,10 @@ describe Datagrid::Columns do
       subject.to_csv(:col_sep => ";").should == "Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n"
     end
 
-    it "should apply presenter" do
-      decorator = Struct.new(:group, :name, :access_level, :pet, :shipping_date)
-      subject.presenter_value = proc do |r|
-        decorator.new(
+    it "should apply decorator" do
+      row_value = Struct.new(:group, :name, :access_level, :pet, :shipping_date)
+      subject.decorator_value = proc do |r|
+        row_value.new(
           double(:group, :name => r.group.name[0]),
           r.name[0],
           r.access_level[0],
@@ -167,11 +167,11 @@ describe Datagrid::Columns do
   end
 
   describe "#row_for" do
-    it "should apply presenter" do
-      decorator = Struct.new(:id, :greeting)
+    it "should apply decorator" do
+      row_value = Struct.new(:id, :greeting)
       report = test_report do
         scope { Entry }
-        presenter { |r| decorator.new(r.id, "Hello, #{r.name}") }
+        decorator { |r| row_value.new(r.id, "Hello, #{r.name}") }
         column(:id)
         column(:greeting)
       end
@@ -210,4 +210,43 @@ describe Datagrid::Columns do
       report.assets.should == [second, first]
     end
   end
+
+  describe "decorator" do
+    it "sets a row value mapping block on the class" do
+      row_value = Struct.new(:original_asset)
+      report_class = test_report_class do
+        decorator { |r| row_value.new(r) }
+      end
+      decorated_asset = report_class.decorator_value.call(:example)
+      expect(decorated_asset).to eq row_value.new(:example)
+    end
+
+    it "is settable on the instance" do
+      row_value = Struct.new(:original_asset)
+      report = test_report
+      report.decorator { |r| row_value.new(r) }
+      decorated_asset = report.decorator_value.call(:example)
+      expect(decorated_asset).to eq row_value.new(:example)
+    end
+  end
+
+  context "with a decorated report" do
+    let(:row_value) { Struct.new(:original_asset) }
+
+    let(:report) {
+      example_decorator = row_value
+      test_report do |g|
+        g.scope     { ["a", "b"] }
+        g.decorator { |r| example_decorator.new(r) }
+      end
+    }
+
+    describe "decorate" do
+      it "applies the report decorator" do
+        decorated_asset = report.decorate(:example)
+        expect(decorated_asset).to eq row_value.new(:example)
+      end
+    end
+  end
+
 end

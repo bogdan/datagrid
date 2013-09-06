@@ -76,8 +76,8 @@ describe Datagrid::Helper do
       })
     end
 
-    it "should apply presenter to implicit assets" do
-      grid.presenter do |r|
+    it "should apply decorator to implicit assets" do
+      grid.decorator do |r|
         double(:asset, name: "T1", group: double(name: "T2"), pet: "T3", access_level: "T4", shipping_date: "T5")
       end
       subject.datagrid_table(grid).should match_css_pattern(
