@@ -42,6 +42,21 @@ module Datagrid
         end
       end
 
+      # Define a decorator for wrapping each record
+      #
+      #   grid = MyGrid.new
+      #   grid.decorator { |asset| MyDecorator.new(asset) }
+      #
+      # The block should return an object that responds to all required column
+      # reader methods. This is best done by delegating to the wrapped object.
+      #
+      def decorator(&block)
+        unless block_given? && block.arity == 1
+          raise ArgumentError "decorator needs a block with 1 argument for passing each record"
+        end
+        self.decorator_value = block
+      end
+
       def driver #:nodoc:
         @driver ||= Drivers::AbstractDriver.guess_driver(scope).new
       end
@@ -144,6 +159,21 @@ module Datagrid
           check_scope_defined!
           scope_value.call
         end
+      end
+
+      # Define a decorator for wrapping each record
+      #
+      #   grid = MyGrid.new
+      #   grid.decorator { |asset| MyDecorator.new(asset) }
+      #
+      # The block should return an object that responds to all required column
+      # reader methods. This is best done by delegating to the wrapped object.
+      #
+      def decorator(&block)
+        unless block_given? && block.arity == 1
+          raise ArgumentError "decorator needs a block with 1 argument for passing each record"
+        end
+        self.decorator_value = block
       end
 
       # Resets current instance scope to default scope defined in a class

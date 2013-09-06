@@ -140,6 +140,23 @@ Each column is sortable.
 
 [More about columns](https://github.com/bogdan/datagrid/wiki/Columns) 
 
+### Decorator
+
+Instead of applying column blocks to format each value as shown above, you may
+already have a decorator (or "presenter") for displaying your objects in the
+view. By setting the decorator option, it will apply to each row.
+
+```
+decorator do |row|
+  MyDecorator.new(row)
+end
+```
+
+The set of decorated assets can be accessed via `grid.decorated_assets` or
+individually as `grid.decorate(asset)`. These methods might be helpful if you
+need to pass anything manually into the `datagrid_table` or `datagrid_row` view
+helpers for rendering.
+
 ### Front end
 
 ### Using Generator

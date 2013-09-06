@@ -82,6 +82,26 @@ describe Datagrid::Columns do
     it "should support csv export options" do
       subject.to_csv(:col_sep => ";").should == "Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n"
     end
+
+    it "should apply decorator" do
+      row_value = Struct.new(:group, :name, :access_level, :pet, :shipping_date)
+      subject.decorator_value = proc do |r|
+        row_value.new(
+          double(:group, :name => r.group.name[0]),
+          r.name[0],
+          r.access_level[0],
+          r.pet[0],
+          r.shipping_date.year
+        )
+      end
+      expect(subject.hash_for(entry)).to eq(
+        :group => "P",
+        :name => "S",
+        :access_level => "a",
+        :pet => "R",
+        :shipping_date => 2013
+      )
+    end
   end
 
   it "should support columns with model and report arguments" do
@@ -146,6 +166,19 @@ describe Datagrid::Columns do
 
   end
 
+  describe "#row_for" do
+    it "should apply decorator" do
+      row_value = Struct.new(:id, :greeting)
+      report = test_report do
+        scope { Entry }
+        decorator { |r| row_value.new(r.id, "Hello, #{r.name}") }
+        column(:id)
+        column(:greeting)
+      end
+      entry = Entry.create!(:name => "World")
+      report.row_for(entry).should == [entry.id, "Hello, World"]
+    end
+  end
 
   context "when grid has formatted column" do
     it "should output correct data" do
@@ -177,4 +210,50 @@ describe Datagrid::Columns do
       report.assets.should == [second, first]
     end
   end
+
+  describe "decorator" do
+    it "sets a row value mapping block on the class" do
+      row_value = Struct.new(:original_asset)
+      report_class = test_report_class do
+        decorator { |r| row_value.new(r) }
+      end
+      decorated_asset = report_class.decorator_value.call(:example)
+      expect(decorated_asset).to eq row_value.new(:example)
+    end
+
+    it "is settable on the instance" do
+      row_value = Struct.new(:original_asset)
+      report = test_report
+      report.decorator { |r| row_value.new(r) }
+      decorated_asset = report.decorator_value.call(:example)
+      expect(decorated_asset).to eq row_value.new(:example)
+    end
+  end
+
+  context "with a decorated report" do
+    let(:row_value) { Struct.new(:original_asset) }
+
+    let(:report) {
+      example_decorator = row_value
+      test_report do |g|
+        g.scope     { ["a", "b"] }
+        g.decorator { |r| example_decorator.new(r) }
+      end
+    }
+
+    describe "decorate" do
+      it "applies the report decorator" do
+        decorated_asset = report.decorate(:example)
+        expect(decorated_asset).to eq row_value.new(:example)
+      end
+    end
+
+    describe "decorated_assets" do
+      it "applies the report decorator to all scoped assets" do
+        assets = report.decorated_assets
+        expect(assets).to eq [row_value.new("a"), row_value.new("b")]
+      end
+    end
+  end
+
 end

@@ -48,4 +48,5 @@ describe Datagrid::Core do
       end
     end
   end
+
 end

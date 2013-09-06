@@ -57,9 +57,10 @@ module Datagrid
     end
 
     def rows(grid, assets, options = {})
-      result = assets.map do |asset|
-        @template.render :partial => "datagrid/row", :locals => {:grid => grid, :options => options, :asset => asset}
-      end.join
+      result = assets.inject("") do |html, asset|
+        asset = grid.decorate(asset)
+        html << @template.render(:partial => "datagrid/row", :locals => {:grid => grid, :options => options, :asset => asset})
+      end
 
       _safe(result)
     end

@@ -12,6 +12,7 @@ module Datagrid
 
         include Datagrid::Core
 
+        class_attribute :decorator_value
         class_attribute :default_column_options
         self.default_column_options = {}
 
@@ -140,6 +141,22 @@ module Datagrid
         data_columns(*column_names).map(&:header)
       end
 
+      # Returns a row asset with the decorator option applied, or else the
+      # original value. This value is used to output each row of the grid.
+      #
+      # Arguments:
+      #
+      #   * <tt>asset</tt> - an instance of one of the grid's assets
+      def decorate(asset)
+        decorator_value ? decorator_value.call(asset) : asset
+      end
+
+      # Returns an array of all grid assets with the decorator option applied,
+      # or else the original values.
+      def decorated_assets
+        decorator_value ? assets.map(&decorator_value) : assets.to_a
+      end
+
       # Returns <tt>Array</tt> column values for given asset
       #
       # Arguments:
@@ -147,17 +164,16 @@ module Datagrid
       #   * <tt>column_names</tt> - list of column names if you want to limit data only to specified columns
       def row_for(asset, *column_names)
         data_columns(*column_names).map do |column|
-          column.data_value(asset, self)
+          column.data_value(decorate(asset), self)
         end
       end
 
       # Returns <tt>Hash</tt> where keys are column names and values are column values for the given asset
       def hash_for(asset)
-        result = {}
-        self.data_columns.each do |column|
-          result[column.name] = column.data_value(asset, self)
+        data_columns.inject(Hash.new) do |result, column|
+          result[column.name] = column.data_value(decorate(asset), self)
+          result
         end
-        result
       end
 
       # Returns Array of Arrays with data for each row in datagrid assets without header.
