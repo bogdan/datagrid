@@ -247,6 +247,13 @@ describe Datagrid::Columns do
         expect(decorated_asset).to eq row_value.new(:example)
       end
     end
+
+    describe "decorated_assets" do
+      it "applies the report decorator to all scoped assets" do
+        assets = report.decorated_assets
+        expect(assets).to eq [row_value.new("a"), row_value.new("b")]
+      end
+    end
   end
 
 end

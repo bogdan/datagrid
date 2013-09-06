@@ -145,6 +145,10 @@ module Datagrid
         decorator_value ? decorator_value.call(asset) : asset
       end
 
+      def decorated_assets
+        decorator_value ? assets.map(&decorator_value) : assets.to_a
+      end
+
       # Returns <tt>Array</tt> column values for given asset
       #
       # Arguments:
