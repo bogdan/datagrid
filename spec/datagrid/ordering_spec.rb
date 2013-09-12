@@ -79,4 +79,29 @@ describe Datagrid::Ordering do
     end.assets.should == [first, second, third]
   end
 
+  it "should support order_by_value" do
+    report = test_report(:order => :the_name) do
+      scope {Entry}
+      column(:the_name, :order_by_value => true) do
+        name
+      end
+    end
+    report.assets.should == [first, second, third]
+    report.descending = true
+    report.assets.should == [third, second, first]
+  end
+
+  it "should support order_by_value as block" do
+
+    order = { :aa => 2, :bb => 3, :cc => 1}
+    report = test_report(:order => :the_name) do
+      
+      scope {Entry}
+      column(:the_name, :order_by_value => proc{|model| order[model.name.to_sym]}) do
+        name
+      end
+    end
+    report.assets.should == [third, first, second]
+  end
+
 end

@@ -17,7 +17,7 @@ module Datagrid
             unless column 
               order_unsupported(value, "no column #{value} in #{self.class}")
             end
-            unless column.order
+            unless column.supports_order?
               order_unsupported(column.name, "column don't support order" ) 
             end
             value
@@ -67,14 +67,21 @@ module Datagrid
 
       def apply_order(assets)
         return assets unless order
-        if descending?
-          if order_column.order_desc
-            apply_asc_order(assets, order_column.order_desc)
-          else
-            apply_desc_order(assets, order_column.order)
+        if order_column.order_by_value?
+          assets = assets.sort_by do |asset|
+            order_column.order_by_value(asset, self)
           end
+          descending? ? assets.reverse : assets
         else
-          apply_asc_order(assets, order_column.order)
+          if descending?
+            if order_column.order_desc
+              apply_asc_order(assets, order_column.order_desc)
+            else
+              apply_desc_order(assets, order_column.order)
+            end
+          else
+            apply_asc_order(assets, order_column.order)
+          end
         end
       end
 

@@ -74,8 +74,14 @@ module Datagrid
       # Available options:
       #   
       #   * <tt>:html</tt> - determines if current column should be present in html table and how is it formatted
-      #   * <tt>:order</tt> - determines if this column could be sortable and how
-      #   * <tt>:order_desc</tt> - determines a descending order for given column (only in case when <tt>:order</tt> can not be easily inverted
+      #   * <tt>:order</tt> - determines if this column could be sortable and how. 
+      #     The value of order is explicitly passed to ORM ordering method. 
+      #     Ex: <tt>"created_at, id"</tt> for ActiveRecord, <tt>[:created_at, :id]</tt> for Mongoid
+      #   * <tt>:order_desc</tt> - determines a descending order for given column (only in case when <tt>:order</tt> can not be easily reversed by ORM)
+      #   * <tt>:order_by_value</tt> - used in case it is easier to perform ordering at ruby level not on database level. 
+      #     Warning: using ruby to order large datasets is very unrecommended. 
+      #     If set to true - datagrid will use column value to order by this column
+      #     If block is given: - datagrid will use value returned from block
       #   * <tt>:url</tt> - a proc with one argument, pass this option to easily convert the value into an URL
       #   * <tt>:before</tt> - determines the position of this column, by adding it before the column passed here
       #   * <tt>:after</tt> - determines the position of this column, by adding it after the column passed here

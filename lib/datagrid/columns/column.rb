@@ -65,6 +65,22 @@ class Datagrid::Columns::Column
     end
   end
 
+  def supports_order?
+    order || order_by_value?
+  end
+
+  def order_by_value(model, grid)
+    if options[:order_by_value] == true
+      data_value(model, grid)
+    else
+      Datagrid::Utils.apply_args(model, grid, &options[:order_by_value])
+    end
+  end
+
+  def order_by_value?
+    !! options[:order_by_value]
+  end
+
   def order_desc
     return nil unless order
     self.options[:order_desc]  
