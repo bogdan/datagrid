@@ -82,6 +82,10 @@ class Datagrid::Columns::Column
     !! options[:mandatory]
   end
 
+  def inspect
+    "#<Datagird::Columns::Column #{grid_class}##{name} #{options.inspect}>"
+  end
+
   def to_s
     header
   end
