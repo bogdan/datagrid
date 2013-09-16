@@ -32,14 +32,14 @@ class Datagrid::Filters::BaseFilter
   end
 
   def parse_values(value)
-    if !self.multiple && value.is_a?(Array)
+    if !multiple? && value.is_a?(Array)
       raise Datagrid::ArgumentError, "#{grid_class}##{name} filter can not accept Array argument. Use :multiple option."
     end
     values = Array.wrap(value)
     values.map! do |v|
       self.parse(v)
     end
-    self.multiple ? values : values.first
+    multiple? ? values : values.first
   end
 
   def header
@@ -53,6 +53,11 @@ class Datagrid::Filters::BaseFilter
   end
 
   def multiple
+    Datagrid::Utils.warn_once("Filter#multiple method is deprecated. Use Filter#multiple? instead")
+    multiple?
+  end
+
+  def multiple?
     self.options[:multiple]
   end
 
