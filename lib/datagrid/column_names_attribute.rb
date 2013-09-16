@@ -18,13 +18,12 @@ module Datagrid
 
     module ClassMethods
       # Adds a filter that acts like a column selection
-      def column_names_filter
-        filter(
-          :column_names, :enum, 
+      def column_names_filter(options = {})
+        filter(:column_names, :enum, {
           :select => :optional_columns_select,
           :multiple => true,
           :dummy => true
-        )
+        }.merge(options || {}))
       end
     end
 
