@@ -33,14 +33,20 @@ class Datagrid::Filters::BaseFilter
   end
 
   def parse_values(value)
-    if !multiple? && value.is_a?(Array)
-      raise Datagrid::ArgumentError, "#{grid_class}##{name} filter can not accept Array argument. Use :multiple option."
+    if multiple?
+      normalize_multiple_value(value).map do |v|
+        parse(v)
+      end
+    else
+      if value.is_a?(Array)
+        raise Datagrid::ArgumentError, "#{grid_class}##{name} filter can not accept Array argument. Use :multiple option."
+      end
+      parse(value)
     end
-    values = Array.wrap(value)
-    values.map! do |v|
-      self.parse(v)
-    end
-    multiple? ? values : values.first
+  end
+
+  def separator
+    options[:multiple].is_a?(String) ? options[:multiple] : default_separator
   end
 
   def header
@@ -114,6 +120,22 @@ class Datagrid::Filters::BaseFilter
     else
       Datagrid::Utils.apply_args(value, scope, grid_object, &block)
     end
+  end
+
+  def normalize_multiple_value(value)
+    case value
+    when String
+      #TODO: write tests and doc
+      value.split(separator)
+    when Array
+      value
+    else
+      Array.wrap(value)
+    end
+  end
+
+  def default_separator
+    ','
   end
 
 end
