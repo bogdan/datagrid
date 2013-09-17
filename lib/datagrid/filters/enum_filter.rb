@@ -1,4 +1,8 @@
+require "datagrid/filters/select_options"
+
 class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
+
+  include Datagrid::Filters::SelectOptions
 
   def initialize(*args)
     super(*args)
@@ -8,27 +12,6 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
   def parse(value)
     return nil if self.strict && !select.include?(value)
     value
-  end
-
-  def select(object = nil)
-    select = self.options[:select]
-    if select.is_a?(Symbol)
-      object.send(select)
-    elsif select.respond_to?(:call)
-      Datagrid::Utils.apply_args(object, &select)
-    else
-      select
-    end
-  end
-
-  def include_blank
-    unless self.prompt
-      self.options.has_key?(:include_blank) ? options[:include_blank] : !multiple?
-    end
-  end
-  
-  def prompt
-    self.options.has_key?(:prompt) ? options[:prompt] : false
   end
 
   def strict

@@ -66,6 +66,14 @@ module Datagrid
         raise NotImplementedError
       end
 
+      def contains(scope, field, value)
+        raise NotImplementedError
+      end
+
+      def column_names(scope)
+        raise NotImplementedError
+      end
+
       protected
       def timestamp_class?(klass)
         TIMESTAMP_CLASSES.include?(klass)

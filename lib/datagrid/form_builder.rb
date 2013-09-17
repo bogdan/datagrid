@@ -6,7 +6,7 @@ module Datagrid
     # Returns a form input html for the corresponding filter name
     def datagrid_filter(filter_or_attribute, options = {})
       filter = datagrid_get_filter(filter_or_attribute)
-      options = Datagrid::Utils.add_html_classes(options, filter.name, datagrid_filter_html_class(filter))
+      options = add_html_classes(options, filter.name, datagrid_filter_html_class(filter))
       self.send(filter.form_builder_helper_name, filter, options)
     end
 
@@ -49,6 +49,31 @@ module Datagrid
       datagrid_range_filter(:integer, filter, options)
     end
 
+    def datagrid_dynamic_filter(attribute_or_filter, options = {})
+      filter = datagrid_get_filter(attribute_or_filter)
+      input_name = "#{object_name}[#{filter.name.to_s}][]"
+      field, operation, value = object.filter_value(filter)
+      options = options.merge(:name => input_name)
+      field_input = select(
+        filter.name, 
+        filter.select(object) || [], 
+        {
+          :include_blank => filter.include_blank,
+          :prompt => filter.prompt,
+          :include_hidden => false,
+          :selected => field
+        }, 
+        add_html_classes(options, "field")
+      )
+      operation_input = select(
+        filter.name, filter.operations_select, 
+        {:include_blank => false, :include_hidden => false, :prompt => false, :selected => operation },
+        add_html_classes(options, "operation")
+      )
+      value_input = text_field(filter.name, add_html_classes(options, "value").merge(:value => value))
+      [field_input, operation_input, value_input].join("\n").html_safe
+    end
+
     def datagrid_range_filter(type, attribute_or_filter, options = {})
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.range?
@@ -71,7 +96,7 @@ module Datagrid
 
     def datagrid_range_filter_options(object, filter, type, options)
       type_method_map = {:from => :first, :to => :last}
-      options = Datagrid::Utils.add_html_classes(options, type)
+      options = add_html_classes(options, type)
       options[:value] = filter.format(object[filter.name].try(type_method_map[type]))
       # In case of datagrid ranged filter 
       # from and to input will have same id
@@ -110,6 +135,10 @@ module Datagrid
 
     def datagrid_filter_html_class(filter)
       filter.class.to_s.demodulize.underscore
+    end
+
+    def add_html_classes(options, *classes)
+      Datagrid::Utils.add_html_classes(options, *classes) 
     end
 
     class Error < StandardError

@@ -16,12 +16,13 @@ class Datagrid::Filters::BaseFilter
     raise NotImplementedError, "#parse(value) suppose to be overwritten"
   end
 
+
+  def unapplicable_value?(value)
+    value.nil? ? !allow_nil? : value.blank? && !allow_blank?
+  end
+
   def apply(grid_object, scope, value)
-    if value.nil?
-      return scope if !allow_nil?
-    else
-      return scope if value.blank? && !allow_blank?
-    end
+    return scope if unapplicable_value?(value)
 
     result = execute(value, scope, grid_object)
     return scope unless result

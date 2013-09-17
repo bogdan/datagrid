@@ -47,6 +47,14 @@ module Datagrid
         #TODO implement the support
         false
       end
+
+      def contains(scope, field, value)
+        scope(field => Regexp.compile(Regexp.escape(value)))
+      end
+
+      def column_names(scope)
+        [] # TODO: implement support
+      end
     end
   end
 end

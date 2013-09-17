@@ -62,14 +62,38 @@ module Datagrid
         false
       end
 
+      def column_names(scope)
+        scope.column_names
+      end
+
       def is_timestamp?(scope, field)
-        has_column?(scope, field) && scope.columns_hash[field.to_s].type == :datetime
+        column_type(scope, field) == :datetime
+      end
+
+      def contains(scope, field, value)
+        if column_type(scope, field) == :string
+          field = prefix_table_name(scope, field)
+          scope.where("#{field} #{contains_predicate} ?", "%#{value}%")
+        else
+          # dont support contains operation by non-varchar column now
+          scope.where("1=0")
+        end
       end
       
       protected
 
       def prefix_table_name(scope, field)
         has_column?(scope, field) ?  [scope.table_name, field].join(".") : field
+      end
+
+      def contains_predicate
+        defined?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) && 
+          ::ActiveRecord::Base.connection.is_a?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) ? 
+          'ilike' : 'like'
+      end
+
+      def column_type(scope, field)
+        has_column?(scope, field) ? scope.columns_hash[field.to_s].type : nil
       end
     end
   end

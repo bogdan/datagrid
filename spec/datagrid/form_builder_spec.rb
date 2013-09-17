@@ -332,7 +332,77 @@ describe Datagrid::FormBuilder do
 
       it { should equal_to_dom(expected_html) }
     end
+
+    context "with dynamic filter" do
+      let(:filter_options) do
+        {}
+      end
+      
+      let(:_grid) do
+        options = filter_options
+        test_report do
+          scope {Entry}
+          filter(:condition, :dynamic, options)
+        end
+      end
+      let(:_filter) { :condition }
+      context "with no options" do
+        let(:expected_html) do
+          <<-HTML
+         <select class="condition dynamic_filter field" id="report_condition" name="report[condition][]"><option value="id">Id</option>
+         <option value="group_id">Group</option>
+         <option value="name">Name</option>
+         <option value="category">Category</option>
+         <option value="access_level">Access level</option>
+         <option value="pet">Pet</option>
+         <option value="disabled">Disabled</option>
+         <option value="confirmed">Confirmed</option>
+         <option value="shipping_date">Shipping date</option>
+         <option value="created_at">Created at</option>
+         <option value="updated_at">Updated at</option></select><select class="condition dynamic_filter operation" id="report_condition" name="report[condition][]"><option value="=">=</option>
+         <option value="=~">=~</option>
+         <option value="&gt;=">&gt;=</option>
+         <option value="&lt;=">&lt;=</option></select><input class="condition dynamic_filter value" id="report_condition" name="report[condition][]" size="30" type="text">
+          HTML
+        end
+        it {should equal_to_dom(expected_html)}
+
+      end
+      context "when default option passed" do
+        let(:filter_options) do
+          {:select => [:id, :name], :default => [:id, '>=', 1]}
+        end
+        let(:expected_html) do
+          <<-HTML
+            <select class="condition dynamic_filter field" id="report_condition" name="report[condition][]"><option value="id" selected>id</option>
+       <option value="name">name</option></select><select class="condition dynamic_filter operation" id="report_condition" name="report[condition][]"><option value="=">=</option>
+       <option value="=~">=~</option>
+       <option value="&gt;=" selected>&gt;=</option>
+       <option value="&lt;=">&lt;=</option></select><input class="condition dynamic_filter value" id="report_condition" name="report[condition][]" size="30" type="text" value="1">
+          HTML
+        end
+        it {should equal_to_dom(expected_html)}
+
+      end
+      context "when select option passed" do
+        let(:filter_options) do
+          {:select => [:id, :name]}
+        end
+        let(:expected_html) do
+          <<-HTML
+        <select class="condition dynamic_filter field" id="report_condition" name="report[condition][]"><option value="id">id</option>
+       <option value="name">name</option></select><select class="condition dynamic_filter operation" id="report_condition" name="report[condition][]"><option value="=">=</option>
+       <option value="=~">=~</option>
+       <option value="&gt;=">&gt;=</option>
+       <option value="&lt;=">&lt;=</option></select><input class="condition dynamic_filter value" id="report_condition" name="report[condition][]" size="30" type="text">
+          HTML
+        end
+        it {should equal_to_dom(expected_html)}
+
+      end
+    end
   end
+
 
   describe ".datagrid_label" do
     let(:_grid) do
