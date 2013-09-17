@@ -40,6 +40,7 @@ describe Datagrid::Helper do
       datagrid_table.should match_css_pattern(
         "table.datagrid tr td.noresults" => 1
       )
+      datagrid_table.should include("&mdash;&mdash;")
     end
   end
 
