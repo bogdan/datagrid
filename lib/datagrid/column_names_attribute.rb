@@ -9,7 +9,7 @@ module Datagrid
       datagrid_attribute :column_names do |names|
         names = Array(names).reject(&:blank?)
         if names.reject(&:blank?).blank?
-          columns.map(&:name)
+          []
         else
           names
         end
@@ -18,13 +18,12 @@ module Datagrid
 
     module ClassMethods
       # Adds a filter that acts like a column selection
-      def column_names_filter
-        filter(
-          :column_names, :enum, 
+      def column_names_filter(options = {})
+        filter(:column_names, :enum, {
           :select => :optional_columns_select,
           :multiple => true,
           :dummy => true
-        )
+        }.merge(options || {}))
       end
     end
 
@@ -36,13 +35,14 @@ module Datagrid
     end
 
     # Returns a list of columns with <tt>:mandatory => true</tt> option
+    # If no mandatory columns specified than all of them considered mandatory
     def mandatory_columns
       self.class.columns.select(&:mandatory?)
     end
 
     # Returns a list of columns without <tt>:mandatory => true</tt> option
     def optional_columns
-      self.class.columns.reject(&:mandatory?)
+      self.class.columns - mandatory_columns
     end
 
     protected
@@ -51,16 +51,29 @@ module Datagrid
       optional_columns.map {|c| [c.header, c.name] }
     end
 
-    def selected_column_names(*args)
+    def selected_column_names(*args)                  
       if args.any?
         args.compact!
         args.map!(&:to_sym)
         args
       else
-        column_names ? column_names + mandatory_columns.map(&:name) : []
+        if column_names && column_names.any?
+          column_names + mandatory_columns.map(&:name)
+        else
+          columns_enabled_by_default.map(&:name)
+        end
       end
     end
 
+    def columns_visibility_enabled?
+      self.class.columns.any? do |column|
+        column.options.key?(:mandatory)
+      end
+    end
+
+    def columns_enabled_by_default
+      columns_visibility_enabled? ? mandatory_columns : []
+    end
   end
 end
 

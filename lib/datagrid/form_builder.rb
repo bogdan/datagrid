@@ -35,7 +35,7 @@ module Datagrid
 
     def datagrid_enum_filter(attribute_or_filter, options = {})
       filter = datagrid_get_filter(attribute_or_filter)
-      if !options.has_key?(:multiple) && filter.multiple
+      if !options.has_key?(:multiple) && filter.multiple?
         options[:multiple] = true
       end
       select filter.name, filter.select(object) || [], {:include_blank => filter.include_blank, :prompt => filter.prompt, :include_hidden => false}, options
@@ -43,7 +43,7 @@ module Datagrid
 
     def datagrid_integer_filter(attribute_or_filter, options = {})
       filter = datagrid_get_filter(attribute_or_filter)
-      if filter.multiple && self.object[filter.name].blank?
+      if filter.multiple? && self.object[filter.name].blank?
         options[:value] = ""
       end
       datagrid_range_filter(:integer, filter, options)

@@ -23,7 +23,7 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
 
   def include_blank
     unless self.prompt
-      self.options.has_key?(:include_blank) ? options[:include_blank] : !multiple
+      self.options.has_key?(:include_blank) ? options[:include_blank] : !multiple?
     end
   end
   

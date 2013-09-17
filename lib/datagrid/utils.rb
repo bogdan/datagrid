@@ -1,5 +1,5 @@
-module Datagrid
-  module Utils
+module Datagrid 
+  module Utils # :nodoc:
     class << self
 
 
@@ -9,14 +9,13 @@ module Datagrid
         TRUTH.include?(value)
       end
 
-      def warn_once(message)
+      def warn_once(message, delay = 5)
         @warnings ||= {}
-        if @warnings[message] 
-          false
-        else
-          warn message
-          @warnings[message] = true
-        end
+        timestamp = @warnings[message]
+        return false if timestamp && timestamp >= Time.now - delay
+        warn message
+        @warnings[message] = Time.now
+        true
       end
 
       def add_html_classes(options, *classes)
