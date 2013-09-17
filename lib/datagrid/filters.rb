@@ -74,7 +74,7 @@ module Datagrid
       #   * <tt>:dummy</tt> - if true, this filter will not be applied automatically 
       #     and will just be displayed in form. In case you may want to apply it manually.
       #
-      # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
+      # See: https://github.com/bogdan/datagrid/wiki/Filters for examples
       def filter(name, type = :default, options = {}, &block)
         if type.is_a?(Hash)
           options = type

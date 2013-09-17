@@ -102,6 +102,8 @@ describe Datagrid::Ordering do
       end
     end
     report.assets.should == [third, first, second]
+    report.descending = true
+    report.assets.should == [second, first, third]
   end
 
 end
