@@ -37,7 +37,9 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
   end
 
   def operations_select
-    %w(= =~ >= <=)
+    %w(= =~ >= <=).map do |operation|
+      I18n.t(operation, :scope => "datagrid.operations", :default => operation)
+    end
   end
 
   protected
@@ -45,6 +47,8 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
   def default_select
     proc {|grid|
       grid.driver.column_names(grid.scope).map do |name|
+        # Mongodb/Rails problem:
+        # '_id'.humanize returns ''
         [name.gsub(/^_/, '').humanize.strip, name]
       end
     }
