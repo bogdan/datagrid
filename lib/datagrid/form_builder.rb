@@ -85,7 +85,7 @@ module Datagrid
         # 2 inputs: "from date" and "to date" to specify a range
         [
           text_field(filter.name, from_options),
-          I18n.t("datagrid.misc.#{type}_range_separator", :default => "<span class=\"separator #{type}\"> - </span>"),
+          I18n.t("datagrid.filters.#{type}.range_separator"),
           text_field(filter.name, to_options)
         ].join.html_safe
       else

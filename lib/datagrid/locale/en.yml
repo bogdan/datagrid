@@ -1,0 +1,27 @@
+en:
+  datagrid:
+    no_results:
+      "&mdash;&mdash;"
+    table:
+      order:
+        asc: "&uarr;"
+        desc: "&darr;"
+    form:
+      submit: "Search"
+    filters:
+      integer:
+        range_separator:
+          "<span class=\"separator integer\"> - </span>"
+      date:
+        range_separator:
+          "<span class=\"separator date\"> - </span>"
+
+      eboolean:
+        "yes": "Yes"
+        "no": "No"
+      dynamic:
+        operations:
+          ">=": ">="
+          "<=": "<="
+          "=": "="
+          "=~": "=~"

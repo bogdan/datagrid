@@ -46,5 +46,6 @@ module Datagrid
 end
 
 require "datagrid/scaffold"
+I18n.load_path << File.expand_path('../datagrid/locale/en.yml', __FILE__)
 
 

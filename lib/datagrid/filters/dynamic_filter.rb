@@ -38,7 +38,7 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
 
   def operations_select
     %w(= =~ >= <=).map do |operation|
-      I18n.t(operation, :scope => "datagrid.operations", :default => operation)
+      I18n.t(operation, :scope => "datagrid.filters.dynamic.operations")
     end
   end
 
