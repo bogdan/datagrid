@@ -103,5 +103,23 @@ describe Datagrid::Filters::IntegerFilter do
     report.assets.should include(Entry.create!(:group => Group.create!(:rating => 5)))
   end
 
+  it "should support multiple values" do
+    report = test_report(:group_id => "1,2") do
+      scope {Entry}
+      filter(:group_id, :string, :multiple => true)
+    end
+    report.assets.should include(Entry.create!( :group_id => 1))
+    report.assets.should include(Entry.create!( :group_id => 2))
+    report.assets.should_not include(Entry.create!( :group_id => 3))
+  end
+  it "should support custom separator multiple values" do
+    report = test_report(:group_id => "1|2") do
+      scope {Entry}
+      filter(:group_id, :string, :multiple => '|')
+    end
+    report.assets.should include(Entry.create!( :group_id => 1))
+    report.assets.should include(Entry.create!( :group_id => 2))
+    report.assets.should_not include(Entry.create!( :group_id => 3))
+  end
   
 end

@@ -30,7 +30,9 @@ module Datagrid
     end
 
     def datagrid_default_filter(attribute_or_filter, options = {})
-      text_field datagrid_get_attribute(attribute_or_filter), options
+      filter = datagrid_get_filter(attribute_or_filter)
+      value = object.filter_value_as_string(filter)
+      text_field filter.name, options.merge(:value => object.filter_value_as_string(filter))
     end
 
     def datagrid_enum_filter(attribute_or_filter, options = {})
@@ -89,7 +91,7 @@ module Datagrid
           text_field(filter.name, to_options)
         ].join.html_safe
       else
-        text_field(filter.name, options)
+        datagrid_default_filter(filter, options)
       end
     end
 

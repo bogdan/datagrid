@@ -126,6 +126,13 @@ module Datagrid
         self[filter.name]
       end
 
+      # Returns string representation of filter value
+      def filter_value_as_string(filter)
+        value = filter_value(filter)
+        value = value.is_a?(Array) ?  value.join(filter.separator) : value.to_s
+        value.blank? ? nil : value
+      end
+
       # Returns filter object with the given name
       def filter_by_name(name)
         self.class.filter_by_name(name)

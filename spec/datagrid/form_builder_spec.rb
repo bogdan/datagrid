@@ -245,6 +245,19 @@ describe Datagrid::FormBuilder do
       let(:_filter) { :name }
 
       it {should equal_to_dom('<input class="name string_filter" id="report_name" name="report[name]" size="30" type="text">')}
+
+      context "when multiple option is set" do
+      let(:_grid) do
+        test_report(:name => "one,two") do
+          scope {Entry}
+          filter(:name, :string, :multiple => true)
+        end
+      end
+
+      let(:_filter) { :name }
+
+      it {should equal_to_dom('<input class="name string_filter" id="report_name" name="report[name]" size="30" type="text" value="one,two">')}
+      end
     end
 
     context "with non multiple filter" do
