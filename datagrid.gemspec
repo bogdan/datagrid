@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "datagrid"
-  s.version = "0.9.3"
+  s.version = "1.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = "2013-08-26"
+  s.date = "2013-09-19"
   s.description = "This allows you to easily build datagrid aka data tables with sortable columns and filters"
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "Readme.markdown",
     "VERSION",
+    "app/assets/stylesheets/datagrid.css.sass",
     "app/views/datagrid/_form.html.erb",
     "app/views/datagrid/_head.html.erb",
     "app/views/datagrid/_order_for.html.erb",
@@ -50,13 +51,17 @@ Gem::Specification.new do |s|
     "lib/datagrid/filters/composite_filters.rb",
     "lib/datagrid/filters/date_filter.rb",
     "lib/datagrid/filters/default_filter.rb",
+    "lib/datagrid/filters/dynamic_filter.rb",
     "lib/datagrid/filters/enum_filter.rb",
     "lib/datagrid/filters/float_filter.rb",
     "lib/datagrid/filters/integer_filter.rb",
     "lib/datagrid/filters/ranged_filter.rb",
+    "lib/datagrid/filters/select_options.rb",
     "lib/datagrid/filters/string_filter.rb",
     "lib/datagrid/form_builder.rb",
     "lib/datagrid/helper.rb",
+    "lib/datagrid/i18n.rb",
+    "lib/datagrid/locale/en.yml",
     "lib/datagrid/ordering.rb",
     "lib/datagrid/renderer.rb",
     "lib/datagrid/rspec.rb",
@@ -74,9 +79,11 @@ Gem::Specification.new do |s|
     "spec/datagrid/filters/boolean_enum_filter_spec.rb",
     "spec/datagrid/filters/composite_filters_spec.rb",
     "spec/datagrid/filters/date_filter_spec.rb",
+    "spec/datagrid/filters/dynamic_filter_spec.rb",
     "spec/datagrid/filters/enum_filter_spec.rb",
     "spec/datagrid/filters/float_filter_spec.rb",
     "spec/datagrid/filters/integer_filter_spec.rb",
+    "spec/datagrid/filters/string_filter_spec.rb",
     "spec/datagrid/filters_spec.rb",
     "spec/datagrid/form_builder_spec.rb",
     "spec/datagrid/helper_spec.rb",
@@ -99,7 +106,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/bogdan/datagrid"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.24"
+  s.rubygems_version = "1.8.25"
   s.summary = "Ruby gem to create datagrids"
 
   if s.respond_to? :specification_version then
