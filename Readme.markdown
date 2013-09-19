@@ -93,12 +93,12 @@ In order to create a report, you need to define:
 ### Scope
 
 Default scope of objects to filter and display.
-In common case it is `ActiveRecord::Base` (or any other supported ORM) subclass with some generic scopes like in example above:
+In common case it is `ActiveRecord::Base` (or any other supported ORM) subclass with some generic scopes like:
 
 ``` ruby
-  scope do
-    User.includes(:group)
-  end
+scope do
+  User.includes(:group)
+end
 ```
 
 [More about scope](https://github.com/bogdan/datagrid/wiki/Scope)
@@ -116,11 +116,13 @@ Datagrid supports different type of filters including:
 
 * text
 * integer
+* float
 * date
 * boolean
 * eboolean - the select of "yes", "no" and any
 * enum
 * string
+* dynamic
 
 [More about filters](https://github.com/bogdan/datagrid/wiki/Filters)
 
