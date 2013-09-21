@@ -6,6 +6,9 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
 
   def initialize(*args)
     super(*args)
+    if checkboxes?
+      options[:multiple] = true
+    end
     raise Datagrid::ConfigurationError, ":select option not specified" unless options[:select]
   end
 
@@ -15,7 +18,11 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
   end
 
   def strict
-    self.options[:strict]
+    options[:strict]
+  end
+
+  def checkboxes?
+    options[:checkboxes]
   end
 
 end

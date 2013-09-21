@@ -14,6 +14,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require "active_record"
 require 'action_view'
+require "rails"
 require "mongoid"
 require "mongo_mapper"
 require 'datagrid'

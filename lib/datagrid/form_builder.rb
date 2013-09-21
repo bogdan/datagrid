@@ -22,7 +22,7 @@ module Datagrid
     end
 
     def datagrid_boolean_filter(attribute_or_filter, options = {})
-      check_box(datagrid_get_attribute(attribute_or_filter), options)
+      check_box(datagrid_get_attribute(attribute_or_filter), options.reverse_merge(datagrid_extra_checkbox_options))
     end
 
     def datagrid_date_filter(attribute_or_filter, options = {})
@@ -40,7 +40,16 @@ module Datagrid
       if !options.has_key?(:multiple) && filter.multiple?
         options[:multiple] = true
       end
-      select filter.name, filter.select(object) || [], {:include_blank => filter.include_blank, :prompt => filter.prompt, :include_hidden => false}, options
+      if filter.checkboxes?
+        filter.select(options).map do |element|
+          text, value = @template.send(:option_text_and_value, element)
+          id = [object_name, filter.name, value.underscore].join('_')
+          input = check_box(filter.name, options.merge(datagrid_extra_checkbox_options).reverse_merge(:id => id, :multiple => true), value, nil)
+          label(filter.name, input + text, :for => id)
+        end.join("\n").html_safe
+      else
+        select filter.name, filter.select(object) || [], {:include_blank => filter.include_blank, :prompt => filter.prompt, :include_hidden => false}, options
+      end
     end
 
     def datagrid_integer_filter(attribute_or_filter, options = {})
@@ -57,18 +66,18 @@ module Datagrid
       field, operation, value = object.filter_value(filter)
       options = options.merge(:name => input_name)
       field_input = select(
-        filter.name, 
-        filter.select(object) || [], 
+        filter.name,
+        filter.select(object) || [],
         {
           :include_blank => filter.include_blank,
           :prompt => filter.prompt,
           :include_hidden => false,
           :selected => field
-        }, 
+        },
         add_html_classes(options, "field")
       )
       operation_input = select(
-        filter.name, filter.operations_select, 
+        filter.name, filter.operations_select,
         {:include_blank => false, :include_hidden => false, :prompt => false, :selected => operation },
         add_html_classes(options, "operation")
       )
@@ -83,7 +92,7 @@ module Datagrid
 
 
         from_options = datagrid_range_filter_options(object, filter, :from, options)
-        to_options = datagrid_range_filter_options(object, filter, :to, options) 
+        to_options = datagrid_range_filter_options(object, filter, :to, options)
         # 2 inputs: "from date" and "to date" to specify a range
         [
           text_field(filter.name, from_options),
@@ -100,17 +109,17 @@ module Datagrid
       type_method_map = {:from => :first, :to => :last}
       options = add_html_classes(options, type)
       options[:value] = filter.format(object[filter.name].try(type_method_map[type]))
-      # In case of datagrid ranged filter 
+      # In case of datagrid ranged filter
       # from and to input will have same id
-      options[:id] = if !options.key?(:id) 
-         # Rails provides it's own default id for all inputs
-         # In order to prevent that we assign no id by default 
-        options[:id] = nil
-      elsif options[:id].present?
-        # If the id was given we prefix it
-        # with from_ and to_ accordingly
-        options[:id] = [type, options[:id]].join("_")
-      end
+      options[:id] = if !options.key?(:id)
+                       # Rails provides it's own default id for all inputs
+                       # In order to prevent that we assign no id by default
+                       options[:id] = nil
+                     elsif options[:id].present?
+                       # If the id was given we prefix it
+                       # with from_ and to_ accordingly
+                       options[:id] = [type, options[:id]].join("_")
+                     end
       options
     end
 
@@ -140,11 +149,16 @@ module Datagrid
     end
 
     def add_html_classes(options, *classes)
-      Datagrid::Utils.add_html_classes(options, *classes) 
+      Datagrid::Utils.add_html_classes(options, *classes)
+    end
+
+    def datagrid_extra_checkbox_options
+      ::ActionPack::VERSION::MAJOR >= 4 ? {:include_hidden => false} : {}
     end
 
     class Error < StandardError
     end
+
   end
 end
 
