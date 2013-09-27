@@ -56,6 +56,21 @@ describe Datagrid::Filters::DynamicFilter do
     report.condition.should == [:shipping_date, "<=", nil]
   end
 
+  it "should nullify incorrect value for datetime" do
+    report.condition = [:created_at, "<=", 'aa']
+    report.condition.should == [:created_at, "<=", nil]
+  end
+
+  it "should nullify incorrect value for date" do
+    report.condition = [:created_at, "<=", '1986-08-05']
+    report.condition.should == [:created_at, "<=", Date.parse('1986-08-05')]
+    report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-04 01:01:01')))
+    report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-05 23:59:59')))
+    report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-05 00:00:00')))
+    report.assets.should_not include(Entry.create!(:created_at => DateTime.parse('1986-08-06 00:00:00')))
+    report.assets.should_not include(Entry.create!(:created_at => DateTime.parse('1986-08-06 23:59:59')))
+  end
+
   it "should support operations for invalid date" do
     report.condition = [:shipping_date, "<=", '1986-08-05']
     report.assets.should include(Entry.create!(:shipping_date => '1986-08-04'))

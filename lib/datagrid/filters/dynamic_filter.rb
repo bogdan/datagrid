@@ -25,14 +25,21 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
 
   def default_filter_where(driver, scope, filter)
     field, operation, value = filter
+    date_conversion = value.is_a?(Date) && driver.is_timestamp?(scope, field)
     case operation
     when '='
       driver.where(scope, field, value)
     when '=~'
       driver.contains(scope, field, value)
     when '>='
+      if date_conversion
+        value = value.beginning_of_day
+      end
       driver.greater_equal(scope, field, value)
     when '<='
+      if date_conversion
+        value = value.end_of_day
+      end
       driver.less_equal(scope, field, value)
     else
       raise "unknown operation: #{operation.inspect}"
@@ -70,7 +77,7 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
     when :date
       Datagrid::Utils.parse_date(value)
     when :timestamp
-      Datagrid::Utils.format_date_as_timestamp(Datagrid::Utils.parse_date(value))
+      Datagrid::Utils.parse_date(value)
     when :boolean
       Datagrid::Utils.booleanize(value)
     end
