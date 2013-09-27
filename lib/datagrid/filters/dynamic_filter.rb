@@ -28,6 +28,9 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
     date_conversion = value.is_a?(Date) && driver.is_timestamp?(scope, field)
     case operation
     when '='
+      if date_conversion
+        value = Datagrid::Utils.format_date_as_timestamp(value)
+      end
       driver.where(scope, field, value)
     when '=~'
       driver.contains(scope, field, value)
