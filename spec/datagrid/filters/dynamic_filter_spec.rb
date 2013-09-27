@@ -46,8 +46,24 @@ describe Datagrid::Filters::DynamicFilter do
     report.assets.should_not include(Entry.create!(:group_id => 3))
   end
 
+  it "should nullify incorrect value for integer" do
+    report.condition = [:group_id, "<=", 'aa']
+    report.condition.should == [:group_id, "<=", nil]
+  end
+
+  it "should nullify incorrect value for date" do
+    report.condition = [:shipping_date, "<=", 'aa']
+    report.condition.should == [:shipping_date, "<=", nil]
+  end
+
   it "should support operations for invalid date" do
     report.condition = [:shipping_date, "<=", '1986-08-05']
+    report.assets.should include(Entry.create!(:shipping_date => '1986-08-04'))
+    report.assets.should include(Entry.create!(:shipping_date => '1986-08-05'))
+    report.assets.should_not include(Entry.create!(:shipping_date => '1986-08-06'))
+  end
+  it "should support operations for invalid date" do
+    report.condition = [:shipping_date, "<=", Date.parse('1986-08-05')]
     report.assets.should include(Entry.create!(:shipping_date => '1986-08-04'))
     report.assets.should include(Entry.create!(:shipping_date => '1986-08-05'))
     report.assets.should_not include(Entry.create!(:shipping_date => '1986-08-06'))

@@ -66,9 +66,9 @@ module Datagrid
             end
           end
         end
+        return Date.parse(value) if value.is_a?(String)
         return value.to_date if value.respond_to?(:to_date)
-        return value unless value.is_a?(String)
-        Date.parse(value)
+        value
       rescue ::ArgumentError
         nil
       end
