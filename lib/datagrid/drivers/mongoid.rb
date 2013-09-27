@@ -58,6 +58,25 @@ module Datagrid
       def column_names(scope)
         to_scope(scope).klass.fields.keys
       end
+
+      def normalized_column_type(scope, field)
+        type = to_scope(scope).klass.fields[field.to_s].type
+        {
+          [BigDecimal , String, Symbol, Range, Array, Hash, ] => :string,
+          [Boolean] => :boolean,
+
+          [Date] => :date,
+
+          TIMESTAMP_CLASSES => :timestamp,
+
+          [Float] => :fload,
+
+          [Integer] => :integer,
+        }.each do |keys, value|
+          return value if keys.include?(type)
+        end
+        return :string
+      end
     end
   end
 end

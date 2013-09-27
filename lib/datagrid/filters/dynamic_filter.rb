@@ -6,12 +6,16 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
 
   def initialize(*)
     super
-    options[:multiple] = true
     options[:select] ||= default_select
+    unless options.has_key?(:include_blank)
+      options[:include_blank] = false
+    end
   end
 
-  def parse(value)
-    value
+  def parse_values(filter)
+    field, operation, value = filter
+
+    [field, operation, type_cast(field, value)]
   end
 
   def unapplicable_value?(filter)
@@ -21,7 +25,6 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
 
   def default_filter_where(driver, scope, filter)
     field, operation, value = filter
-    driver.to_scope(scope)
     case operation
     when '='
       driver.where(scope, field, value)
@@ -38,7 +41,7 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
 
   def operations_select
     %w(= =~ >= <=).map do |operation|
-      I18n.t(operation, :scope => "datagrid.filters.dynamic.operations")
+      [I18n.t(operation, :scope => "datagrid.filters.dynamic.operations").html_safe, operation]
     end
   end
 
@@ -54,4 +57,22 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
     }
   end
 
+  def type_cast(field, value)
+    type = grid_class.driver.normalized_column_type(grid_class.scope, field)
+    return nil if value.blank?
+    case type
+    when :string
+      value.to_s
+    when :integer
+      value.is_a?(Numeric) || value =~ /^\d/ ?  value.to_i : nil
+    when :float
+      value.is_a?(Numeric) || value =~ /^\d/ ?  value.to_f : nil
+    when :date
+      Datagrid::Utils.parse_date(value)
+    when :timestamp
+      Datagrid::Utils.format_date_as_timestamp(Datagrid::Utils.parse_date(value))
+    when :boolean
+      Datagrid::Utils.booleanize(value)
+    end
+  end
 end

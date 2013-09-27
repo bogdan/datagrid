@@ -74,6 +74,10 @@ module Datagrid
         raise NotImplementedError
       end
 
+      def normalize_column_type(scope, field)
+        raise NotImplementedError
+      end
+
       protected
       def timestamp_class?(klass)
         TIMESTAMP_CLASSES.include?(klass)

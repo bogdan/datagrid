@@ -12,26 +12,9 @@ class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
   end
 
   def parse(value)
-    return nil if value.blank?
-    return value if value.is_a?(Range)
-    if value.is_a?(String)
-      formats.each do |format|
-        begin
-          return Date.strptime(value, format)
-        rescue ArgumentError
-        end
-      end
-    end
-    return value.to_date if value.respond_to?(:to_date)
-    return value unless value.is_a?(String)
-    Date.parse(value)
-  rescue ArgumentError
-    nil
+    Datagrid::Utils.parse_date(value)
   end
 
-  def formats
-    Array(Datagrid.configuration.date_formats)
-  end
 
   def format(value)
     if formats.any? && value
@@ -43,23 +26,15 @@ class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
 
   def default_filter_where(driver, scope, value)
     if driver.is_timestamp?(scope, name)
-      value = format_value_timestamp(value)
+      value = Datagrid::Utils.format_date_as_timestamp(value)
     end
     super(driver, scope, value)
   end
 
   protected
-  def format_value_timestamp(value)
-    if !value
-      value
-    elsif (range? && value.is_a?(Array))
-      [value.first.try(:beginning_of_day), value.last.try(:end_of_day)]
-    elsif value.is_a?(Range)
-      (value.first.beginning_of_day..value.last.end_of_day)
-    else
-      value.beginning_of_day..value.end_of_day
-    end
-  end
 
+  def formats
+    Array(Datagrid.configuration.date_formats)
+  end
 end
 

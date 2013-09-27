@@ -396,9 +396,9 @@ describe Datagrid::FormBuilder do
          <option value="shipping_date">Shipping date</option>
          <option value="created_at">Created at</option>
          <option value="updated_at">Updated at</option></select><select class="condition dynamic_filter operation" id="report_condition" name="report[condition][]"><option value="=">=</option>
-         <option value="=~">=~</option>
-         <option value="&gt;=">&gt;=</option>
-         <option value="&lt;=">&lt;=</option></select><input class="condition dynamic_filter value" id="report_condition" name="report[condition][]" size="30" type="text">
+         <option value="=~">&asymp;</option>
+         <option value="&gt;=">&ge;</option>
+         <option value="&lt;=">&le;</option></select><input class="condition dynamic_filter value" id="report_condition" name="report[condition][]" size="30" type="text">
           HTML
         end
         it {should equal_to_dom(expected_html)}
@@ -412,9 +412,9 @@ describe Datagrid::FormBuilder do
           <<-HTML
             <select class="condition dynamic_filter field" id="report_condition" name="report[condition][]"><option value="id" selected>id</option>
        <option value="name">name</option></select><select class="condition dynamic_filter operation" id="report_condition" name="report[condition][]"><option value="=">=</option>
-       <option value="=~">=~</option>
-       <option value="&gt;=" selected>&gt;=</option>
-       <option value="&lt;=">&lt;=</option></select><input class="condition dynamic_filter value" id="report_condition" name="report[condition][]" size="30" type="text" value="1">
+       <option value="=~">&asymp;</option>
+       <option value="&gt;=" selected>&ge;</option>
+       <option value="&lt;=">&le;</option></select><input class="condition dynamic_filter value" id="report_condition" name="report[condition][]" size="30" type="text" value="1">
           HTML
         end
         it {should equal_to_dom(expected_html)}
@@ -428,9 +428,9 @@ describe Datagrid::FormBuilder do
           <<-HTML
         <select class="condition dynamic_filter field" id="report_condition" name="report[condition][]"><option value="id">id</option>
        <option value="name">name</option></select><select class="condition dynamic_filter operation" id="report_condition" name="report[condition][]"><option value="=">=</option>
-       <option value="=~">=~</option>
-       <option value="&gt;=">&gt;=</option>
-       <option value="&lt;=">&lt;=</option></select><input class="condition dynamic_filter value" id="report_condition" name="report[condition][]" size="30" type="text">
+       <option value="=~">&asymp;</option>
+       <option value="&gt;=">&ge;</option>
+       <option value="&lt;=">&le;</option></select><input class="condition dynamic_filter value" id="report_condition" name="report[condition][]" size="30" type="text">
           HTML
         end
         it {should equal_to_dom(expected_html)}

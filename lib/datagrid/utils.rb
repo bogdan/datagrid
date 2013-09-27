@@ -54,6 +54,37 @@ module Datagrid
         end
         block.call(*args)
       end
+
+      def parse_date(value)
+        return nil if value.blank?
+        return value if value.is_a?(Range)
+        if value.is_a?(String)
+          Array(Datagrid.configuration.date_formats).each do |format|
+            begin
+              return Date.strptime(value, format)
+            rescue ::ArgumentError
+            end
+          end
+        end
+        return value.to_date if value.respond_to?(:to_date)
+        return value unless value.is_a?(String)
+        Date.parse(value)
+      rescue ::ArgumentError
+        nil
+      end
+
+      def format_date_as_timestamp(value)
+        if !value
+          value
+        elsif value.is_a?(Array)
+          [value.first.try(:beginning_of_day), value.last.try(:end_of_day)]
+        elsif value.is_a?(Range)
+          (value.first.beginning_of_day..value.last.end_of_day)
+        else
+          value.beginning_of_day..value.end_of_day
+        end
+      end
+
     end
   end
 end
