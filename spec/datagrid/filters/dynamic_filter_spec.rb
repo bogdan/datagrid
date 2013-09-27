@@ -39,6 +39,12 @@ describe Datagrid::Filters::DynamicFilter do
     report.assets.should include(Entry.create!(:group_id => 1))
     report.assets.should_not include(Entry.create!(:group_id => 3))
   end
+  it "should support <= operation" do
+    report.condition = [:group_id, "<=", '2']
+    report.assets.should include(Entry.create!(:group_id => 1))
+    report.assets.should include(Entry.create!(:group_id => 2))
+    report.assets.should_not include(Entry.create!(:group_id => 3))
+  end
 
   it "should support operations for invalid date" do
     report.condition = [:shipping_date, "<=", '1986-08-05']
