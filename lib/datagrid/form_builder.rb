@@ -31,7 +31,6 @@ module Datagrid
 
     def datagrid_default_filter(attribute_or_filter, options = {})
       filter = datagrid_get_filter(attribute_or_filter)
-      value = object.filter_value_as_string(filter)
       text_field filter.name, options.merge(:value => object.filter_value_as_string(filter))
     end
 
