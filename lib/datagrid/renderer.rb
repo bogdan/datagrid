@@ -38,7 +38,7 @@ module Datagrid
       options[:html] ||= {}
       options[:html][:class] ||= "datagrid #{html_class(grid)}"
       if options[:cycle]
-        ::Datagrid::Utils.warn_once("datagrid_table cycle option is deprecated. Use css to stylee odd/even rows instead.")
+        ::Datagrid::Utils.warn_once("datagrid_table cycle option is deprecated. Use css to style odd/even rows instead.")
       end
       assets = args.any? ? args.shift : grid.assets
       paginate = options[:paginate]
