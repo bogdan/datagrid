@@ -55,24 +55,24 @@ module Datagrid
       # 
       # Arguments:
       #
-      #   * <tt>name</tt> - filter name
-      #   * <tt>type</tt> - filter type that defines type case and GUI representation of a filter
-      #   * <tt>options</tt> - hash of options
-      #   * <tt>block</tt> - proc to apply the filter
+      # * <tt>name</tt> - filter name
+      # * <tt>type</tt> - filter type that defines type case and GUI representation of a filter
+      # * <tt>options</tt> - hash of options
+      # * <tt>block</tt> - proc to apply the filter
       #
       # Available options:
       #   
-      #   * <tt>:header</tt> - determines the header of the filter
-      #   * <tt>:default</tt> - the default filter value. Able to accept a <tt>Proc</tt> in case default should be recalculated
-      #   * <tt>:multiple</tt> - determines if more than one option can be selected
-      #   * <tt>:allow_nil</tt> - determines if the value can be nil
-      #   * <tt>:allow_blank</tt> - determines if the value can be blank
-      #   * <tt>:before</tt> - determines the position of this filter, 
-      #     by adding it before the filter passed here (when using datagrid_form_for helper)
-      #   * <tt>:after</tt> - determines the position of this filter, 
-      #     by adding it after the filter passed here (when using datagrid_form_for helper)
-      #   * <tt>:dummy</tt> - if true, this filter will not be applied automatically 
-      #     and will be just displayed in form. In case you may want to apply it manually.
+      # * <tt>:header</tt> - determines the header of the filter
+      # * <tt>:default</tt> - the default filter value. Able to accept a <tt>Proc</tt> in case default should be recalculated
+      # * <tt>:multiple</tt> - determines if more than one option can be selected
+      # * <tt>:allow_nil</tt> - determines if the value can be nil
+      # * <tt>:allow_blank</tt> - determines if the value can be blank
+      # * <tt>:before</tt> - determines the position of this filter, 
+      #   by adding it before the filter passed here (when using datagrid_form_for helper)
+      # * <tt>:after</tt> - determines the position of this filter, 
+      #   by adding it after the filter passed here (when using datagrid_form_for helper)
+      # * <tt>:dummy</tt> - if true, this filter will not be applied automatically 
+      #   and will be just displayed in form. In case you may want to apply it manually.
       #
       # See: https://github.com/bogdan/datagrid/wiki/Filters for examples
       def filter(name, type = :default, options = {}, &block)
@@ -121,7 +121,7 @@ module Datagrid
         self.class.filters
       end
 
-      # Returns filter valur for given filter definition
+      # Returns filter value for given filter definition
       def filter_value(filter)
         self[filter.name]
       end

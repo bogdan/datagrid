@@ -1,6 +1,6 @@
 module Datagrid
   module Filters
-    module CompositeFilters
+    module CompositeFilters #:nodoc:
 
       def self.included(base)
         base.extend         ClassMethods

@@ -20,6 +20,7 @@ describe Datagrid::Filters::StringFilter do
     report.assets.should include(Entry.create!( :name => "one,1"))
     report.assets.should include(Entry.create!( :name => "two,2"))
     report.assets.should_not include(Entry.create!( :name => "one"))
+    report.assets.should_not include(Entry.create!( :name => "two"))
   end
 
 end

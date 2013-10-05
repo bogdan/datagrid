@@ -1,7 +1,7 @@
 class Datagrid::FilteringError < StandardError
 end
 
-class Datagrid::Filters::BaseFilter
+class Datagrid::Filters::BaseFilter #:nodoc:
 
   attr_accessor :grid_class, :options, :block, :name
 
