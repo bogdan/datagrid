@@ -72,7 +72,7 @@ module Datagrid
       #   * <tt>:after</tt> - determines the position of this filter, 
       #     by adding it after the filter passed here (when using datagrid_form_for helper)
       #   * <tt>:dummy</tt> - if true, this filter will not be applied automatically 
-      #     and will just be displayed in form. In case you may want to apply it manually.
+      #     and will be just displayed in form. In case you may want to apply it manually.
       #
       # See: https://github.com/bogdan/datagrid/wiki/Filters for examples
       def filter(name, type = :default, options = {}, &block)

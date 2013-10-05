@@ -189,7 +189,7 @@ module Datagrid
       end
 
       # Return Array of Hashes where keys are column names and values are column values 
-      # for each row in datagrid <tt>#assets</tt>
+      # for each row in filtered datagrid relation.
       #
       # Example:
       #
@@ -268,12 +268,27 @@ module Datagrid
         self.columns(*names)
       end
 
-      # Finds a column by name
+      # Finds a column definition by name
       def column_by_name(name)
         self.class.column_by_name(name)
       end
 
 
+      # Gives ability to have a different formatting for CSV and HTML column value.
+      #
+      # Example:
+      #   
+      #   column(:name) do |model|
+      #     format(model.name) do |value|
+      #       content_tag(:strong, value)
+      #     end
+      #   end
+      #
+      #   column(:company) do |model|
+      #     format(model.company.name) do 
+      #       render :partial => "company_with_logo", :locals => {:company => model.company }
+      #     end
+      #   end
       def format(value, &block)
         if block_given?
           self.class.format(value, &block)

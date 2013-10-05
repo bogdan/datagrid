@@ -18,6 +18,17 @@ module Datagrid
 
     module ClassMethods
       # Adds a filter that acts like a column selection
+      # All defined columns will be available to select/deselect
+      # as a multi-select enum filter.
+      # Columns with <tt>:mandatory => true</tt> option
+      # will always present in the grid table and won't be listed
+      # in column names selection
+      # Accepts same options as <tt>:enum</tt> filter
+      #
+      # Examples:
+      # 
+      #   column_names_filter(:header => "Choose columns")
+      #   
       def column_names_filter(options = {})
         filter(:column_names, :enum, {
           :select => :optional_columns_select,
