@@ -78,6 +78,10 @@ module Datagrid
         raise NotImplementedError
       end
 
+      def batch_map(scope)
+        raise NotImplementedError
+      end
+
       protected
       def timestamp_class?(klass)
         TIMESTAMP_CLASSES.include?(klass)

@@ -174,7 +174,7 @@ module Datagrid
       #   * <tt>column_names</tt> - list of column names if you want to limit data only to specified columns
       def rows(*column_names)
         #TODO: find in batches
-        self.assets.map do |asset|
+        driver.batch_map(assets) do |asset|
           self.row_for(asset, *column_names)
         end
       end
@@ -205,7 +205,7 @@ module Datagrid
       #     MyGrid.new.data_hash # => [{:name => "One"}, {:name => "Two"}]
       #
       def data_hash
-        self.assets.map do |asset|
+        driver.batch_map(assets) do |asset|
           hash_for(asset)
         end
       end

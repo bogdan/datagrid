@@ -55,6 +55,10 @@ module Datagrid
       def column_names(scope)
         [] # TODO: implement support
       end
+
+      def batch_map(scope, &block)
+        scope.map(&block)
+      end
     end
   end
 end

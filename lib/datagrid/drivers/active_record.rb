@@ -94,6 +94,14 @@ module Datagrid
         end
         return :string
       end
+
+      def batch_map(scope, &block)
+        result = []
+        scope.find_each do |record|
+          result << yield(record)
+        end
+        result
+      end
       
       protected
 

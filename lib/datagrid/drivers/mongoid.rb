@@ -77,6 +77,10 @@ module Datagrid
         end
         return :string
       end
+
+      def batch_map(scope, &block)
+        scope.map(&block)
+      end
     end
   end
 end
