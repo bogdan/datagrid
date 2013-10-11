@@ -78,7 +78,7 @@ module Datagrid
         raise NotImplementedError
       end
 
-      def batch_map(scope)
+      def batch_map(scope, options = {})
         raise NotImplementedError
       end
 

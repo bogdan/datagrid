@@ -6,4 +6,6 @@ spec.log
 pkg
 wiki
 .rvmrc
+.ruby-version
+.ruby-gemset
 Gemfile.lock

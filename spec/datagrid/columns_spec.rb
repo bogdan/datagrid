@@ -177,4 +177,19 @@ describe Datagrid::Columns do
       report.assets.should == [second, first]
     end
   end
+
+  describe "fetching data in batches" do
+    it "should pass the batch size to the find_each method" do
+      report = test_report do
+        scope { Entry }
+        column :id
+        batch_size 25
+      end
+
+      fake_assets = double(:assets)
+      report.should_receive(:assets) { fake_assets }
+      fake_assets.should_receive(:find_each).with(batch_size: 25)
+      report.rows
+    end
+  end
 end
