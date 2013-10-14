@@ -84,9 +84,20 @@ describe Datagrid::Filters::DynamicFilter do
     report.assets.should_not include(Entry.create!(:created_at => DateTime.parse('1986-08-06 23:59:59')))
   end
 
-  it "should support date equal operation by timestamp column" do
+  it "should support date = operation by timestamp column" do
     report.condition = [:created_at, "=", '1986-08-05']
     report.condition.should == [:created_at, "=", Date.parse('1986-08-05')]
+    report.assets.should_not include(Entry.create!(:created_at => DateTime.parse('1986-08-04 23:59:59')))
+    report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-05 23:59:59')))
+    report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-05 00:00:01')))
+    #TODO: investigate SQLite issue and uncomment this line
+    #report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-05 00:00:00')))
+    report.assets.should_not include(Entry.create!(:created_at => DateTime.parse('1986-08-06 23:59:59')))
+  end
+
+  it "should support date =~ operation by timestamp column" do
+    report.condition = [:created_at, "=~", '1986-08-05']
+    report.condition.should == [:created_at, "=~", Date.parse('1986-08-05')]
     report.assets.should_not include(Entry.create!(:created_at => DateTime.parse('1986-08-04 23:59:59')))
     report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-05 23:59:59')))
     report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-05 00:00:01')))

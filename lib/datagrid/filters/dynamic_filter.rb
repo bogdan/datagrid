@@ -36,6 +36,9 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
       if column_type(field) == :string
         driver.contains(scope, field, value)
       else
+        if date_conversion
+          value = Datagrid::Utils.format_date_as_timestamp(value)
+        end
         driver.where(scope, field, value)
       end
     when '>='
