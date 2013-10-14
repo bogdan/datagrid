@@ -74,7 +74,7 @@ module Datagrid
         raise NotImplementedError
       end
 
-      def normalize_column_type(scope, field)
+      def normalized_column_type(scope, field)
         raise NotImplementedError
       end
 

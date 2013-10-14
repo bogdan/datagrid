@@ -90,6 +90,10 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
       Datagrid::Utils.parse_date(value)
     when :boolean
       Datagrid::Utils.booleanize(value)
+    when nil
+      value
+    else
+      raise NotImplementedError, "unknown column type: #{type.inspect}"
     end
   end
 

@@ -77,6 +77,7 @@ module Datagrid
 
       def normalized_column_type(scope, field)
         type = column_type(scope, field)
+        return nil unless type
         {
           [:string, :text, :time, :binary] => :string,
           [:integer, :primary_key] => :integer,
@@ -87,7 +88,6 @@ module Datagrid
         }.each do |keys, value|
           return value if keys.include?(type)
         end
-        return :string
       end
 
       def batch_map(scope, &block)

@@ -52,7 +52,7 @@ module Datagrid
       end
 
       def contains(scope, field, value)
-        scope(field => Regexp.compile(Regexp.escape(value)))
+        scope.where(field => Regexp.compile(Regexp.escape(value)))
       end
 
       def column_names(scope)
@@ -60,7 +60,8 @@ module Datagrid
       end
 
       def normalized_column_type(scope, field)
-        type = to_scope(scope).klass.fields[field.to_s].type
+        type = to_scope(scope).klass.fields[field.to_s].try(:type)
+        return nil unless type
         {
           [BigDecimal , String, Symbol, Range, Array, Hash, ] => :string,
           [Boolean] => :boolean,
