@@ -71,13 +71,8 @@ module Datagrid
       end
 
       def contains(scope, field, value)
-        if normalized_column_type(scope, field) == :string
-          field = prefix_table_name(scope, field)
-          scope.where("#{field} #{contains_predicate} ?", "%#{value}%")
-        else
-          # dont support contains operation by non-varchar column now
-          scope.where("1=0")
-        end
+        field = prefix_table_name(scope, field)
+        scope.where("#{field} #{contains_predicate} ?", "%#{value}%")
       end
 
       def normalized_column_type(scope, field)

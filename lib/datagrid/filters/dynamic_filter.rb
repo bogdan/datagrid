@@ -33,7 +33,11 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
       end
       driver.where(scope, field, value)
     when '=~'
-      driver.contains(scope, field, value)
+      if column_type(field) == :string
+        driver.contains(scope, field, value)
+      else
+        driver.where(scope, field, value)
+      end
     when '>='
       if date_conversion
         value = value.beginning_of_day
@@ -68,7 +72,7 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
   end
 
   def type_cast(field, value)
-    type = grid_class.driver.normalized_column_type(grid_class.scope, field)
+    type = column_type(field)
     return nil if value.blank?
     case type
     when :string
@@ -84,5 +88,9 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
     when :boolean
       Datagrid::Utils.booleanize(value)
     end
+  end
+
+  def column_type(field)
+    grid_class.driver.normalized_column_type(grid_class.scope, field)
   end
 end

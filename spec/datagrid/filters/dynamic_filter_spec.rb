@@ -24,22 +24,32 @@ describe Datagrid::Filters::DynamicFilter do
     report.condition = [:name, "=", ""]
     report.assets.should include(Entry.create!(:name => 'hello'))
   end
-  it "should support =~ operation" do
+  it "should support =~ operation on strings" do
     report.condition = [:name, "=~", "ell"]
     report.assets.should include(Entry.create!(:name => 'hello'))
     report.assets.should_not include(Entry.create!(:name => 'bye'))
   end
-  it "should support >= operation" do
+
+  it "should support =~ operation integers" do
+    report.condition = [:group_id, "=~", 2]
+    report.assets.should include(Entry.create!(:group_id => 2))
+    report.assets.should_not include(Entry.create!(:group_id => 1))
+    report.assets.should_not include(Entry.create!(:group_id => 3))
+  end
+
+  it "should support >= operation on integer" do
     report.condition = [:group_id, ">=", 2]
     report.assets.should include(Entry.create!(:group_id => 3))
     report.assets.should_not include(Entry.create!(:group_id => 1))
   end
-  it "should support <= operation" do
+
+  it "should support <= operation on integer" do
     report.condition = [:group_id, "<=", 2]
     report.assets.should include(Entry.create!(:group_id => 1))
     report.assets.should_not include(Entry.create!(:group_id => 3))
   end
-  it "should support <= operation" do
+
+  it "should support <= operation on integer with string value" do
     report.condition = [:group_id, "<=", '2']
     report.assets.should include(Entry.create!(:group_id => 1))
     report.assets.should include(Entry.create!(:group_id => 2))
