@@ -14,16 +14,19 @@ describe Datagrid::Filters::DynamicFilter do
     report.assets.should include(Entry.create!(:name => 'hello'))
     report.assets.should_not include(Entry.create!(:name => 'bye'))
   end
+
   it "should support >= operation" do
     report.condition = [:name, ">=", "d"]
     report.assets.should include(Entry.create!(:name => 'x'))
     report.assets.should include(Entry.create!(:name => 'd'))
     report.assets.should_not include(Entry.create!(:name => 'a'))
   end
+
   it "should blank value" do
     report.condition = [:name, "=", ""]
     report.assets.should include(Entry.create!(:name => 'hello'))
   end
+
   it "should support =~ operation on strings" do
     report.condition = [:name, "=~", "ell"]
     report.assets.should include(Entry.create!(:name => 'hello'))
@@ -87,7 +90,7 @@ describe Datagrid::Filters::DynamicFilter do
     report.assets.should_not include(Entry.create!(:created_at => DateTime.parse('1986-08-04 23:59:59')))
     report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-05 23:59:59')))
     report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-05 00:00:01')))
-    #TODO: investigate DB issue and uncomment this line
+    #TODO: investigate SQLite issue and uncomment this line
     #report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-05 00:00:00')))
     report.assets.should_not include(Entry.create!(:created_at => DateTime.parse('1986-08-06 23:59:59')))
   end
