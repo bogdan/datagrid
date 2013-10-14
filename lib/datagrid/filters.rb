@@ -64,7 +64,9 @@ module Datagrid
       #   
       # * <tt>:header</tt> - determines the header of the filter
       # * <tt>:default</tt> - the default filter value. Able to accept a <tt>Proc</tt> in case default should be recalculated
-      # * <tt>:multiple</tt> - determines if more than one option can be selected
+      # * <tt>:multiple</tt> -  if true multiple values can be assigned to this filter. 
+      #   By default multiple values are parsed from string using `,` separator. 
+      #   But you can specify a different separator as option value. Default: false.
       # * <tt>:allow_nil</tt> - determines if the value can be nil
       # * <tt>:allow_blank</tt> - determines if the value can be blank
       # * <tt>:before</tt> - determines the position of this filter, 
