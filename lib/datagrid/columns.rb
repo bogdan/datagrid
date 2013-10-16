@@ -24,6 +24,27 @@ module Datagrid
 
     module ClassMethods
 
+      ##
+      # :method: batch_size=
+      #
+      # :call-seq: batch_size=(size)
+      #
+      # Specify a default batch size when generating CSV or just data
+      # Default: 1000
+      #
+      #   self.batch_size = 500
+      #   # Disable batches
+      #   self.batch_size = nil
+      #
+
+      ##
+      # :method: batch_size
+      #
+      # :call-seq: batch_size
+      #
+      # Returns specified batch_size configuration variable
+      # See <tt>batch_size=</tt> for more information
+      #
 
       ##
       # :method: default_column_options=
