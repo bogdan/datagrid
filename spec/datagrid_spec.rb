@@ -53,19 +53,17 @@ describe SimpleReport do
     end
   end
 
-
   describe ".batch_size" do
-
     context "when not defined on class level" do
       it "returns nil" do
-        subject.batch_size.should be_nil
+        subject.batch_size.should == 1000
       end
     end
 
     context "when defined in the grid class" do
       subject do
         test_report do
-          batch_size 25
+          self.batch_size = 25
         end
       end
 

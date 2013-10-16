@@ -61,5 +61,15 @@ describe Datagrid::Drivers::Mongoid do
         end
       }.should raise_error(Datagrid::OrderUnsupported)
     end
+
+    it "should support batch_size" do
+      report = test_report do
+        scope { MongoidEntry }
+        self.batch_size = 1 
+        column(:name)
+      end
+
+      report.data.should == [["Name"], ["Main First"], ["Main Second"]]
+    end
   end
 end

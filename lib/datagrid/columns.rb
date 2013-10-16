@@ -15,6 +15,9 @@ module Datagrid
         class_attribute :default_column_options
         self.default_column_options = {}
 
+        class_attribute :batch_size
+        self.batch_size = 1000
+
       end
       base.send :include, InstanceMethods
     end # self.included
@@ -173,8 +176,7 @@ module Datagrid
       #
       #   * <tt>column_names</tt> - list of column names if you want to limit data only to specified columns
       def rows(*column_names)
-        options = batch_size ? { batch_size: batch_size } : {}
-        driver.batch_map(assets, options) do |asset|
+        map_with_batches do |asset|
           self.row_for(asset, *column_names)
         end
       end
@@ -205,7 +207,7 @@ module Datagrid
       #     MyGrid.new.data_hash # => [{:name => "One"}, {:name => "Two"}]
       #
       def data_hash
-        driver.batch_map(assets) do |asset|
+        map_with_batches do |asset|
           hash_for(asset)
         end
       end
@@ -294,6 +296,16 @@ module Datagrid
           self.class.format(value, &block)
         else
           super
+        end
+      end
+
+      protected
+
+      def map_with_batches(&block)
+        if batch_size && batch_size > 0
+          driver.batch_map(assets, batch_size, &block)
+        else
+          assets.map(&block)
         end
       end
 

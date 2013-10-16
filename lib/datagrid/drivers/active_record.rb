@@ -90,9 +90,9 @@ module Datagrid
         end
       end
 
-      def batch_map(scope, options = {}, &block)
+      def batch_map(scope, batch_size, &block)
         result = []
-        scope.find_each(options) do |record|
+        scope.find_each(batch_size ? { :batch_size => batch_size} : {}) do |record|
           result << yield(record)
         end
         result

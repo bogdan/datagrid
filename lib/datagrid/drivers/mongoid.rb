@@ -79,8 +79,17 @@ module Datagrid
         return :string
       end
 
-      def batch_map(scope, options = {}, &block)
-        scope.map(&block)
+      def batch_map(scope, batch_size, &block)
+        current_page = 0
+        result = []
+        loop do
+          batch = scope.skip(current_page * batch_size).limit(batch_size).to_a
+          return result if batch.empty?
+          scope.skip(current_page * batch_size).limit(batch_size).each do |item|
+            result << yield(item)
+          end
+          current_page+=1
+        end
       end
     end
   end

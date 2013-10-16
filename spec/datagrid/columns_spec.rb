@@ -183,12 +183,26 @@ describe Datagrid::Columns do
       report = test_report do
         scope { Entry }
         column :id
-        batch_size 25
+        self.batch_size = 25
       end
 
       fake_assets = double(:assets)
       report.should_receive(:assets) { fake_assets }
       fake_assets.should_receive(:find_each).with(batch_size: 25)
+      report.rows
+    end
+    it "should be able to disable batches" do
+      report = test_report do
+        scope { Entry }
+        column :id
+        self.batch_size = 0
+      end
+
+      fake_assets = double(:assets)
+
+      report.should_receive(:assets) { fake_assets }
+      fake_assets.should_receive(:map)
+      fake_assets.should_not_receive(:find_each)
       report.rows
     end
   end

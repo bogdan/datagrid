@@ -42,10 +42,6 @@ module Datagrid
         end
       end
 
-      def batch_size(number)
-        instance_variable_set :@batch_size, number
-      end
-
       def driver #:nodoc:
         @driver ||= Drivers::AbstractDriver.guess_driver(scope).new
       end
@@ -163,9 +159,6 @@ module Datagrid
         self.class.send :check_scope_defined!, message
       end
 
-      def batch_size
-        self.class.instance_variable_get :@batch_size
-      end
 
     end # InstanceMethods
   end
