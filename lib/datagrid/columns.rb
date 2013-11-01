@@ -107,6 +107,7 @@ module Datagrid
       #     Warning: using ruby to order large datasets is very unrecommended. 
       #     If set to true - datagrid will use column value to order by this column
       #     If block is given - datagrid will use value returned from block
+      #   * <tt>:mandatory</tt> - if true, column will never be hidden with #column_names selection
       #   * <tt>:url</tt> - a proc with one argument, pass this option to easily convert the value into an URL
       #   * <tt>:before</tt> - determines the position of this column, by adding it before the column passed here
       #   * <tt>:after</tt> - determines the position of this column, by adding it after the column passed here
