@@ -40,7 +40,7 @@ module Datagrid
         options[:multiple] = true
       end
       if filter.checkboxes?
-        filter.select(options).map do |element|
+        filter.select(object).map do |element|
           text, value = @template.send(:option_text_and_value, element)
           id = [object_name, filter.name, value.underscore].join('_')
           input = check_box(filter.name, options.merge(datagrid_extra_checkbox_options).reverse_merge(:id => id, :multiple => true), value, nil)
