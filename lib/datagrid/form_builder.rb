@@ -40,7 +40,7 @@ module Datagrid
         filter.select(object).map do |element|
           text, value = @template.send(:option_text_and_value, element)
           id = [object_name, filter.name, value].join('_').underscore
-          input = check_box(filter.name, datagrid_extra_checkbox_options.reverse_merge(:id => id, :multiple => true), value, nil)
+          input = check_box(filter.name, datagrid_extra_checkbox_options.reverse_merge(:id => id, :multiple => true), value.to_s, nil)
           label(filter.name, input + text, options.reverse_merge(:for => id))
         end.join("\n").html_safe
       else
