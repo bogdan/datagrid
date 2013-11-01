@@ -236,8 +236,8 @@ describe Datagrid::FormBuilder do
         let(:_filter) { :category }
         it { should equal_to_dom(
           '
-<label for="report_category_first"><input class="category enum_filter" id="report_category_first" name="report[category][]" type="checkbox" value="first" />first</label>
-<label for="report_category_second"><input class="category enum_filter" id="report_category_second" name="report[category][]" type="checkbox" value="second" />second</label>
+<label class="category enum_filter" for="report_category_first"><input id="report_category_first" name="report[category][]" type="checkbox" value="first" />first</label>
+<label class="category enum_filter" for="report_category_second"><input id="report_category_second" name="report[category][]" type="checkbox" value="second" />second</label>
 '
         )}
       end

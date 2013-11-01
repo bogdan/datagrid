@@ -36,17 +36,17 @@ module Datagrid
 
     def datagrid_enum_filter(attribute_or_filter, options = {})
       filter = datagrid_get_filter(attribute_or_filter)
-      if !options.has_key?(:multiple) && filter.multiple?
-        options[:multiple] = true
-      end
       if filter.checkboxes?
         filter.select(object).map do |element|
           text, value = @template.send(:option_text_and_value, element)
           id = [object_name, filter.name, value].join('_').underscore
-          input = check_box(filter.name, options.merge(datagrid_extra_checkbox_options).reverse_merge(:id => id, :multiple => true), value, nil)
-          label(filter.name, input + text, :for => id)
+          input = check_box(filter.name, datagrid_extra_checkbox_options.reverse_merge(:id => id, :multiple => true), value, nil)
+          label(filter.name, input + text, options.reverse_merge(:for => id))
         end.join("\n").html_safe
       else
+        if !options.has_key?(:multiple) && filter.multiple?
+          options[:multiple] = true
+        end
         select filter.name, filter.select(object) || [], {:include_blank => filter.include_blank, :prompt => filter.prompt, :include_hidden => false}, options
       end
     end
