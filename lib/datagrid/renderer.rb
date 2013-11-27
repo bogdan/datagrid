@@ -29,14 +29,14 @@ module Datagrid
     def form_for(grid, options = {})
       options[:method] ||= :get
       options[:html] ||= {}
-      options[:html][:class] ||= "datagrid-form #{html_class(grid)}"
+      options[:html][:class] ||= "datagrid-form #{@template.dom_class(grid)}"
       @template.render :partial => "datagrid/form", :locals => {:grid => grid, :options => options}
     end
 
     def table(grid, *args)
       options = args.extract_options!
       options[:html] ||= {}
-      options[:html][:class] ||= "datagrid #{html_class(grid)}"
+      options[:html][:class] ||= "datagrid #{@template.dom_class(grid)}"
       if options[:cycle]
         ::Datagrid::Utils.warn_once("datagrid_table cycle option is deprecated. Use css to style odd/even rows instead.")
       end
@@ -66,10 +66,6 @@ module Datagrid
 
     def order_for(grid, column)
       @template.render :partial => "datagrid/order_for", :locals => { :grid => grid, :column => column }
-    end
-
-    def html_class(grid)
-      grid.class.to_s.underscore.demodulize
     end
 
     def _safe(string)

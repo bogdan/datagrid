@@ -50,6 +50,17 @@ describe Datagrid::Helper do
         "table.datagrid.simple_report" => 1
       )
     end
+    it "should have namespaced grid class as html class on table" do
+      module ::Ns23
+        class TestGrid
+          include Datagrid
+          scope { Entry }
+        end
+      end
+      subject.datagrid_table(::Ns23::TestGrid.new).should match_css_pattern(
+        "table.datagrid.ns23_test_grid" => 1
+      )
+    end
     it "should return data table html" do
       datagrid_table = subject.datagrid_table(grid)
 
@@ -317,7 +328,7 @@ describe Datagrid::Helper do
       end
     end
     describe ".datagrid_form_for" do
-      it "should render ordering layout" do
+      it "should render form and filter inputs" do
         class FormForGrid
           include Datagrid
           scope { Entry }
@@ -332,7 +343,19 @@ describe Datagrid::Helper do
           "form input[name=commit][value=Search]" => 1
         )
       end
+      it "should support html classes for grid class with namespace" do
+        module ::Ns22
+          class TestGrid
+            include Datagrid
+            scope { Entry }
+          end
+        end
+        subject.datagrid_form_for(::Ns22::TestGrid.new, :url => "grid").should match_css_pattern(
+          "form.datagrid-form.ns22_test_grid" => 1,
+        )
+      end
     end
+
 
     describe ".datagrid_row" do
       let(:grid) do

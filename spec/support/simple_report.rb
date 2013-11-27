@@ -9,6 +9,9 @@ def test_report_class(&block)
   Class.new.tap do |klass|
     klass.class_eval do
       include Datagrid
+      def self.name
+        "TestGrid"
+      end
     end
     if block
       klass.class_eval(&block)
