@@ -110,15 +110,15 @@ module Datagrid
       options[:value] = filter.format(object[filter.name].try(type_method_map[type]))
       # In case of datagrid ranged filter
       # from and to input will have same id
-      options[:id] = if !options.key?(:id)
-                       # Rails provides it's own default id for all inputs
-                       # In order to prevent that we assign no id by default
-                       options[:id] = nil
-                     elsif options[:id].present?
-                       # If the id was given we prefix it
-                       # with from_ and to_ accordingly
-                       options[:id] = [type, options[:id]].join("_")
-                     end
+      if !options.key?(:id)
+        # Rails provides it's own default id for all inputs
+        # In order to prevent that we assign no id by default
+        options[:id] = nil
+      elsif options[:id].present?
+        # If the id was given we prefix it
+        # with from_ and to_ accordingly
+        options[:id] = [type, options[:id]].join("_")
+      end
       options
     end
 
