@@ -8,6 +8,9 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
     template "controller.rb.erb", "app/controllers/#{grid_controller_name.underscore}.rb"
     template "index.html.erb", "app/views/#{grid_controller_short_name}/index.html.erb"
     route("resources :#{grid_controller_short_name}")
+    in_root do
+      inject_into_file "app/assets/stylesheets/application.css", " *= require datagrid", {:before => %r{require_self}} # before all
+    end
   end
 
   def grid_class_name
