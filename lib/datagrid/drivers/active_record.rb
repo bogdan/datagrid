@@ -18,7 +18,7 @@ module Datagrid
         # We can only reveal it by checking if it respond to some specific
         # to ActiveRecord method like #scoped
         if scope.is_a?(Class) 
-          scope.scoped({})
+          Rails.version >= "4.0" ? scope.all : scope.scoped({})
         elsif scope.respond_to?(:scoped)
           scope.scoped
         else
