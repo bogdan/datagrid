@@ -37,6 +37,7 @@ module Datagrid
     def datagrid_enum_filter(attribute_or_filter, options = {})
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.checkboxes?
+        options = add_html_classes(options, 'checkboxes')
         filter.select(object).map do |element|
           text, value = @template.send(:option_text_and_value, element)
           id = [object_name, filter.name, value].join('_').underscore
