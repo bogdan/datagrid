@@ -457,5 +457,10 @@ describe Datagrid::FormBuilder do
         '<label class="foo" for="report_name">Name</label>'
       )
     end
+    it "should support block" do
+      view.datagrid_label(:name, :class => 'foo') { 'The Name' }.should equal_to_dom(
+        '<label class="foo" for="report_name">The Name</label>'
+      )
+    end
   end
 end
