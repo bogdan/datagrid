@@ -11,9 +11,9 @@ module Datagrid
     end
 
     # Returns a form label html for the corresponding filter name
-    def datagrid_label(filter_or_attribute, options = {})
+    def datagrid_label(filter_or_attribute, options = {}, &block)
       filter = datagrid_get_filter(filter_or_attribute)
-      self.label(filter.name, filter.header, options)
+      label(filter.name, filter.header, options, &block)
     end
 
     protected
