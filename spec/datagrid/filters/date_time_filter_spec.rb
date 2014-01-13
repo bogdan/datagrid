@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Datagrid::Filters::DateTimeFilter do
 
-  it "should support date range argument" do
+  it "should support datetime range argument" do
     e1 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 3, 0))
@@ -17,7 +17,7 @@ describe Datagrid::Filters::DateTimeFilter do
 
   {:active_record => Entry, :mongoid => MongoidEntry}.each do |orm, klass|
     describe "with orm #{orm}" do
-      describe "date to timestamp conversion" do
+      describe "timestamp to timestamp conversion" do
         let(:klass) { klass }
         subject do
           test_report(:created_at => _created_at) do
@@ -30,14 +30,14 @@ describe Datagrid::Filters::DateTimeFilter do
           klass.create(:created_at => date)
         end
 
-        context "when single date paramter given" do
+        context "when single datetime paramter given" do
           let(:_created_at) { DateTime.now }
           it { should include(entry_dated(_created_at))}
           it { should_not include(entry_dated(_created_at - 1.second))}
           it { should_not include(entry_dated(_created_at + 1.second))}
         end
 
-        context "when range date range given" do
+        context "when range datetime range given" do
           let(:_created_at) { [DateTime.now.beginning_of_day, DateTime.now.end_of_day] }
           it { should include(entry_dated(1.second.ago))}
           it { should include(entry_dated(Date.today.to_datetime))}
@@ -50,7 +50,7 @@ describe Datagrid::Filters::DateTimeFilter do
     end
   end
 
-  it "should support date range given as array argument" do
+  it "should support datetime range given as array argument" do
     e1 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 3, 0))
@@ -63,7 +63,7 @@ describe Datagrid::Filters::DateTimeFilter do
     report.assets.should_not include(e3)
   end
 
-  it "should support minimum date argument" do
+  it "should support minimum datetime argument" do
     e1 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 3, 0))
@@ -76,7 +76,7 @@ describe Datagrid::Filters::DateTimeFilter do
     report.assets.should include(e3)
   end
 
-  it "should support maximum date argument" do
+  it "should support maximum datetime argument" do
     e1 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 3, 0))
@@ -129,14 +129,14 @@ describe Datagrid::Filters::DateTimeFilter do
   end
 
 
-  context "when date format is configured" do
+  context "when datetime format is configured" do
     around(:each) do |example|
       with_datetime_format(format = "%m/%d/%Y %H:%M") do
         example.run
       end
     end
 
-    it "should have configurable date format" do
+    it "should have configurable datetime format" do
       report = test_report(:created_at => "10/01/2013 01:00") do
         scope  {Entry}
         filter(:created_at, :datetime)
@@ -144,7 +144,7 @@ describe Datagrid::Filters::DateTimeFilter do
       report.created_at.should == DateTime.new(2013,10,01,1,0)
     end
 
-    it "should support default explicit date" do
+    it "should support default explicit datetime" do
       report = test_report(:created_at => DateTime.parse("2013-10-01 01:00")) do
         scope  {Entry}
         filter(:created_at, :datetime)
