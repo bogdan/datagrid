@@ -8,6 +8,7 @@ module Datagrid
     require "datagrid/filters/boolean_enum_filter"
     require "datagrid/filters/boolean_filter"
     require "datagrid/filters/date_filter"
+    require "datagrid/filters/date_time_filter"
     require "datagrid/filters/default_filter"
     require "datagrid/filters/integer_filter"
     require "datagrid/filters/composite_filters"
@@ -17,6 +18,7 @@ module Datagrid
 
     FILTER_TYPES = {
       :date => Filters::DateFilter,
+      :datetime => Filters::DateTimeFilter,
       :string => Filters::StringFilter,
       :default => Filters::DefaultFilter,
       :eboolean => Filters::BooleanEnumFilter ,
@@ -52,7 +54,7 @@ module Datagrid
       # Defines new datagrid filter.
       # This method automatically generates <tt>attr_accessor</tt> for filter name
       # and adds it to the list of datagrid attributes.
-      # 
+      #
       # Arguments:
       #
       # * <tt>name</tt> - filter name
@@ -61,19 +63,19 @@ module Datagrid
       # * <tt>block</tt> - proc to apply the filter
       #
       # Available options:
-      #   
+      #
       # * <tt>:header</tt> - determines the header of the filter
       # * <tt>:default</tt> - the default filter value. Able to accept a <tt>Proc</tt> in case default should be recalculated
-      # * <tt>:multiple</tt> -  if true multiple values can be assigned to this filter. 
-      #   By default multiple values are parsed from string using `,` separator. 
+      # * <tt>:multiple</tt> -  if true multiple values can be assigned to this filter.
+      #   By default multiple values are parsed from string using `,` separator.
       #   But you can specify a different separator as option value. Default: false.
       # * <tt>:allow_nil</tt> - determines if the value can be nil
       # * <tt>:allow_blank</tt> - determines if the value can be blank
-      # * <tt>:before</tt> - determines the position of this filter, 
+      # * <tt>:before</tt> - determines the position of this filter,
       #   by adding it before the filter passed here (when using datagrid_form_for helper)
-      # * <tt>:after</tt> - determines the position of this filter, 
+      # * <tt>:after</tt> - determines the position of this filter,
       #   by adding it after the filter passed here (when using datagrid_form_for helper)
-      # * <tt>:dummy</tt> - if true, this filter will not be applied automatically 
+      # * <tt>:dummy</tt> - if true, this filter will not be applied automatically
       #   and will be just displayed in form. In case you may want to apply it manually.
       #
       # See: https://github.com/bogdan/datagrid/wiki/Filters for examples

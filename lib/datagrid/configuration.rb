@@ -8,6 +8,6 @@ module Datagrid
     yield(configuration)
   end
 
-  class Configuration < Struct.new(:date_formats)
+  class Configuration < Struct.new(:date_formats, :datetime_formats)
   end
 end

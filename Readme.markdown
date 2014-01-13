@@ -61,13 +61,13 @@ Basic grid api:
 
 ``` ruby
 report = SimpleReport.new(
-        :group_id => [1,2], :from_logins_count => 1, 
+        :group_id => [1,2], :from_logins_count => 1,
         :category => "first",
         :order => :group,
         :descending => true
 )
 
-report.assets # => Array of User instances: 
+report.assets # => Array of User instances:
               # SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count >= 1 AND users.category = 'first' ORDER BY groups.name DESC
 
 report.header # => ["Name", "Group", "Activated"]
@@ -118,6 +118,7 @@ Datagrid supports different type of filters including:
 * integer
 * float
 * date
+* datetime
 * boolean
 * eboolean - the select of "yes", "no" and any
 * enum
@@ -137,10 +138,10 @@ column(:activated, :header => "Active", :order => "activated", :after => :name) 
 end
 ```
 
-Some formatting options are also available. 
+Some formatting options are also available.
 Each column is sortable.
 
-[More about columns](https://github.com/bogdan/datagrid/wiki/Columns) 
+[More about columns](https://github.com/bogdan/datagrid/wiki/Columns)
 
 ### Front end
 
@@ -178,8 +179,8 @@ All advanced frontend things are described in:
 
 ## Self-Promotion
 
-Like datagrid? 
+Like datagrid?
 
-Follow the repository on [GitHub](https://github.com/bogdan/datagrid). 
+Follow the repository on [GitHub](https://github.com/bogdan/datagrid).
 
 Read [author blog](http://gusiev.com).
