@@ -1,4 +1,4 @@
-module Datagrid 
+module Datagrid
   module Utils # :nodoc:
     class << self
 
@@ -68,6 +68,24 @@ module Datagrid
         end
         return Date.parse(value) if value.is_a?(String)
         return value.to_date if value.respond_to?(:to_date)
+        value
+      rescue ::ArgumentError
+        nil
+      end
+
+      def parse_datetime(value)
+        return nil if value.blank?
+        return value if value.is_a?(Range)
+        if value.is_a?(String)
+          Array(Datagrid.configuration.datetime_formats).each do |format|
+            begin
+              return DateTime.strptime(value, format)
+            rescue ::ArgumentError
+            end
+          end
+        end
+        return DateTime.parse(value) if value.is_a?(String)
+        return value.to_datetime if value.respond_to?(:to_datetime)
         value
       rescue ::ArgumentError
         nil

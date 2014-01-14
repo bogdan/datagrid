@@ -16,6 +16,9 @@ en:
       date:
         range_separator:
           "<span class=\"separator date\"> - </span>"
+      datetime:
+        range_separator:
+          "<span class=\"separator datetime\"> - </span>"
 
       eboolean:
         "yes": "Yes"

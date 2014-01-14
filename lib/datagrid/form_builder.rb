@@ -29,6 +29,10 @@ module Datagrid
       datagrid_range_filter(:date, attribute_or_filter, options)
     end
 
+    def datagrid_date_time_filter(attribute_or_filter, options = {})
+      datagrid_range_filter(:datetime, attribute_or_filter, options)
+    end
+
     def datagrid_default_filter(attribute_or_filter, options = {})
       filter = datagrid_get_filter(attribute_or_filter)
       text_field filter.name, options.reverse_merge(:value => object.filter_value_as_string(filter))
