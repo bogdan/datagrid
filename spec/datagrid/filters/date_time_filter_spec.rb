@@ -1,20 +1,6 @@
 require 'spec_helper'
 
 describe Datagrid::Filters::DateTimeFilter do
-
-  it "should support datetime range argument" do
-    e1 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 1, 0))
-    e2 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 2, 0))
-    e3 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 3, 0))
-    report = test_report(:created_at => DateTime.new(2013, 1, 1, 1, 30)..DateTime.new(2013, 1, 1, 2, 30)) do
-      scope { Entry }
-      filter(:created_at, :datetime)
-    end
-    report.assets.should_not include(e1)
-    report.assets.should include(e2)
-    report.assets.should_not include(e3)
-  end
-
   {:active_record => Entry, :mongoid => MongoidEntry}.each do |orm, klass|
     describe "with orm #{orm}" do
       describe "timestamp to timestamp conversion" do
