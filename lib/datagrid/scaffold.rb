@@ -9,7 +9,16 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
     template "index.html.erb", "app/views/#{grid_controller_short_name}/index.html.erb"
     route("resources :#{grid_controller_short_name}")
     in_root do
-      inject_into_file "app/assets/stylesheets/application.css", " *= require datagrid", {:before => %r{require_self}} # before all
+      {
+        "css" => " *= require datagrid",
+        "css.sass" => " *= require datagrid",
+        "css.scss" => " *= require datagrid",
+      }.each do |extension, string|
+        file = "app/assets/stylesheets/application.#{extension}"
+        if File.exists?(Rails.root.join(file))
+          inject_into_file file, string + "\n", {:before => %r{.*require_self}} # before all
+        end
+      end
     end
   end
 

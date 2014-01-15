@@ -21,6 +21,7 @@ module Datagrid
     def datagrid_boolean_enum_filter(attribute_or_filter, options = {})
       datagrid_enum_filter(attribute_or_filter, options)
     end
+
     def datagrid_extended_boolean_filter(attribute_or_filter, options = {})
       datagrid_enum_filter(attribute_or_filter, options)
     end

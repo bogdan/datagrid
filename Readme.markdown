@@ -159,8 +159,8 @@ create  app/grids/skills_grid.rb
 create  app/controllers/skills_controller.rb
 create  app/views/skills/index.html.erb
 route  resources :skills
+insert  app/assets/stylesheet/application.css
 ```
-
 
 ### Customize Built-in partials
 
