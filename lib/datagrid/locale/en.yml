@@ -23,6 +23,11 @@ en:
       eboolean:
         "yes": "Yes"
         "no": "No"
+
+      xboolean:
+        "yes": "Yes"
+        "no": "No"
+
       dynamic:
         operations:
           ">=": "&ge;"

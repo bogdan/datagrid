@@ -10,12 +10,4 @@ class Datagrid::Filters::BooleanEnumFilter < Datagrid::Filters::EnumFilter #:nod
     super(report, attribute, options, &block)
   end
 
-  def apply(grid_object, scope, value)
-    super(grid_object, scope, value)
-  end
-
-  def to_boolean(value)
-    #TODO decide what to do with conversion
-  end
-
 end

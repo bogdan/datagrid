@@ -20,6 +20,9 @@ module Datagrid
     def datagrid_boolean_enum_filter(attribute_or_filter, options = {})
       datagrid_enum_filter(attribute_or_filter, options)
     end
+    def datagrid_extended_boolean_filter(attribute_or_filter, options = {})
+      datagrid_enum_filter(attribute_or_filter, options)
+    end
 
     def datagrid_boolean_filter(attribute_or_filter, options = {})
       check_box(datagrid_get_attribute(attribute_or_filter), options.reverse_merge(datagrid_extra_checkbox_options))

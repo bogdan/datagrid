@@ -38,8 +38,7 @@ class SimpleReport
   end
 
   filter(:category, :enum, :select => ["first", "second"])
-  filter(:disabled, :eboolean)
-  filter(:confirmed, :boolean)
+  filter(:disabled, :xboolean)
   filter(:group_id, :integer, :multiple => true)
   filter(:logins_count, :integer, :range => true)
   filter(:group_name, :string, :header => "Group") do |value|
@@ -120,7 +119,7 @@ Datagrid supports different type of filters including:
 * date
 * datetime
 * boolean
-* eboolean - the select of "yes", "no" and any
+* xboolean - the select of "yes", "no" and any
 * enum
 * string
 * dynamic
