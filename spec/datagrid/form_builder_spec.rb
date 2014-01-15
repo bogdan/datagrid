@@ -473,5 +473,10 @@ describe Datagrid::FormBuilder do
         '<label class="foo" for="report_name">The Name</label>'
       )
     end
+    it "should support explicit label" do
+      view.datagrid_label(:name, "The Name").should equal_to_dom(
+        '<label for="report_name">The Name</label>'
+      )
+    end
   end
 end
