@@ -40,6 +40,8 @@ class Datagrid::Columns::Column
         self.html_block = options[:html]
       end
     end
+    options[:if] = convert_option_to_proc(options[:if])
+    options[:unless] = convert_option_to_proc(options[:unless])
   end
 
   def data_value(model, grid)
@@ -98,6 +100,10 @@ class Datagrid::Columns::Column
     !! options[:mandatory]
   end
 
+  def visible?(grid)
+    (!options[:if] || (options[:if] && options[:if].call(grid))) && !options[:unless] || (options[:unless] && !options[:unless].call(grid))
+  end
+
   def inspect
     "#<Datagird::Columns::Column #{grid_class}##{name} #{options.inspect}>"
   end
@@ -143,4 +149,12 @@ class Datagrid::Columns::Column
     end
   end
 
+  private
+  def convert_option_to_proc(option)
+    if option.is_a?(Proc)
+      option
+    elsif option
+      proc {|object| object.send(option.to_sym) }
+    end
+  end
 end

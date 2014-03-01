@@ -82,6 +82,20 @@ describe Datagrid::Columns do
     it "should support csv export options" do
       subject.to_csv(:col_sep => ";").should == "Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n"
     end
+
+    it "should support hidding columns through if and unless" do
+      report = test_report do
+        scope {Entry}
+        column(:id, :if => :show?)
+        column(:name, :unless => proc {|grid| !grid.show? })
+
+        def show?
+          false
+        end
+      end
+      report.columns(:id).should == []
+      report.columns(:name).should == []
+    end
   end
 
   it "should support columns with model and report arguments" do

@@ -111,6 +111,8 @@ module Datagrid
       #   * <tt>:url</tt> - a proc with one argument, pass this option to easily convert the value into an URL
       #   * <tt>:before</tt> - determines the position of this column, by adding it before the column passed here
       #   * <tt>:after</tt> - determines the position of this column, by adding it after the column passed here
+      #   * <tt>:if</tt> - the column is shown if the reult of calling this argument is true
+      #   * <tt>:unless</tt> - the column is shown unless the reult of calling this argument is true
       #
       # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
       def column(name, options = {}, &block)
@@ -273,7 +275,7 @@ module Datagrid
       #   grid.columns # => id and name columns
       #   grid.columns(:id, :category) # => id and category column
       def columns(*args)
-        self.class.columns(*args)
+        self.class.columns(*args).select {|column| column.visible?(self)}
       end
 
       # Returns all columns that can be represented in plain data(non-html) way
