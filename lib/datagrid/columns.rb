@@ -317,6 +317,7 @@ module Datagrid
         if block_given?
           self.class.format(value, &block)
         else
+          # don't override Object#format method
           super
         end
       end
