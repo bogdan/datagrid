@@ -45,6 +45,7 @@ class Datagrid::Columns::Column
   end
 
   def data_value(model, grid)
+    raise "no data value for #{name} column" unless data?
     result = generic_value(model,grid)
     result.is_a?(ResponseFormat) ? result.data_value : result
   end

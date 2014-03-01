@@ -6,6 +6,9 @@ module Datagrid
       TRUTH = [true, 1, "1", "true", "yes", "on"]
 
       def booleanize(value)
+        if value.respond_to?(:downcase)
+          value = value.downcase
+        end
         TRUTH.include?(value)
       end
 

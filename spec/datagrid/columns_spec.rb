@@ -220,4 +220,26 @@ describe Datagrid::Columns do
       report.rows
     end
   end
+
+  describe ".data_row" do
+    it "should give access to column values via an object" do
+      grid = test_report do
+        scope  { Entry }
+        column(:id)
+        column(:name) do
+          name.capitalize
+        end
+        column(:actions, html: true) do 
+          "some link here"
+        end
+      end
+      entry = Entry.create!(name: 'hello')
+      row = grid.data_row(entry)
+      row.id.should == entry.id
+      row.name.should == "Hello"
+      proc {
+        row.actions
+      }.should raise_error
+    end
+  end
 end

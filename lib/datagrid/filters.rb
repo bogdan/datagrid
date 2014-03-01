@@ -6,6 +6,7 @@ module Datagrid
     require "datagrid/filters/base_filter"
     require "datagrid/filters/enum_filter"
     require "datagrid/filters/boolean_enum_filter"
+    require "datagrid/filters/extended_boolean_filter"
     require "datagrid/filters/boolean_filter"
     require "datagrid/filters/date_filter"
     require "datagrid/filters/date_time_filter"
@@ -22,6 +23,7 @@ module Datagrid
       :string => Filters::StringFilter,
       :default => Filters::DefaultFilter,
       :eboolean => Filters::BooleanEnumFilter ,
+      :xboolean => Filters::ExtendedBooleanFilter ,
       :boolean => Filters::BooleanFilter ,
       :integer => Filters::IntegerFilter,
       :enum => Filters::EnumFilter,
