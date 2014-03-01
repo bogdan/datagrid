@@ -25,6 +25,14 @@ end
 require 'rspec'
 require "logger"
 
+class DatagridTest < Rails::Application
+
+end
+
+if I18n.respond_to?(:enforce_available_locales)
+  I18n.enforce_available_locales = true
+end
+
 File.open('spec.log', "w").close
 TEST_LOGGER = Logger.new('spec.log')
 

@@ -11,13 +11,18 @@ module Datagrid
     end
 
     # Returns a form label html for the corresponding filter name
-    def datagrid_label(filter_or_attribute, options = {}, &block)
+    def datagrid_label(filter_or_attribute, options_or_text = {}, options = {}, &block)
       filter = datagrid_get_filter(filter_or_attribute)
-      label(filter.name, filter.header, options, &block)
+      text, options = options_or_text.is_a?(Hash) ? [filter.header, options_or_text] : [options_or_text, options]
+      label(filter.name, text, options, &block)
     end
 
     protected
     def datagrid_boolean_enum_filter(attribute_or_filter, options = {})
+      datagrid_enum_filter(attribute_or_filter, options)
+    end
+
+    def datagrid_extended_boolean_filter(attribute_or_filter, options = {})
       datagrid_enum_filter(attribute_or_filter, options)
     end
 

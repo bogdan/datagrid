@@ -16,7 +16,6 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     raise NotImplementedError, "#parse(value) suppose to be overwritten"
   end
 
-
   def unapplicable_value?(value)
     value.nil? ? !allow_nil? : value.blank? && !allow_blank?
   end
@@ -87,11 +86,12 @@ class Datagrid::Filters::BaseFilter #:nodoc:
   def default_filter_block
     filter = self
     lambda do |value, scope, grid|
-      filter.dummy? ? nil : filter.default_filter(value, scope, grid)
+      filter.default_filter(value, scope, grid)
     end
   end
 
   def default_filter(value, scope, grid)
+    return nil if dummy?
     driver = grid.driver
     if !driver.has_column?(scope, name) && driver.to_scope(scope, grid.columns).respond_to?(name)
       driver.to_scope(scope, grid.columns).send(name, value)

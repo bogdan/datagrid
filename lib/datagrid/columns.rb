@@ -321,6 +321,27 @@ module Datagrid
         end
       end
 
+      # Returns an object representing a table row.
+      # Allows to access column values
+      #
+      # Example:
+      # 
+      #  class MyGrid
+      #    scope { User }
+      #    column(:id)
+      #    column(:name)
+      #    column(:number_of_purchases) do |user|
+      #      user.purchases.count
+      #    end
+      #  end
+      #
+      #  row = MyGrid.new.data_row(User.last)
+      #  row.id # => user.id
+      #  row.number_of_purchases # => user.purchases.count
+      def data_row(asset)
+        ::Datagrid::Columns::DataRow.new(self, asset)
+      end
+
       protected
 
       def map_with_batches(&block)
@@ -333,5 +354,20 @@ module Datagrid
 
     end # InstanceMethods
 
+    class DataRow
+
+      def initialize(grid, model)
+        @grid = grid
+        @model = model
+      end
+
+      def method_missing(meth, *args, &blk)
+        if column = @grid.column_by_name(meth)
+          column.data_value(@model, @grid)
+        else
+          super
+        end
+      end
+    end
   end
 end

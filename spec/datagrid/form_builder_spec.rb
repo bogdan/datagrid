@@ -234,12 +234,23 @@ describe Datagrid::FormBuilder do
           end
         end
         let(:_filter) { :category }
-        it { should equal_to_dom(
-          '
+        if Rails.version >= "4.0"
+          it { should equal_to_dom(
+            '
 <label class="category enum_filter checkboxes" for="report_category_first"><input id="report_category_first" name="report[category][]" type="checkbox" value="first" />first</label>
 <label class="category enum_filter checkboxes" for="report_category_second"><input id="report_category_second" name="report[category][]" type="checkbox" value="second" />second</label>
-'
-        )}
+            '
+          )}
+        else
+          it { should equal_to_dom(
+            '
+<label class="category enum_filter checkboxes" for="report_category_first"><input name="report[category][]" type="hidden"><input id="report_category_first" name="report[category][]" type="checkbox" value="first" />first</label>
+<label class="category enum_filter checkboxes" for="report_category_second"><input name="report[category][]" type="hidden"><input id="report_category_second" name="report[category][]" type="checkbox" value="second" />second</label>
+            '
+          )}
+
+
+        end
       end
     end
 
@@ -460,6 +471,11 @@ describe Datagrid::FormBuilder do
     it "should support block" do
       view.datagrid_label(:name, :class => 'foo') { 'The Name' }.should equal_to_dom(
         '<label class="foo" for="report_name">The Name</label>'
+      )
+    end
+    it "should support explicit label" do
+      view.datagrid_label(:name, "The Name").should equal_to_dom(
+        '<label for="report_name">The Name</label>'
       )
     end
   end
