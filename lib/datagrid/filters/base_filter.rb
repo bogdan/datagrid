@@ -93,8 +93,8 @@ class Datagrid::Filters::BaseFilter #:nodoc:
 
   def default_filter(value, scope, grid)
     driver = grid.driver
-    if !driver.has_column?(scope, name) && driver.to_scope(scope).respond_to?(name)
-      driver.to_scope(scope).send(name, value)
+    if !driver.has_column?(scope, name) && driver.to_scope(scope, grid.columns).respond_to?(name)
+      driver.to_scope(scope, grid.columns).send(name, value)
     else
       default_filter_where(driver, scope, value)
     end

@@ -26,7 +26,7 @@ module Datagrid
         self.class.match?(scope)
       end
 
-      def to_scope(scope)
+      def to_scope(scope, columns = [])
         raise NotImplementedError
       end
 

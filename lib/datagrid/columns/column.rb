@@ -98,6 +98,10 @@ class Datagrid::Columns::Column
     !! options[:mandatory]
   end
 
+  def select
+    options[:select]
+  end
+
   def inspect
     "#<Datagird::Columns::Column #{grid_class}##{name} #{options.inspect}>"
   end
