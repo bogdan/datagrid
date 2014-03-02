@@ -63,6 +63,17 @@ describe Datagrid::FormBuilder do
       it { should equal_to_dom(
         '<input class="created_at date_filter" id="report_created_at" name="report[created_at]" size="30" type="text"/>'
       )}
+      context "when special date format specified" do
+        around(:each) do |example|
+          _grid.created_at = Date.parse('2012-01-02')
+          with_date_format do
+            example.run
+          end
+        end
+        it { should equal_to_dom(
+          '<input class="created_at date_filter" id="report_created_at" name="report[created_at]" size="30" type="text" value="01/02/2012"/>'
+        )}
+      end
     end
 
     context "with integer filter type and range option" do

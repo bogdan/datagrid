@@ -48,6 +48,7 @@ module Datagrid
 
       # Returns filter definition object by name
       def filter_by_name(attribute)
+        return attribute if attribute.is_a?(Datagrid::Filters::BaseFilter)
         self.filters.find do |filter|
           filter.name.to_sym == attribute.to_sym
         end
@@ -133,10 +134,14 @@ module Datagrid
       end
 
       # Returns string representation of filter value
-      def filter_value_as_string(filter)
+      def filter_value_as_string(name)
+        filter = filter_by_name(name)
         value = filter_value(filter)
-        value = value.is_a?(Array) ?  value.join(filter.separator) : value.to_s
-        value.blank? ? nil : value
+        if value.is_a?(Array) 
+          value.map {|v| filter.format(v) }.join(filter.separator)
+        else
+          filter.format(value)
+        end
       end
 
       # Returns filter object with the given name

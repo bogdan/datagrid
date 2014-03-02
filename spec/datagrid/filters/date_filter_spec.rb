@@ -7,7 +7,7 @@ describe Datagrid::Filters::DateFilter do
     e2 = Entry.create!(:created_at => 4.days.ago)
     e3 = Entry.create!(:created_at => 1.day.ago)
     report = test_report(:created_at => 5.day.ago..3.days.ago) do
-      scope { Entry } 
+      scope { Entry }
       filter(:created_at, :date)
     end
     report.assets.should_not include(e1)
@@ -21,7 +21,7 @@ describe Datagrid::Filters::DateFilter do
         let(:klass) { klass }
         subject do
           test_report(:created_at => _created_at) do
-            scope { klass } 
+            scope { klass }
             filter(:created_at, :date, :range => true)
           end.assets.to_a
         end
@@ -57,7 +57,7 @@ describe Datagrid::Filters::DateFilter do
     e2 = Entry.create!(:created_at => 4.days.ago)
     e3 = Entry.create!(:created_at => 1.day.ago)
     report = test_report(:created_at => [5.day.ago.to_date.to_s, 3.days.ago.to_date.to_s]) do
-      scope { Entry } 
+      scope { Entry }
       filter(:created_at, :date, :range => true)
     end
     report.assets.should_not include(e1)
@@ -70,7 +70,7 @@ describe Datagrid::Filters::DateFilter do
     e2 = Entry.create!(:created_at => 4.days.ago)
     e3 = Entry.create!(:created_at => 1.day.ago)
     report = test_report(:created_at => [5.day.ago.to_date.to_s, nil]) do
-      scope { Entry } 
+      scope { Entry }
       filter(:created_at, :date, :range => true)
     end
     report.assets.should_not include(e1)
@@ -83,7 +83,7 @@ describe Datagrid::Filters::DateFilter do
     e2 = Entry.create!(:created_at => 4.days.ago)
     e3 = Entry.create!(:created_at => 1.day.ago)
     report = test_report(:created_at => [nil, 3.days.ago.to_date.to_s]) do
-      scope { Entry } 
+      scope { Entry }
       filter(:created_at, :date, :range => true)
     end
     report.assets.should include(e1)
@@ -97,7 +97,7 @@ describe Datagrid::Filters::DateFilter do
     e2 = Entry.create!(:created_at => 4.days.ago)
     e3 = Entry.create!(:created_at => 1.day.ago)
     report = test_report(:created_at => (4.days.ago.to_date..4.days.ago.to_date)) do
-      scope { Entry } 
+      scope { Entry }
       filter(:created_at, :date, :range => true)
     end
     report.assets.should_not include(e1)
@@ -110,7 +110,7 @@ describe Datagrid::Filters::DateFilter do
     e2 = Entry.create!(:created_at => 4.days.ago)
     e3 = Entry.create!(:created_at => 1.day.ago)
     report = test_report(:created_at => (1.days.ago.to_date..7.days.ago.to_date)) do
-      scope { Entry } 
+      scope { Entry }
       filter(:created_at, :date, :range => true)
     end
     report.assets.should_not include(e1)
@@ -121,7 +121,7 @@ describe Datagrid::Filters::DateFilter do
 
   it "should support block" do
     report = test_report(:created_at => Date.today) do
-      scope { Entry } 
+      scope { Entry }
       filter(:created_at, :date, :range => true) do |value|
         where("created_at >= ?", value)
       end
@@ -129,7 +129,7 @@ describe Datagrid::Filters::DateFilter do
     report.assets.should_not include(Entry.create!(:created_at => 1.day.ago))
     report.assets.should include(Entry.create!(:created_at => DateTime.now))
   end
-  
+
 
   context "when date format is configured" do
     around(:each) do |example|
@@ -170,4 +170,15 @@ describe Datagrid::Filters::DateFilter do
     end
     report.created_at.should == [Date.new(2012, 01, 01), Date.new(2013, 01, 01)]
   end
+
+  it "should properly format date in filter_value_as_string" do
+    with_date_format do
+      report = test_report(:created_at => "2012-01-02") do
+        scope  {Entry}
+        filter(:created_at, :date)
+      end
+      report.filter_value_as_string(:created_at).should == "01/02/2012"
+    end
+  end
+
 end
