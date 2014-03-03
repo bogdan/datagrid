@@ -138,7 +138,7 @@ class Datagrid::Columns::Column
 
   def generic_value(model, grid)
     if self.data_block.arity >= 1
-      Datagrid::Utils.apply_args(model, grid, &data_block)
+      Datagrid::Utils.apply_args(model, grid, grid.data_row(model), &data_block)
     else
       model.instance_eval(&self.data_block)
     end

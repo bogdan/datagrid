@@ -228,4 +228,23 @@ describe Datagrid::Columns do
       }.should raise_error
     end
   end
+
+  describe "column value" do
+    it "should support conversion" do
+      group = Group.create!
+      Entry.create(:group => group)
+      Entry.create(:group => group)
+      grid = test_report do
+        scope { Group }
+        column(:entries_count) do |g|
+          g.entries.count
+        end
+        column(:odd_entries) do |_, _, row|
+          row.entries_count.odd?
+        end
+      end
+
+      grid.row_for(group).should == [2, false]
+    end
+  end
 end
