@@ -6,7 +6,7 @@ module Datagrid
         !Datagrid::Drivers::ActiveRecord.match?(scope) && scope.is_a?(::Array)
       end
 
-      def to_scope(scope)
+      def to_scope(scope, columns = [])
         scope
       end
 

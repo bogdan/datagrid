@@ -94,7 +94,7 @@ module Datagrid
 
       # Returns a scope(e.g ActiveRecord::Relation) with all applied filters
       def assets
-        driver.to_scope(scope)
+        driver.to_scope(scope, self.columns)
       end
 
 

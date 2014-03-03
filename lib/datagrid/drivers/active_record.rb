@@ -11,19 +11,26 @@ module Datagrid
         end
       end
 
-      def to_scope(scope)
-        return scope if scope.is_a?(::ActiveRecord::Relation)
+      def to_scope(scope, columns = [])
         # Model class or Active record association
         # ActiveRecord association class hides itself under an Array 
         # We can only reveal it by checking if it respond to some specific
         # to ActiveRecord method like #scoped
-        if scope.is_a?(Class) 
+        scope = if scope.is_a?(::ActiveRecord::Relation)
+          scope
+        elsif scope.is_a?(Class)
           Rails.version >= "4.0" ? scope.all : scope.scoped({})
         elsif scope.respond_to?(:scoped)
           scope.scoped
         else
           scope
         end
+        select_columns = columns.select(&:select)
+        if select_columns.present?
+          scope = scope.select("#{scope.quoted_table_name}.*")
+          select_columns.each {|column| scope = scope.select(column.select) }
+        end
+        scope
       end
 
       def where(scope, attribute, value)

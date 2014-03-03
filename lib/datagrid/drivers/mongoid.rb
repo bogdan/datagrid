@@ -11,7 +11,7 @@ module Datagrid
         end
       end
 
-      def to_scope(scope)
+      def to_scope(scope, columns = [])
         scope.where(nil)
       end
 
