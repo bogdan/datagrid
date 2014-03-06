@@ -92,6 +92,7 @@ module Datagrid
       # Arguments:
       #
       #   * <tt>name</tt> - column name
+      #   * <tt>query</tt> - a string representing the query to select this column (supports only ActiveRecord)
       #   * <tt>options</tt> - hash of options
       #   * <tt>block</tt> - proc to calculate a column value
       #
@@ -167,6 +168,10 @@ module Datagrid
     end # ClassMethods
 
     module InstanceMethods
+
+      def assets
+        driver.append_column_queries(super, columns.map(&:query).compact)
+      end
 
       # Returns <tt>Array</tt> of human readable column names. See also "Localization" section
       #

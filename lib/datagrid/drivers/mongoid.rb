@@ -4,14 +4,14 @@ module Datagrid
 
       def self.match?(scope)
         return false unless defined?(::Mongoid)
-        if scope.is_a?(Class) 
+        if scope.is_a?(Class)
           scope.ancestors.include?(::Mongoid::Document)
         else
           scope.is_a?(::Mongoid::Criteria)
         end
       end
 
-      def to_scope(scope, columns = [])
+      def to_scope(scope)
         scope.where(nil)
       end
 

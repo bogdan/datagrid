@@ -73,7 +73,7 @@ module Datagrid
         end
       end
 
-      # Returns a hash of grid attributes including filter values 
+      # Returns a hash of grid attributes including filter values
       # and ordering values
       def attributes
         result = {}
@@ -94,7 +94,7 @@ module Datagrid
 
       # Returns a scope(e.g ActiveRecord::Relation) with all applied filters
       def assets
-        driver.to_scope(scope, self.columns)
+        driver.to_scope(scope)
       end
 
 
@@ -120,17 +120,17 @@ module Datagrid
       end
 
       # Redefines scope at instance level
-      # 
+      #
       #   class MyGrid
       #     scope { Article.order('created_at desc') }
       #   end
-      # 
+      #
       #   grid = MyGrid.new
       #   grid.scope do |scope|
       #     scope.where(:author_id => current_user.id)
       #   end
-      #   grid.assets 
-      #       # => SELECT * FROM articles WHERE author_id = ? 
+      #   grid.assets
+      #       # => SELECT * FROM articles WHERE author_id = ?
       #       #    ORDER BY created_at desc
       #
       def scope(&block)

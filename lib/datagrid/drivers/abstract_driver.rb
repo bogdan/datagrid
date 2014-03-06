@@ -26,7 +26,7 @@ module Datagrid
         self.class.match?(scope)
       end
 
-      def to_scope(scope, columns = [])
+      def to_scope(scope)
         raise NotImplementedError
       end
 
@@ -53,7 +53,7 @@ module Datagrid
       def less_equal(scope, field, value)
         raise NotImplementedError
       end
-      
+
       def has_column?(scope, column_name)
         raise NotImplementedError
       end
@@ -80,6 +80,14 @@ module Datagrid
 
       def batch_map(scope, batch_size, &block)
         raise NotImplementedError
+      end
+
+      def append_column_queries(assets, columns)
+        if columns.present?
+          raise NotImplementedError
+        else
+          assets
+        end
       end
 
       protected

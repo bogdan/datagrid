@@ -16,9 +16,9 @@ describe Datagrid::Drivers::ActiveRecord do
     subject.to_scope(Group.create!.entries).should be_a(ActiveRecord::Relation)
   end
 
-  it "should support specifying select options in columns" do
-    Entry.create!(:group_id => 1)
-    a = subject.to_scope(Entry.group(:name), [Datagrid::Columns::Column.new(SimpleReport, :sum_group_id, 'sum(entries.group_id) sum_group_id')])
-    a.first.sum_group_id.should == 1
+  it "should support append_column_queries" do
+    scope = subject.append_column_queries(Entry.scoped, ['sum(entries.group_id) sum_group_id'])
+    scope.select_values.length.should == 2
+    scope.select_values.should == ["#{Entry.quoted_table_name}.*", 'sum(entries.group_id) sum_group_id']
   end
 end
