@@ -56,7 +56,7 @@ class Datagrid::Columns::Column
   end
 
   def header
-    self.options[:header] || 
+    self.options[:header] ||
       I18n.translate(self.name, :scope => "datagrid.#{self.grid_class.param_name}.columns", :default => self.name.to_s.humanize )
   end
 
@@ -86,22 +86,22 @@ class Datagrid::Columns::Column
 
   def order_desc
     return nil unless order
-    self.options[:order_desc]  
+    self.options[:order_desc]
   end
 
   def html?
     options[:html] != false
   end
-  
+
   def data?
     self.data_block != nil
   end
-  
+
   def mandatory?
     !! options[:mandatory]
   end
 
-  def visible?(grid)
+  def enabled?(grid)
     (!options[:if] || (options[:if] && options[:if].call(grid))) && !options[:unless] || (options[:unless] && !options[:unless].call(grid))
   end
 
