@@ -88,7 +88,7 @@ module Datagrid
       end
 
       # Defines new datagrid column
-      # 
+      #
       # Arguments:
       #
       #   * <tt>name</tt> - column name
@@ -96,15 +96,15 @@ module Datagrid
       #   * <tt>block</tt> - proc to calculate a column value
       #
       # Available options:
-      #   
+      #
       #   * <tt>:html</tt> - determines if current column should be present in html table and how is it formatted
-      #   * <tt>:order</tt> - determines if this column could be sortable and how. 
-      #     The value of order is explicitly passed to ORM ordering method. 
+      #   * <tt>:order</tt> - determines if this column could be sortable and how.
+      #     The value of order is explicitly passed to ORM ordering method.
       #     Ex: <tt>"created_at, id"</tt> for ActiveRecord, <tt>[:created_at, :id]</tt> for Mongoid
-      #   * <tt>:order_desc</tt> - determines a descending order for given column 
+      #   * <tt>:order_desc</tt> - determines a descending order for given column
       #     (only in case when <tt>:order</tt> can not be easily reversed by ORM)
-      #   * <tt>:order_by_value</tt> - used in case it is easier to perform ordering at ruby level not on database level. 
-      #     Warning: using ruby to order large datasets is very unrecommended. 
+      #   * <tt>:order_by_value</tt> - used in case it is easier to perform ordering at ruby level not on database level.
+      #     Warning: using ruby to order large datasets is very unrecommended.
       #     If set to true - datagrid will use column value to order by this column
       #     If block is given - datagrid will use value returned from block
       #   * <tt>:mandatory</tt> - if true, column will never be hidden with #column_names selection
@@ -113,13 +113,18 @@ module Datagrid
       #   * <tt>:after</tt> - determines the position of this column, by adding it after the column passed here
       #
       # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
-      def column(name, options = {}, &block)
+      def column(name, options_or_query = {}, options = {}, &block)
+        if options_or_query.is_a?(String)
+          query = options_or_query
+        else
+          options = options_or_query
+        end
         check_scope_defined!("Scope should be defined before columns")
         block ||= lambda do |model|
           model.send(name)
         end
         position = Datagrid::Utils.extract_position_from_options(columns_array, options)
-        column = Datagrid::Columns::Column.new(self, name, default_column_options.merge(options), &block)
+        column = Datagrid::Columns::Column.new(self, name, query, default_column_options.merge(options), &block)
         columns_array.insert(position, column)
       end
 
@@ -148,7 +153,7 @@ module Datagrid
             end
           end
         else
-          # Ruby Object#format exists. 
+          # Ruby Object#format exists.
           # We don't want to change the behaviour and overwrite it.
           super
         end
@@ -212,7 +217,7 @@ module Datagrid
         self.rows(*column_names).unshift(self.header(*column_names))
       end
 
-      # Return Array of Hashes where keys are column names and values are column values 
+      # Return Array of Hashes where keys are column names and values are column values
       # for each row in filtered datagrid relation.
       #
       # Example:
@@ -267,7 +272,7 @@ module Datagrid
       # Returns all columns selected in grid instance
       #
       # Examples:
-      # 
+      #
       #   MyGrid.new.columns # => all defined columns
       #   grid = MyGrid.new(:column_names => [:id, :name])
       #   grid.columns # => id and name columns
@@ -301,7 +306,7 @@ module Datagrid
       # Gives ability to have a different formatting for CSV and HTML column value.
       #
       # Example:
-      #   
+      #
       #   column(:name) do |model|
       #     format(model.name) do |value|
       #       content_tag(:strong, value)
@@ -309,7 +314,7 @@ module Datagrid
       #   end
       #
       #   column(:company) do |model|
-      #     format(model.company.name) do 
+      #     format(model.company.name) do
       #       render :partial => "company_with_logo", :locals => {:company => model.company }
       #     end
       #   end
@@ -325,7 +330,7 @@ module Datagrid
       # Allows to access column values
       #
       # Example:
-      # 
+      #
       #  class MyGrid
       #    scope { User }
       #    column(:id)

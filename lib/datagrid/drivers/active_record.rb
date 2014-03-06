@@ -4,16 +4,16 @@ module Datagrid
 
       def self.match?(scope)
         return false unless defined?(::ActiveRecord)
-        if scope.is_a?(Class) 
+        if scope.is_a?(Class)
           scope.ancestors.include?(::ActiveRecord::Base)
         else
-          scope.is_a?(::ActiveRecord::Relation) 
+          scope.is_a?(::ActiveRecord::Relation)
         end
       end
 
       def to_scope(scope, columns = [])
         # Model class or Active record association
-        # ActiveRecord association class hides itself under an Array 
+        # ActiveRecord association class hides itself under an Array
         # We can only reveal it by checking if it respond to some specific
         # to ActiveRecord method like #scoped
         scope = if scope.is_a?(::ActiveRecord::Relation)
@@ -25,10 +25,12 @@ module Datagrid
         else
           scope
         end
-        select_columns = columns.select(&:select)
-        if select_columns.present?
-          scope = scope.select("#{scope.quoted_table_name}.*")
-          select_columns.each {|column| scope = scope.select(column.select) }
+        query_columns = columns.map(&:query).compact
+        if query_columns.present?
+          if scope.select_values.empty?
+            scope = scope.select(Arel.respond_to?(:star) ? scope.klass.arel_table[Arel.star] : "#{scope.quoted_table_name}.*")
+          end
+          scope = scope.select(*query_columns)
         end
         scope
       end
@@ -104,7 +106,7 @@ module Datagrid
         end
         result
       end
-      
+
       protected
 
       def prefix_table_name(scope, field)
@@ -112,8 +114,8 @@ module Datagrid
       end
 
       def contains_predicate
-        defined?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) && 
-          ::ActiveRecord::Base.connection.is_a?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) ? 
+        defined?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) &&
+          ::ActiveRecord::Base.connection.is_a?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) ?
           'ilike' : 'like'
       end
 

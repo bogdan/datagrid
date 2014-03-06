@@ -17,8 +17,8 @@ describe Datagrid::Drivers::ActiveRecord do
   end
 
   it "should support specifying select options in columns" do
-    Entry.create!
-    a = subject.to_scope(Entry.group(:name), [Datagrid::Columns::Column.new(SimpleReport, :sum_id, {:select => 'sum(entries.id) sum_id'})])
-    a.first.sum_id.should == 1
+    Entry.create!(:group_id => 1)
+    a = subject.to_scope(Entry.group(:name), [Datagrid::Columns::Column.new(SimpleReport, :sum_group_id, 'sum(entries.group_id) sum_group_id')])
+    a.first.sum_group_id.should == 1
   end
 end
