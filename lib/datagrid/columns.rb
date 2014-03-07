@@ -170,7 +170,7 @@ module Datagrid
     module InstanceMethods
 
       def assets
-        driver.append_column_queries(super, columns.map(&:query).compact)
+        driver.append_column_queries(super, columns.select(&:query))
       end
 
       # Returns <tt>Array</tt> of human readable column names. See also "Localization" section
