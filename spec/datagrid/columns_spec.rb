@@ -92,6 +92,19 @@ describe Datagrid::Columns do
       end
       report.assets.first.sum_group_id.should == group.id
     end
+    it "should support hidding columns through if and unless" do
+      report = test_report do
+        scope {Entry}
+        column(:id, :if => :show?)
+        column(:name, :unless => proc {|grid| !grid.show? })
+
+        def show?
+          false
+        end
+      end
+      report.columns(:id).should == []
+      report.columns(:name).should == []
+    end
   end
 
   it "should support columns with model and report arguments" do
