@@ -15,5 +15,10 @@ describe Datagrid::Drivers::ActiveRecord do
     subject.to_scope(Entry.limit(5)).should be_a(ActiveRecord::Relation)
     subject.to_scope(Group.create!.entries).should be_a(ActiveRecord::Relation)
   end
-  
+
+  it "should support append_column_queries" do
+    scope = subject.append_column_queries(Entry.scoped, ['sum(entries.group_id) sum_group_id'])
+    scope.select_values.length.should == 2
+    scope.select_values.should == ["#{Entry.quoted_table_name}.*", 'sum(entries.group_id) sum_group_id']
+  end
 end

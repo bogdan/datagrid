@@ -4,26 +4,36 @@ module Datagrid
 
       def self.match?(scope)
         return false unless defined?(::ActiveRecord)
-        if scope.is_a?(Class) 
+        if scope.is_a?(Class)
           scope.ancestors.include?(::ActiveRecord::Base)
         else
-          scope.is_a?(::ActiveRecord::Relation) 
+          scope.is_a?(::ActiveRecord::Relation)
         end
       end
 
       def to_scope(scope)
         return scope if scope.is_a?(::ActiveRecord::Relation)
         # Model class or Active record association
-        # ActiveRecord association class hides itself under an Array 
+        # ActiveRecord association class hides itself under an Array
         # We can only reveal it by checking if it respond to some specific
         # to ActiveRecord method like #scoped
-        if scope.is_a?(Class) 
+        if scope.is_a?(Class)
           Rails.version >= "4.0" ? scope.all : scope.scoped({})
         elsif scope.respond_to?(:scoped)
           scope.scoped
         else
           scope
         end
+      end
+
+      def append_column_queries(assets, columns)
+        if columns.present?
+          if assets.select_values.empty?
+            assets = assets.select(Arel.respond_to?(:star) ? assets.klass.arel_table[Arel.star] : "#{assets.quoted_table_name}.*")
+          end
+          assets = assets.select(*columns)
+        end
+        assets
       end
 
       def where(scope, attribute, value)
@@ -97,7 +107,7 @@ module Datagrid
         end
         result
       end
-      
+
       protected
 
       def prefix_table_name(scope, field)
@@ -105,8 +115,8 @@ module Datagrid
       end
 
       def contains_predicate
-        defined?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) && 
-          ::ActiveRecord::Base.connection.is_a?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) ? 
+        defined?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) &&
+          ::ActiveRecord::Base.connection.is_a?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) ?
           'ilike' : 'like'
       end
 

@@ -34,14 +34,14 @@ module Datagrid
 
       def greater_equal(scope, field, value)
         scope.select do |object|
-          compare_value = object.send(field) 
+          compare_value = object.send(field)
           compare_value.respond_to?(:>=) && compare_value >= value
         end
       end
 
       def less_equal(scope, field, value)
         scope.select do |object|
-          compare_value = object.send(field) 
+          compare_value = object.send(field)
           compare_value.respond_to?(:<=) && compare_value <= value
         end
       end
@@ -51,7 +51,7 @@ module Datagrid
       end
 
       def is_timestamp?(scope, column_name)
-        has_column?(scope, column_name) && 
+        has_column?(scope, column_name) &&
           timestamp_class?(scope.first.send(column_name).class)
       end
 

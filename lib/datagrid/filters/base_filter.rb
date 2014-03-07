@@ -103,7 +103,7 @@ class Datagrid::Filters::BaseFilter #:nodoc:
   def format(value)
     value.nil? ? nil : value.to_s
   end
-  
+
   def dummy?
     options[:dummy]
   end

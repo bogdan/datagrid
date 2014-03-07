@@ -4,7 +4,7 @@ module Datagrid
 
       def self.match?(scope)
         return false unless defined?(::MongoMapper)
-        if scope.is_a?(Class) 
+        if scope.is_a?(Class)
           scope.ancestors.include?(::MongoMapper::Document)
         else
           scope.is_a?(::Plucky::Query)

@@ -31,7 +31,7 @@ describe Datagrid::Columns do
     it  "should generate header" do
       subject.header.should == ["Shipping date", "Group", "Name", "Access level", "Pet"]
     end
-    
+
     it "should return html_columns" do
       report = test_report do
         scope {Entry}
@@ -81,6 +81,16 @@ describe Datagrid::Columns do
 
     it "should support csv export options" do
       subject.to_csv(:col_sep => ";").should == "Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n"
+    end
+
+    it "should support defining a query for a column" do
+      report = test_report do
+        scope {Entry}
+        filter(:name)
+        column(:id)
+        column(:sum_group_id, 'sum(group_id) sum_group_id')
+      end
+      report.assets.first.sum_group_id.should == group.id
     end
   end
 
@@ -215,7 +225,7 @@ describe Datagrid::Columns do
         column(:name) do
           name.capitalize
         end
-        column(:actions, html: true) do 
+        column(:actions, html: true) do
           "some link here"
         end
       end

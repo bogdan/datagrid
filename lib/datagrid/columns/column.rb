@@ -25,9 +25,9 @@ class Datagrid::Columns::Column
     end
   end
 
-  attr_accessor :grid_class, :options, :data_block, :name, :html_block
+  attr_accessor :grid_class, :options, :data_block, :name, :html_block, :query
 
-  def initialize(grid_class, name, options = {}, &block)
+  def initialize(grid_class, name, query, options = {}, &block)
     self.grid_class = grid_class
     self.name = name.to_sym
     self.options = options
@@ -40,6 +40,7 @@ class Datagrid::Columns::Column
         self.html_block = options[:html]
       end
     end
+    self.query = query
   end
 
   def data_value(model, grid)
@@ -54,7 +55,7 @@ class Datagrid::Columns::Column
   end
 
   def header
-    self.options[:header] || 
+    self.options[:header] ||
       I18n.translate(self.name, :scope => "datagrid.#{self.grid_class.param_name}.columns", :default => self.name.to_s.humanize )
   end
 
@@ -84,17 +85,17 @@ class Datagrid::Columns::Column
 
   def order_desc
     return nil unless order
-    self.options[:order_desc]  
+    self.options[:order_desc]
   end
 
   def html?
     options[:html] != false
   end
-  
+
   def data?
     self.data_block != nil
   end
-  
+
   def mandatory?
     !! options[:mandatory]
   end
