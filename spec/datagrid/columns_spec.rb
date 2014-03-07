@@ -88,7 +88,7 @@ describe Datagrid::Columns do
         scope {Entry}
         filter(:name)
         column(:id)
-        column(:sum_group_id, 'sum(group_id) sum_group_id')
+        column(:sum_group_id, 'sum(group_id)')
       end
       report.assets.first.sum_group_id.should == group.id
     end

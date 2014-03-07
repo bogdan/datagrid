@@ -31,6 +31,7 @@ module Datagrid
           if assets.select_values.empty?
             assets = assets.select(Arel.respond_to?(:star) ? assets.klass.arel_table[Arel.star] : "#{assets.quoted_table_name}.*")
           end
+          columns = columns.map {|c| "#{c.query} AS #{c.name}"}
           assets = assets.select(*columns)
         end
         assets

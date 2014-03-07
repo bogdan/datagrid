@@ -17,8 +17,8 @@ describe Datagrid::Drivers::ActiveRecord do
   end
 
   it "should support append_column_queries" do
-    scope = subject.append_column_queries(Entry.scoped, ['sum(entries.group_id) sum_group_id'])
+    scope = subject.append_column_queries(Entry.scoped, [Datagrid::Columns::Column.new(SimpleReport, :sum_group_id, 'sum(entries.group_id)')])
     scope.select_values.length.should == 2
-    scope.select_values.should == ["#{Entry.quoted_table_name}.*", 'sum(entries.group_id) sum_group_id']
+    scope.select_values.should == ["#{Entry.quoted_table_name}.*", 'sum(entries.group_id) AS sum_group_id']
   end
 end
