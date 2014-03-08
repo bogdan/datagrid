@@ -83,28 +83,6 @@ describe Datagrid::Columns do
       subject.to_csv(:col_sep => ";").should == "Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n"
     end
 
-    it "should support defining a query for a column" do
-      report = test_report do
-        scope {Entry}
-        filter(:name)
-        column(:id)
-        column(:sum_group_id, 'sum(group_id)')
-      end
-      report.assets.first.sum_group_id.should == group.id
-    end
-    it "should support hidding columns through if and unless" do
-      report = test_report do
-        scope {Entry}
-        column(:id, :if => :show?)
-        column(:name, :unless => proc {|grid| !grid.show? })
-
-        def show?
-          false
-        end
-      end
-      report.columns(:id).should == []
-      report.columns(:name).should == []
-    end
   end
 
   it "should support columns with model and report arguments" do
@@ -139,6 +117,43 @@ describe Datagrid::Columns do
     child.column_by_name(:name).should_not be_nil
     child.column_by_name(:group_id).should_not be_nil
   end
+  it "should support defining a query for a column" do
+    report = test_report do
+      scope {Entry}
+      filter(:name)
+      column(:id)
+      column(:sum_group_id, 'sum(group_id)')
+    end
+    Entry.create!(:group => group)
+    report.assets.first.sum_group_id.should == group.id
+  end
+
+    it "should support post formatting for column defined with query" do
+      report = test_report do
+        scope {Group.joins(:entries).group("groups.id")}
+        filter(:name)
+        column(:entries_count, 'count(entries.id)') do |model|
+          format("(#{model.entries_count})") do |value|
+            content_tag(:span, value)
+          end
+        end
+      end
+      3.times { Entry.create!(group: group) }
+      report.rows.should == [["(3)"]]
+    end
+    it "should support hidding columns through if and unless" do
+      report = test_report do
+        scope {Entry}
+        column(:id, :if => :show?)
+        column(:name, :unless => proc {|grid| !grid.show? })
+
+        def show?
+          false
+        end
+      end
+      report.columns(:id).should == []
+      report.columns(:name).should == []
+    end
 
   describe ".column_names attributes" do
     let(:grid) do
