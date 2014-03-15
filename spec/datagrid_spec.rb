@@ -56,7 +56,7 @@ describe SimpleReport do
   describe ".batch_size" do
     context "when not defined on class level" do
       it "returns nil" do
-        subject.batch_size.should == 1000
+        subject.batch_size.should == nil
       end
     end
 

@@ -16,7 +16,6 @@ module Datagrid
         self.default_column_options = {}
 
         class_attribute :batch_size
-        self.batch_size = 1000
 
       end
       base.send :include, InstanceMethods
