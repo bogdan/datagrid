@@ -258,18 +258,11 @@ module Datagrid
       #   grid.to_csv(:col_sep => ';')
       def to_csv(*column_names)
         options = column_names.extract_options!
-        klass = if RUBY_VERSION >= "1.9"
-                  require 'csv'
-                  CSV
-                else
-                  require "fastercsv"
-                  FasterCSV
-                end
-        klass.generate(
+        csv_class.generate(
           {:headers => self.header(*column_names), :write_headers => true}.merge(options)
         ) do |csv|
-          self.rows(*column_names).each do |row|
-            csv << row
+          each_with_batches do |asset|
+            csv << row_for(asset, *column_names)
           end
         end
       end
@@ -357,10 +350,29 @@ module Datagrid
       protected
 
       def map_with_batches(&block)
+        result = []
+        each_with_batches do |asset|
+          result << block.call(asset)
+        end
+        result
+      end
+
+      def each_with_batches(&block)
         if batch_size && batch_size > 0
-          driver.batch_map(assets, batch_size, &block)
+          driver.batch_each(assets, batch_size, &block)
         else
-          assets.map(&block)
+          assets.each(&block)
+        end
+      end
+
+
+      def csv_class
+        if RUBY_VERSION >= "1.9"
+          require 'csv'
+          CSV
+        else
+          require "fastercsv"
+          FasterCSV
         end
       end
 

@@ -239,7 +239,7 @@ describe Datagrid::Columns do
       fake_assets = double(:assets)
 
       report.should_receive(:assets) { fake_assets }
-      fake_assets.should_receive(:map)
+      fake_assets.should_receive(:each)
       fake_assets.should_not_receive(:find_each)
       report.rows
     end

@@ -65,8 +65,8 @@ module Datagrid
         []
       end
 
-      def batch_map(scope, batch_size, &block)
-        scope.map(&block)
+      def batch_each(scope, batch_size, &block)
+        scope.each(&block)
       end
     end
   end
