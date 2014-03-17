@@ -247,7 +247,7 @@ describe Datagrid::FormBuilder do
           end
         end
         let(:_filter) { :category }
-        if true || Rails.version >= "4.0"
+        if Rails.version >= "4.1"
           it { should equal_to_dom(
             '
 <label class="category enum_filter checkboxes" for="report_category_first"><input id="report_category_first" name="report[category][]" type="checkbox" value="first" />first</label>
