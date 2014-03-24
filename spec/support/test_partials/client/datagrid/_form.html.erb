@@ -1,0 +1,13 @@
+<%= form_for grid, options do |f| -%>
+  <p>Namespaced form partial.</p>
+  <% grid.filters.each do |filter| %>
+    <div class="datagrid-filter filter">
+      <%= f.datagrid_label filter %>
+      <%= f.datagrid_filter filter %>
+    </div>
+  <% end %>
+  <div class="datagrid-actions">
+    <%= f.submit I18n.t("datagrid.form.search").html_safe, :class => "datagrid-submit" %>
+    <%= link_to I18n.t('datagrid.form.reset').html_safe, url_for(grid.to_param => {}), :class => "datagrid-reset" %>
+  </div>
+<% end -%>

@@ -30,7 +30,7 @@ module Datagrid
       options[:method] ||= :get
       options[:html] ||= {}
       options[:html][:class] ||= "datagrid-form #{@template.dom_class(grid)}"
-      @template.render :partial => "datagrid/form", :locals => {:grid => grid, :options => options}
+      _render_partial('form', options[:partials], {:grid => grid, :options => options})
     end
 
     def table(grid, *args)
@@ -47,29 +47,50 @@ module Datagrid
         assets = assets.paginate(paginate)
       end
 
-      @template.render :partial => "datagrid/table", :locals => {:grid => grid, :options => options, :assets => assets}
+      _render_partial('table', options[:partials],
+                      {
+                        :grid => grid,
+                        :options => options,
+                        :assets => assets
+                      })
     end
 
     def header(grid, options = {})
       options[:order] = true unless options.has_key?(:order)
 
-      @template.render :partial => "datagrid/head", :locals => {:grid => grid, :options => options}
+      _render_partial('head', options[:partials],
+                      { :grid => grid, :options => options })
     end
 
     def rows(grid, assets, options = {})
       result = assets.map do |asset|
-        @template.render :partial => "datagrid/row", :locals => {:grid => grid, :options => options, :asset => asset}
+        _render_partial('row', options[:partials],
+                        {
+                          :grid => grid,
+                          :options => options,
+                          :asset => asset
+                        })
       end.join
 
       _safe(result)
     end
 
-    def order_for(grid, column)
-      @template.render :partial => "datagrid/order_for", :locals => { :grid => grid, :column => column }
+    def order_for(grid, column, options = {})
+      _render_partial('order_for', options[:partials],
+                      { :grid => grid, :column => column })
     end
+
+    private
 
     def _safe(string)
       string.respond_to?(:html_safe) ? string.html_safe : string
+    end
+
+    def _render_partial(partial_name, partials_path, locals = {})
+      @template.render({
+        :partial => File.join(partials_path || 'datagrid', partial_name),
+        :locals => locals
+      })
     end
   end
 end

@@ -1,4 +1,5 @@
 <tr>
+  <p>Namespaced head partial.</p>
   <% grid.html_columns(*options[:columns]).each do |column| %>
     <th class="<%= datagrid_column_classes(grid, column) %>">
       <%= column.header %>
