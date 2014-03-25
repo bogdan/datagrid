@@ -128,6 +128,26 @@ describe Datagrid::Helper do
       end
     end
 
+    context 'with partials attribute' do
+      let(:grid) do
+        test_report do
+          scope { Entry }
+          column(:name)
+          column(:category)
+        end
+      end
+
+      it 'renders namespaced table partial' do
+        rendered_partial = subject.datagrid_table(grid, [entry], {
+                                    :partials => 'client/datagrid'
+                                    })
+        expect(rendered_partial).to include 'Namespaced table partial.'
+        expect(rendered_partial).to include 'Namespaced row partial.'
+        expect(rendered_partial).to include 'Namespaced head partial.'
+        expect(rendered_partial).to include 'Namespaced order_for partial.'
+      end
+    end
+
 
     describe ".datagrid_rows" do
       it "should support urls" do
@@ -308,7 +328,7 @@ describe Datagrid::Helper do
             "td.name" => 1
           )
         end
-    end
+      end
     end
 
     describe ".datagrid_order_for" do
@@ -328,6 +348,13 @@ describe Datagrid::Helper do
       end
     end
     describe ".datagrid_form_for" do
+      it 'returns namespaced partial if partials options is passed' do
+        rendered_form = subject.datagrid_form_for(grid, {
+          :url => '',
+          :partials => 'client/datagrid'
+        })
+        expect(rendered_form).to include 'Namespaced form partial.'
+      end
       it "should render form and filter inputs" do
         class FormForGrid
           include Datagrid

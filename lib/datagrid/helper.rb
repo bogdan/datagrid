@@ -24,6 +24,8 @@ module Datagrid
     # * <tt>:columns</tt> - Array of column names to display. 
     #   Used in case when same grid class is used in different places 
     #   and needs different columns. Default: all defined columns.
+    # * <tt>:partials</tt> - Path for partials lookup.
+    #   Default: 'datagrid'.
     def datagrid_table(report, *args)
       datagrid_renderer.table(report, *args)
     end
@@ -34,7 +36,8 @@ module Datagrid
     #
     # * <tt>:order</tt> - display ordering controls built-in into header
     #   Default: true
-    #     
+    # * <tt>:partials</tt> - Path for partials lookup.
+    #   Default: 'datagrid'.
     def datagrid_header(grid, options = {})
       datagrid_renderer.header(grid, options)
     end
@@ -46,8 +49,13 @@ module Datagrid
     end
 
     # Renders ordering controls for the given column name
-    def datagrid_order_for(grid, column)
-      datagrid_renderer.order_for(grid, column)
+    #
+    # Supported options:
+    #
+    # * <tt>:partials</tt> - Path for partials lookup.
+    #   Default: 'datagrid'.
+    def datagrid_order_for(grid, column, options = {})
+      datagrid_renderer.order_for(grid, column, options)
     end
 
     # Renders HTML for for grid with all filters inputs and lables defined in it
