@@ -4,9 +4,21 @@ require "action_view"
 module Datagrid
   module Helper
 
-    # Format an value from datagrid column with given name and for given model
-    def datagrid_format_value(report, column_name, model)
-      datagrid_renderer.format_value(report, column_name, model)
+    # Returns individual cell value from the given grid, column name and model
+    # Allows to render custom HTML layout for grid data
+    #
+    #   <ul>
+    #     <% @grid.columns.each do |column|
+    #       <li><%= column.header %>: <%= datagrid_value(@grid, column.name, @resource %></li>
+    #     <% end %>
+    #   </ul>
+    #
+    def datagrid_value(grid, column_name, model)
+      datagrid_renderer.format_value(grid, column_name, model)
+    end
+
+    def datagrid_format_value(grid, column_name, model) #:nodoc:
+      datagrid_value(grid, column_name, model)
     end
 
     # Renders html table with columns defined in grid class.
@@ -26,8 +38,8 @@ module Datagrid
     #   and needs different columns. Default: all defined columns.
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
-    def datagrid_table(report, *args)
-      datagrid_renderer.table(report, *args)
+    def datagrid_table(grid, *args)
+      datagrid_renderer.table(grid, *args)
     end
 
     # Renders HTML table header for given grid instance using columns defined in it
@@ -44,8 +56,16 @@ module Datagrid
 
 
     # Renders HTML table rows using given grid definition using columns defined in it
-    def datagrid_rows(report, assets, options = {})
-      datagrid_renderer.rows(report, assets, options)
+    #
+    # Supported options:
+    #
+    # * <tt>:columns</tt> - Array of column names to display. 
+    #   Used in case when same grid class is used in different places 
+    #   and needs different columns. Default: all defined columns.
+    # * <tt>:partials</tt> - Path for partials lookup.
+    #   Default: 'datagrid'.
+    def datagrid_rows(grid, assets, options = {})
+      datagrid_renderer.rows(grid, assets, options)
     end
 
     # Renders ordering controls for the given column name
@@ -59,6 +79,12 @@ module Datagrid
     end
 
     # Renders HTML for for grid with all filters inputs and lables defined in it
+    #
+    # Supported options:
+    #
+    # * <tt>:partials</tt> - Path for form partial lookup.
+    #   Default: 'datagrid'.
+    # * All options supported by Rails <tt>form_for</tt> helper
     def datagrid_form_for(grid, options = {})
       datagrid_renderer.form_for(grid, options)
     end
@@ -91,7 +117,7 @@ module Datagrid
 
       def method_missing(method, *args, &blk)
         if column = @grid.column_by_name(method)
-          @context.datagrid_format_value(@grid, column, @asset)
+          @context.datagrid_value(@grid, column, @asset)
         else
           super
         end

@@ -420,7 +420,7 @@ describe Datagrid::Helper do
     end
   end
 
-  describe ".datagrid_format_value" do
+  describe ".datagrid_value" do
     it "should format value by column name" do
       report = test_report do
         scope {Entry}
@@ -428,7 +428,7 @@ describe Datagrid::Helper do
           "<b>#{e.name}</b>"
         end
       end
-      subject.datagrid_format_value(report, :name, entry).should == "<b>Star</b>"
+      subject.datagrid_value(report, :name, entry).should == "<b>Star</b>"
     end
     it "should support format in column" do
       report = test_report do
@@ -439,7 +439,7 @@ describe Datagrid::Helper do
           end
         end
       end
-      subject.datagrid_format_value(report, :name, entry).should == "<a href=\"/profile\">Star</a>"
+      subject.datagrid_value(report, :name, entry).should == "<a href=\"/profile\">Star</a>"
     end
   end
 end
