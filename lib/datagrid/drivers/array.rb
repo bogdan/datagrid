@@ -1,6 +1,6 @@
 module Datagrid
   module Drivers
-    class Array < AbstractDriver
+    class Array < AbstractDriver #:nodoc:
 
       def self.match?(scope)
         !Datagrid::Drivers::ActiveRecord.match?(scope) && scope.is_a?(::Array)

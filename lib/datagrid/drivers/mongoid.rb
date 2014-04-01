@@ -1,6 +1,6 @@
 module Datagrid
   module Drivers
-    class Mongoid < AbstractDriver
+    class Mongoid < AbstractDriver #:nodoc:
 
       def self.match?(scope)
         return false unless defined?(::Mongoid)

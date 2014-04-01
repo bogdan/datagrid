@@ -1,6 +1,6 @@
 module Datagrid
   module Drivers
-    class MongoMapper < AbstractDriver
+    class MongoMapper < AbstractDriver #:nodoc:
 
       def self.match?(scope)
         return false unless defined?(::MongoMapper)

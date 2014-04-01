@@ -1,6 +1,6 @@
 module Datagrid
   module Drivers
-    class ActiveRecord < AbstractDriver
+    class ActiveRecord < AbstractDriver #:nodoc:
 
       def self.match?(scope)
         return false unless defined?(::ActiveRecord)

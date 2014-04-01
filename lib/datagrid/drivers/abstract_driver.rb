@@ -1,6 +1,6 @@
 module Datagrid
   module Drivers
-    class AbstractDriver
+    class AbstractDriver #:nodoc:
 
       TIMESTAMP_CLASSES = [DateTime, Time, ActiveSupport::TimeWithZone]
 
