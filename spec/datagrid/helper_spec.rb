@@ -128,6 +128,38 @@ describe Datagrid::Helper do
       end
     end
 
+    context "with html_attributes as a Hash" do
+      let(:grid) do
+        test_report do
+          scope { Entry }
+          column(:name, :html_attributes => {:rowspan => 2})
+        end
+      end
+
+      it "should output only given column names" do
+        subject.datagrid_table(grid, [entry]).should match_css_pattern(
+          "table.datagrid th.name" => 1,
+          "table.datagrid td.name[rowspan='2']" => 1
+        )
+      end
+    end
+
+    context "with html_attributes as a Proc" do
+      let(:grid) do
+        test_report do
+          scope { Entry }
+          column(:name, :html_attributes => lambda {|m| { "data-name" => m.name } })
+        end
+      end
+
+      it "should output only given column names" do
+        subject.datagrid_table(grid, [entry]).should match_css_pattern(
+          "table.datagrid th.name" => 1,
+          "table.datagrid td.name[data-name='Star']" => 1
+        )
+      end
+    end
+
     context 'with partials attribute' do
       let(:grid) do
         test_report do

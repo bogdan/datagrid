@@ -17,6 +17,20 @@ module Datagrid
       datagrid_renderer.format_value(grid, column_name, model)
     end
 
+    def datagrid_td_tag grid, column, model, &block
+      td_options = { :class => datagrid_column_classes(grid, column) }
+      if column.options[:html_attributes]
+        html_attributes = if column.options[:html_attributes].is_a? Proc
+          column.options[:html_attributes].call(model)
+        else
+          column.options[:html_attributes]
+        end
+
+        td_options.merge!(html_attributes)
+      end
+      content_tag :td, td_options, &block
+    end
+
     def datagrid_format_value(grid, column_name, model) #:nodoc:
       datagrid_value(grid, column_name, model)
     end
