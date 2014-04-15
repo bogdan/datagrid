@@ -1,7 +1,7 @@
 <tr class="<%= options[:cycle] && cycle(*options[:cycle]) %>">
   <p>Namespaced row partial.</p>
   <% grid.html_columns(*options[:columns]).each do |column| %>
-    <%= datagrid_td_tag(grid, column) do %>
+    <%= datagrid_td_tag(grid, column, asset) do %>
       <%= datagrid_value(grid, column, asset) %>
     <% end %>
   <% end %>
