@@ -17,6 +17,11 @@ module Datagrid
       datagrid_renderer.format_value(grid, column_name, model)
     end
 
+    def datagrid_td_tag grid, column, &block
+      content = block_given? ? capture(&block) : ''
+      "<td class=\"#{datagrid_column_classes(grid, column)}\">#{content}</td>".html_safe
+    end
+
     def datagrid_format_value(grid, column_name, model) #:nodoc:
       datagrid_value(grid, column_name, model)
     end
