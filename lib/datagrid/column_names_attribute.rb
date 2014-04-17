@@ -3,9 +3,6 @@ module Datagrid
     extend ActiveSupport::Concern
 
     included do
-      class_attribute :columns_array
-      self.columns_array = []
-
       datagrid_attribute :column_names do |names|
         names = Array(names).reject(&:blank?)
         if names.reject(&:blank?).blank?

@@ -17,6 +17,9 @@ module Datagrid
 
         class_attribute :batch_size
 
+        class_attribute :columns_array
+        self.columns_array = []
+
       end
       base.send :include, InstanceMethods
     end # self.included
