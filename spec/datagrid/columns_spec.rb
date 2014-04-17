@@ -312,7 +312,7 @@ describe Datagrid::Columns do
     end 
 
     let(:basic_grid) { modified_grid.class.new }
-    let!(:entry) { Entry.create!(:name => "Hello", :category => 'First') }
+    let!(:entry) { Entry.create!(:name => "Hello", :category => 'first') }
 
     it "should have correct columns" do
       modified_grid.columns.size.should == 2
@@ -341,5 +341,21 @@ describe Datagrid::Columns do
       end
       modified_grid.rows.should == [[entry.id, "Hello", 'First']]
     end
+
+    it "should support column_names accessor" do
+      modified_grid.column_names = [:name]
+      modified_grid.rows.should == [['Hello']]
+      modified_grid.column_names = [:id]
+      modified_grid.rows.should == [[entry.id]]
+    end
+    it "should support column_names accessor with mandatory columns" do
+      modified_grid.column(:category, :mandatory => true)
+      modified_grid.column_names = [:name]
+      modified_grid.rows.should == [['Hello', 'first']]
+      basic_grid.column_names = [:id]
+      basic_grid.rows.should == [[entry.id]]
+    end
+    
   end
+
 end

@@ -45,12 +45,12 @@ module Datagrid
     # Returns a list of columns with <tt>:mandatory => true</tt> option
     # If no mandatory columns specified than all of them considered mandatory
     def mandatory_columns
-      self.class.columns.select(&:mandatory?)
+      columns_array.select(&:mandatory?)
     end
 
     # Returns a list of columns without <tt>:mandatory => true</tt> option
     def optional_columns
-      self.class.columns - mandatory_columns
+      columns_array - mandatory_columns
     end
 
     protected
@@ -74,7 +74,7 @@ module Datagrid
     end
 
     def columns_visibility_enabled?
-      self.class.columns.any? do |column|
+      columns_array.any? do |column|
         column.options.key?(:mandatory)
       end
     end
