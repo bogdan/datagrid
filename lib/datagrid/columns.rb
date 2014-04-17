@@ -75,7 +75,7 @@ module Datagrid
       # All column definistion are returned by default
       # You can limit the output with only columns you need like:
       #
-      #   grid.columns(:id, :name)
+      #   GridClass.columns(:id, :name)
       #
       # Supported options:
       #
