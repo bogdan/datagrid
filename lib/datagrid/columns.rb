@@ -12,7 +12,7 @@ module Datagrid
 
         include Datagrid::Core
 
-        class_attribute :default_column_options
+        class_attribute :default_column_options, :instance_writer => false
         self.default_column_options = {}
 
         class_attribute :batch_size
@@ -81,12 +81,7 @@ module Datagrid
       #
       # * :data - if true returns only non-html columns. Default: false.
       def columns(*args)
-        options = args.extract_options!
-        args.compact!
-        args.map!(&:to_sym)
-        columns_array.select do |column|
-          (!options[:data] || column.data?) && (!options[:html] || column.html?) && (column.mandatory? || args.empty? || args.include?(column.name))
-        end
+        filter_columns(columns_array, *args)
       end
 
       # Defines new datagrid column
@@ -119,25 +114,12 @@ module Datagrid
       #
       # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
       def column(name, options_or_query = {}, options = {}, &block)
-        if options_or_query.is_a?(String)
-          query = options_or_query
-        else
-          options = options_or_query
-        end
-        check_scope_defined!("Scope should be defined before columns")
-        block ||= lambda do |model|
-          model.send(name)
-        end
-        position = Datagrid::Utils.extract_position_from_options(columns_array, options)
-        column = Datagrid::Columns::Column.new(self, name, query, default_column_options.merge(options), &block)
-        columns_array.insert(position, column)
+        define_column(columns_array, name, options_or_query, options, &block)
       end
 
       # Returns column definition with given name
       def column_by_name(name)
-        self.columns.find do |col|
-          col.name.to_sym == name.to_sym
-        end
+        find_column_by_name(columns_array, name)
       end
 
       # Returns an array of all defined column names
@@ -167,6 +149,36 @@ module Datagrid
       def inherited(child_class) #:nodoc:
         super(child_class)
         child_class.columns_array = self.columns_array.clone
+      end
+
+      def filter_columns(columns, *args) #:nodoc:
+        options = args.extract_options!
+        args.compact!
+        args.map!(&:to_sym)
+        columns.select do |column|
+          (!options[:data] || column.data?) && (!options[:html] || column.html?) && (column.mandatory? || args.empty? || args.include?(column.name))
+        end
+      end
+
+      def find_column_by_name(columns,name) #:nodoc:
+        columns.find do |col|
+          col.name.to_sym == name.to_sym
+        end
+      end
+
+      def define_column(columns, name, options_or_query = {}, options = {}, &block) #:nodoc:
+        if options_or_query.is_a?(String)
+          query = options_or_query
+        else
+          options = options_or_query
+        end
+        check_scope_defined!("Scope should be defined before columns")
+        block ||= lambda do |model|
+          model.send(name)
+        end
+        position = Datagrid::Utils.extract_position_from_options(columns, options)
+        column = Datagrid::Columns::Column.new(self, name, query, default_column_options.merge(options), &block)
+        columns.insert(position, column)
       end
 
     end # ClassMethods
@@ -280,7 +292,7 @@ module Datagrid
       #   grid.columns # => id and name columns
       #   grid.columns(:id, :category) # => id and category column
       def columns(*args)
-        self.class.columns(*args).select {|column| column.enabled?(self)}
+        self.class.filter_columns(columns_array, *args).select {|column| column.enabled?(self)} 
       end
 
       # Returns all columns that can be represented in plain data(non-html) way
@@ -301,9 +313,8 @@ module Datagrid
 
       # Finds a column definition by name
       def column_by_name(name)
-        self.class.column_by_name(name)
+        self.class.find_column_by_name(columns, name)
       end
-
 
       # Gives ability to have a different formatting for CSV and HTML column value.
       #
@@ -348,6 +359,15 @@ module Datagrid
       #  row.number_of_purchases # => user.purchases.count
       def data_row(asset)
         ::Datagrid::Columns::DataRow.new(self, asset)
+      end
+
+      def column(name, options_or_query = {}, options = {}, &block) #:nodoc:
+        self.class.define_column(columns_array, name, options_or_query, options, &block)
+      end
+
+      def initialize(*) #:nodoc:
+        self.columns_array = self.class.columns_array.clone
+        super
       end
 
       protected

@@ -243,6 +243,21 @@ describe Datagrid::Columns do
       fake_assets.should_not_receive(:find_each)
       report.rows
     end
+    
+    it "should support instance level batch size" do
+      grid = test_report do
+        scope {Entry}
+        column :id
+        self.batch_size = 25
+      end
+      grid.batch_size = 0
+      fake_assets = double(:assets)
+
+      grid.should_receive(:assets) { fake_assets }
+      fake_assets.should_receive(:each)
+      fake_assets.should_not_receive(:find_each)
+      grid.rows
+    end
   end
 
   describe ".data_row" do
@@ -283,6 +298,48 @@ describe Datagrid::Columns do
       end
 
       grid.row_for(group).should == [2, false]
+    end
+  end
+
+  describe "instance level column definition" do
+    let(:modified_grid) do
+      grid = test_report do
+        scope { Entry }
+        column(:id)
+      end
+      grid.column(:name)
+      grid
+    end 
+
+    let(:basic_grid) { modified_grid.class.new }
+    let!(:entry) { Entry.create!(:name => "Hello", :category => 'First') }
+
+    it "should have correct columns" do
+      modified_grid.columns.size.should == 2
+      basic_grid.class.columns.size.should == 1
+      basic_grid.columns.size.should == 1
+    end
+
+    it "should give correct header" do
+      modified_grid.header.should == ["Id", "Name"]
+      basic_grid.header.should == ["Id"]
+    end
+
+    it "should give correct rows" do
+      modified_grid.rows.should == [[entry.id, 'Hello']]
+      basic_grid.rows.should == [[entry.id]]
+    end
+
+    it "should support possitioning" do
+      modified_grid.column(:category, :before => :name)
+      modified_grid.header.should == ["Id", "Category", "Name"]
+    end
+
+    it "should support columns block" do
+      modified_grid.column(:category) do
+        category.capitalize
+      end
+      modified_grid.rows.should == [[entry.id, "Hello", 'First']]
     end
   end
 end
