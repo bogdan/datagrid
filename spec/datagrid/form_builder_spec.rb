@@ -14,7 +14,6 @@ describe Datagrid::FormBuilder do
 
   let(:template) { ActionView::Base.new}
   let(:view) { ActionView::Helpers::FormBuilder.new(:report, _grid, template, {}, Proc.new {|f| })}
-  subject { view }
 
 
   describe ".datagrid_filter" do
@@ -28,6 +27,7 @@ describe Datagrid::FormBuilder do
     subject do
       view.datagrid_filter(_filter, _filter_options)
     end
+
     let(:_filter_options) { {} }
     context "with default filter type" do
       let(:_grid) {
@@ -391,6 +391,31 @@ describe Datagrid::FormBuilder do
       end
 
       it { should equal_to_dom(expected_html) }
+    end
+    context "with column_names_filter default given as symbols" do
+      let(:_grid) do
+        test_report() do
+          scope {Entry}
+
+          column_names_filter(:default => [:id, :name], :checkboxes => true)
+
+          column(:id)
+          column(:name)
+          column(:category)
+        end       
+      end
+      let(:_filter) { :column_names }
+      let(:expected_html) do
+        <<DOM
+<label class="column_names enum_filter checkboxes" for="report_column_names_id"><input name="report[column_names][]" type="hidden"><input checked id="report_column_names_id" name="report[column_names][]" type="checkbox" value="id">Id</label>
+<label class="column_names enum_filter checkboxes" for="report_column_names_name"><input name="report[column_names][]" type="hidden"><input checked id="report_column_names_name" name="report[column_names][]" type="checkbox" value="name">Name</label>
+<label class="column_names enum_filter checkboxes" for="report_column_names_category"><input name="report[column_names][]" type="hidden"><input id="report_column_names_category" name="report[column_names][]" type="checkbox" value="category">Category</label>
+DOM
+      end
+
+      it do
+        should equal_to_dom(expected_html)
+      end
     end
 
     context "with dynamic filter" do
