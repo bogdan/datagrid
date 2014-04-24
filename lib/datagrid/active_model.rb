@@ -2,7 +2,7 @@
 module Datagrid
 
   # Required to be ActiveModel compatible
-  module ActiveModel
+  module ActiveModel #:nodoc:
   
     def self.included(base)
       base.extend         ClassMethods

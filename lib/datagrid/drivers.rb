@@ -6,6 +6,6 @@ require "datagrid/drivers/mongo_mapper"
 
 
 module Datagrid
-  module Drivers
+  module Drivers # :nodoc:
   end
 end

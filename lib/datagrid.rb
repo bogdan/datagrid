@@ -24,7 +24,6 @@ module Datagrid
   autoload :Engine
 
   def self.included(base)
-    base.extend         ClassMethods
     base.class_eval do
 
       include ::Datagrid::Core
@@ -36,9 +35,6 @@ module Datagrid
 
     end
   end # self.included
-
-  module ClassMethods
-  end # ClassMethods
 
   class ConfigurationError < StandardError; end
   class ArgumentError < ::ArgumentError; end
