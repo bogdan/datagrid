@@ -50,7 +50,10 @@ module Datagrid
         filter.select(object).map do |element|
           text, value = @template.send(:option_text_and_value, element)
           id = [object_name, filter.name, value].join('_').underscore
-          input = check_box(filter.name, datagrid_extra_checkbox_options.reverse_merge(:id => id, :multiple => true), value.to_s, nil)
+          html_options = datagrid_extra_checkbox_options.reverse_merge(
+            :id => id, :multiple => true, :checked => enum_checkbox_checked?(filter, value)
+          )
+          input = check_box(filter.name, html_options, value.to_s, nil)
           label(filter.name, input + text, options.reverse_merge(:for => id))
         end.join("\n").html_safe
       else
@@ -58,6 +61,17 @@ module Datagrid
           options[:multiple] = true
         end
         select filter.name, filter.select(object) || [], {:include_blank => filter.include_blank, :prompt => filter.prompt, :include_hidden => false}, options
+      end
+    end
+
+    def enum_checkbox_checked?(filter, option_value)
+      current_value = object.send(filter.name)
+      if current_value.respond_to?(:include?)
+        # Typecast everything to string
+        # to remove difference between String and Symbol
+        current_value.map(&:to_s).include?(option_value.to_s)
+      else
+        current_value.to_s == option_value.to_s
       end
     end
 
