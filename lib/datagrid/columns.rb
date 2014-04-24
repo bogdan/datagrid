@@ -156,6 +156,29 @@ module Datagrid
         end
       end
 
+      # Allows dynamic columns definition, that could not be defined at class level
+      #
+      #   class MerchantsGrid
+      #
+      #     scope { Merchant }
+      #
+      #     column(:name)
+      #
+      #     dynamic do
+      #       PurchaseCategory.all.each do |category|
+      #         column(:"#{category.name.underscore}_sales") do |merchant|
+      #           merchant.purchases.where(:category_id => category.id).count
+      #         end
+      #       end
+      #     end
+      #   end
+      #
+      #   grid = MerchantsGrid.new
+      #   grid.data # => [
+      #             #      [ "Name",   "Swimwear Sales", "Sportswear Sales", ... ]
+      #             #      [ "Reebok", 2083382,            8382283,          ... ]
+      #             #      [ "Nike",   8372283,            18734783,         ... ]
+      #             #    ]
       def dynamic(&block)
         previous_block = dynamic_block
         self.dynamic_block = proc {
@@ -388,8 +411,7 @@ module Datagrid
 
       def initialize(*) #:nodoc:
         self.columns_array = self.class.columns_array.clone
-        z = self
-        z.instance_eval(&dynamic_block) if dynamic_block
+        instance_eval(&dynamic_block) if dynamic_block
         super
       end
 
