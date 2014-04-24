@@ -2,6 +2,7 @@
 module Datagrid
 
   # Required to be ActiveModel compatible
+  # @private
   module ActiveModel #:nodoc:
   
     def self.included(base)
