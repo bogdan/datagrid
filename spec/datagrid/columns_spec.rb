@@ -355,7 +355,28 @@ describe Datagrid::Columns do
       basic_grid.column_names = [:id]
       basic_grid.rows.should == [[entry.id]]
     end
-    
+
+    it "should respect column availability criteria" do
+      modified_grid.column(:category, :if => proc { false })
+      modified_grid.columns.map(&:name).should == [:id, :name]
+    end
+  end
+
+  describe 'dynamic columns' do
+    it "should work" do
+      grid = test_report do
+        scope {Entry} 
+        column(:id)
+        dynamic {
+          column(:name)
+          column(:category)
+        }
+      end
+
+      grid.columns.map(&:name).should == [:id, :name, :category]
+      grid.class.columns.map(&:name).should == [:id]
+
+    end
   end
 
 end

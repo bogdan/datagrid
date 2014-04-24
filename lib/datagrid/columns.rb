@@ -20,6 +20,8 @@ module Datagrid
         class_attribute :columns_array
         self.columns_array = []
 
+        class_attribute :dynamic_block, :instance_writer => false
+
       end
       base.send :include, InstanceMethods
     end # self.included
@@ -152,6 +154,14 @@ module Datagrid
           # We don't want to change the behaviour and overwrite it.
           super
         end
+      end
+
+      def dynamic(&block)
+        previous_block = dynamic_block
+        self.dynamic_block = proc {
+          instance_eval(&previous_block) if previous_block
+          instance_eval(&block)
+        }
       end
 
       def inherited(child_class) #:nodoc:
@@ -378,6 +388,8 @@ module Datagrid
 
       def initialize(*) #:nodoc:
         self.columns_array = self.class.columns_array.clone
+        z = self
+        z.instance_eval(&dynamic_block) if dynamic_block
         super
       end
 
