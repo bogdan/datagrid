@@ -131,6 +131,14 @@ module Datagrid
         Datagrid::Columns::Column::ResponseFormat.new(&block)
       end
 
+      # Formats column value for HTML.
+      # Helps to distinguish formatting as plain data and HTML
+      #
+      #   column(:name) do |model|
+      #     format(model.name) do |value|
+      #       content_tag(:strong, value)
+      #     end
+      #   end
       def format(value, &block)
         if block_given?
           respond_to do |f|
@@ -160,12 +168,6 @@ module Datagrid
         end
       end
 
-      def find_column_by_name(columns,name) #:nodoc:
-        columns.find do |col|
-          col.name.to_sym == name.to_sym
-        end
-      end
-
       def define_column(columns, name, options_or_query = {}, options = {}, &block) #:nodoc:
         if options_or_query.is_a?(String)
           query = options_or_query
@@ -179,6 +181,12 @@ module Datagrid
         position = Datagrid::Utils.extract_position_from_options(columns, options)
         column = Datagrid::Columns::Column.new(self, name, query, default_column_options.merge(options), &block)
         columns.insert(position, column)
+      end
+
+      def find_column_by_name(columns,name) #:nodoc:
+        columns.find do |col|
+          col.name.to_sym == name.to_sym
+        end
       end
 
     end # ClassMethods
@@ -361,6 +369,9 @@ module Datagrid
         ::Datagrid::Columns::DataRow.new(self, asset)
       end
 
+      # Defines a column at instance level
+      #
+      # See Datagrid::Columns::ClassMethods#column for more info
       def column(name, options_or_query = {}, options = {}, &block) #:nodoc:
         self.class.define_column(columns_array, name, options_or_query, options, &block)
       end
@@ -387,7 +398,6 @@ module Datagrid
           assets.each(&block)
         end
       end
-
 
       def csv_class
         if RUBY_VERSION >= "1.9"
