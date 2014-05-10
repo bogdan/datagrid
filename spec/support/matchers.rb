@@ -4,12 +4,9 @@ def equal_to_dom(text)
   EqualToDom.new(text)
 end
 
-
-
 def match_css_pattern(pattern)
   CssPattern.new(pattern)
 end
-
 
 class EqualToDom
 
