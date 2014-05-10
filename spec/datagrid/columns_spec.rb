@@ -375,6 +375,9 @@ describe Datagrid::Columns do
 
       grid.columns.map(&:name).should == [:id, :name, :category]
       grid.class.columns.map(&:name).should == [:id]
+
+      grid.column_by_name(:id).should_not be_nil
+      grid.column_by_name(:name).should_not be_nil
     end
   end
 
