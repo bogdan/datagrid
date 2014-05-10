@@ -5,29 +5,9 @@ def equal_to_dom(text)
 end
 
 
-def include_dom(text)
-  IncludeDom.new(text)
-end
 
 def match_css_pattern(pattern)
   CssPattern.new(pattern)
-end
-
-
-class IncludeDom
-  def initialize(expectation)
-    @expectation = Nokogiri::HTML::DocumentFragment.parse(expectation.strip).to_s
-  end
-
-  def matches?(text)
-    @matcher = Nokogiri::HTML::DocumentFragment.parse(text.strip).to_s
-    @matcher == @expectation
-  end
-
-  def failure_message
-    "Expected dom \n#{@matcher.inspect}\n to include \n#{@expectation.inspect}\n, but it wasn't"
-  end
-  
 end
 
 
@@ -45,6 +25,10 @@ class EqualToDom
 
   def failure_message
     "Expected dom \n#{@matcher}\n to match \n#{@expectation}\n, but it wasn't"
+  end
+
+  def description
+    "Expecting dom \n#{@matcher}\n to match \n#{@expectation}\n"
   end
 
   private
