@@ -39,6 +39,12 @@ describe Datagrid::ColumnNamesAttribute do
     subject.row_for(entry).should == ["hello", "greeting"]
   end
 
+  it "should find any column by name" do
+    subject.column_by_name(:id).should_not be_nil
+    subject.column_by_name(:name).should_not be_nil
+    subject.column_by_name(:category).should_not be_nil
+  end
+
 
   context "when default option is passed to column_names_filter" do
     let(:column_names_filter_options) do

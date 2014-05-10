@@ -146,6 +146,7 @@ describe Datagrid::Columns do
         scope {Entry}
         column(:id, :if => :show?)
         column(:name, :unless => proc {|grid| !grid.show? })
+        column(:category)
 
         def show?
           false
@@ -153,6 +154,7 @@ describe Datagrid::Columns do
       end
       report.columns(:id).should == []
       report.columns(:name).should == []
+      report.available_columns.map(&:name).should == [:category]
     end
 
   describe ".column_names attributes" do
@@ -356,13 +358,18 @@ describe Datagrid::Columns do
       basic_grid.rows.should == [[entry.id]]
     end
 
+    it "should support available columns" do
+      modified_grid.column(:category, :mandatory => true)
+      modified_grid.available_columns.map(&:name).should == [:id, :name, :category]
+    end
+
     it "should respect column availability criteria" do
       modified_grid.column(:category, :if => proc { false })
       modified_grid.columns.map(&:name).should == [:id, :name]
     end
   end
 
-  describe 'dynamic columns' do
+  describe 'dynamic helper' do
     it "should work" do
       grid = test_report do
         scope {Entry} 

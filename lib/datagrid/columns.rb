@@ -354,7 +354,7 @@ module Datagrid
 
       # Finds a column definition by name
       def column_by_name(name)
-        self.class.find_column_by_name(columns, name)
+        self.class.find_column_by_name(columns_array, name)
       end
 
       # Gives ability to have a different formatting for CSV and HTML column value.
@@ -413,6 +413,27 @@ module Datagrid
         self.columns_array = self.class.columns_array.clone
         instance_eval(&dynamic_block) if dynamic_block
         super
+      end
+
+      # Returns all columns available for current grid configuration
+      #   
+      #   class MyGrid
+      #     filter(:search)
+      #     column(:id)
+      #     column(:name, :mandatory => true)
+      #     column(:search_match, :if => proc {|grid| grid.search.present? }
+      #   end
+      #
+      #   grid = MyGrid.new
+      #   grid.columns # => [ <#Column:name> ]
+      #   grid.available_columns # => [ <#Column:id>, <#Column:name> ]
+      #   grid.search = "keyword"
+      #   grid.available_columns # => [ <#Column:id>, <#Column:name>, <#Column:search_match> ] 
+      #
+      def available_columns
+        columns_array.select do |column|
+          column.enabled?(self)
+        end
       end
 
       protected
