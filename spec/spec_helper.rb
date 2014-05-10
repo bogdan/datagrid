@@ -1,5 +1,9 @@
 require 'rubygems'
 require 'bundler'
+require 'mongoid'
+require 'mongo_mapper'
+
+
 
 begin
   Bundler.setup(:default, :development)
@@ -35,7 +39,26 @@ end
 
 File.open('spec.log', "w").close
 TEST_LOGGER = Logger.new('spec.log')
+NO_MONGO = ENV['NO_MONGO']
 
+begin
+  Mongoid.from_hash({
+    "host" => "localhost",
+    "database" =>"datagrid_mongoid",
+    "autocreate_indexes" => true,
+    "logger" => nil,
+  })
+  MongoMapper.connection = Mongo::Connection.new('localhost', 27017)
+  MongoMapper.database = "datagrid_mongo_mapper"
+
+rescue Mongo::ConnectionFailure
+  message = "Didn't find mongodb at localhost:27017."
+  if NO_MONGO
+    warn("MONGODB WARNING: #{message}. Skipping Mongoid and Mongomapper tests.")
+  else
+    raise "#{message}. Run with NO_MONGO=true env variable to skip mongodb tests"
+  end
+end
 
 RSpec.configure do |config|
 
@@ -44,11 +67,19 @@ RSpec.configure do |config|
     #TODO better database truncation
     Group.delete_all
     Entry.delete_all
-    MongoidEntry.delete_all
-    MongoMapperEntry.delete_all
+    unless NO_MONGO
+      MongoidEntry.delete_all
+      MongoMapperEntry.delete_all
+    end
 
   end
 
+  config.treat_symbols_as_metadata_keys_with_true_values = true
+
+  if NO_MONGO
+    config.filter_run_excluding :mongoid => true
+    config.filter_run_excluding :mongomapper => true
+  end
 
 end
 

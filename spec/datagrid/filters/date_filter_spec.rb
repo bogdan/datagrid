@@ -16,7 +16,7 @@ describe Datagrid::Filters::DateFilter do
   end
 
   {:active_record => Entry, :mongoid => MongoidEntry}.each do |orm, klass|
-    describe "with orm #{orm}" do
+    describe "with orm #{orm}", orm => true do
       describe "date to timestamp conversion" do
         let(:klass) { klass }
         subject do
