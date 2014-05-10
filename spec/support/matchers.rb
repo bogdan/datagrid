@@ -25,7 +25,7 @@ class EqualToDom
   end
 
   def description
-    "Expecting dom \n#{@matcher}\n to match \n#{@expectation}\n"
+    "equal to dom #{@expectation[0..20]}"
   end
 
   private
@@ -81,5 +81,9 @@ class CssPattern
 
   def negative_failure_message
     "Expected do not match dom pattern. But it was"
+  end
+
+  def description
+    "match dom pattern"
   end
 end
