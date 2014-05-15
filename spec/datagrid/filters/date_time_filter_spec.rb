@@ -44,9 +44,9 @@ describe Datagrid::Filters::DateTimeFilter do
       scope { Entry }
       filter(:created_at, :datetime, :range => true)
     end
-    report.assets.should_not include(e1)
-    report.assets.should include(e2)
-    report.assets.should_not include(e3)
+    expect(report.assets).not_to include(e1)
+    expect(report.assets).to include(e2)
+    expect(report.assets).not_to include(e3)
   end
 
   it "should support minimum datetime argument" do
@@ -57,9 +57,9 @@ describe Datagrid::Filters::DateTimeFilter do
       scope { Entry }
       filter(:created_at, :datetime, :range => true)
     end
-    report.assets.should_not include(e1)
-    report.assets.should include(e2)
-    report.assets.should include(e3)
+    expect(report.assets).not_to include(e1)
+    expect(report.assets).to include(e2)
+    expect(report.assets).to include(e3)
   end
 
   it "should support maximum datetime argument" do
@@ -70,9 +70,9 @@ describe Datagrid::Filters::DateTimeFilter do
       scope { Entry }
       filter(:created_at, :datetime, :range => true)
     end
-    report.assets.should include(e1)
-    report.assets.should include(e2)
-    report.assets.should_not include(e3)
+    expect(report.assets).to include(e1)
+    expect(report.assets).to include(e2)
+    expect(report.assets).not_to include(e3)
   end
 
   it "should find something in one second interval" do
@@ -84,9 +84,9 @@ describe Datagrid::Filters::DateTimeFilter do
       scope { Entry }
       filter(:created_at, :datetime, :range => true)
     end
-    report.assets.should_not include(e1)
-    report.assets.should include(e2)
-    report.assets.should_not include(e3)
+    expect(report.assets).not_to include(e1)
+    expect(report.assets).to include(e2)
+    expect(report.assets).not_to include(e3)
   end
   it "should support invalid range" do
 
@@ -97,9 +97,9 @@ describe Datagrid::Filters::DateTimeFilter do
       scope { Entry }
       filter(:created_at, :datetime, :range => true)
     end
-    report.assets.should_not include(e1)
-    report.assets.should_not include(e2)
-    report.assets.should_not include(e3)
+    expect(report.assets).not_to include(e1)
+    expect(report.assets).not_to include(e2)
+    expect(report.assets).not_to include(e3)
   end
 
 
@@ -110,8 +110,8 @@ describe Datagrid::Filters::DateTimeFilter do
         where("created_at >= ?", value)
       end
     end
-    report.assets.should_not include(Entry.create!(:created_at => 1.day.ago))
-    report.assets.should include(Entry.create!(:created_at => DateTime.tomorrow))
+    expect(report.assets).not_to include(Entry.create!(:created_at => 1.day.ago))
+    expect(report.assets).to include(Entry.create!(:created_at => DateTime.tomorrow))
   end
 
 
@@ -127,7 +127,7 @@ describe Datagrid::Filters::DateTimeFilter do
         scope  {Entry}
         filter(:created_at, :datetime)
       end
-      report.created_at.should == DateTime.new(2013,10,01,1,0)
+      expect(report.created_at).to eq(DateTime.new(2013,10,01,1,0))
     end
 
     it "should support default explicit datetime" do
@@ -135,7 +135,7 @@ describe Datagrid::Filters::DateTimeFilter do
         scope  {Entry}
         filter(:created_at, :datetime)
       end
-      report.created_at.should == DateTime.new(2013,10,01,1,0)
+      expect(report.created_at).to eq(DateTime.new(2013,10,01,1,0))
     end
   end
 
@@ -145,6 +145,6 @@ describe Datagrid::Filters::DateTimeFilter do
       scope  {Entry}
       filter(:created_at, :datetime, :range => true)
     end
-    report.created_at.should == [DateTime.new(2012, 01, 01, 1, 0), DateTime.new(2013, 01, 01, 1, 0)]
+    expect(report.created_at).to eq([DateTime.new(2012, 01, 01, 1, 0), DateTime.new(2013, 01, 01, 1, 0)])
   end
 end

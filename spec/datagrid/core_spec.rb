@@ -15,7 +15,7 @@ describe Datagrid::Core do
       context 'in the class' do
         let(:report) { report_class.new }
 
-        it { expect(report.scope.to_a).to have(2).item }
+        it { expect(report.scope.to_a.size).to eq(2) }
       end
 
       context 'changes scope on the fly' do
@@ -25,26 +25,26 @@ describe Datagrid::Core do
           end
         end
 
-        it { expect(report.scope.to_a).to have(1).item }
+        it { expect(report.scope.to_a.size).to eq(1) }
       end
 
       context 'overriding scope by initializer' do
         let(:report) { report_class.new { Entry.limit(1) } }
 
-        it { expect(report.scope.to_a).to have(1).item }
+        it { expect(report.scope.to_a.size).to eq(1) }
 
         context "reset scope to default" do
           before do
             report.reset_scope
           end
-          it { expect(report.scope.to_a).to have(2).item }
+          it { expect(report.scope.to_a.size).to eq(2) }
         end
       end
 
       context "appending scope by initializer " do
         let(:report) { report_class.new {|scope| scope.limit(1)} }
-        it { expect(report.scope.to_a).to have(1).item }
-        it { expect(report.scope.order_values).to have(1).item }
+        it { expect(report.scope.to_a.size).to eq(1) }
+        it { expect(report.scope.order_values.size).to eq(1) }
       end
     end
   end

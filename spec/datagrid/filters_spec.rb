@@ -3,10 +3,10 @@ require 'spec_helper'
 describe Datagrid::Filters do
 
   it "should support default option as proc" do
-    test_report do
+    expect(test_report do
       scope {Entry}
       filter(:created_at, :date, :default => proc { Date.today } )
-    end.created_at.should == Date.today
+    end.created_at).to eq(Date.today)
   end
 
   it "should stack with other filters" do
@@ -16,7 +16,7 @@ describe Datagrid::Filters do
       filter(:name)
       filter(:category, :enum, :select => ["first", "second"])
     end
-    report.assets.should be_empty
+    expect(report.assets).to be_empty
   end
 
   it "should not support array argument for not multiple filter" do
@@ -24,9 +24,9 @@ describe Datagrid::Filters do
       scope {Entry}
       filter(:group_id, :integer)
     end
-    lambda {
+    expect {
       report.group_id = [1,2]
-    }.should raise_error(Datagrid::ArgumentError)
+    }.to raise_error(Datagrid::ArgumentError)
   end
 
   it "should filter block with 2 arguments" do
@@ -36,15 +36,15 @@ describe Datagrid::Filters do
         scope.where(:group_id => value)
       end
     end
-    lambda {
+    expect {
       report.group_id = [1,2]
-    }.should raise_error(Datagrid::ArgumentError)
+    }.to raise_error(Datagrid::ArgumentError)
   end
 
 
   it "should initialize when report Scope table not exists" do
     class ModelWithoutTable < ActiveRecord::Base; end
-    ModelWithoutTable.should_not be_table_exists
+    expect(ModelWithoutTable).not_to be_table_exists
     class TheReport
       include Datagrid
 
@@ -53,7 +53,7 @@ describe Datagrid::Filters do
       filter(:name)
       filter(:limit)
     end
-    TheReport.new(:name => 'hello').should_not be_nil
+    expect(TheReport.new(:name => 'hello')).not_to be_nil
   end
 
   it "should support inheritence" do
@@ -65,8 +65,8 @@ describe Datagrid::Filters do
     child = Class.new(parent) do
       filter(:group_id)
     end
-    parent.filters.size.should == 1
-    child.filters.size.should == 2
+    expect(parent.filters.size).to eq(1)
+    expect(child.filters.size).to eq(2)
   end
 
   describe "allow_blank and allow_nil options" do
@@ -80,9 +80,9 @@ describe Datagrid::Filters do
           self
         end
       end
-      report.name.should == value
+      expect(report.name).to eq(value)
       report.assets
-      $FILTER_PERFORMED.should == result
+      expect($FILTER_PERFORMED).to eq(result)
     end
 
     it "should support allow_blank argument" do
@@ -110,7 +110,7 @@ describe Datagrid::Filters do
         scope {Entry}
         filter(:limit)
       end
-      grid.assets.to_a.size.should == 1
+      expect(grid.assets.to_a.size).to eq(1)
     end
     
   end
@@ -125,7 +125,7 @@ describe Datagrid::Filters do
           end
         end
       end
-      grid.assets.should_not be_empty
+      expect(grid.assets).not_to be_empty
     end
 
   end
@@ -137,7 +137,7 @@ describe Datagrid::Filters do
         filter(:limit)
         filter(:name, :before => :limit)
       end
-      grid.filters.index {|f| f.name == :name}.should == 0
+      expect(grid.filters.index {|f| f.name == :name}).to eq(0)
     end
   end
 
@@ -149,7 +149,7 @@ describe Datagrid::Filters do
         filter(:name)
         filter(:group_id, :after => :limit)
       end
-      grid.filters.index {|f| f.name == :group_id}.should == 1
+      expect(grid.filters.index {|f| f.name == :group_id}).to eq(1)
     end
   end
 
@@ -159,7 +159,7 @@ describe Datagrid::Filters do
       filter(:period, :date, :dummy => true, :default => proc { Date.today })
     end
     Entry.create!(:created_at => 3.days.ago)
-    grid.assets.should_not be_empty
+    expect(grid.assets).not_to be_empty
   end
 
   describe "#filter_by" do
@@ -171,8 +171,8 @@ describe Datagrid::Filters do
       end
       e = Entry.create!(:name => 'hello')
       grid.attributes = {:id => -1, :name => 'hello'}
-      grid.assets.should be_empty
-      grid.filter_by(:name).should_not be_empty
+      expect(grid.assets).to be_empty
+      expect(grid.filter_by(:name)).not_to be_empty
     end
   end
 end

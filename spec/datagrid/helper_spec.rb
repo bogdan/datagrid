@@ -7,15 +7,15 @@ require 'datagrid/renderer'
 describe Datagrid::Helper do
   subject do
     template = ActionView::Base.new
-    template.stub(:protect_against_forgery?).and_return(false)
+    allow(template).to receive(:protect_against_forgery?).and_return(false)
     template.view_paths << File.expand_path("../../../app/views", __FILE__)
     template.view_paths << File.expand_path("../../support/test_partials", __FILE__)
     template
   end
 
   before(:each) do
-    subject.stub(:params).and_return({})
-    subject.stub(:url_for) do |options|
+    allow(subject).to receive(:params).and_return({})
+    allow(subject).to receive(:url_for) do |options|
       options.to_param
     end
 
@@ -37,16 +37,16 @@ describe Datagrid::Helper do
     it "should show an empty table with dashes" do
       datagrid_table = subject.datagrid_table(grid)
 
-      datagrid_table.should match_css_pattern(
+      expect(datagrid_table).to match_css_pattern(
         "table.datagrid tr td.noresults" => 1
       )
-      datagrid_table.should include("&mdash;&mdash;")
+      expect(datagrid_table).to include("&mdash;&mdash;")
     end
   end
 
   describe ".datagrid_table" do
     it "should have grid class as html class on table" do
-      subject.datagrid_table(grid).should match_css_pattern(
+      expect(subject.datagrid_table(grid)).to match_css_pattern(
         "table.datagrid.simple_report" => 1
       )
     end
@@ -57,14 +57,14 @@ describe Datagrid::Helper do
           scope { Entry }
         end
       end
-      subject.datagrid_table(::Ns23::TestGrid.new).should match_css_pattern(
+      expect(subject.datagrid_table(::Ns23::TestGrid.new)).to match_css_pattern(
         "table.datagrid.ns23_test_grid" => 1
       )
     end
     it "should return data table html" do
       datagrid_table = subject.datagrid_table(grid)
 
-      datagrid_table.should match_css_pattern({
+      expect(datagrid_table).to match_css_pattern({
         "table.datagrid tr th.group div.order" => 1,
         "table.datagrid tr th.group" => /Group.*/,
         "table.datagrid tr th.name div.order" => 1,
@@ -78,7 +78,7 @@ describe Datagrid::Helper do
       other_entry = Entry.create!(entry.attributes)
       datagrid_table = subject.datagrid_table(grid, [entry])
 
-      datagrid_table.should match_css_pattern({
+      expect(datagrid_table).to match_css_pattern({
         "table.datagrid tr th.group div.order" => 1,
         "table.datagrid tr th.group" => /Group.*/,
         "table.datagrid tr th.name div.order" => 1,
@@ -89,7 +89,7 @@ describe Datagrid::Helper do
     end
 
     it "should support cycle option" do
-      subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"]).should match_css_pattern({
+      expect(subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"])).to match_css_pattern({
         "tr.odd td.group" => "Pop",
         "tr.odd td.name" => "Star"
       })
@@ -97,11 +97,11 @@ describe Datagrid::Helper do
     end
 
     it "should support no order given" do
-      subject.datagrid_table(grid, [entry], :order => false).should match_css_pattern("table.datagrid th .order" => 0)
+      expect(subject.datagrid_table(grid, [entry], :order => false)).to match_css_pattern("table.datagrid th .order" => 0)
     end
 
     it "should support columns option" do
-      subject.datagrid_table(grid, [entry], :columns => [:name]).should match_css_pattern(
+      expect(subject.datagrid_table(grid, [entry], :columns => [:name])).to match_css_pattern(
         "table.datagrid th.name" => 1,
         "table.datagrid td.name" => 1,
         "table.datagrid th.group" => 0,
@@ -119,7 +119,7 @@ describe Datagrid::Helper do
       end
 
       it "should output only given column names" do
-        subject.datagrid_table(grid, [entry]).should match_css_pattern(
+        expect(subject.datagrid_table(grid, [entry])).to match_css_pattern(
           "table.datagrid th.name" => 1,
           "table.datagrid td.name" => 1,
           "table.datagrid th.category" => 0,
@@ -155,7 +155,7 @@ describe Datagrid::Helper do
           scope { Entry }
           column(:name, :url => lambda {|model| model.name})
         end
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name a[href=Star]" => "Star"
         )
       end
@@ -165,7 +165,7 @@ describe Datagrid::Helper do
           scope { Entry }
           column(:name, :url => lambda {|model| false})
         end
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name" => "Star"
         )
       end
@@ -175,7 +175,7 @@ describe Datagrid::Helper do
           scope { Entry }
           column(:name)
         end
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name.ordered.asc" => "Star"
         )
       end
@@ -185,7 +185,7 @@ describe Datagrid::Helper do
           scope { Entry }
           column(:name)
         end
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name.ordered.desc" => "Star"
         )
       end
@@ -197,7 +197,7 @@ describe Datagrid::Helper do
             content_tag(:span, model.name)
           end
         end
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name span" => "Star"
         )
       end
@@ -207,7 +207,7 @@ describe Datagrid::Helper do
           scope { Entry }
           column(:name, :html => lambda {|data| content_tag :h1, data})
         end
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name h1" => "Star"
         )
       end
@@ -219,7 +219,7 @@ describe Datagrid::Helper do
             self.name.upcase
           end
         end
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name em" => "STAR"
         )
       end
@@ -231,7 +231,7 @@ describe Datagrid::Helper do
             content_tag(:span, "#{model.name}-#{grid.assets.klass}" )
           end
         end
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name span" => "Star-Entry"
         )
       end
@@ -243,7 +243,7 @@ describe Datagrid::Helper do
             content_tag :h1, "#{data}-#{model.name.downcase}"
           })
         end
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name h1" => "Star-star"
         )
       end
@@ -255,7 +255,7 @@ describe Datagrid::Helper do
             content_tag :h1, "#{data}-#{model.name.downcase}-#{grid.assets.klass}"
           })
         end
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name h1" => "Star-star-Entry"
         )
       end
@@ -269,7 +269,7 @@ describe Datagrid::Helper do
             self.name.upcase
           end
         end
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name h1" => "STAR-Star"
         )
       end
@@ -283,7 +283,7 @@ describe Datagrid::Helper do
             self.name.upcase
           end
         end
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name h1" => "STAR-Star-Entry"
         )
       end
@@ -294,10 +294,10 @@ describe Datagrid::Helper do
           column(:name)
           column(:category)
         end
-        subject.datagrid_rows(rp, [entry], :columns => [:name]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry], :columns => [:name])).to match_css_pattern(
           "tr td.name" => "Star"
         )
-        subject.datagrid_rows(rp, [entry], :columns => [:name]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry], :columns => [:name])).to match_css_pattern(
           "tr td.category" => 0
         )
       end
@@ -308,7 +308,7 @@ describe Datagrid::Helper do
           column(:name, :class => 'my_class')
         end
 
-        subject.datagrid_rows(rp, [entry]).should match_css_pattern(
+        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
           "tr td.name.my_class" => "Star"
         )
       end
@@ -324,7 +324,7 @@ describe Datagrid::Helper do
           end
         end
         it "should ignore them" do
-          subject.datagrid_rows(grid, [entry]).should match_css_pattern(
+          expect(subject.datagrid_rows(grid, [entry])).to match_css_pattern(
             "td.name" => 1
           )
         end
@@ -339,7 +339,7 @@ describe Datagrid::Helper do
           column(:category)
         end
         grid = OrderedGrid.new(:descending => true, :order => :category)
-        subject.datagrid_order_for(grid, grid.column_by_name(:category)).should equal_to_dom(<<-HTML)
+        expect(subject.datagrid_order_for(grid, grid.column_by_name(:category))).to equal_to_dom(<<-HTML)
 <div class="order">
   <a href="ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="asc">&uarr;</a>
   <a href="ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="desc">&darr;</a>
@@ -362,7 +362,7 @@ describe Datagrid::Helper do
           filter(:category)
         end
         grid = FormForGrid.new(:category => "hello")
-        subject.datagrid_form_for(grid, :url => "/grid").should match_css_pattern(
+        expect(subject.datagrid_form_for(grid, :url => "/grid")).to match_css_pattern(
           "form.datagrid-form.form_for_grid[action='/grid']" => 1,
           "form input[name=utf8]" => 1,
           "form .filter label" => "Category",
@@ -377,7 +377,7 @@ describe Datagrid::Helper do
             scope { Entry }
           end
         end
-        subject.datagrid_form_for(::Ns22::TestGrid.new, :url => "grid").should match_css_pattern(
+        expect(subject.datagrid_form_for(::Ns22::TestGrid.new, :url => "grid")).to match_css_pattern(
           "form.datagrid-form.ns22_test_grid" => 1,
         )
       end
@@ -399,13 +399,13 @@ describe Datagrid::Helper do
 
       it "should provide access to row data" do
         r = subject.datagrid_row(grid, entry)
-        r.name.should == "Hello"
-        r.category.should == "greetings"
+        expect(r.name).to eq("Hello")
+        expect(r.category).to eq("greetings")
       end
       it "should yield block" do
         subject.datagrid_row(grid, entry) do |row|
-          row.name.should == "Hello"
-          row.category.should == "greetings"
+          expect(row.name).to eq("Hello")
+          expect(row.category).to eq("greetings")
         end
       end
 
@@ -415,7 +415,7 @@ describe Datagrid::Helper do
           subject.concat(",")
           subject.concat(row.category)
         end
-        name.should == "Hello,greetings"
+        expect(name).to eq("Hello,greetings")
       end
     end
   end
@@ -428,7 +428,7 @@ describe Datagrid::Helper do
           "<b>#{e.name}</b>"
         end
       end
-      subject.datagrid_value(report, :name, entry).should == "<b>Star</b>"
+      expect(subject.datagrid_value(report, :name, entry)).to eq("<b>Star</b>")
     end
     it "should support format in column" do
       report = test_report do
@@ -439,7 +439,7 @@ describe Datagrid::Helper do
           end
         end
       end
-      subject.datagrid_value(report, :name, entry).should == "<a href=\"/profile\">Star</a>"
+      expect(subject.datagrid_value(report, :name, entry)).to eq("<a href=\"/profile\">Star</a>")
     end
   end
 end

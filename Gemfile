@@ -15,7 +15,7 @@ group :development do
   gem "rspec"
   gem "nokogiri" # used to test html output
 
-  gem "sqlite3-ruby"
+  gem "sqlite3"
 
   group :mongo do
     gem "mongoid", "2.2.2"

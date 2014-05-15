@@ -11,13 +11,13 @@ describe Datagrid::Drivers::ActiveRecord do
   end
 
   it "should convert any scope to AR::Relation" do
-    subject.to_scope(Entry).should be_a(ActiveRecord::Relation)
-    subject.to_scope(Entry.limit(5)).should be_a(ActiveRecord::Relation)
-    subject.to_scope(Group.create!.entries).should be_a(ActiveRecord::Relation)
+    expect(subject.to_scope(Entry)).to be_a(ActiveRecord::Relation)
+    expect(subject.to_scope(Entry.limit(5))).to be_a(ActiveRecord::Relation)
+    expect(subject.to_scope(Group.create!.entries)).to be_a(ActiveRecord::Relation)
   end
 
   it "should support append_column_queries" do
     scope = subject.append_column_queries(Entry.scoped, [Datagrid::Columns::Column.new(SimpleReport, :sum_group_id, 'sum(entries.group_id)')])
-    scope.to_sql.strip.should == 'SELECT "entries".*, sum(entries.group_id) AS sum_group_id FROM "entries"'
+    expect(scope.to_sql.strip).to eq('SELECT "entries".*, sum(entries.group_id) AS sum_group_id FROM "entries"')
   end
 end

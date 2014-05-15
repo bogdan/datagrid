@@ -33,33 +33,65 @@ describe Datagrid::Drivers::Mongoid, :mongoid do
     end
 
 
-    its(:assets) {should include(first, second)}
+    describe '#assets' do
+      subject { super().assets }
+      it {should include(first, second)}
+    end
 
-    its(:"assets.size") {should == 2}
-    its(:rows) {should == [["Main First", 2, false], ["Main Second", 3, true]]}
-    its(:header) {should ==[ "Name", "Group", "Disabled"]}
+    describe '#assets' do
+      subject { super().assets }
+      describe '#size' do
+        subject { super().size }
+        it {should == 2}
+      end
+    end
 
-    its(:data) {should == [[ "Name", "Group", "Disabled"], ["Main First", 2, false], ["Main Second", 3, true]]}
+    describe '#rows' do
+      subject { super().rows }
+      it {should == [["Main First", 2, false], ["Main Second", 3, true]]}
+    end
+
+    describe '#header' do
+      subject { super().header }
+      it {should ==[ "Name", "Group", "Disabled"]}
+    end
+
+    describe '#data' do
+      subject { super().data }
+      it {should == [[ "Name", "Group", "Disabled"], ["Main First", 2, false], ["Main Second", 3, true]]}
+    end
 
 
     describe "when some filters specified" do
       let(:_attributes) { {:from_group_id => 3} }
-      its(:assets) {should_not include(first)}
-      its(:assets) {should include(second)}
+
+      describe '#assets' do
+        subject { super().assets }
+        it {should_not include(first)}
+      end
+
+      describe '#assets' do
+        subject { super().assets }
+        it {should include(second)}
+      end
     end
 
     describe "when reverse ordering is specified" do
       let(:_attributes) { {:order => :name, :descending => true} }
-      its(:rows) {should == [["Main Second", 3, true], ["Main First", 2, false]]}
+
+      describe '#rows' do
+        subject { super().rows }
+        it {should == [["Main Second", 3, true], ["Main First", 2, false]]}
+      end
     end
 
     it "should not provide default order for non declared fields" do
-      proc {
+      expect {
         test_report(:order => :test) do
           scope { MongoidEntry }
           column(:test)
         end
-      }.should raise_error(Datagrid::OrderUnsupported)
+      }.to raise_error(Datagrid::OrderUnsupported)
     end
 
     it "should support batch_size" do
@@ -69,7 +101,7 @@ describe Datagrid::Drivers::Mongoid, :mongoid do
         column(:name)
       end
 
-      report.data.should == [["Name"], ["Main First"], ["Main Second"]]
+      expect(report.data).to eq([["Name"], ["Main First"], ["Main Second"]])
     end
   end
 end

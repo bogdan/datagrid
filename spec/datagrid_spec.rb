@@ -22,12 +22,15 @@ describe SimpleReport do
     :group => group, :name => "Star", :disabled => false, :confirmed => false, :category => "first"
   ) }
 
-  its(:assets) { should include(entry) }
+  describe '#assets' do
+    subject { super().assets }
+    it { should include(entry) }
+  end
 
   describe ".attributes" do
     it "should return report attributes" do
       (subject.filters.map(&:name) + [:order, :descending]).each do |attribute|
-        subject.attributes.should have_key(attribute)
+        expect(subject.attributes).to have_key(attribute)
       end
     end
 
@@ -35,7 +38,7 @@ describe SimpleReport do
 
   describe ".scope" do
     it "should return defined scope of objects" do
-      subject.scope.should respond_to(:each)
+      expect(subject.scope).to respond_to(:each)
     end
       
 
@@ -45,9 +48,9 @@ describe SimpleReport do
       end
 
       it "should raise ConfigurationError" do
-        lambda {
+        expect {
           subject.scope
-        }.should raise_error(Datagrid::ConfigurationError)
+        }.to raise_error(Datagrid::ConfigurationError)
 
       end
     end
@@ -56,7 +59,7 @@ describe SimpleReport do
   describe ".batch_size" do
     context "when not defined on class level" do
       it "returns nil" do
-        subject.batch_size.should == nil
+        expect(subject.batch_size).to eq(nil)
       end
     end
 
@@ -68,7 +71,7 @@ describe SimpleReport do
       end
 
       it "returns the configured batch size" do
-        subject.batch_size.should == 25
+        expect(subject.batch_size).to eq(25)
       end
     end
 

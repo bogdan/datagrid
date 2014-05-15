@@ -5,13 +5,13 @@ describe Datagrid::Scaffold do
 
   describe '.paginate_code' do
     it 'should fall through options successfully' do
-      subject.paginate_code.should eql('paginate_somehow')
+      expect(subject.paginate_code).to eql('paginate_somehow')
     end
   end
 
   describe '.pagination_helper_code' do
     it 'should fall through options successfully' do
-      subject.pagination_helper_code.should eql('some_pagination_helper(@assets)')
+      expect(subject.pagination_helper_code).to eql('some_pagination_helper(@assets)')
     end
   end
 end
