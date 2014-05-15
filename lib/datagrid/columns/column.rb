@@ -16,11 +16,11 @@ class Datagrid::Columns::Column
       self.html_block = block
     end
 
-    def data_value
+    def call_data
       data_block.call
     end
 
-    def html_value(context)
+    def call_html(context)
       context.instance_eval(&html_block)
     end
   end
@@ -48,7 +48,7 @@ class Datagrid::Columns::Column
   def data_value(model, grid)
     raise "no data value for #{name} column" unless data?
     result = generic_value(model,grid)
-    result.is_a?(ResponseFormat) ? result.data_value : result
+    result.is_a?(ResponseFormat) ? result.call_data : result
   end
 
 
@@ -119,7 +119,7 @@ class Datagrid::Columns::Column
       value_from_html_block(context, asset, grid)
     else
       result = generic_value(asset,grid)
-      result.is_a?(ResponseFormat) ? result.html_value(context) : result
+      result.is_a?(ResponseFormat) ? result.call_html(context) : result
     end
   end
 
@@ -144,6 +144,9 @@ class Datagrid::Columns::Column
   end
 
   def generic_value(model, grid)
+    unless enabled?(grid)
+      raise Datagrid::ColumnUnavailableError, "Column #{name} disabled for #{grid.inspect}"
+    end
     if self.data_block.arity >= 1
       Datagrid::Utils.apply_args(model, grid, grid.data_row(model), &data_block)
     else

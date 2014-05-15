@@ -38,6 +38,7 @@ module Datagrid
 
   class ConfigurationError < StandardError; end
   class ArgumentError < ::ArgumentError; end
+  class ColumnUnavailableError < StandardError; end
 
 end
 

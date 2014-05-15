@@ -16,7 +16,7 @@ module Datagrid
         column = grid.column_by_name(column)
       end
 
-      value = column.html_value(@template, asset, grid)
+      value = grid.html_value(column, @template, asset)
 
       url = column.options[:url] && column.options[:url].call(asset)
       if url

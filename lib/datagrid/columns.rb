@@ -217,6 +217,7 @@ module Datagrid
       end
 
       def find_column_by_name(columns,name) #:nodoc:
+        return name if name.is_a?(Datagrid::Columns::Column)
         columns.find do |col|
           col.name.to_sym == name.to_sym
         end
@@ -246,7 +247,7 @@ module Datagrid
       #   * <tt>column_names</tt> - list of column names if you want to limit data only to specified columns
       def row_for(asset, *column_names)
         data_columns(*column_names).map do |column|
-          column.data_value(asset, self)
+          data_value(column, asset)
         end
       end
 
@@ -254,7 +255,7 @@ module Datagrid
       def hash_for(asset)
         result = {}
         self.data_columns.each do |column|
-          result[column.name] = column.data_value(asset, self)
+          result[column.name] = data_value(column, asset)
         end
         result
       end
@@ -415,6 +416,16 @@ module Datagrid
         super
       end
 
+      # Return a cell data value for given column name and asset
+      def data_value(column_name, asset)
+        column_by_name(column_name).data_value(asset, self)
+      end
+
+      # Return a cell HTML value for given column name and asset and view context
+      def html_value(column_name, context, asset)
+        column_by_name(column_name).html_value(context, asset, self)
+      end
+
       protected
 
       def map_with_batches(&block)
@@ -453,11 +464,7 @@ module Datagrid
       end
 
       def method_missing(meth, *args, &blk)
-        if column = @grid.column_by_name(meth)
-          column.data_value(@model, @grid)
-        else
-          super
-        end
+        @grid.data_value(meth, @model)
       end
     end
   end
