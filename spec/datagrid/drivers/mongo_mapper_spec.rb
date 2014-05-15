@@ -1,4 +1,4 @@
-describe Datagrid::Drivers::MongoMapper do
+describe Datagrid::Drivers::MongoMapper, :mongomapper do
 
   describe ".match?" do
     

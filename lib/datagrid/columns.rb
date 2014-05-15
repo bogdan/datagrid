@@ -416,6 +416,27 @@ module Datagrid
         super
       end
 
+      # Returns all columns available for current grid configuration
+      #   
+      #   class MyGrid
+      #     filter(:search)
+      #     column(:id)
+      #     column(:name, :mandatory => true)
+      #     column(:search_match, :if => proc {|grid| grid.search.present? }
+      #   end
+      #
+      #   grid = MyGrid.new
+      #   grid.columns # => [ <#Column:name> ]
+      #   grid.available_columns # => [ <#Column:id>, <#Column:name> ]
+      #   grid.search = "keyword"
+      #   grid.available_columns # => [ <#Column:id>, <#Column:name>, <#Column:search_match> ] 
+      #
+      def available_columns
+        columns_array.select do |column|
+          column.enabled?(self)
+        end
+      end
+
       # Return a cell data value for given column name and asset
       def data_value(column_name, asset)
         column_by_name(column_name).data_value(asset, self)

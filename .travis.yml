@@ -1,0 +1,20 @@
+language: ruby
+#bundler_args: --without development
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - 2.1.1
+  #- jruby
+  #- jruby-head
+#env: JRUBY_OPTS="--server -J-Xms512m -J-Xmx1024m"
+#matrix:
+  #allow_failures:
+    #- rvm: jruby-head
+    #- gemfile: gemfiles/rails41.gemfile
+notifications:
+  email: false
+services:
+  - mongodb
+gemfile:
+  - Gemfile
+  #- gemfiles/rails41.gemfile

@@ -257,8 +257,8 @@ describe Datagrid::FormBuilder do
         else
           it { should equal_to_dom(
             '
-<label class="category enum_filter checkboxes" for="report_category_first"><input name="report[category][]" type="hidden"><input id="report_category_first" name="report[category][]" type="checkbox" value="first" />first</label>
-<label class="category enum_filter checkboxes" for="report_category_second"><input name="report[category][]" type="hidden"><input id="report_category_second" name="report[category][]" type="checkbox" value="second" />second</label>
+<label class="category enum_filter checkboxes" for="report_category_first"><input id="report_category_first" name="report[category][]" type="checkbox" value="first" />first</label>
+<label class="category enum_filter checkboxes" for="report_category_second"><input id="report_category_second" name="report[category][]" type="checkbox" value="second" />second</label>
             '
           )}
 
@@ -407,9 +407,9 @@ describe Datagrid::FormBuilder do
       let(:_filter) { :column_names }
       let(:expected_html) do
         <<DOM
-<label class="column_names enum_filter checkboxes" for="report_column_names_id"><input name="report[column_names][]" type="hidden"><input checked id="report_column_names_id" name="report[column_names][]" type="checkbox" value="id">Id</label>
-<label class="column_names enum_filter checkboxes" for="report_column_names_name"><input name="report[column_names][]" type="hidden"><input checked id="report_column_names_name" name="report[column_names][]" type="checkbox" value="name">Name</label>
-<label class="column_names enum_filter checkboxes" for="report_column_names_category"><input name="report[column_names][]" type="hidden"><input id="report_column_names_category" name="report[column_names][]" type="checkbox" value="category">Category</label>
+<label class="column_names enum_filter checkboxes" for="report_column_names_id"><input checked id="report_column_names_id" name="report[column_names][]" type="checkbox" value="id">Id</label>
+<label class="column_names enum_filter checkboxes" for="report_column_names_name"><input checked id="report_column_names_name" name="report[column_names][]" type="checkbox" value="name">Name</label>
+<label class="column_names enum_filter checkboxes" for="report_column_names_category"><input id="report_column_names_category" name="report[column_names][]" type="checkbox" value="category">Category</label>
 DOM
       end
 

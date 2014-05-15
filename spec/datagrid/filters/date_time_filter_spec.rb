@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Datagrid::Filters::DateTimeFilter do
   {:active_record => Entry, :mongoid => MongoidEntry}.each do |orm, klass|
-    describe "with orm #{orm}" do
+    describe "with orm #{orm}", orm => true do
       describe "timestamp to timestamp conversion" do
         let(:klass) { klass }
         subject do
@@ -117,7 +117,7 @@ describe Datagrid::Filters::DateTimeFilter do
 
   context "when datetime format is configured" do
     around(:each) do |example|
-      with_datetime_format(format = "%m/%d/%Y %H:%M") do
+      with_datetime_format("%m/%d/%Y %H:%M") do
         example.run
       end
     end

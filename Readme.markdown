@@ -1,5 +1,7 @@
 # Datagrid
 
+[![Build Status](https://travis-ci.org/bogdan/datagrid.svg?branch=master)](https://travis-ci.org/bogdan/datagrid)
+
 Ruby library that helps you to build and represent table-like data with:
 
 * Customizable filtering
