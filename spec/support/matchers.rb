@@ -34,13 +34,16 @@ end
 class EqualToDom
 
   def initialize(expectation)
-    @expectation = Nokogiri::HTML::DocumentFragment.parse(force_encoding(expectation).strip).to_s
+    @expectation = normalize(expectation)
   end
 
   def matches?(text)
-
-    @matcher = Nokogiri::HTML::DocumentFragment.parse(force_encoding(text).strip).to_s
+    @matcher = normalize(text)
     @matcher == @expectation
+  end
+
+  def normalize(text)
+    Nokogiri::HTML::DocumentFragment.parse(force_encoding(text.split("\n").map(&:strip).join(""))).to_s
   end
 
   def failure_message
