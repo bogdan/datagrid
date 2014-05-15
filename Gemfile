@@ -17,10 +17,12 @@ group :development do
 
   gem "sqlite3-ruby"
 
-  gem "mongoid", "2.2.2"
-  gem "mongo_mapper", ">=0.11.0"
-  gem "bson", "1.4.0"
-  gem "bson_ext", "1.4.0"
+  group :mongo do
+    gem "mongoid", "2.2.2"
+    gem "mongo_mapper", ">=0.11.0"
+    gem "bson", "1.4.0"
+    gem "bson_ext", "1.4.0"
+  end
 
   gem "fastercsv", :platform => "mri_18"
 end
