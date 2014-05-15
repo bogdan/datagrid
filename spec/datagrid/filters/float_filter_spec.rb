@@ -9,7 +9,7 @@ describe Datagrid::Filters::FloatFilter do
       scope { Group }
       filter(:rating, :float)
     end
-    report.assets.should include(g1)
-    report.assets.should_not include(g2)
+    expect(report.assets).to include(g1)
+    expect(report.assets).not_to include(g2)
   end
 end

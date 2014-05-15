@@ -3,10 +3,10 @@ require 'spec_helper'
 describe Datagrid::Filters::ExtendedBooleanFilter do
 
   it "should support select option" do
-    test_report do
+    expect(test_report do
       scope {Entry}
       filter(:disabled, :xboolean)
-    end.class.filter_by_name(:disabled).select.should == [["Yes", "YES"], ["No", "NO"]]
+    end.class.filter_by_name(:disabled).select).to eq([["Yes", "YES"], ["No", "NO"]])
   end
 
   it "should generate pass boolean value to filter block" do
@@ -18,17 +18,17 @@ describe Datagrid::Filters::ExtendedBooleanFilter do
     disabled_entry = Entry.create!(:disabled => true)
     enabled_entry = Entry.create!(:disabled => false)
 
-    grid.disabled.should be_nil
-    grid.assets.should include(disabled_entry, enabled_entry)
+    expect(grid.disabled).to be_nil
+    expect(grid.assets).to include(disabled_entry, enabled_entry)
     grid.disabled = "YES"
 
-    grid.disabled.should == "YES"
-    grid.assets.should include(disabled_entry)
-    grid.assets.should_not include(enabled_entry)
+    expect(grid.disabled).to eq("YES")
+    expect(grid.assets).to include(disabled_entry)
+    expect(grid.assets).not_to include(enabled_entry)
     grid.disabled = "NO"
-    grid.disabled.should == "NO"
-    grid.assets.should include(enabled_entry)
-    grid.assets.should_not include(disabled_entry)
+    expect(grid.disabled).to eq("NO")
+    expect(grid.assets).to include(enabled_entry)
+    expect(grid.assets).not_to include(disabled_entry)
 
   end
 

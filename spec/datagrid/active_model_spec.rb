@@ -14,19 +14,19 @@ describe Datagrid::ActiveModel do
 
   describe ".model_name" do
     it "should be generate from class name " do
-      ActiveReport.model_name.should == "ActiveReport"
+      expect(ActiveReport.model_name).to eq("ActiveReport")
     end
     it "should have ActiveModel naming conventions" do
-      ActiveReport.model_name.i18n_key.should == :active_report
+      expect(ActiveReport.model_name.i18n_key).to eq(:active_report)
     end
   end
 
   describe ".param_name" do
     it "should make right param key from simple class name" do
-      ActiveReport.param_name.should == 'active_report'
+      expect(ActiveReport.param_name).to eq('active_report')
     end
     it "should make right param key from class of module" do
-      Grid::ActiveReport.param_name.should == 'grid_active_report'
+      expect(Grid::ActiveReport.param_name).to eq('grid_active_report')
     end
   end
 

@@ -10,9 +10,9 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry } 
       filter(:group_id, :integer)
     end
-    report.assets.should_not include(e1)
-    report.assets.should include(e2)
-    report.assets.should_not include(e3)
+    expect(report.assets).not_to include(e1)
+    expect(report.assets).to include(e2)
+    expect(report.assets).not_to include(e3)
   end
 
   it "should support integer range given as array argument" do
@@ -23,9 +23,9 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry } 
       filter(:group_id, :integer, :range => true)
     end
-    report.assets.should_not include(e1)
-    report.assets.should include(e2)
-    report.assets.should_not include(e3)
+    expect(report.assets).not_to include(e1)
+    expect(report.assets).to include(e2)
+    expect(report.assets).not_to include(e3)
   end
 
   it "should support minimum integer argument" do
@@ -36,9 +36,9 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry } 
       filter(:group_id, :integer, :range => true)
     end
-    report.assets.should_not include(e1)
-    report.assets.should_not include(e2)
-    report.assets.should include(e3)
+    expect(report.assets).not_to include(e1)
+    expect(report.assets).not_to include(e2)
+    expect(report.assets).to include(e3)
   end
 
   it "should support maximum integer argument" do
@@ -49,9 +49,9 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry } 
       filter(:group_id, :integer, :range => true)
     end
-    report.assets.should include(e1)
-    report.assets.should include(e2)
-    report.assets.should_not include(e3)
+    expect(report.assets).to include(e1)
+    expect(report.assets).to include(e2)
+    expect(report.assets).not_to include(e3)
   end
 
   it "should find something in one integer interval" do
@@ -63,9 +63,9 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry } 
       filter(:group_id, :integer, :range => true)
     end
-    report.assets.should_not include(e1)
-    report.assets.should include(e2)
-    report.assets.should_not include(e3)
+    expect(report.assets).not_to include(e1)
+    expect(report.assets).to include(e2)
+    expect(report.assets).not_to include(e3)
   end
   it "should support invalid range" do
 
@@ -76,9 +76,9 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry } 
       filter(:group_id, :integer, :range => true)
     end
-    report.assets.should_not include(e1)
-    report.assets.should_not include(e2)
-    report.assets.should_not include(e3)
+    expect(report.assets).not_to include(e1)
+    expect(report.assets).not_to include(e2)
+    expect(report.assets).not_to include(e3)
   end
 
 
@@ -89,8 +89,8 @@ describe Datagrid::Filters::IntegerFilter do
         where("group_id >= ?", value)
       end
     end
-    report.assets.should_not include(Entry.create!(:group_id => 1))
-    report.assets.should include(Entry.create!(:group_id => 5))
+    expect(report.assets).not_to include(Entry.create!(:group_id => 1))
+    expect(report.assets).to include(Entry.create!(:group_id => 5))
   end
 
 
@@ -99,8 +99,8 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry.joins(:group) } 
       filter(:rating, :integer, :range => true)
     end
-    report.assets.should_not include(Entry.create!(:group => Group.create!(:rating => 3)))
-    report.assets.should include(Entry.create!(:group => Group.create!(:rating => 5)))
+    expect(report.assets).not_to include(Entry.create!(:group => Group.create!(:rating => 3)))
+    expect(report.assets).to include(Entry.create!(:group => Group.create!(:rating => 5)))
   end
 
   it "should support multiple values" do
@@ -108,18 +108,18 @@ describe Datagrid::Filters::IntegerFilter do
       scope {Entry}
       filter(:group_id, :string, :multiple => true)
     end
-    report.assets.should include(Entry.create!( :group_id => 1))
-    report.assets.should include(Entry.create!( :group_id => 2))
-    report.assets.should_not include(Entry.create!( :group_id => 3))
+    expect(report.assets).to include(Entry.create!( :group_id => 1))
+    expect(report.assets).to include(Entry.create!( :group_id => 2))
+    expect(report.assets).not_to include(Entry.create!( :group_id => 3))
   end
   it "should support custom separator multiple values" do
     report = test_report(:group_id => "1|2") do
       scope {Entry}
       filter(:group_id, :string, :multiple => '|')
     end
-    report.assets.should include(Entry.create!( :group_id => 1))
-    report.assets.should include(Entry.create!( :group_id => 2))
-    report.assets.should_not include(Entry.create!( :group_id => 3))
+    expect(report.assets).to include(Entry.create!( :group_id => 1))
+    expect(report.assets).to include(Entry.create!( :group_id => 2))
+    expect(report.assets).not_to include(Entry.create!( :group_id => 3))
   end
   
   it "should support multiple values" do
@@ -127,9 +127,9 @@ describe Datagrid::Filters::IntegerFilter do
       scope {Entry}
       filter(:group_id, :string, :multiple => true)
     end
-    report.assets.should include(Entry.create!( :group_id => 1))
-    report.assets.should include(Entry.create!( :group_id => 2))
-    report.assets.should_not include(Entry.create!( :group_id => 3))
+    expect(report.assets).to include(Entry.create!( :group_id => 1))
+    expect(report.assets).to include(Entry.create!( :group_id => 2))
+    expect(report.assets).not_to include(Entry.create!( :group_id => 3))
   end
 
   it "should support custom separator multiple values" do
@@ -137,8 +137,8 @@ describe Datagrid::Filters::IntegerFilter do
       scope {Entry}
       filter(:group_id, :string, :multiple => '|')
     end
-    report.assets.should include(Entry.create!( :group_id => 1))
-    report.assets.should include(Entry.create!( :group_id => 2))
-    report.assets.should_not include(Entry.create!( :group_id => 3))
+    expect(report.assets).to include(Entry.create!( :group_id => 1))
+    expect(report.assets).to include(Entry.create!( :group_id => 2))
+    expect(report.assets).not_to include(Entry.create!( :group_id => 3))
   end
 end

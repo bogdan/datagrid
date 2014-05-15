@@ -38,23 +38,56 @@ describe Datagrid::Drivers::Array do
     end
   
           
-    its(:"assets.size") {should == 3}
-    its(:rows) {should == [["Vasya", 15], ["Petya", 12], ["Vova", 13]]}
-    its(:header) {should ==[ "Name", "Age"]}
+    describe '#assets' do
+      subject { super().assets }
+      describe '#size' do
+        subject { super().size }
+        it {should == 3}
+      end
+    end
+
+    describe '#rows' do
+      subject { super().rows }
+      it {should == [["Vasya", 15], ["Petya", 12], ["Vova", 13]]}
+    end
+
+    describe '#header' do
+      subject { super().header }
+      it {should ==[ "Name", "Age"]}
+    end
       
-    its(:data) {should == [[ "Name", "Age"], ["Vasya", 15], ["Petya", 12], ["Vova", 13]]}
+    describe '#data' do
+      subject { super().data }
+      it {should == [[ "Name", "Age"], ["Vasya", 15], ["Petya", 12], ["Vova", 13]]}
+    end
       
       
     describe "when some filters specified" do
       let(:_attributes) { {:age => [12,14]} }
-      its(:assets) {should_not include(first)}
-      its(:assets) {should include(second)}
-      its(:assets) {should include(third)}
+
+      describe '#assets' do
+        subject { super().assets }
+        it {should_not include(first)}
+      end
+
+      describe '#assets' do
+        subject { super().assets }
+        it {should include(second)}
+      end
+
+      describe '#assets' do
+        subject { super().assets }
+        it {should include(third)}
+      end
     end
       
     describe "when reverse ordering is specified" do
       let(:_attributes) { {:order => :name, :descending => true} }
-      its(:assets) {should == [third, first, second]}
+
+      describe '#assets' do
+        subject { super().assets }
+        it {should == [third, first, second]}
+      end
     end
   end
 end

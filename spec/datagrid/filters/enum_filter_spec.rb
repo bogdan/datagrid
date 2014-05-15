@@ -3,17 +3,17 @@ require 'spec_helper'
 describe Datagrid::Filters::EnumFilter do
 
   it "should support select option" do
-    test_report do
+    expect(test_report do
       scope {Entry}
       filter(:group_id, :enum, :select =>  [1,2] )
-    end.class.filter_by_name(:group_id).select.should == [1,2]
+    end.class.filter_by_name(:group_id).select).to eq([1,2])
   end
 
   it "should support select option as proc" do
-    test_report do
+    expect(test_report do
       scope {Entry}
       filter(:group_id, :enum, :select => proc { [1,2] })
-    end.class.filter_by_name(:group_id).select.should == [1,2]
+    end.class.filter_by_name(:group_id).select).to eq([1,2])
   end
 
   it "should support select option as proc with instace input" do
@@ -22,7 +22,7 @@ describe Datagrid::Filters::EnumFilter do
               filter(:group_id, :enum, :select => proc { |obj| obj.object_id })
             end.class
     instance = klass.new
-    klass.filter_by_name(:group_id).select(instance).should == instance.object_id
+    expect(klass.filter_by_name(:group_id).select(instance)).to eq(instance.object_id)
   end
   
   it "should initialize select option only on instanciation" do
@@ -43,7 +43,7 @@ describe Datagrid::Filters::EnumFilter do
       end
     end
 
-    report.filter_by_name(:group_id).select(report).should == [1,3,5]
+    expect(report.filter_by_name(:group_id).select(report)).to eq([1,3,5])
   end
 
 end

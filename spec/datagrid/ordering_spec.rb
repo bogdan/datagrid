@@ -9,74 +9,74 @@ describe Datagrid::Ordering do
 
 
   it "should support order" do
-    test_report(:order => "name") do
+    expect(test_report(:order => "name") do
       scope do
         Entry
       end
       column :name
-    end.assets.should == [first, second, third]
+    end.assets).to eq([first, second, third])
 
   end
 
   it "should support desc order" do
-    test_report(:order => "name", :descending => true) do
+    expect(test_report(:order => "name", :descending => true) do
       scope do
         Entry
       end
       column :name
-    end.assets.should == [third, second, first]
+    end.assets).to eq([third, second, first])
   end
 
 
   it "should raise error if ordered by not existing column" do
-    lambda {
+    expect {
       test_report(:order => :hello)
-    }.should raise_error(Datagrid::OrderUnsupported)
+    }.to raise_error(Datagrid::OrderUnsupported)
   end
 
   it "should raise error if ordered by column without order" do
-    lambda do
+    expect do
       test_report(:order => :category) do
         filter(:category, :default, :order => false) do |value|
           self
         end
       end
-    end.should raise_error(Datagrid::OrderUnsupported)
+    end.to raise_error(Datagrid::OrderUnsupported)
   end
 
   it "should override default order" do
-    test_report(:order => :name) do
+    expect(test_report(:order => :name) do
       scope { Entry.order("name desc")}
       column(:name, :order => "name asc")
-    end.assets.should == [first, second, third]
+    end.assets).to eq([first, second, third])
   end
 
   it "should support order given as block" do
-    test_report(:order => :name) do
+    expect(test_report(:order => :name) do
       scope { Entry }
       column(:name, :order => proc { order("name desc") })
-    end.assets.should == [third, second, first]
+    end.assets).to eq([third, second, first])
   end
 
   it "should support reversing order given as block" do
-    test_report(:order => :name, :descending => true) do
+    expect(test_report(:order => :name, :descending => true) do
       scope { Entry }
       column(:name, :order => proc { order("name desc") })
-    end.assets.should == [first, second, third]
+    end.assets).to eq([first, second, third])
   end
 
   it "should support order desc given as block" do
-    test_report(:order => :name, :descending => true) do
+    expect(test_report(:order => :name, :descending => true) do
       scope { Entry }
       column(:name,  :order_desc => proc { order("name desc")})
-    end.assets.should == [third, second, first]
+    end.assets).to eq([third, second, first])
   end
 
   it "should treat true order as default" do
-    test_report(:order => :name) do
+    expect(test_report(:order => :name) do
       scope { Entry }
       column(:name,  :order => true)
-    end.assets.should == [first, second, third]
+    end.assets).to eq([first, second, third])
   end
 
   it "should support order_by_value" do
@@ -86,9 +86,9 @@ describe Datagrid::Ordering do
         name
       end
     end
-    report.assets.should == [first, second, third]
+    expect(report.assets).to eq([first, second, third])
     report.descending = true
-    report.assets.should == [third, second, first]
+    expect(report.assets).to eq([third, second, first])
   end
 
   it "should support order_by_value as block" do
@@ -101,9 +101,9 @@ describe Datagrid::Ordering do
         name
       end
     end
-    report.assets.should == [third, first, second]
+    expect(report.assets).to eq([third, first, second])
     report.descending = true
-    report.assets.should == [second, first, third]
+    expect(report.assets).to eq([second, first, third])
   end
 
 end

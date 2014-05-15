@@ -20,7 +20,7 @@ describe Datagrid::FormBuilder do
 
     it "should work for every filter type" do
       Datagrid::Filters::FILTER_TYPES.each do |type, klass|
-        Datagrid::FormBuilder.instance_methods.map(&:to_sym).should include(klass.form_builder_helper_name)
+        expect(Datagrid::FormBuilder.instance_methods.map(&:to_sym)).to include(klass.form_builder_helper_name)
       end
     end
 
@@ -497,22 +497,22 @@ DOM
       end
     end
     it "should generate label for filter" do
-      view.datagrid_label(:name).should equal_to_dom(
+      expect(view.datagrid_label(:name)).to equal_to_dom(
         '<label for="report_name">Name</label>'
       )
     end
     it "should pass options through to the helper" do
-      view.datagrid_label(:name, :class => 'foo').should equal_to_dom(
+      expect(view.datagrid_label(:name, :class => 'foo')).to equal_to_dom(
         '<label class="foo" for="report_name">Name</label>'
       )
     end
     it "should support block" do
-      view.datagrid_label(:name, :class => 'foo') { 'The Name' }.should equal_to_dom(
+      expect(view.datagrid_label(:name, :class => 'foo') { 'The Name' }).to equal_to_dom(
         '<label class="foo" for="report_name">The Name</label>'
       )
     end
     it "should support explicit label" do
-      view.datagrid_label(:name, "The Name").should equal_to_dom(
+      expect(view.datagrid_label(:name, "The Name")).to equal_to_dom(
         '<label for="report_name">The Name</label>'
       )
     end
