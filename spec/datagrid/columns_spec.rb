@@ -378,4 +378,22 @@ describe Datagrid::Columns do
     end
   end
 
+  describe ".data_value" do
+    it "should return value" do
+      grid = test_report do
+        scope {Entry }
+        column(:name)
+      end
+      grid.data_value(:name, Entry.create!(:name => 'Hello')).should == 'Hello'
+    end
+    it "should raise for disabled columns" do
+      grid = test_report do
+        scope {Entry }
+        column(:name, :if => proc { false })
+      end
+      proc  {
+        grid.data_value(:name, Entry.create!(:name => 'Hello'))
+      }.should raise_error(Datagrid::ColumnUnavailableError)
+    end
+  end
 end

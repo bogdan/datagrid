@@ -355,7 +355,7 @@ module Datagrid
 
       # Finds a column definition by name
       def column_by_name(name)
-        self.class.find_column_by_name(columns, name)
+        self.class.find_column_by_name(columns_array, name)
       end
 
       # Gives ability to have a different formatting for CSV and HTML column value.
