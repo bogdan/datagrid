@@ -367,7 +367,8 @@ describe Datagrid::Helper do
           "form input[name=utf8]" => 1,
           "form .filter label" => "Category",
           "form .filter input.category.default_filter[name='form_for_grid[category]'][value=hello]" => 1,
-          "form input[name=commit][value=Search]" => 1
+          "form input[name=commit][value=Search]" => 1,
+          "form a.datagrid-reset[href='']" => 1
         )
       end
       it "should support html classes for grid class with namespace" do
