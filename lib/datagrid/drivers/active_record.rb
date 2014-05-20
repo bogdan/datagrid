@@ -105,6 +105,10 @@ module Datagrid
         scope.find_each(batch_size ? { :batch_size => batch_size} : {}, &block)
       end
 
+      def default_cache_key(asset)
+        asset.id || raise(NotImplementedError)
+      end
+
       protected
 
       def prefix_table_name(scope, field)

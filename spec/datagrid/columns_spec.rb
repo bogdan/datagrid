@@ -406,4 +406,22 @@ describe Datagrid::Columns do
       }.to raise_error(Datagrid::ColumnUnavailableError)
     end
   end
+
+  describe "caching" do
+    it "should work when enabled in class" do
+      grid = test_report do
+        scope {Entry}
+        self.cached = true
+        column(:random1) {rand(10**9)}
+        column(:random2) {rand(10**9)}
+      end
+
+      row = grid.data_row(Entry.create!)
+      expect(row.random1).to eq(row.random1)
+      expect(row.random2).to_not eq(row.random1)
+      grid.cached = false
+      expect(row.random2).to_not eq(row.random2)
+      expect(row.random2).to_not eq(row.random1)
+    end
+  end
 end

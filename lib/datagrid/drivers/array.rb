@@ -68,6 +68,10 @@ module Datagrid
       def batch_each(scope, batch_size, &block)
         scope.each(&block)
       end
+      
+      def default_cache_key(asset)
+        asset
+      end
     end
   end
 end

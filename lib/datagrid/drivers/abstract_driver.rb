@@ -90,6 +90,10 @@ module Datagrid
         end
       end
 
+      def default_cache_key(asset)
+        raise NotImplementedError
+      end
+
       protected
       def timestamp_class?(klass)
         TIMESTAMP_CLASSES.include?(klass)
