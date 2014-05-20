@@ -382,7 +382,7 @@ module Datagrid
         end
       end
 
-      # Returns an object representing a table row.
+      # Returns an object representing a grid row.
       # Allows to access column values
       #
       # Example:
@@ -439,15 +439,40 @@ module Datagrid
 
       # Return a cell data value for given column name and asset
       def data_value(column_name, asset)
-        column_by_name(column_name).data_value(asset, self)
+        column = column_by_name(column_name)
+        raise "no data value for #{name} column" unless column.data?
+        result = generic_value(column, asset)
+        result.is_a?(Datagrid::Columns::Column::ResponseFormat) ? result.call_data : result
       end
 
       # Return a cell HTML value for given column name and asset and view context
       def html_value(column_name, context, asset)
-        column_by_name(column_name).html_value(context, asset, self)
+        column  = column_by_name(column_name)
+        if column.html? && column.html_block
+          value_from_html_block(context, asset, column)
+        else
+          result = generic_value(column, asset)
+          result.is_a?(Datagrid::Columns::Column::ResponseFormat) ? result.call_html(context) : result
+        end
+      end
+
+
+      def generic_value(column, model) #:nodoc:
+
+        unless column.enabled?(self)
+          raise Datagrid::ColumnUnavailableError, "Column #{column.name} disabled for #{inspect}"
+        end
+
+        if column.data_block.arity >= 1
+          Datagrid::Utils.apply_args(model, self, data_row(model), &column.data_block)
+        else
+          model.instance_eval(&column.data_block)
+        end
+
       end
 
       protected
+
 
       def map_with_batches(&block)
         result = []
@@ -475,6 +500,20 @@ module Datagrid
         end
       end
 
+      def value_from_html_block(context, asset, column)
+        args = []
+        remaining_arity = column.html_block.arity
+
+        if column.data?
+          args << data_value(column, asset)
+          remaining_arity -= 1
+        end
+
+        args << asset if remaining_arity > 0
+        args << self if remaining_arity > 1
+
+        context.instance_exec(*args, &column.html_block)
+      end
     end # InstanceMethods
 
     class DataRow
