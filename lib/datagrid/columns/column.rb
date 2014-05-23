@@ -124,15 +124,7 @@ class Datagrid::Columns::Column
   end
 
   def generic_value(model, grid)
-    unless enabled?(grid)
-      raise Datagrid::ColumnUnavailableError, "Column #{name} disabled for #{grid.inspect}"
-    end
-
-      if self.data_block.arity >= 1
-        Datagrid::Utils.apply_args(model, grid, grid.data_row(model), &data_block)
-      else
-        model.instance_eval(&self.data_block)
-      end
+    grid.generic_value(self, model)
   end
 
   private
