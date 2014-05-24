@@ -12,7 +12,7 @@ group :development do
   gem "byebug", :platform => ["ruby_20", "ruby_21"]
   gem "ruby-debug", :platform => "ruby_18"
 
-  gem "rspec"
+  gem "rspec", ">= 2.14"
   gem "nokogiri" # used to test html output
 
   gem "sqlite3"
