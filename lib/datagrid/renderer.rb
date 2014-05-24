@@ -30,6 +30,7 @@ module Datagrid
       options[:method] ||= :get
       options[:html] ||= {}
       options[:html][:class] ||= "datagrid-form #{@template.dom_class(grid)}"
+      options[:as] ||= grid.param_name
       _render_partial('form', options[:partials], {:grid => grid, :options => options})
     end
 

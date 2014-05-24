@@ -376,10 +376,27 @@ describe Datagrid::Helper do
           class TestGrid
             include Datagrid
             scope { Entry }
+            filter(:id)
           end
         end
         expect(subject.datagrid_form_for(::Ns22::TestGrid.new, :url => "grid")).to match_css_pattern(
           "form.datagrid-form.ns22_test_grid" => 1,
+          "form.datagrid-form label[for=ns22_test_grid_id]" => 1,
+          "form.datagrid-form input#ns22_test_grid_id[name='ns22_test_grid[id]']" => 1,
+        )
+      end
+
+      it "should have overridable param_name method" do
+        class ParamNameGrid81
+          include Datagrid
+          scope { Entry }
+          filter(:id)
+          def param_name
+            'g'
+          end
+        end
+        expect(subject.datagrid_form_for(::ParamNameGrid81.new, :url => "/grid")).to match_css_pattern(
+          "form.datagrid-form input[name='g[id]']" => 1,
         )
       end
     end
