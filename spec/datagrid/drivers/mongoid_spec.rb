@@ -1,3 +1,5 @@
+require "spec_helper"
+
 describe Datagrid::Drivers::Mongoid, :mongoid do
 
   describe ".match?" do
@@ -66,8 +68,8 @@ describe Datagrid::Drivers::Mongoid, :mongoid do
       let(:_attributes) { {:from_group_id => 3} }
 
       describe '#assets' do
-        subject { super().assets }
-        it {should_not include(first)}
+        subject { super().assets.map(&:_id) }
+        it {should_not include(first.id)}
       end
 
       describe '#assets' do

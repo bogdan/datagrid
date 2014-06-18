@@ -8,8 +8,6 @@ shared_examples_for "Datagrid" do
       subject.assets.should_not be_empty
     end
 
-    its(:data) {should_not be_empty}
-
     described_class.columns(:data => true).each do |column|
       describe "column ##{column.name}" do
 

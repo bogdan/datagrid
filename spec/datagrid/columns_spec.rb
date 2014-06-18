@@ -98,8 +98,8 @@ describe Datagrid::Columns do
     end
     Entry.create!(:category => "foo")
     Entry.create!(:category => "foobar")
-    expect(report.rows.first.first).to be_true
-    expect(report.rows.last.first).to be_false
+    expect(report.rows.first.first).to eq(true)
+    expect(report.rows.last.first).to eq(false)
   end
 
   it "should inherit columns correctly" do
