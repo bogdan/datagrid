@@ -11,7 +11,20 @@ describe Datagrid::Scaffold do
 
   describe '.pagination_helper_code' do
     it 'should fall through options successfully' do
-      expect(subject.pagination_helper_code).to eql('some_pagination_helper(@assets)')
+      expect(subject.pagination_helper_code).to eql('some_pagination_helper(@grid.assets)')
+    end
+
+    context "when Kaminari exists" do
+      before(:each) do
+        Object.const_set("Kaminari", 1)
+      end
+      it 'should fall through options successfully' do
+        expect(subject.pagination_helper_code).to eql('paginate(@grid.assets)')
+      end
+
+      after(:each) do
+        Object.send(:remove_const, "Kaminari")
+      end
     end
   end
 end
