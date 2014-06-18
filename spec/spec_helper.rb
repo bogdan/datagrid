@@ -74,11 +74,14 @@ RSpec.configure do |config|
 
   end
 
-  config.treat_symbols_as_metadata_keys_with_true_values = true
-
   if NO_MONGO
     config.filter_run_excluding :mongoid => true
     config.filter_run_excluding :mongomapper => true
+  end
+
+  config.expect_with :rspec do |c|
+    #c.syntax = :expect
+    c.syntax = [:should, :expect]
   end
 
 end

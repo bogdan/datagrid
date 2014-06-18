@@ -82,7 +82,7 @@ class CssPattern
     end 
   end
 
-  def negative_failure_message
+  def failure_message
     "Expected do not match dom pattern. But it was"
   end
 
