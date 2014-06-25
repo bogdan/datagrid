@@ -169,10 +169,26 @@ describe Datagrid::Filters do
         filter(:id)
         filter(:name)
       end
-      e = Entry.create!(:name => 'hello')
+      Entry.create!(:name => 'hello')
       grid.attributes = {:id => -1, :name => 'hello'}
       expect(grid.assets).to be_empty
       expect(grid.filter_by(:name)).not_to be_empty
     end
+  end
+
+  it "should support instance filter rejection" do
+    grid = test_report(:name => 'hello') do
+      scope { Entry }
+      filter(:id)
+      filter(:name)
+    end
+
+    Entry.create!(:name => 'hello1')
+    expect(grid.assets).to be_empty
+    grid.filters.reject! {|f| f.name == :name }
+    expect(grid.filters.map(&:name)).to eq([:id])
+    expect(grid.assets).to_not be_empty
+    expect(grid.class.filters.map(&:name)).to eq([:id, :name])
+
   end
 end

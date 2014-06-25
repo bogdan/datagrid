@@ -113,6 +113,7 @@ module Datagrid
     module InstanceMethods
 
       def initialize(*args, &block) # :nodoc:
+        self.filters = self.class.filters.clone
         self.filters.each do |filter|
           self[filter.name] = filter.default
         end
@@ -120,12 +121,7 @@ module Datagrid
       end
 
       def assets # :nodoc:
-        apply_filters(super, self.class.filters)
-      end
-
-      # Returns all defined filters Array
-      def filters
-        self.class.filters
+        apply_filters(super, filters)
       end
 
       # Returns filter value for given filter definition
