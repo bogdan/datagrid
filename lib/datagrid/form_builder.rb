@@ -116,17 +116,21 @@ module Datagrid
 
         from_options = datagrid_range_filter_options(object, filter, :from, options)
         to_options = datagrid_range_filter_options(object, filter, :to, options)
+        from_input = text_field(filter.name, from_options)
+        to_input = text_field(filter.name, to_options)
+
         # 2 inputs: "from date" and "to date" to specify a range
-        [
-          text_field(filter.name, from_options),
-          I18n.t("datagrid.filters.#{type}.range_separator"),
-          text_field(filter.name, to_options)
-        ].join.html_safe
+        if separator = I18n.t("datagrid.filters.#{type}.range_separator", default: '').presence
+          # Support deprecated translation option: range_separator
+          [from_input, separator, to_input].join.html_safe
+        else
+          # More flexible range_format option
+          I18n.t("datagrid.filters.#{type}.range_format", :from_input => from_input, :to_input => to_input).html_safe
+        end
       else
         datagrid_default_filter(filter, options)
       end
     end
-
 
     def datagrid_range_filter_options(object, filter, type, options)
       type_method_map = {:from => :first, :to => :last}

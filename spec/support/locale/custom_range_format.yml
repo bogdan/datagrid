@@ -1,0 +1,7 @@
+en:
+  datagrid:
+    filters:
+      integer:
+        range_format:
+          "from %{from_input} to %{to_input}"
+

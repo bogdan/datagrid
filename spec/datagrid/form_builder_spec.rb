@@ -123,6 +123,34 @@ describe Datagrid::FormBuilder do
           '<input class="group_id integer_filter to" multiple name="report[group_id][]" size="30" type="text" value="1"/>'
         )}
       end
+
+      context "when custom format translation specified" do
+        let(:_range) { nil }
+        around(:each) do |example|
+          I18n.load_path << File.expand_path('../../support/locale/custom_range_format.yml', __FILE__)
+          I18n.reload!
+          example.run
+          I18n.load_path.pop
+          I18n.reload!
+        end
+        it { should equal_to_dom(
+          'from <input class="group_id integer_filter from" multiple name="report[group_id][]" size="30" type="text"> to <input class="group_id integer_filter to" multiple name="report[group_id][]" size="30" type="text">'
+        )}
+      end
+      context "when deprecated separator is specified" do
+        let(:_range) { nil }
+        around(:each) do |example|
+          I18n.load_path << File.expand_path('../../support/locale/deprecated_range_separator.yml', __FILE__)
+          I18n.reload!
+          example.run
+          I18n.load_path.pop
+          I18n.reload!
+
+        end
+        it { should equal_to_dom(
+          '<input class="group_id integer_filter from" multiple name="report[group_id][]" size="30" type="text"> | <input class="group_id integer_filter to" multiple name="report[group_id][]" size="30" type="text">'
+        )}
+      end
     end
 
 
