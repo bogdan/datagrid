@@ -16,7 +16,7 @@ describe Datagrid::Helper do
   before(:each) do
     allow(subject).to receive(:params).and_return({})
     allow(subject).to receive(:url_for) do |options|
-      options.to_param
+      options.is_a?(String) ? options : ["/location", options.to_param.presence].compact.join('?')
     end
 
   end
@@ -341,8 +341,8 @@ describe Datagrid::Helper do
         grid = OrderedGrid.new(:descending => true, :order => :category)
         expect(subject.datagrid_order_for(grid, grid.column_by_name(:category))).to equal_to_dom(<<-HTML)
 <div class="order">
-  <a href="ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="asc">&uarr;</a>
-  <a href="ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="desc">&darr;</a>
+  <a href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="asc">&uarr;</a>
+  <a href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="desc">&darr;</a>
 </div>
         HTML
       end
@@ -368,7 +368,7 @@ describe Datagrid::Helper do
           "form .filter label" => "Category",
           "form .filter input.category.default_filter[name='form_for_grid[category]'][value=hello]" => 1,
           "form input[name=commit][value=Search]" => 1,
-          "form a.datagrid-reset[href='']" => 1
+          "form a.datagrid-reset[href='/location']" => 1
         )
       end
       it "should support html classes for grid class with namespace" do
@@ -458,6 +458,29 @@ describe Datagrid::Helper do
         end
       end
       expect(subject.datagrid_value(report, :name, entry)).to eq("<a href=\"/profile\">Star</a>")
+    end
+
+    it "should use cache" do
+      grid = test_report do
+        scope {Entry}
+        self.cached = true
+        column(:random1, html: true) {rand(10**9)}
+        column(:random2) {|model| format(rand(10**9)) {|value| value}}
+      end
+
+      entry = Entry.create!
+
+      data_row = grid.data_row(entry)
+      html_row = subject.datagrid_row(grid, entry)
+      expect(html_row.random1).to eq(html_row.random1)
+      expect(html_row.random2).to_not eq(html_row.random1)
+      expect(data_row.random2).to eq(html_row.random2)
+      expect(data_row.random2).to_not eq(html_row.random1)
+      grid.cached = false
+      expect(html_row.random2).to_not eq(html_row.random2)
+      expect(html_row.random2).to_not eq(html_row.random1)
+      expect(data_row.random2).to_not eq(html_row.random2)
+      expect(data_row.random2).to_not eq(html_row.random1)
     end
   end
 end

@@ -21,6 +21,9 @@ module Datagrid
         self.columns_array = []
 
         class_attribute :dynamic_block, :instance_writer => false
+        
+        class_attribute :cached
+        self.cached = false
 
       end
       base.send :include, InstanceMethods
@@ -302,7 +305,7 @@ module Datagrid
         end
       end
 
-      # Returns a CSV representation of the data in the table
+      # Returns a CSV representation of the data in the grid
       # You are able to specify which columns you want to see in CSV.
       # All data columns are included by default
       # Also you can specify options hash as last argument that is proxied to
@@ -382,7 +385,7 @@ module Datagrid
         end
       end
 
-      # Returns an object representing a table row.
+      # Returns an object representing a grid row.
       # Allows to access column values
       #
       # Example:
@@ -439,15 +442,70 @@ module Datagrid
 
       # Return a cell data value for given column name and asset
       def data_value(column_name, asset)
-        column_by_name(column_name).data_value(asset, self)
+        column = column_by_name(column_name)
+        cache(column, asset, :data_value) do
+          raise "no data value for #{column.name} column" unless column.data?
+          result = generic_value(column, asset)
+          result.is_a?(Datagrid::Columns::Column::ResponseFormat) ? result.call_data : result
+        end
       end
 
       # Return a cell HTML value for given column name and asset and view context
       def html_value(column_name, context, asset)
-        column_by_name(column_name).html_value(context, asset, self)
+        column  = column_by_name(column_name)
+        cache(column, asset, :html_value) do
+          if column.html? && column.html_block
+            value_from_html_block(context, asset, column)
+          else
+            result = generic_value(column, asset)
+            result.is_a?(Datagrid::Columns::Column::ResponseFormat) ? result.call_html(context) : result
+          end
+        end
+      end
+
+
+      def generic_value(column, model) #:nodoc:
+        cache(column, model, :generic_value) do
+          unless column.enabled?(self)
+            raise Datagrid::ColumnUnavailableError, "Column #{column.name} disabled for #{inspect}"
+          end
+
+          if column.data_block.arity >= 1
+            Datagrid::Utils.apply_args(model, self, data_row(model), &column.data_block)
+          else
+            model.instance_eval(&column.data_block)
+          end
+        end
+
       end
 
       protected
+
+      def cache(column, asset, type)
+        @cache ||= {}
+        unless cached?
+          @cache.clear
+          return yield
+        end
+        key = cache_key(asset)
+        unless key
+          raise(Datagrid::CacheKeyError, "Datagrid Cache key is #{key.inspect} for #{asset.inspect}.")
+        end
+        @cache[column.name] ||= {}
+        @cache[column.name][key] ||= {}
+        @cache[column.name][key][type] ||= yield
+      end
+
+      def cache_key(asset)
+        if cached.respond_to?(:call)
+          cached.call(asset)
+        else
+          driver.default_cache_key(asset)
+        end
+      rescue NotImplementedError
+        raise Datagrid::ConfigurationError, "#{self} is setup to use cache. But there was appropriate cache key found for #{asset.inspect}. Please set cached option to block with asset as argument and cache key as returning value to resolve the issue."
+      end
+
 
       def map_with_batches(&block)
         result = []
@@ -475,6 +533,20 @@ module Datagrid
         end
       end
 
+      def value_from_html_block(context, asset, column)
+        args = []
+        remaining_arity = column.html_block.arity
+
+        if column.data?
+          args << data_value(column, asset)
+          remaining_arity -= 1
+        end
+
+        args << asset if remaining_arity > 0
+        args << self if remaining_arity > 1
+
+        context.instance_exec(*args, &column.html_block)
+      end
     end # InstanceMethods
 
     class DataRow

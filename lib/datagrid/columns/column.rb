@@ -46,9 +46,8 @@ class Datagrid::Columns::Column
   end
 
   def data_value(model, grid)
-    raise "no data value for #{name} column" unless data?
-    result = generic_value(model,grid)
-    result.is_a?(ResponseFormat) ? result.call_data : result
+    # backward compatibility method
+    grid.data_value(name, model)
   end
 
 
@@ -75,7 +74,7 @@ class Datagrid::Columns::Column
 
   def order_by_value(model, grid)
     if options[:order_by_value] == true
-      data_value(model, grid)
+      grid.data_value(self, model)
     else
       Datagrid::Utils.apply_args(model, grid, &options[:order_by_value])
     end
@@ -115,28 +114,9 @@ class Datagrid::Columns::Column
   end
 
   def html_value(context, asset, grid)
-    if html? && html_block
-      value_from_html_block(context, asset, grid)
-    else
-      result = generic_value(asset,grid)
-      result.is_a?(ResponseFormat) ? result.call_html(context) : result
-    end
+    grid.html_value(name, context, asset)
   end
 
-  def value_from_html_block(context, asset, grid)
-    args = []
-    remaining_arity = html_block.arity
-
-    if data?
-      args << data_value(asset,grid)
-      remaining_arity -= 1
-    end
-
-    args << asset if remaining_arity > 0
-    args << grid if remaining_arity > 1
-
-    return context.instance_exec(*args, &html_block)
-  end
 
   def block
     Datagrid::Utils.warn_once("Datagrid::Columns::Column#block is deprecated. Use #html_block or #data_block instead")
@@ -144,14 +124,7 @@ class Datagrid::Columns::Column
   end
 
   def generic_value(model, grid)
-    unless enabled?(grid)
-      raise Datagrid::ColumnUnavailableError, "Column #{name} disabled for #{grid.inspect}"
-    end
-    if self.data_block.arity >= 1
-      Datagrid::Utils.apply_args(model, grid, grid.data_row(model), &data_block)
-    else
-      model.instance_eval(&self.data_block)
-    end
+    grid.generic_value(self, model)
   end
 
   private

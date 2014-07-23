@@ -90,6 +90,10 @@ module Datagrid
           current_page+=1
         end
       end
+
+      def default_cache_key(asset)
+        asset.id || raise(NotImplementedError)
+      end
     end
   end
 end
