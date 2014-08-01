@@ -83,7 +83,11 @@ class CssPattern
   end
 
   def failure_message
-    "Expected do not match dom pattern. But it was"
+    "Expected to match dom pattern. But it wasn't."
+  end
+
+  def failure_message_when_negated
+    "Expected to not match dom pattern. But it was."
   end
 
   def description
