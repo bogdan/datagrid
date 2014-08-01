@@ -89,5 +89,18 @@ describe Datagrid::Drivers::Array do
         it {should == [third, first, second]}
       end
     end
+
   end
+    describe "when using enumerator scope" do
+
+      it "should work fine" do
+        grid = test_report(to_enum: true) do
+          scope {[]}
+          filter(:to_enum, :boolean) do |_, scope|
+            scope.to_enum
+          end
+        end
+        grid.assets.should_not be_any
+      end
+    end
 end
