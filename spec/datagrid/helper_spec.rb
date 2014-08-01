@@ -164,6 +164,22 @@ describe Datagrid::Helper do
         )
       end
     end
+    context "when scope is lazy enumerator" do
+      let(:grid) do
+        test_report do
+          scope { ['a', 'b'].lazy }
+          column(:name) do |value|
+            value
+          end
+        end
+      end
+      it "should render table" do
+        expect(subject.datagrid_table(grid)).to match_css_pattern(
+          "table.datagrid th.name" => 1,
+          "table.datagrid td.name" => 2,
+        )
+      end
+    end
   end
 
   describe ".datagrid_rows" do

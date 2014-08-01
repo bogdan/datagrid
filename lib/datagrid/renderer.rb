@@ -65,13 +65,14 @@ module Datagrid
 
     def rows(grid, assets, options = {})
       result = assets.map do |asset|
-        _render_partial('row', options[:partials],
-                        {
-                          :grid => grid,
-                          :options => options,
-                          :asset => asset
-                        })
-      end.join
+        _render_partial(
+          'row', options[:partials],
+          {
+            :grid => grid,
+            :options => options,
+            :asset => asset
+          })
+      end.to_a.join
 
       _safe(result)
     end
