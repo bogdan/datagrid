@@ -147,6 +147,23 @@ describe Datagrid::Helper do
         expect(rendered_partial).to include 'Namespaced order_for partial.'
       end
     end
+
+    context "when scope is enumerator" do
+      let(:grid) do
+        test_report do
+          scope { ['a', 'b'].to_enum }
+          column(:name) do |value|
+            value
+          end
+        end
+      end
+      it "should render table" do
+        expect(subject.datagrid_table(grid)).to match_css_pattern(
+          "table.datagrid th.name" => 1,
+          "table.datagrid td.name" => 2,
+        )
+      end
+    end
   end
 
   describe ".datagrid_rows" do
