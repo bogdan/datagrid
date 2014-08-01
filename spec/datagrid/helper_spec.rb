@@ -75,7 +75,7 @@ describe Datagrid::Helper do
     end
 
     it "should support giving assets explicitly" do
-      other_entry = Entry.create!(entry.attributes)
+      Entry.create!(entry.attributes)
       datagrid_table = subject.datagrid_table(grid, [entry])
 
       expect(datagrid_table).to match_css_pattern({
@@ -147,294 +147,293 @@ describe Datagrid::Helper do
         expect(rendered_partial).to include 'Namespaced order_for partial.'
       end
     end
+  end
 
-
-    describe ".datagrid_rows" do
-      it "should support urls" do
-        rp = test_report do
-          scope { Entry }
-          column(:name, :url => lambda {|model| model.name})
-        end
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name a[href=Star]" => "Star"
-        )
+  describe ".datagrid_rows" do
+    it "should support urls" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :url => lambda {|model| model.name})
       end
-
-      it "should support conditional urls" do
-        rp = test_report do
-          scope { Entry }
-          column(:name, :url => lambda {|model| false})
-        end
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name" => "Star"
-        )
-      end
-
-      it "should add ordering classes to column" do
-        rp = test_report(:order => :name) do
-          scope { Entry }
-          column(:name)
-        end
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name.ordered.asc" => "Star"
-        )
-      end
-
-      it "should add ordering classes to column" do
-        rp = test_report(:order => :name, :descending => true) do
-          scope { Entry }
-          column(:name)
-        end
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name.ordered.desc" => "Star"
-        )
-      end
-
-      it "should render html columns" do
-        rp = test_report do
-          scope { Entry }
-          column(:name, :html => true) do |model|
-            content_tag(:span, model.name)
-          end
-        end
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name span" => "Star"
-        )
-      end
-
-      it "should render argument-based html columns" do
-        rp = test_report do
-          scope { Entry }
-          column(:name, :html => lambda {|data| content_tag :h1, data})
-        end
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name h1" => "Star"
-        )
-      end
-
-      it "should render argument-based html columns with custom data" do
-        rp = test_report do
-          scope { Entry }
-          column(:name, :html => lambda {|data| content_tag :em, data}) do
-            self.name.upcase
-          end
-        end
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name em" => "STAR"
-        )
-      end
-
-      it "should render html columns with double arguments for column" do
-        rp = test_report do
-          scope { Entry }
-          column(:name, :html => true) do |model, grid|
-            content_tag(:span, "#{model.name}-#{grid.assets.klass}" )
-          end
-        end
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name span" => "Star-Entry"
-        )
-      end
-
-      it "should render argument-based html blocks with double arguments" do
-        rp = test_report do
-          scope { Entry }
-          column(:name, :html => lambda { |data, model|
-            content_tag :h1, "#{data}-#{model.name.downcase}"
-          })
-        end
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name h1" => "Star-star"
-        )
-      end
-
-      it "should render argument-based html blocks with triple arguments" do
-        rp = test_report do
-          scope { Entry }
-          column(:name, :html => lambda { |data, model, grid|
-            content_tag :h1, "#{data}-#{model.name.downcase}-#{grid.assets.klass}"
-          })
-        end
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name h1" => "Star-star-Entry"
-        )
-      end
-
-      it "should render argument-based html blocks with double arguments and custom data" do
-        rp = test_report do
-          scope { Entry }
-          column(:name, :html => lambda { |data, model|
-            content_tag :h1, "#{data}-#{model.name}"
-          }) do
-            self.name.upcase
-          end
-        end
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name h1" => "STAR-Star"
-        )
-      end
-
-      it "should render argument-based html blocks with triple arguments and custom data" do
-        rp = test_report do
-          scope { Entry }
-          column(:name, :html => lambda { |data, model, grid|
-            content_tag :h1, "#{data}-#{model.name}-#{grid.assets.klass}"
-          }) do
-            self.name.upcase
-          end
-        end
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name h1" => "STAR-Star-Entry"
-        )
-      end
-
-      it "should support columns option" do
-        rp = test_report do
-          scope { Entry }
-          column(:name)
-          column(:category)
-        end
-        expect(subject.datagrid_rows(rp, [entry], :columns => [:name])).to match_css_pattern(
-          "tr td.name" => "Star"
-        )
-        expect(subject.datagrid_rows(rp, [entry], :columns => [:name])).to match_css_pattern(
-          "tr td.category" => 0
-        )
-      end
-
-      it "should allow CSS classes to be specified for a column" do
-        rp = test_report do
-          scope { Entry }
-          column(:name, :class => 'my_class')
-        end
-
-        expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-          "tr td.name.my_class" => "Star"
-        )
-      end
-
-      context "when grid has complicated columns" do
-        let(:grid) do
-          test_report(:name => 'Hello') do
-            scope {Entry}
-            filter(:name)
-            column(:name) do |model, grid|
-              "'#{model.name}' filtered by '#{grid.name}'"
-            end
-          end
-        end
-        it "should ignore them" do
-          expect(subject.datagrid_rows(grid, [entry])).to match_css_pattern(
-            "td.name" => 1
-          )
-        end
-      end
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name a[href=Star]" => "Star"
+      )
     end
 
-    describe ".datagrid_order_for" do
-      it "should render ordering layout" do
-        class OrderedGrid
-          include Datagrid
-          scope { Entry }
-          column(:category)
-        end
-        grid = OrderedGrid.new(:descending => true, :order => :category)
-        expect(subject.datagrid_order_for(grid, grid.column_by_name(:category))).to equal_to_dom(<<-HTML)
-<div class="order">
-  <a href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="asc">&uarr;</a>
-  <a href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="desc">&darr;</a>
-</div>
-        HTML
+    it "should support conditional urls" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :url => lambda {|model| false})
       end
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name" => "Star"
+      )
     end
-    describe ".datagrid_form_for" do
-      it 'returns namespaced partial if partials options is passed' do
-        rendered_form = subject.datagrid_form_for(grid, {
-          :url => '',
-          :partials => 'client/datagrid'
+
+    it "should add ordering classes to column" do
+      rp = test_report(:order => :name) do
+        scope { Entry }
+        column(:name)
+      end
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name.ordered.asc" => "Star"
+      )
+    end
+
+    it "should add ordering classes to column" do
+      rp = test_report(:order => :name, :descending => true) do
+        scope { Entry }
+        column(:name)
+      end
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name.ordered.desc" => "Star"
+      )
+    end
+
+    it "should render html columns" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :html => true) do |model|
+          content_tag(:span, model.name)
+        end
+      end
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name span" => "Star"
+      )
+    end
+
+    it "should render argument-based html columns" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :html => lambda {|data| content_tag :h1, data})
+      end
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name h1" => "Star"
+      )
+    end
+
+    it "should render argument-based html columns with custom data" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :html => lambda {|data| content_tag :em, data}) do
+          self.name.upcase
+        end
+      end
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name em" => "STAR"
+      )
+    end
+
+    it "should render html columns with double arguments for column" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :html => true) do |model, grid|
+          content_tag(:span, "#{model.name}-#{grid.assets.klass}" )
+        end
+      end
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name span" => "Star-Entry"
+      )
+    end
+
+    it "should render argument-based html blocks with double arguments" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :html => lambda { |data, model|
+          content_tag :h1, "#{data}-#{model.name.downcase}"
         })
-        expect(rendered_form).to include 'Namespaced form partial.'
       end
-      it "should render form and filter inputs" do
-        class FormForGrid
-          include Datagrid
-          scope { Entry }
-          filter(:category)
-        end
-        grid = FormForGrid.new(:category => "hello")
-        expect(subject.datagrid_form_for(grid, :url => "/grid")).to match_css_pattern(
-          "form.datagrid-form.form_for_grid[action='/grid']" => 1,
-          "form input[name=utf8]" => 1,
-          "form .filter label" => "Category",
-          "form .filter input.category.default_filter[name='form_for_grid[category]'][value=hello]" => 1,
-          "form input[name=commit][value=Search]" => 1,
-          "form a.datagrid-reset[href='/location']" => 1
-        )
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name h1" => "Star-star"
+      )
+    end
+
+    it "should render argument-based html blocks with triple arguments" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :html => lambda { |data, model, grid|
+          content_tag :h1, "#{data}-#{model.name.downcase}-#{grid.assets.klass}"
+        })
       end
-      it "should support html classes for grid class with namespace" do
-        module ::Ns22
-          class TestGrid
-            include Datagrid
-            scope { Entry }
-            filter(:id)
-          end
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name h1" => "Star-star-Entry"
+      )
+    end
+
+    it "should render argument-based html blocks with double arguments and custom data" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :html => lambda { |data, model|
+          content_tag :h1, "#{data}-#{model.name}"
+        }) do
+          self.name.upcase
         end
-        expect(subject.datagrid_form_for(::Ns22::TestGrid.new, :url => "grid")).to match_css_pattern(
-          "form.datagrid-form.ns22_test_grid" => 1,
-          "form.datagrid-form label[for=ns22_test_grid_id]" => 1,
-          "form.datagrid-form input#ns22_test_grid_id[name='ns22_test_grid[id]']" => 1,
-        )
+      end
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name h1" => "STAR-Star"
+      )
+    end
+
+    it "should render argument-based html blocks with triple arguments and custom data" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :html => lambda { |data, model, grid|
+          content_tag :h1, "#{data}-#{model.name}-#{grid.assets.klass}"
+        }) do
+          self.name.upcase
+        end
+      end
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name h1" => "STAR-Star-Entry"
+      )
+    end
+
+    it "should support columns option" do
+      rp = test_report do
+        scope { Entry }
+        column(:name)
+        column(:category)
+      end
+      expect(subject.datagrid_rows(rp, [entry], :columns => [:name])).to match_css_pattern(
+        "tr td.name" => "Star"
+      )
+      expect(subject.datagrid_rows(rp, [entry], :columns => [:name])).to match_css_pattern(
+        "tr td.category" => 0
+      )
+    end
+
+    it "should allow CSS classes to be specified for a column" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :class => 'my_class')
       end
 
-      it "should have overridable param_name method" do
-        class ParamNameGrid81
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name.my_class" => "Star"
+      )
+    end
+
+    context "when grid has complicated columns" do
+      let(:grid) do
+        test_report(:name => 'Hello') do
+          scope {Entry}
+          filter(:name)
+          column(:name) do |model, grid|
+            "'#{model.name}' filtered by '#{grid.name}'"
+          end
+        end
+      end
+      it "should ignore them" do
+        expect(subject.datagrid_rows(grid, [entry])).to match_css_pattern(
+          "td.name" => 1
+        )
+      end
+    end
+  end
+
+  describe ".datagrid_order_for" do
+    it "should render ordering layout" do
+      class OrderedGrid
+        include Datagrid
+        scope { Entry }
+        column(:category)
+      end
+      grid = OrderedGrid.new(:descending => true, :order => :category)
+      expect(subject.datagrid_order_for(grid, grid.column_by_name(:category))).to equal_to_dom(<<-HTML)
+<div class="order">
+<a href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="asc">&uarr;</a>
+<a href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="desc">&darr;</a>
+</div>
+      HTML
+    end
+  end
+  describe ".datagrid_form_for" do
+    it 'returns namespaced partial if partials options is passed' do
+      rendered_form = subject.datagrid_form_for(grid, {
+        :url => '',
+        :partials => 'client/datagrid'
+      })
+      expect(rendered_form).to include 'Namespaced form partial.'
+    end
+    it "should render form and filter inputs" do
+      class FormForGrid
+        include Datagrid
+        scope { Entry }
+        filter(:category)
+      end
+      grid = FormForGrid.new(:category => "hello")
+      expect(subject.datagrid_form_for(grid, :url => "/grid")).to match_css_pattern(
+        "form.datagrid-form.form_for_grid[action='/grid']" => 1,
+        "form input[name=utf8]" => 1,
+        "form .filter label" => "Category",
+        "form .filter input.category.default_filter[name='form_for_grid[category]'][value=hello]" => 1,
+        "form input[name=commit][value=Search]" => 1,
+        "form a.datagrid-reset[href='/location']" => 1
+      )
+    end
+    it "should support html classes for grid class with namespace" do
+      module ::Ns22
+        class TestGrid
           include Datagrid
           scope { Entry }
           filter(:id)
-          def param_name
-            'g'
-          end
         end
-        expect(subject.datagrid_form_for(::ParamNameGrid81.new, :url => "/grid")).to match_css_pattern(
-          "form.datagrid-form input[name='g[id]']" => 1,
-        )
+      end
+      expect(subject.datagrid_form_for(::Ns22::TestGrid.new, :url => "grid")).to match_css_pattern(
+        "form.datagrid-form.ns22_test_grid" => 1,
+        "form.datagrid-form label[for=ns22_test_grid_id]" => 1,
+        "form.datagrid-form input#ns22_test_grid_id[name='ns22_test_grid[id]']" => 1,
+      )
+    end
+
+    it "should have overridable param_name method" do
+      class ParamNameGrid81
+        include Datagrid
+        scope { Entry }
+        filter(:id)
+        def param_name
+          'g'
+        end
+      end
+      expect(subject.datagrid_form_for(::ParamNameGrid81.new, :url => "/grid")).to match_css_pattern(
+        "form.datagrid-form input[name='g[id]']" => 1,
+      )
+    end
+  end
+
+
+  describe ".datagrid_row" do
+    let(:grid) do
+      test_report do
+        scope { Entry }
+        column(:name)
+        column(:category)
       end
     end
 
+    let(:entry) do
+      Entry.create!(:name => "Hello", :category => "greetings")
+    end
 
-    describe ".datagrid_row" do
-      let(:grid) do
-        test_report do
-          scope { Entry }
-          column(:name)
-          column(:category)
-        end
+    it "should provide access to row data" do
+      r = subject.datagrid_row(grid, entry)
+      expect(r.name).to eq("Hello")
+      expect(r.category).to eq("greetings")
+    end
+    it "should yield block" do
+      subject.datagrid_row(grid, entry) do |row|
+        expect(row.name).to eq("Hello")
+        expect(row.category).to eq("greetings")
       end
+    end
 
-      let(:entry) do
-        Entry.create!(:name => "Hello", :category => "greetings")
+    it "should output data from block" do
+      name = subject.datagrid_row(grid, entry) do |row|
+        subject.concat(row.name)
+        subject.concat(",")
+        subject.concat(row.category)
       end
-
-      it "should provide access to row data" do
-        r = subject.datagrid_row(grid, entry)
-        expect(r.name).to eq("Hello")
-        expect(r.category).to eq("greetings")
-      end
-      it "should yield block" do
-        subject.datagrid_row(grid, entry) do |row|
-          expect(row.name).to eq("Hello")
-          expect(row.category).to eq("greetings")
-        end
-      end
-
-      it "should output data from block" do
-        name = subject.datagrid_row(grid, entry) do |row|
-          subject.concat(row.name)
-          subject.concat(",")
-          subject.concat(row.category)
-        end
-        expect(name).to eq("Hello,greetings")
-      end
+      expect(name).to eq("Hello,greetings")
     end
   end
 
