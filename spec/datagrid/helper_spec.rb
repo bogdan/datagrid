@@ -165,7 +165,9 @@ describe Datagrid::Helper do
       end
     end
     context "when scope is lazy enumerator" do
-      pending("not supported by ruby < 2.0") if RUBY_VERSION < '2.0'
+      before(:each) do
+        pending("not supported by ruby < 2.0") if RUBY_VERSION < '2.0'
+      end
       let(:grid) do
         test_report do
           scope { ['a', 'b'].lazy }
