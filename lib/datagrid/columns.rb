@@ -414,9 +414,9 @@ module Datagrid
       end
 
       def initialize(*) #:nodoc:
-        self.columns_array = self.class.columns_array.clone
-        instance_eval(&dynamic_block) if dynamic_block
+        self.columns_array = self.class.columns_array
         super
+        instance_eval(&dynamic_block) if dynamic_block
       end
 
       # Returns all columns available for current grid configuration
