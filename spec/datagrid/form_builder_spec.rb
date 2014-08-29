@@ -25,10 +25,11 @@ describe Datagrid::FormBuilder do
     end
 
     subject do
-      view.datagrid_filter(_filter, _filter_options)
+      view.datagrid_filter(_filter, _filter_options, &_filter_block)
     end
 
     let(:_filter_options) { {} }
+    let(:_filter_block) { nil }
     context "with default filter type" do
       let(:_grid) {
         test_report do
@@ -233,6 +234,16 @@ describe Datagrid::FormBuilder do
        <option value="first">first</option>
        <option value="second">second</option></select>'
       )}
+
+      context "when block is given" do
+        before(:each) do
+          pending("not supported by rails < 4.1") if Rails.version < '4.1'
+        end
+        let(:_filter_block ) { proc { template.content_tag(:option, 'block option', :value => 'block_value') }}
+        it { should equal_to_dom(
+          '<select class="category enum_filter" id="report_category" name="report[category]"><option value=\"block_value\">block option</option></select>'
+        )}
+      end
       context "when first option is selected" do
         before(:each) do
           _grid.category = "first"

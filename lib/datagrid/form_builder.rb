@@ -4,10 +4,10 @@ module Datagrid
   module FormBuilder
 
     # Returns a form input html for the corresponding filter name
-    def datagrid_filter(filter_or_attribute, options = {})
+    def datagrid_filter(filter_or_attribute, options = {}, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       options = add_html_classes(options, filter.name, datagrid_filter_html_class(filter))
-      self.send(filter.form_builder_helper_name, filter, options)
+      self.send(filter.form_builder_helper_name, filter, options, &block)
     end
 
     # Returns a form label html for the corresponding filter name
@@ -43,7 +43,7 @@ module Datagrid
       text_field filter.name, options.reverse_merge(:value => object.filter_value_as_string(filter))
     end
 
-    def datagrid_enum_filter(attribute_or_filter, options = {})
+    def datagrid_enum_filter(attribute_or_filter, options = {}, &block)
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.checkboxes?
         options = add_html_classes(options, 'checkboxes')
@@ -60,7 +60,14 @@ module Datagrid
         if !options.has_key?(:multiple) && filter.multiple?
           options[:multiple] = true
         end
-        select filter.name, filter.select(object) || [], {:include_blank => filter.include_blank, :prompt => filter.prompt, :include_hidden => false}, options
+        select(
+          filter.name, 
+          filter.select(object) || [],
+          {:include_blank => filter.include_blank,
+           :prompt => filter.prompt,
+           :include_hidden => false},
+           options, &block
+        )
       end
     end
 
