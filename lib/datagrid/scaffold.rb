@@ -8,6 +8,9 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
     template "controller.rb.erb", "app/controllers/#{grid_controller_name.underscore}.rb"
     template "index.html.erb", "app/views/#{grid_controller_short_name}/index.html.erb"
     route("resources :#{grid_controller_short_name}")
+    unless defined?(::Kaminari) || defined?(::WillPaginate)
+      gem 'kaminari'
+    end
     in_root do
       {
         "css" => " *= require datagrid",
@@ -43,20 +46,15 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
   end
 
   def paginate_code
-    if defined?(::Kaminari) || defined?(::WillPaginate)
-      "page(params[:page])"
-    else
-      "paginate_somehow"
-    end
+    "page(params[:page])"
   end
 
   def pagination_helper_code
-    if defined?(::Kaminari)
-      "paginate(@grid.assets)"
-    elsif defined?(::WillPaginate)
+    if defined?(::WillPaginate)
       "will_paginate(@grid.assets)"
     else
-      "some_pagination_helper(@grid.assets)"
+      # Kaminari is default
+      "paginate(@grid.assets)"
     end
 
   end
