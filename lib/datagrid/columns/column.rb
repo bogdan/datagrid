@@ -106,7 +106,7 @@ class Datagrid::Columns::Column
   end
 
   def inspect
-    "#<Datagird::Columns::Column #{grid_class}##{name} #{options.inspect}>"
+    "#<Datagrid::Columns::Column #{grid_class}##{name} #{options.inspect}>"
   end
 
   def to_s
