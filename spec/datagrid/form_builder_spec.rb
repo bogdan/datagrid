@@ -12,7 +12,12 @@ end
 
 describe Datagrid::FormBuilder do
 
-  let(:template) { ActionView::Base.new}
+  let(:template) do
+    ActionView::Base.new.tap do |v|
+      v.view_paths << File.expand_path("../../../app/views", __FILE__)
+      v.view_paths << File.expand_path("../../support/test_partials", __FILE__)
+    end
+  end
   let(:view) { ActionView::Helpers::FormBuilder.new(:report, _grid, template, {}, Proc.new {|f| })}
 
 

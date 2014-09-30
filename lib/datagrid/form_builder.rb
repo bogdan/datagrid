@@ -17,6 +17,10 @@ module Datagrid
       label(filter.name, text, options, &block)
     end
 
+    def datagrid_extra_checkbox_options
+      ::ActionPack::VERSION::MAJOR >= 4 ? {:include_hidden => false} : {}
+    end
+
     protected
     def datagrid_boolean_enum_filter(attribute_or_filter, options = {})
       datagrid_enum_filter(attribute_or_filter, options)
@@ -44,18 +48,25 @@ module Datagrid
     end
 
     def datagrid_enum_filter(attribute_or_filter, options = {}, &block)
+      options = options.clone
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.checkboxes?
         options = add_html_classes(options, 'checkboxes')
-        filter.select(object).map do |element|
+        partials_path = options.delete(:partials) || 'datagrid' 
+        elements = filter.select(object).map do |element|
           text, value = @template.send(:option_text_and_value, element)
-          id = [object_name, filter.name, value].join('_').underscore
-          html_options = datagrid_extra_checkbox_options.reverse_merge(
-            :id => id, :multiple => true, :checked => enum_checkbox_checked?(filter, value)
-          )
-          input = check_box(filter.name, html_options, value.to_s, nil)
-          label(filter.name, input + text, options.reverse_merge(:for => id))
-        end.join("\n").html_safe
+          checked = enum_checkbox_checked?(filter, value)
+          [value, text, checked]
+        end
+        @template.render(
+          :partial => File.join(partials_path, 'enum_checkboxes'),
+          :locals => {
+            :elements => elements, 
+            :form => self, 
+            :filter => filter,
+            :options => options,
+          } 
+        )
       else
         if !options.has_key?(:multiple) && filter.multiple?
           options[:multiple] = true
@@ -184,10 +195,6 @@ module Datagrid
 
     def add_html_classes(options, *classes)
       Datagrid::Utils.add_html_classes(options, *classes)
-    end
-
-    def datagrid_extra_checkbox_options
-      ::ActionPack::VERSION::MAJOR >= 4 ? {:include_hidden => false} : {}
     end
 
     class Error < StandardError

@@ -10,4 +10,8 @@ class Datagrid::Filters::BooleanEnumFilter < Datagrid::Filters::EnumFilter #:nod
     super(report, attribute, options, &block)
   end
 
+
+  def checkbox_id(value)
+    [object_name, name, value].join('_').underscore 
+  end
 end

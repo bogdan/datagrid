@@ -1,0 +1,11 @@
+<%# 
+Indent in this file may cause extra space to appear.
+You can add indent if whitespace doesn't matter for you
+%>
+<%- elements.each do |value, text, checked| -%>
+<%- id = [form.object_name, filter.name, value].join('_').underscore -%>
+<%= form.label filter.name, options.merge(:for => id) do -%>
+<%= form.check_box(filter.name, form.datagrid_extra_checkbox_options.merge(:multiple => true, :id => id, :checked => checked), value.to_s, nil) -%>
+<%= text -%>
+<%- end -%>
+<%- end -%>
