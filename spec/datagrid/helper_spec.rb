@@ -382,6 +382,7 @@ describe Datagrid::Helper do
 </div>
       HTML
     end
+
   end
   describe ".datagrid_form_for" do
     it 'returns namespaced partial if partials options is passed' do
@@ -517,5 +518,28 @@ describe Datagrid::Helper do
       expect(data_row.random2).to_not eq(html_row.random2)
       expect(data_row.random2).to_not eq(html_row.random1)
     end
+  
   end
+
+  describe ".datagrid_header" do
+    
+    it "should support order_by_value colums" do
+      grid = test_report(:order => "category") do
+        scope { Entry }
+        column(:category, :order => false, :order_by_value => true)
+
+        def param_name
+          'grid'
+        end
+      end
+      expect(subject.datagrid_header(grid)).to equal_to_dom(<<-HTML)
+<tr><th class="category ordered asc">Category<div class="order">
+<a href="/location?grid%5Bdescending%5D=false&amp;grid%5Border%5D=category" class="asc">↑</a><a href="/location?grid%5Bdescending%5D=true&amp;grid%5Border%5D=category" class="desc">↓</a>
+</div>
+</th></tr>
+HTML
+    end
+  end
+
 end
+
