@@ -153,6 +153,21 @@ describe Datagrid::FormBuilder do
         )}
       end
     end
+    context "with float filter type and range option" do
+      let(:_filter) { :rating }
+      let(:_grid) {
+        test_report(:rating => _range) do
+          scope {Group}
+          filter(:rating, :float, :range => true)
+        end
+      }
+      let(:_range) { [1.5,2.5]}
+      it { should equal_to_dom(
+        '<input class="rating float_filter from" multiple name="report[rating][]" size="30" type="text" value="1.5"/>' +
+        '<span class="separator float"> - </span>' +
+        '<input class="rating float_filter to" multiple name="report[rating][]" size="30" type="text" value="2.5"/>'
+      )}
+    end
 
 
     context "with date filter type and range option" do

@@ -19,6 +19,9 @@ en:
       datetime:
         range_format:
           "%{from_input}<span class=\"separator datetime\"> - </span>%{to_input}"
+      float:
+        range_format:
+          "%{from_input}<span class=\"separator float\"> - </span>%{to_input}"
 
       eboolean:
         "yes": "Yes"
