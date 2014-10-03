@@ -534,7 +534,7 @@ describe Datagrid::Helper do
       end
       expect(subject.datagrid_header(grid)).to equal_to_dom(<<HTML)
 <tr><th class="category ordered asc">Category<div class="order">
-<a href="/location?grid%5Bdescending%5D=false&amp;grid%5Border%5D=category" class="asc">↑</a><a href="/location?grid%5Bdescending%5D=true&amp;grid%5Border%5D=category" class="desc">↓</a>
+<a href="/location?grid%5Bdescending%5D=false&amp;grid%5Border%5D=category" class="asc">&uarr;</a><a href="/location?grid%5Bdescending%5D=true&amp;grid%5Border%5D=category" class="desc">&darr;</a>
 </div>
 </th></tr>
 HTML
