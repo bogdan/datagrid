@@ -173,7 +173,7 @@ module Datagrid
     end
 
     def datagrid_float_filter(attribute_or_filter, options = {})
-      datagrid_default_filter(attribute_or_filter, options)
+      datagrid_range_filter(:float, attribute_or_filter, options)
     end
 
     def datagrid_get_attribute(attribute_or_filter)

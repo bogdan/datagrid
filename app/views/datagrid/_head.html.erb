@@ -2,7 +2,7 @@
   <% grid.html_columns(*options[:columns]).each do |column| %>
     <th class="<%= datagrid_column_classes(grid, column) %>">
       <%= column.header %>
-      <%= datagrid_order_for(grid, column, options) if column.order && options[:order]%>
+      <%= datagrid_order_for(grid, column, options) if column.supports_order? && options[:order]%>
     </th>
   <% end %>
 </tr>
