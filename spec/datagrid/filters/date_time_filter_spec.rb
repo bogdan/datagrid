@@ -27,7 +27,7 @@ describe Datagrid::Filters::DateTimeFilter do
           let(:_created_at) { [DateTime.now.beginning_of_day, DateTime.now.end_of_day] }
           it { should include(entry_dated(1.second.ago))}
           it { should include(entry_dated(Date.today.to_datetime))}
-          it { should include(entry_dated(Date.today.end_of_day.to_datetime))}
+          it { should include(entry_dated(DateTime.now.end_of_day.to_datetime))}
           it { should_not include(entry_dated(Date.yesterday.end_of_day))}
           it { should_not include(entry_dated(Date.tomorrow.beginning_of_day))}
         end

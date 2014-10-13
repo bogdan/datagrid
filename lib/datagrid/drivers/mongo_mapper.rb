@@ -24,7 +24,7 @@ module Datagrid
       end
 
       def desc(scope, order)
-        scope.sort(order.desc)
+        scope.sort("#{order} desc")
       end
 
       def default_order(scope, column_name)

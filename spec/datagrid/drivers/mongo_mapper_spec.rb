@@ -1,3 +1,5 @@
+require "spec_helper"
+
 describe Datagrid::Drivers::MongoMapper, :mongomapper do
 
   describe ".match?" do
