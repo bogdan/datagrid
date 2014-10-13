@@ -22,7 +22,6 @@ group :development do
     gem "mongo_mapper", ">=0.11.0"
     gem "bson", "1.4.0"
     gem "bson_ext", "1.4.0"
-    gem "plucky", '0.4.0'
   end
 
   gem "fastercsv", :platform => "mri_18"
