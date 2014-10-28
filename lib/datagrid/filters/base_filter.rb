@@ -114,7 +114,7 @@ class Datagrid::Filters::BaseFilter #:nodoc:
         return type
       end
     end
-    raise "wtf is #{self}"
+    raise "wtf is #{inspect}"
   end
 
   protected
