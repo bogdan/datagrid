@@ -191,4 +191,17 @@ describe Datagrid::Filters do
     expect(grid.class.filters.map(&:name)).to eq([:id, :name])
 
   end
+
+
+  describe "#filter_by_name" do
+    it "should return filter object" do
+      r = test_report do
+        scope {Entry}
+        filter(:id, :integer)
+      end
+
+      object = r.filter_by_name(:id)
+      expect(object.type).to eq(:integer)
+    end
+  end
 end

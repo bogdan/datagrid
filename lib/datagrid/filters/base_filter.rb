@@ -108,6 +108,15 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     options[:dummy]
   end
 
+  def type
+    Datagrid::Filters::FILTER_TYPES.each do |type, klass|
+      if is_a?(klass)
+        return type
+      end
+    end
+    raise "wtf is #{self}"
+  end
+
   protected
 
   def default_filter_where(driver, scope, value)
