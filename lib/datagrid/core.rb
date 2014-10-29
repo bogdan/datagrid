@@ -27,7 +27,7 @@ module Datagrid
           end
 
           define_method :"#{name}=" do |value|
-            instance_variable_set("@#{name}", block.call(value))
+            instance_variable_set("@#{name}", instance_exec(value, &block))
           end
         end
       end
