@@ -15,10 +15,10 @@ module Datagrid
             value = value.to_sym
             column = column_by_name(value)
             unless column 
-              order_unsupported(value, "no column #{value} in #{self.class}")
+              self.class.order_unsupported(value, "no column #{value} in #{self.class}")
             end
             unless column.supports_order?
-              order_unsupported(column.name, "column don't support order" ) 
+              self.class.order_unsupported(column.name, "column don't support order" ) 
             end
             value
           else

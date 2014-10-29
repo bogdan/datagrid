@@ -106,4 +106,19 @@ describe Datagrid::Ordering do
     expect(report.assets).to eq([second, first, third])
   end
 
+  it "should work correctly with inherited classes" do
+    class OrderInheritenceBase
+      include Datagrid
+      scope { Entry }
+    end
+
+    class OrderInheritenceChild < OrderInheritenceBase
+      column(:name)
+    end
+
+    grid = OrderInheritenceChild.new(order: 'name')
+    expect(grid.assets).to eq([first, second, third])
+    grid.descending = true
+    expect(grid.assets).to eq([third, second, first])
+  end
 end

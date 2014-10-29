@@ -42,11 +42,17 @@ TEST_LOGGER = Logger.new('spec.log')
 NO_MONGO = ENV['NO_MONGO']
 
 begin
-  Mongoid.from_hash({
-    "host" => "localhost",
-    "database" =>"datagrid_mongoid",
-    "autocreate_indexes" => true,
-    "logger" => nil,
+  Mongoid.load_configuration({
+    "sessions" =>
+    {
+      "default" => 
+      {
+        "hosts" => ["localhost:27017"],
+        "database" =>"datagrid_mongoid",
+        "autocreate_indexes" => true,
+        "logger" => nil,
+      }
+    }
   })
   MongoMapper.connection = Mongo::Connection.new('localhost', 27017)
   MongoMapper.database = "datagrid_mongo_mapper"
