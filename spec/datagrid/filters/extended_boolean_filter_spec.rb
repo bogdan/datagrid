@@ -3,10 +3,11 @@ require 'spec_helper'
 describe Datagrid::Filters::ExtendedBooleanFilter do
 
   it "should support select option" do
-    expect(test_report do
+    grid = test_report do
       scope {Entry}
       filter(:disabled, :xboolean)
-    end.class.filter_by_name(:disabled).select).to eq([["Yes", "YES"], ["No", "NO"]])
+    end
+    expect(grid.filter_by_name(:disabled).select(grid)).to eq([["Yes", "YES"], ["No", "NO"]])
   end
 
   it "should generate pass boolean value to filter block" do

@@ -3,17 +3,19 @@ require 'spec_helper'
 describe Datagrid::Filters::EnumFilter do
 
   it "should support select option" do
-    expect(test_report do
+    report = test_report do
       scope {Entry}
       filter(:group_id, :enum, :select =>  [1,2] )
-    end.class.filter_by_name(:group_id).select).to eq([1,2])
+    end
+    expect(report.filter_by_name(:group_id).select(report)).to eq([1,2])
   end
 
   it "should support select option as proc" do
-    expect(test_report do
+    grid = test_report do
       scope {Entry}
       filter(:group_id, :enum, :select => proc { [1,2] })
-    end.class.filter_by_name(:group_id).select).to eq([1,2])
+    end
+    expect(grid.filter_by_name(:group_id).select(grid)).to eq([1,2])
   end
 
   it "should support select option as proc with instace input" do

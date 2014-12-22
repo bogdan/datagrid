@@ -1,9 +1,9 @@
 module Datagrid::Filters::SelectOptions
 
   def select(object = nil)
-    #unless object
-      #Datagrid::Utils.warn_once("#{self.class.name}#select without argument is deprecated")
-    #end
+    unless object
+      Datagrid::Utils.warn_once("#{self.class.name}#select without argument is deprecated")
+    end
     select = self.options[:select]
     if select.is_a?(Symbol)
       object.send(select)
