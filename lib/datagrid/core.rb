@@ -98,6 +98,7 @@ module Datagrid
       end
 
 
+      # Updates datagrid attributes with a passed hash argument
       def assign_attributes(attributes)
         attributes.each do |name, value|
           self[name] = value
@@ -159,6 +160,12 @@ module Datagrid
         self.class.send :check_scope_defined!, message
       end
 
+      def inspect
+        attrs = attributes.map do |key, value|
+          "#{key}: #{value.inspect}"
+        end.join(", ")
+        "#<#{self.class} #{attrs}>"
+      end
 
     end # InstanceMethods
   end
