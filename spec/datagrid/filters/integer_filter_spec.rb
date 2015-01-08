@@ -121,7 +121,8 @@ describe Datagrid::Filters::IntegerFilter do
       filter(:group_id, :integer, :multiple => true, :allow_nil => false, :allow_blank => true )
     end
     report.group_id = []
-    expect(report.assets).to be_empty
+    expect(report.assets).to_not include(entry1)
+    expect(report.assets).to_not include(entry2)
     report.group_id = [1]
     expect(report.assets).to include(entry1)
     expect(report.assets).to_not include(entry2)
