@@ -141,4 +141,21 @@ describe Datagrid::Filters::IntegerFilter do
     expect(report.assets).to include(Entry.create!( :group_id => 2))
     expect(report.assets).not_to include(Entry.create!( :group_id => 3))
   end
+
+  it "should support multiple with allow_blank allow_nil options" do
+    report  = test_report do
+      scope {Entry}
+      filter(:group_id, :integer, :multiple => true, :allow_nil => false, :allow_blank => true )
+    end
+    group1 = Entry.create!(:group_id => 1)
+    group2 = Entry.create!(:group_id => 2)
+    report.group_id = []
+    expect(report.assets).to be_empty
+    report.group_id = [1]
+    expect(report.assets).to include(group1)
+    expect(report.assets).to_not include(group2)
+    report.group_id = nil
+    expect(report.assets).to include(group1)
+    expect(report.assets).to include(group2)
+  end
 end

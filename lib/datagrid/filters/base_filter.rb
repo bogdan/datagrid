@@ -33,13 +33,13 @@ class Datagrid::Filters::BaseFilter #:nodoc:
 
   def parse_values(value)
     if multiple?
+      return nil if value.nil?
       normalize_multiple_value(value).map do |v|
         parse(v)
       end
+    elsif value.is_a?(Array)
+      raise Datagrid::ArgumentError, "#{grid_class}##{name} filter can not accept Array argument. Use :multiple option."
     else
-      if value.is_a?(Array)
-        raise Datagrid::ArgumentError, "#{grid_class}##{name} filter can not accept Array argument. Use :multiple option."
-      end
       parse(value)
     end
   end
