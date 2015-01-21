@@ -22,13 +22,18 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
   end
 
   def unapplicable_value?(filter)
-    field, operation, value = filter
-    field.blank? || !operations.include?(operation) || super(value)
+    _, _, value = filter
+    super(value)
   end
 
   def default_filter_where(driver, scope, filter)
     field, operation, value = filter
     date_conversion = value.is_a?(Date) && driver.is_timestamp?(scope, field)
+
+    return scope if field.blank? || operation.blank?
+    unless operations.include?(operation)
+      raise Datagrid::FilteringError, "Unknown operation: #{operation.inspect}. Available operations: #{operations.join(' ')}"
+    end
     case operation
     when '='
       if date_conversion
@@ -55,7 +60,7 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
       end
       driver.less_equal(scope, field, value)
     else
-      raise "unknown operation: #{operation.inspect}"
+      raise Datagrid::FilteringError, "Unknown operation: #{operation.inspect}. Use filter block argument to implement operation"
     end
   end
 

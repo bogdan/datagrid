@@ -119,4 +119,31 @@ describe Datagrid::Filters::DynamicFilter do
     expect(report.assets).not_to include(Entry.create!(:shipping_date => '1986-08-06'))
   end
 
+  it "should support allow_nil and allow_blank options" do
+    grid = test_report do
+      scope {Entry}
+      filter(:condition, :dynamic, :allow_nil => true, :allow_blank => true, operations: ['>=', '<=']) do |(field, operation, value), scope|
+        if value.blank?
+          scope.where(disabled: false)
+        else
+          scope.where("#{field} #{operation} ?", value)
+        end
+      end
+    end
+
+    expect(grid.assets).to_not include(Entry.create!(disabled: true))
+    expect(grid.assets).to include(Entry.create!(disabled: false))
+
+    grid.condition = [:group_id, '>=', 3]
+    expect(grid.assets).to include(Entry.create!(disabled: true, group_id: 4))
+    expect(grid.assets).to_not include(Entry.create!(disabled: false, group_id: 2))
+  end
+
+  it "should raise if unknown operation" do
+    report.condition = [:shipping_date, "<>", '1996-08-05']
+    expect{
+      report.assets
+    }.to raise_error(Datagrid::FilteringError)
+  end
+
 end
