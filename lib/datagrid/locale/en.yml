@@ -23,10 +23,6 @@ en:
         range_format:
           "%{from_input}<span class=\"separator float\"> - </span>%{to_input}"
 
-      eboolean:
-        "yes": "Yes"
-        "no": "No"
-
       xboolean:
         "yes": "Yes"
         "no": "No"
