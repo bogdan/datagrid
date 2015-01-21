@@ -4,9 +4,12 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
 
   include Datagrid::Filters::SelectOptions
 
+  AVAILABLE_OPERATIONS = %w(= =~ >= <=)
+
   def initialize(*)
     super
     options[:select] ||= default_select
+    options[:operations] ||= AVAILABLE_OPERATIONS
     unless options.has_key?(:include_blank)
       options[:include_blank] = false
     end
@@ -20,7 +23,7 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
 
   def unapplicable_value?(filter)
     field, operation, value = filter
-    field.blank? || operation.blank? || super(value)
+    field.blank? || !operations.include?(operation) || super(value)
   end
 
   def default_filter_where(driver, scope, filter)
@@ -56,8 +59,12 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
     end
   end
 
+  def operations
+    options[:operations]
+  end
+
   def operations_select
-    %w(= =~ >= <=).map do |operation|
+    operations.map do |operation|
       [I18n.t(operation, :scope => "datagrid.filters.dynamic.operations").html_safe, operation]
     end
   end

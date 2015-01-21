@@ -544,6 +544,19 @@ DOM
         it {should equal_to_dom(expected_html)}
 
       end
+
+      context "when operation options passed" do
+        let(:filter_options) do
+          {:operations => %w(>= <=), :select => [:id]}
+        end
+        let(:expected_html) do
+          <<-HTML
+          <select class="condition dynamic_filter field" id="report_condition" name="report[condition][]"><option value="id">id</option></select><select class="condition dynamic_filter operation" id="report_condition" name="report[condition][]"><option value="&gt;=">≥</option>
+       <option value="&lt;=">≤</option></select><input class="condition dynamic_filter value" id="report_condition" name="report[condition][]" size="30" type="text">
+          HTML
+        end
+        it {should equal_to_dom(expected_html)}
+      end
     end
   end
 
