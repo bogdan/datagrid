@@ -202,5 +202,3 @@ module Datagrid
 
   end
 end
-
-
