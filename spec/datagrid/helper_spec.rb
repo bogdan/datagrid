@@ -365,6 +365,25 @@ describe Datagrid::Helper do
         )
       end
     end
+
+    it "should escape html" do
+      entry.update_attributes!(:name => "<div>hello</div>")
+      expect(subject.datagrid_rows(grid, [entry], :columns => [:name])).to equal_to_dom(<<-HTML)
+       <tr class=""><td class="name">&lt;div&gt;hello&lt;/div&gt;</td></tr>
+        HTML
+    end
+
+    it "should not escape safe html" do
+      entry.update_attributes!(:name => "<div>hello</div>")
+      grid.column(:safe_name) do |model|
+        model.name.html_safe
+      end
+      expect(subject.datagrid_rows(grid, [entry], :columns => [:safe_name])).to equal_to_dom(<<-HTML)
+       <tr class=""><td class="safe_name"><div>hello</div></td></tr>
+        HTML
+
+    end
+
   end
 
   describe ".datagrid_order_for" do
@@ -374,8 +393,8 @@ describe Datagrid::Helper do
         scope { Entry }
         column(:category)
       end
-      grid = OrderedGrid.new(:descending => true, :order => :category)
-      expect(subject.datagrid_order_for(grid, grid.column_by_name(:category))).to equal_to_dom(<<-HTML)
+      object = OrderedGrid.new(:descending => true, :order => :category)
+      expect(subject.datagrid_order_for(object, object.column_by_name(:category))).to equal_to_dom(<<-HTML)
 <div class="order">
 <a href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="asc">&uarr;</a>
 <a href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="desc">&darr;</a>
@@ -398,8 +417,8 @@ describe Datagrid::Helper do
         scope { Entry }
         filter(:category)
       end
-      grid = FormForGrid.new(:category => "hello")
-      expect(subject.datagrid_form_for(grid, :url => "/grid")).to match_css_pattern(
+      object = FormForGrid.new(:category => "hello")
+      expect(subject.datagrid_form_for(object, :url => "/grid")).to match_css_pattern(
         "form.datagrid-form.form_for_grid[action='/grid']" => 1,
         "form input[name=utf8]" => 1,
         "form .filter label" => "Category",
@@ -482,6 +501,7 @@ describe Datagrid::Helper do
           "<b>#{e.name}</b>"
         end
       end
+
       expect(subject.datagrid_value(report, :name, entry)).to eq("<b>Star</b>")
     end
     it "should support format in column" do
@@ -493,6 +513,7 @@ describe Datagrid::Helper do
           end
         end
       end
+      expect(subject.datagrid_value(report, :name, entry)).to be_html_safe
       expect(subject.datagrid_value(report, :name, entry)).to eq("<a href=\"/profile\">Star</a>")
     end
 

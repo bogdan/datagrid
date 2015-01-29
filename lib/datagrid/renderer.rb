@@ -22,7 +22,7 @@ module Datagrid
       if url
         @template.link_to(value, url)
       else
-        _safe(value)
+        value
       end
     end
 
