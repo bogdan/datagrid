@@ -10,18 +10,18 @@ en:
       search: "Search"
       reset: "Reset"
     filters:
-      integer:
-        range_format:
-          "%{from_input}<span class=\"separator integer\"> - </span>%{to_input}"
-      date:
-        range_format:
-          "%{from_input}<span class=\"separator date\"> - </span>%{to_input}"
-      datetime:
-        range_format:
-          "%{from_input}<span class=\"separator datetime\"> - </span>%{to_input}"
-      float:
-        range_format:
-          "%{from_input}<span class=\"separator float\"> - </span>%{to_input}"
+      #integer:
+        #range_format:
+          #"%{from_input}<span class=\"separator integer\"> - </span>%{to_input}"
+      #date:
+        #range_format:
+          #"%{from_input}<span class=\"separator date\"> - </span>%{to_input}"
+      #datetime:
+        #range_format:
+          #"%{from_input}<span class=\"separator datetime\"> - </span>%{to_input}"
+      #float:
+        #range_format:
+          #"%{from_input}<span class=\"separator float\"> - </span>%{to_input}"
 
       xboolean:
         "yes": "Yes"

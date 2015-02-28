@@ -130,12 +130,14 @@ describe Datagrid::FormBuilder do
         )}
       end
 
-      context "when custom format translation specified" do
+      context "when deprecated format translation specified" do
         let(:_range) { nil }
         around(:each) do |example|
-          I18n.load_path << File.expand_path('../../support/locale/custom_range_format.yml', __FILE__)
+          I18n.load_path << File.expand_path('../../support/locale/deprecated_range_format.yml', __FILE__)
           I18n.reload!
-          example.run
+          silence_warnings do
+            example.run
+          end
           I18n.load_path.pop
           I18n.reload!
         end
@@ -148,7 +150,9 @@ describe Datagrid::FormBuilder do
         around(:each) do |example|
           I18n.load_path << File.expand_path('../../support/locale/deprecated_range_separator.yml', __FILE__)
           I18n.reload!
-          example.run
+          silence_warnings do
+            example.run
+          end
           I18n.load_path.pop
           I18n.reload!
 
