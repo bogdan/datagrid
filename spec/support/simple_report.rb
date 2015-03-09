@@ -61,3 +61,12 @@ class SimpleReport
   end
 
 end
+
+module Ns45
+  class TranslatedReport
+    include Datagrid
+    scope { Entry }
+    filter(:name)
+    column(:name)
+  end
+end

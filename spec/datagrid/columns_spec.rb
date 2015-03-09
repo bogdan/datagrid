@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Datagrid::Columns do
+  include I18nHelpers
 
   let(:group) { Group.create!(:name => "Pop") }
 
@@ -30,6 +31,18 @@ describe Datagrid::Columns do
     end
     it  "should generate header" do
       expect(subject.header).to eq(["Shipping date", "Group", "Name", "Access level", "Pet"])
+    end
+
+    it "translates column with deprecated namespace" do
+      store_translations(:en, datagrid: {ns45_translated_report: {columns: {name: "Navn"}}}) do
+        expect(Ns45::TranslatedReport.new.header.first).to eq("Navn")
+      end
+    end
+
+    it "translates column with namespace" do
+      store_translations(:en, datagrid: {:"ns45/translated_report" => {columns: {name: "Navn"}}}) do
+        expect(Ns45::TranslatedReport.new.header.first).to eq("Navn")
+      end
     end
 
     it "should return html_columns" do

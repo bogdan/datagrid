@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Datagrid::Filters do
+  include I18nHelpers
 
   it "should support default option as proc" do
     expect(test_report do
@@ -204,4 +205,19 @@ describe Datagrid::Filters do
       expect(object.type).to eq(:integer)
     end
   end
+
+  it "translates filter with deprecated namespace" do
+    grid = Ns45::TranslatedReport.new
+    store_translations(:en, datagrid: {ns45_translated_report: {filters: {name: "Navn"}}}) do
+      expect(grid.filters.map(&:header)).to eq(["Navn"])
+    end
+  end
+
+  it "translates filter with namespace" do
+    grid = Ns45::TranslatedReport.new
+    store_translations(:en, datagrid: {:"ns45/translated_report" => {filters: {name: "Navn"}}}) do
+      expect(grid.filters.map(&:header)).to eq(["Navn"])
+    end
+  end
+
 end

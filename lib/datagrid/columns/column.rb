@@ -1,4 +1,7 @@
+require_relative "../translation"
+
 class Datagrid::Columns::Column
+  include Datagrid::Translation
 
   class ResponseFormat # :nodoc:
 
@@ -56,8 +59,7 @@ class Datagrid::Columns::Column
   end
 
   def header
-    self.options[:header] ||
-      I18n.translate(self.name, :scope => "datagrid.#{self.grid_class.model_name.i18n_key}.columns", :default => self.name.to_s.humanize )
+    self.options[:header] || translate_from_namespace(:columns, grid_class, name)
   end
 
   def order

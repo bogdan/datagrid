@@ -1,7 +1,10 @@
+require_relative "../translation"
+
 class Datagrid::FilteringError < StandardError
 end
 
 class Datagrid::Filters::BaseFilter #:nodoc:
+  include Datagrid::Translation
 
   attr_accessor :grid_class, :options, :block, :name
 
@@ -49,8 +52,7 @@ class Datagrid::Filters::BaseFilter #:nodoc:
   end
 
   def header
-    options[:header] ||
-      I18n.translate(self.name, :scope => "datagrid.#{grid_class.model_name.i18n_key}.filters", :default => self.name.to_s.humanize)
+    options[:header] || translate_from_namespace(:filters, grid_class, name)
   end
 
   def default
