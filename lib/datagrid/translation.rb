@@ -5,18 +5,20 @@ module Datagrid
     include ActionView::Helpers::TranslationHelper
 
     def translate_from_namespace(namespace, grid_class, key)
-      deprecated_namespace = :"datagrid.#{grid_class.param_name}.#{namespace}.#{key}"
+      deprecated_translation_key = :"#{grid_class.param_name}.#{namespace}.#{key}"
 
-      Datagrid::Utils.warn_once(
-        "Deprecated translation namespace. Use 'datagrid.#{grid_class.model_name.i18n_key}' instead"
-      ) if I18n.exists? deprecated_namespace
+      if grid_class.name.include?("::") && I18n.exists?(deprecated_translation_key)
+        Datagrid::Utils.warn_once(
+          "Deprecated translation namespace. Use 'datagrid.#{grid_class.model_name.i18n_key}' instead"
+        )
+      end
 
       lookups = [
-        :"datagrid.#{grid_class.model_name.i18n_key}.#{namespace}.#{key}",
-        deprecated_namespace,
+        :"#{grid_class.model_name.i18n_key}.#{namespace}.#{key}",
+        deprecated_translation_key,
         key.to_s.humanize
       ]
-      t(lookups.shift, default: lookups).presence
+      t(lookups.shift, scope: "datagrid", default: lookups).presence
     end
 
   end
