@@ -8,9 +8,8 @@ group :development do
   gem "jeweler"
 
 
-  gem "debugger", :platform => "ruby_19"
+  gem "debugger", :platform => :ruby_19
   gem "byebug", :platform => [:ruby_20, :ruby_21, :ruby_22] & Bundler::Dsl::VALID_PLATFORMS
-  gem "ruby-debug", :platform => "ruby_18"
 
   gem "rspec", ">= 3"
   gem "nokogiri" # used to test html output
@@ -24,5 +23,4 @@ group :development do
     gem "bson_ext", "1.4.0"
   end
 
-  gem "fastercsv", :platform => "mri_18"
 end
