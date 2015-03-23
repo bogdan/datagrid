@@ -92,7 +92,7 @@ describe Datagrid::Drivers::MongoMapper, :mongomapper do
         test_report(:order => :test) do
           scope { MongoMapperEntry }
           column(:test)
-        end
+        end.assets
       }.to raise_error(Datagrid::OrderUnsupported)
     end
   end

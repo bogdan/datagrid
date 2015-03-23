@@ -3,9 +3,9 @@ require 'spec_helper'
 describe Datagrid::Ordering do
 
 
-  let!(:first) { Entry.create!(:name => "aa")}
-  let!(:second) { Entry.create!(:name => "bb")}
   let!(:third) { Entry.create!(:name => "cc")}
+  let!(:second) { Entry.create!(:name => "bb")}
+  let!(:first) { Entry.create!(:name => "aa")}
 
 
   it "should support order" do
@@ -30,7 +30,7 @@ describe Datagrid::Ordering do
 
   it "should raise error if ordered by not existing column" do
     expect {
-      test_report(:order => :hello)
+      test_report(:order => :hello).assets
     }.to raise_error(Datagrid::OrderUnsupported)
   end
 
@@ -40,7 +40,7 @@ describe Datagrid::Ordering do
         filter(:category, :default, :order => false) do |value|
           self
         end
-      end
+      end.assets
     end.to raise_error(Datagrid::OrderUnsupported)
   end
 
@@ -120,5 +120,17 @@ describe Datagrid::Ordering do
     expect(grid.assets).to eq([first, second, third])
     grid.descending = true
     expect(grid.assets).to eq([third, second, first])
+  end
+  it "should support ordering by dynamic columns" do
+
+    report = test_report(:order => "name") do
+      scope {Entry}
+      dynamic do
+        column(:name)
+      end
+    end
+
+    expect(report.assets).to eq([first, second, third])
+
   end
 end

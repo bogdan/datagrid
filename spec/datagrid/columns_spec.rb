@@ -212,7 +212,10 @@ describe Datagrid::Columns do
       end
       first = Entry.create(:name => '1st')
       second = Entry.create(:name => '2nd')
-      expect { report.attributes = {:order => :id} }.to raise_error(Datagrid::OrderUnsupported)
+      expect do
+        report.attributes = {:order => :id} 
+        report.assets
+      end.to raise_error(Datagrid::OrderUnsupported)
       report.attributes = {:order => :name, :descending => true}
       expect(report.assets).to eq([second, first])
     end

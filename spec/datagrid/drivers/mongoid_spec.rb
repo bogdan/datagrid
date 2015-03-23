@@ -92,7 +92,7 @@ describe Datagrid::Drivers::Mongoid, :mongoid do
         test_report(:order => :test) do
           scope { MongoidEntry }
           column(:test)
-        end
+        end.assets
       }.to raise_error(Datagrid::OrderUnsupported)
     end
 
