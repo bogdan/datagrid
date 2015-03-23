@@ -295,14 +295,6 @@ describe Datagrid::FormBuilder do
         )}
       end
       context "with checkboxes option" do
-        let(:_filter) { :category_with_prompt }
-        it { should equal_to_dom(
-          '<select class="category_with_prompt enum_filter" id="report_category_with_prompt" name="report[category_with_prompt]"><option value="">My Prompt</option>
-         <option value="first">first</option>
-         <option value="second">second</option></select>'
-        )}
-      end
-      context "with checkboxes option" do
         let(:_grid) do
           test_report do
             scope {Entry}
