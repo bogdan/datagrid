@@ -9,7 +9,7 @@ group :development do
 
 
   gem "debugger", :platform => "ruby_19"
-  gem "byebug", :platform => ["ruby_20", "ruby_21", "ruby_22"] & Bundler::Dsl::VALID_PLATFORMS
+  gem "byebug", :platform => [:ruby_20, :ruby_21, :ruby_22] & Bundler::Dsl::VALID_PLATFORMS
   gem "ruby-debug", :platform => "ruby_18"
 
   gem "rspec", ">= 3"
