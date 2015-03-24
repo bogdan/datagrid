@@ -419,7 +419,7 @@ module Datagrid
         instance_eval(&dynamic_block) if dynamic_block
       end
 
-      # Returns all columns available for current grid configuration
+      # Returns all columns available for current grid configuration.
       #   
       #   class MyGrid
       #     filter(:search)
