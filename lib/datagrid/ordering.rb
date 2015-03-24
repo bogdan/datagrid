@@ -53,7 +53,13 @@ module Datagrid
       #   MyGrid.new(:order => "name").order_column # => #<Column name: "name", ...>
       #
       def order_column
-        column_by_name(order)
+        order && column_by_name(order)
+      end
+
+      # Returns true if given grid is ordered by given column.
+      # <tt>column</tt> can be given as name or as column object
+      def ordered_by?(column)
+        order_column == column_by_name(column)
       end
 
       private

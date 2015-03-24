@@ -133,4 +133,18 @@ describe Datagrid::Ordering do
     expect(report.assets).to eq([first, second, third])
 
   end
+
+  it "should support #ordered_by? method" do
+    report = test_report(:order => "name") do
+      scope  {Entry}
+      column(:id)
+      column(:name)
+    end
+    expect(report).to be_ordered_by(:name)
+    expect(report).to be_ordered_by("name")
+    expect(report).to be_ordered_by(report.column_by_name(:name))
+    expect(report).to_not be_ordered_by(:id)
+    expect(report).to_not be_ordered_by("id")
+    expect(report).to_not be_ordered_by(report.column_by_name(:id))
+  end
 end
