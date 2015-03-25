@@ -30,7 +30,17 @@ describe Datagrid::Filters::ExtendedBooleanFilter do
     expect(grid.disabled).to eq("NO")
     expect(grid.assets).to include(enabled_entry)
     expect(grid.assets).not_to include(disabled_entry)
+  end
 
+  it "should normalize true/false as YES/NO" do
+    grid = test_report do
+      scope {Entry}
+      filter(:disabled, :xboolean)
+    end
+    grid.disabled = true
+    expect(grid.disabled).to eq("YES")
+    grid.disabled = false
+    expect(grid.disabled).to eq("NO")
   end
 
 end

@@ -16,8 +16,16 @@ class Datagrid::Filters::ExtendedBooleanFilter < Datagrid::Filters::EnumFilter #
   end
 
   def parse(value)
-    return nil if value.blank?
-    super(value)
+    case
+    when value == true
+      YES
+    when value == false
+      NO
+    when value.blank?
+      nil
+    else
+      super(value)
+    end
   end
 
 end
