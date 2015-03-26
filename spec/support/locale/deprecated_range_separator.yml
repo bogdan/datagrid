@@ -1,5 +1,0 @@
-en:
-  datagrid:
-    filters:
-      integer:
-        range_separator: " | "
