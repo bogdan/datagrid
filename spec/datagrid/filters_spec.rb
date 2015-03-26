@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Datagrid::Filters do
-  include I18nHelpers
 
   it "should support default option as proc" do
     expect(test_report do

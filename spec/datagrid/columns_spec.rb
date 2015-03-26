@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Datagrid::Columns do
-  include I18nHelpers
 
   let(:group) { Group.create!(:name => "Pop") }
 
