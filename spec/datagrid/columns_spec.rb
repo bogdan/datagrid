@@ -34,13 +34,13 @@ describe Datagrid::Columns do
 
     describe "translations" do
       
-        module ::Ns45
-          class TranslatedReport
-            include Datagrid
-            scope { Entry }
-            column(:name)
-          end
+      module ::Ns45
+        class TranslatedReport
+          include Datagrid
+          scope { Entry }
+          column(:name)
         end
+      end
       it "translates column with deprecated namespace" do
         silence_warnings do
           store_translations(:en, datagrid: {ns45_translated_report: {columns: {name: "Navn"}}}) do
