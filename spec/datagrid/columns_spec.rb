@@ -32,6 +32,41 @@ describe Datagrid::Columns do
       expect(subject.header).to eq(["Shipping date", "Group", "Name", "Access level", "Pet"])
     end
 
+    describe "translations" do
+      
+      module ::Ns45
+        class TranslatedReport
+          include Datagrid
+          scope { Entry }
+          column(:name)
+        end
+      end
+      it "translates column with deprecated namespace" do
+        silence_warnings do
+          store_translations(:en, datagrid: {ns45_translated_report: {columns: {name: "Navn"}}}) do
+            expect(Ns45::TranslatedReport.new.header.first).to eq("Navn")
+          end
+        end
+      end
+
+      it "translates column with namespace" do
+        store_translations(:en, datagrid: {:"ns45/translated_report" => {columns: {name: "Navn"}}}) do
+          expect(Ns45::TranslatedReport.new.header.first).to eq("Navn")
+        end
+      end
+
+      it "translates column without namespace" do
+        class Report27
+          include Datagrid
+          scope {Entry}
+          column(:name)
+        end
+        store_translations(:en, datagrid: {:"report27" => {columns: {name: "Nombre"}}}) do
+          expect(Report27.new.header.first).to eq("Nombre")
+        end
+      end
+    end
+
     it "should return html_columns" do
       report = test_report do
         scope {Entry}

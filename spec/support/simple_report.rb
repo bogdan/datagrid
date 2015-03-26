@@ -61,3 +61,4 @@ class SimpleReport
   end
 
 end
+

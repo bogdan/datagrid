@@ -56,8 +56,7 @@ class Datagrid::Columns::Column
   end
 
   def header
-    self.options[:header] ||
-      I18n.translate(self.name, :scope => "datagrid.#{self.grid_class.param_name}.columns", :default => self.name.to_s.humanize )
+    self.options[:header] || Datagrid::Utils.translate_from_namespace(:columns, grid_class, name)
   end
 
   def order
