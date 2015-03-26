@@ -23,13 +23,35 @@ describe Datagrid::Columns do
     let(:date) { Date.new(2013, 8, 1) }
 
     it "should have data columns without html columns" do
-      expect(subject.data_columns.size).to eq(subject.columns.size - 1)
+      grid = test_report do
+        scope {Entry}
+        column(:name)
+        column(:action, :html => true) do 
+          'dummy'
+        end
+      end
+      expect(grid.data_columns.map(&:name)).to eq([:name])
+      expect(grid.html_columns.map(&:name)).to eq([:name, :action])
     end
     it "should build rows of data" do
-      expect(subject.rows).to eq([[date, "Pop", "Star", "admin", "ROTTWEILER"]])
+      grid = test_report do
+        scope {Entry}
+        column(:name)
+        column(:action, :html => true) do 
+          'dummy'
+        end
+      end
+      expect(grid.rows).to eq([["Star"]])
     end
-    it  "should generate header" do
-      expect(subject.header).to eq(["Shipping date", "Group", "Name", "Access level", "Pet"])
+    it  "should generate header without html columns" do
+      grid = test_report do
+        scope {Entry}
+        column(:name)
+        column(:action, :html => true) do 
+          'dummy'
+        end
+      end
+      expect(grid.header).to eq(["Name"])
     end
 
     describe "translations" do

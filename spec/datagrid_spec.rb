@@ -2,9 +2,11 @@ require 'spec_helper'
 require "datagrid/rspec"
 
 
-describe SimpleReport do
+describe Datagrid do
   
-  it_should_behave_like 'Datagrid'
+  describe SimpleReport do
+    it_should_behave_like 'Datagrid'
+  end
   
   let(:group) { Group.create!(:name => "Pop") }
   
