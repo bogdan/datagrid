@@ -54,6 +54,17 @@ describe Datagrid::Columns do
           expect(Ns45::TranslatedReport.new.header.first).to eq("Navn")
         end
       end
+
+      it "translates column without namespace" do
+        class Report27
+          include Datagrid
+          scope {Entry}
+          column(:name)
+        end
+        store_translations(:en, datagrid: {:"report27" => {columns: {name: "Nombre"}}}) do
+          expect(Report27.new.header.first).to eq("Nombre")
+        end
+      end
     end
 
     it "should return html_columns" do
