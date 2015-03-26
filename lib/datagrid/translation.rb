@@ -10,7 +10,7 @@ module Datagrid
 
       if grid_class.param_name != i18n_key && I18n.exists?(deprecated_key)
         Datagrid::Utils.warn_once(
-          "Deprecated translation namespace. Use 'datagrid.#{i18n_key}' instead"
+          "Deprecated translation namespace 'datagrid.#{grid_class.param_name}' for #{grid_class}. Use 'datagrid.#{i18n_key}' instead."
         )
         return I18n.t(deprecated_key)
       end

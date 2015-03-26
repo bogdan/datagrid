@@ -206,18 +206,30 @@ describe Datagrid::Filters do
     end
   end
 
+  describe "tranlations" do
+    
+      module ::Ns46
+        class TranslatedReport
+          include Datagrid
+          scope { Entry }
+          filter(:name)
+        end
+      end
   it "translates filter with deprecated namespace" do
-    grid = Ns45::TranslatedReport.new
-    store_translations(:en, datagrid: {ns45_translated_report: {filters: {name: "Navn"}}}) do
-      expect(grid.filters.map(&:header)).to eq(["Navn"])
+    grid = Ns46::TranslatedReport.new
+    silence_warnings do
+      store_translations(:en, datagrid: {ns46_translated_report: {filters: {name: "Navn"}}}) do
+        expect(grid.filters.map(&:header)).to eq(["Navn"])
+      end
     end
   end
 
   it "translates filter with namespace" do
-    grid = Ns45::TranslatedReport.new
-    store_translations(:en, datagrid: {:"ns45/translated_report" => {filters: {name: "Navn"}}}) do
+    grid = Ns46::TranslatedReport.new
+    store_translations(:en, datagrid: {:"ns46/translated_report" => {filters: {name: "Navn"}}}) do
       expect(grid.filters.map(&:header)).to eq(["Navn"])
     end
   end
 
+  end
 end
