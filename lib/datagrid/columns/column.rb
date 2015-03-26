@@ -1,7 +1,4 @@
-require_relative "../translation"
-
 class Datagrid::Columns::Column
-  include Datagrid::Translation
 
   class ResponseFormat # :nodoc:
 
@@ -59,7 +56,7 @@ class Datagrid::Columns::Column
   end
 
   def header
-    self.options[:header] || translate_from_namespace(:columns, grid_class, name)
+    self.options[:header] || Datagrid::Utils.translate_from_namespace(:columns, grid_class, name)
   end
 
   def order
