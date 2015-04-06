@@ -45,7 +45,7 @@ shared_examples_for "Datagrid" do
           when :integer
             1
           when :enum
-            select = filter.select(subject)
+            select = subject.select_options(filter)
             select.first.try(:last)
           else
             raise "unknown filter type: #{filter.class}"

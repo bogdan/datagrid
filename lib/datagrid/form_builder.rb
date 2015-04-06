@@ -53,7 +53,7 @@ module Datagrid
       if filter.checkboxes?
         options = add_html_classes(options, 'checkboxes')
         partials_path = options.delete(:partials) || 'datagrid' 
-        elements = filter.select(object).map do |element|
+        elements = object.select_options(filter).map do |element|
           text, value = @template.send(:option_text_and_value, element)
           checked = enum_checkbox_checked?(filter, value)
           [value, text, checked]
@@ -73,7 +73,7 @@ module Datagrid
         end
         select(
           filter.name, 
-          filter.select(object) || [],
+          object.select_options(filter) || [],
           {:include_blank => filter.include_blank,
            :prompt => filter.prompt,
            :include_hidden => false},
@@ -108,7 +108,7 @@ module Datagrid
       options = options.merge(:name => input_name)
       field_input = select(
         filter.name,
-        filter.select(object) || [],
+        object.select_options(filter) || [],
         {
           :include_blank => filter.include_blank,
           :prompt => filter.prompt,
