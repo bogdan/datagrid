@@ -151,6 +151,16 @@ module Datagrid
         apply_filters(scope, filters.map{|f| filter_by_name(f)})
       end
 
+      # Returns select options for specific filter or filter name
+      # If given filter doesn't support select options raises `ArgumentError`
+      def select_options(filter)
+        filter = filter_by_name(filter)
+        unless filter.class.included_modules.include?(::Datagrid::Filters::SelectOptions)
+          raise ::Datagrid::ArgumentError, "#{filter.name} with type #{FILTER_TYPES.invert[filter.class].inspect} can not have select options"
+        end
+        filter.select(self)
+      end
+
       protected
 
       def apply_filters(current_scope, filters)
