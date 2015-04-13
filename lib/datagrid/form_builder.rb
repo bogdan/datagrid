@@ -52,14 +52,13 @@ module Datagrid
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.checkboxes?
         options = add_html_classes(options, 'checkboxes')
-        partials_path = options.delete(:partials) || 'datagrid' 
         elements = object.select_options(filter).map do |element|
           text, value = @template.send(:option_text_and_value, element)
           checked = enum_checkbox_checked?(filter, value)
           [value, text, checked]
         end
         @template.render(
-          :partial => File.join(partials_path, 'enum_checkboxes'),
+          :partial => partial_path(options, 'enum_checkboxes'),
           :locals => {
             :elements => elements, 
             :form => self, 
@@ -95,7 +94,7 @@ module Datagrid
 
     def datagrid_integer_filter(attribute_or_filter, options = {})
       filter = datagrid_get_filter(attribute_or_filter)
-      if filter.multiple? && self.object[filter.name].blank?
+      if filter.multiple? && object[filter.name].blank?
         options[:value] = ""
       end
       datagrid_range_filter(:integer, filter, options)
@@ -151,7 +150,7 @@ module Datagrid
           I18n.t(format_key, :from_input => from_input, :to_input => to_input).html_safe
         else
           # More flexible way to render via partial
-          @template.render :partial => 'datagrid/range_filter', :locals => {
+          @template.render :partial => partial_path(options, 'range_filter'), :locals => {
             :from_options => from_options, :to_options => to_options, :filter => filter, :form => self
           }
         end
@@ -214,8 +213,11 @@ module Datagrid
       Datagrid::Utils.add_html_classes(options, *classes)
     end
 
-    class Error < StandardError
+    def partial_path(options, name)
+      File.join(options.delete(:partials) || 'datagrid', name)
     end
 
+    class Error < StandardError
+    end
   end
 end
