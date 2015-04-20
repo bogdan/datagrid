@@ -2,7 +2,7 @@ require "datagrid/filters/ranged_filter"
 
 class Datagrid::Filters::DateTimeFilter < Datagrid::Filters::BaseFilter
 
-  include RangedFilter
+  include Datagrid::Filters::RangedFilter
 
   def parse(value)
     Datagrid::Utils.parse_datetime(value)

@@ -1,4 +1,4 @@
-module RangedFilter
+module Datagrid::Filters::RangedFilter
   
 
   def initialize(grid, name, options, &block)

@@ -1,6 +1,6 @@
 class Datagrid::Filters::FloatFilter < Datagrid::Filters::BaseFilter
 
-  include RangedFilter
+  include Datagrid::Filters::RangedFilter
 
   def parse(value)
     return nil if value.blank?

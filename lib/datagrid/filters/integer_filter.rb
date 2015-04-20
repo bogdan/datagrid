@@ -2,7 +2,7 @@ require "datagrid/filters/ranged_filter"
 
 class Datagrid::Filters::IntegerFilter < Datagrid::Filters::BaseFilter
 
-  include RangedFilter
+  include Datagrid::Filters::RangedFilter
 
   def parse(value)
     return nil if value.blank?
