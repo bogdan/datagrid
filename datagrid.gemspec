@@ -11,12 +11,11 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Bogdan Gusiev"]
-  s.date = "2015-03-25"
+  s.date = "2015-04-13"
   s.description = "This allows you to easily build datagrid aka data tables with sortable columns and filters"
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
-    "LICENSE.txt",
-    "Readme.markdown"
+    "LICENSE.txt"
   ]
   s.files = [
     ".document",
@@ -103,8 +102,7 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb",
     "spec/support/active_record.rb",
     "spec/support/configuration.rb",
-    "spec/support/locale/deprecated_range_format.yml",
-    "spec/support/locale/deprecated_range_separator.yml",
+    "spec/support/i18n_helpers.rb",
     "spec/support/matchers.rb",
     "spec/support/mongo_mapper.rb",
     "spec/support/mongoid.rb",
@@ -121,7 +119,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/bogdan/datagrid"
   s.licenses = ["MIT"]
-  s.rubygems_version = "2.4.5"
+  s.rubygems_version = "2.2.2"
   s.summary = "Ruby gem to create datagrids"
 
   if s.respond_to? :specification_version then
