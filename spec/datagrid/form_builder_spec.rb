@@ -58,6 +58,13 @@ describe Datagrid::FormBuilder do
       it { should equal_to_dom(
         '<input class="group_id integer_filter" id="report_group_id" name="report[group_id]" size="30" type="text"/>'
       )}
+
+      context "when partials option is passed for filter that don't support range" do
+        let(:_filter_options) { {partials: 'anything' } }
+        it { should equal_to_dom(
+          '<input class="group_id integer_filter" id="report_group_id" name="report[group_id]" size="30" type="text"/>'
+        )}
+      end
     end
 
     context "with date filter type" do
@@ -128,6 +135,23 @@ describe Datagrid::FormBuilder do
           '<span class="separator integer"> - </span>' +
           '<input class="group_id integer_filter to" multiple name="report[group_id][]" size="30" type="text" value="1"/>'
         )}
+      end
+
+      context "with custom partials option and template exists" do
+        let(:_filter_options) { { :partials => 'custom_range' } }
+        let(:_range) { nil }
+        it { should equal_to_dom(
+          "custom_range_partial"
+        ) }
+      end
+
+      context "when custom partial doesn't exist" do
+        let(:_filter_options) { { :partials => 'not_existed' } }
+        let(:_range) { nil }
+        it { should equal_to_dom(
+          '<input class="group_id integer_filter from" multiple name="report[group_id][]" size="30" type="text"><span class="separator integer"> - </span><input class="group_id integer_filter to" multiple name="report[group_id][]" size="30" type="text">'
+        ) }
+        
       end
 
       context "when deprecated format translation specified" do
@@ -313,6 +337,11 @@ describe Datagrid::FormBuilder do
           )}
 
 
+        end
+
+        context "when partials option passed and partial exists" do
+          let(:_filter_options) { {partials: 'custom_checkboxes'} }
+          it { should equal_to_dom('custom_enum_checkboxes') }
         end
       end
     end

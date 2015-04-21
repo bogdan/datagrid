@@ -7,6 +7,8 @@ module Datagrid
     def datagrid_filter(filter_or_attribute, options = {}, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       options = add_html_classes(options, filter.name, datagrid_filter_html_class(filter))
+      # Prevent partials option from appearing in HTML attributes
+      options.delete(:partials) unless supports_partial?(filter)
       self.send(filter.form_builder_helper_name, filter, options, &block)
     end
 
@@ -48,9 +50,9 @@ module Datagrid
     end
 
     def datagrid_enum_filter(attribute_or_filter, options = {}, &block)
-      options = options.clone
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.checkboxes?
+        partial = partial_path(options, 'enum_checkboxes')
         options = add_html_classes(options, 'checkboxes')
         elements = object.select_options(filter).map do |element|
           text, value = @template.send(:option_text_and_value, element)
@@ -58,7 +60,7 @@ module Datagrid
           [value, text, checked]
         end
         @template.render(
-          :partial => partial_path(options, 'enum_checkboxes'),
+          :partial => partial,
           :locals => {
             :elements => elements, 
             :form => self, 
@@ -128,6 +130,7 @@ module Datagrid
     def datagrid_range_filter(type, attribute_or_filter, options = {})
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.range?
+        partial = partial_path(options, 'range_filter')
         options = options.merge(:multiple => true)
 
 
@@ -150,7 +153,7 @@ module Datagrid
           I18n.t(format_key, :from_input => from_input, :to_input => to_input).html_safe
         else
           # More flexible way to render via partial
-          @template.render :partial => partial_path(options, 'range_filter'), :locals => {
+          @template.render :partial => partial, :locals => {
             :from_options => from_options, :to_options => to_options, :filter => filter, :form => self
           }
         end
@@ -214,7 +217,18 @@ module Datagrid
     end
 
     def partial_path(options, name)
-      File.join(options.delete(:partials) || 'datagrid', name)
+      if partials = options.delete(:partials)
+        partial_name = File.join(partials, name)
+        # Second argument is []: no magical namespaces to lookup added from controller 
+        if @template.lookup_context.template_exists?(partial_name, [], true)
+          return partial_name
+        end
+      end
+      File.join('datagrid', name)
+    end
+
+    def supports_partial?(filter)
+      (filter.supports_range? && filter.range?) || (filter.type == :enum && filter.checkboxes?)
     end
 
     class Error < StandardError

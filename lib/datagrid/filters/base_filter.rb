@@ -99,6 +99,10 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     end
   end
 
+  def supports_range?
+    self.class.ancestors.include?(::Datagrid::Filters::RangedFilter)
+  end
+
   def format(value)
     value.nil? ? nil : value.to_s
   end

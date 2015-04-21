@@ -42,6 +42,11 @@ end
 class CssPattern
   def initialize(pattern)
     @css_pattern = pattern
+    unless @css_pattern.is_a?(Hash)
+      @css_pattern = Array(@css_pattern).map do |key|
+        [key, 1]
+      end
+    end
   end
 
   def error!(message)

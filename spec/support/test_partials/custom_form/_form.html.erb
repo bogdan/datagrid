@@ -1,0 +1,7 @@
+<%= form_for grid, options do |f| -%>
+  <p>form_partial_test</p>
+  <% grid.filters.each do |filter| %>
+    <%= f.datagrid_label filter %>
+    <%= f.datagrid_filter filter, partials: options[:partials] %>
+  <% end %>
+<% end -%>

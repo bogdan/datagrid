@@ -455,6 +455,29 @@ describe Datagrid::Helper do
         "form.datagrid-form input[name='g[id]']" => 1,
       )
     end
+
+    it "takes default partials if custom doesn't exist" do
+      class PartialDefaultGrid
+        include Datagrid
+        scope {Entry}
+        filter(:id, :integer, :range => true)
+        filter(:group_id, :enum, :multiple => true, :checkboxes => true, :select => [1,2])
+        def param_name
+          'g'
+        end
+      end
+      rendered_form = subject.datagrid_form_for(PartialDefaultGrid.new, {
+        :url => '',
+        :partials => 'custom_form'
+      })
+      expect(rendered_form).to include 'form_partial_test'
+      expect(rendered_form).to match_css_pattern([
+        'input.integer_filter.from',
+        'input.integer_filter.to',
+        ".enum_filter input[value='1']",
+        ".enum_filter input[value='2']",
+      ])
+    end
   end
 
 
