@@ -8,7 +8,7 @@ describe Datagrid::Drivers::Mongoid, :mongoid do
 
     it {should be_match(MongoidEntry)}
     it {should be_match(MongoidEntry.scoped)}
-    it {should_not be_match(Entry.scoped)}
+    it {should_not be_match(Entry.where(:id => 1))}
 
   end
   describe "api" do

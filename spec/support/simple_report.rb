@@ -33,7 +33,7 @@ class SimpleReport
   filter(:confirmed, :boolean)
 
   filter(:name) do |value|
-    self.scoped(:conditions => {:name => value})
+    self.where(:name => value)
   end
 
   column(:group, :order => "groups.name") do

@@ -6,7 +6,7 @@ describe Datagrid::Drivers::ActiveRecord do
     subject { described_class }
 
     it {should be_match(Entry)}
-    it {should be_match(Entry.scoped)}
+    it {should be_match(Entry.where(:id => 1))}
     it {should_not be_match(MongoidEntry)}
   end
 
@@ -17,7 +17,7 @@ describe Datagrid::Drivers::ActiveRecord do
   end
 
   it "should support append_column_queries" do
-    scope = subject.append_column_queries(Entry.scoped, [Datagrid::Columns::Column.new(test_report_class, :sum_group_id, 'sum(entries.group_id)')])
+    scope = subject.append_column_queries(Entry.where({}), [Datagrid::Columns::Column.new(test_report_class, :sum_group_id, 'sum(entries.group_id)')])
     expect(scope.to_sql.strip).to eq('SELECT "entries".*, sum(entries.group_id) AS sum_group_id FROM "entries"')
   end
 end
