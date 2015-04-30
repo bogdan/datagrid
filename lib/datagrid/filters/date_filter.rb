@@ -24,11 +24,11 @@ class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
     end
   end
 
-  def default_filter_where(driver, scope, value)
+  def default_filter_where(scope, value)
     if driver.is_timestamp?(scope, name)
       value = Datagrid::Utils.format_date_as_timestamp(value)
     end
-    super(driver, scope, value)
+    super(scope, value)
   end
 
   protected

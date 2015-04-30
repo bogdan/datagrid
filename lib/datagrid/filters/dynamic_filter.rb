@@ -26,7 +26,7 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
     super(value)
   end
 
-  def default_filter_where(driver, scope, filter)
+  def default_filter_where(scope, filter)
     field, operation, value = filter
     date_conversion = value.is_a?(Date) && driver.is_timestamp?(scope, field)
 

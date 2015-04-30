@@ -91,11 +91,10 @@ class Datagrid::Filters::BaseFilter #:nodoc:
 
   def default_filter(value, scope, grid)
     return nil if dummy?
-    driver = grid.driver
     if !driver.has_column?(scope, name) && driver.to_scope(scope).respond_to?(name)
       driver.to_scope(scope).send(name, value)
     else
-      default_filter_where(driver, scope, value)
+      default_filter_where(scope, value)
     end
   end
 
@@ -122,7 +121,7 @@ class Datagrid::Filters::BaseFilter #:nodoc:
 
   protected
 
-  def default_filter_where(driver, scope, value)
+  def default_filter_where(scope, value)
     driver.where(scope, name, value)
   end
 
@@ -148,6 +147,10 @@ class Datagrid::Filters::BaseFilter #:nodoc:
 
   def default_separator
     ','
+  end
+
+  def driver
+    grid_class.driver
   end
 
 end

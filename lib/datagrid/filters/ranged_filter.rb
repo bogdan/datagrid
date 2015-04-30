@@ -36,7 +36,7 @@ module Datagrid::Filters::RangedFilter
     options[:range]
   end
 
-  def default_filter_where(driver, scope, value)
+  def default_filter_where(scope, value)
     if range? && value.is_a?(Array)
       left, right = value
       if left
@@ -47,7 +47,7 @@ module Datagrid::Filters::RangedFilter
       end
       scope
     else 
-      super(driver, scope, value)
+      super(scope, value)
     end
   end
 
