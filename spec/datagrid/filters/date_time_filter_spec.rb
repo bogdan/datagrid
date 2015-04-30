@@ -5,11 +5,16 @@ describe Datagrid::Filters::DateTimeFilter do
     describe "with orm #{orm}", orm => true do
       describe "timestamp to timestamp conversion" do
         let(:klass) { klass }
-        subject do
+
+        let(:grid) do
           test_report(:created_at => _created_at) do
             scope { klass }
             filter(:created_at, :datetime, :range => true)
-          end.assets.to_a
+          end
+        end
+
+        subject do
+          grid.assets.to_a
         end
 
         def entry_dated(date)
