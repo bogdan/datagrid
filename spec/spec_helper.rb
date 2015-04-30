@@ -31,6 +31,8 @@ require "logger"
 
 class DatagridTest < Rails::Application
 
+  config.eager_load = false
+
 end
 
 if I18n.respond_to?(:enforce_available_locales)
