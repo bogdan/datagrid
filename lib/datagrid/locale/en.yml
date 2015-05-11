@@ -6,6 +6,7 @@ en:
       order:
         asc: "&uarr;"
         desc: "&darr;"
+      no_columns: "No columns selected"
     form:
       search: "Search"
       reset: "Reset"
