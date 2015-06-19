@@ -13,7 +13,7 @@ class MongoidEntry
   field :category, :type => String
   field :disabled, :default => false, :type => Boolean
   field :confirmed, :default => false, :type => Boolean
-  field :shipping_date, :type => DateTime
+  field :shipping_date, :type => Time
 
 end
 

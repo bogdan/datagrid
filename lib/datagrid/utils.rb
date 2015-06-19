@@ -96,13 +96,13 @@ module Datagrid
         if value.is_a?(String)
           Array(Datagrid.configuration.datetime_formats).each do |format|
             begin
-              return DateTime.strptime(value, format)
+              return Time.strptime(value, format)
             rescue ::ArgumentError
             end
           end
         end
-        return DateTime.parse(value) if value.is_a?(String)
-        return value.to_datetime if value.respond_to?(:to_datetime)
+        return Time.parse(value) if value.is_a?(String)
+        return value.to_time if value.respond_to?(:to_time)
         value
       rescue ::ArgumentError
         nil

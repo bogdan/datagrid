@@ -8,7 +8,7 @@ class MongoMapperEntry
   key :category, String
   key :disabled, Boolean, :default => false
   key :confirmed, Boolean, :default => false
-  key :shipping_date, DateTime
+  key :shipping_date, Time
   timestamps!
 
 end

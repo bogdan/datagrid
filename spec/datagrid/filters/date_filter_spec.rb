@@ -127,7 +127,7 @@ describe Datagrid::Filters::DateFilter do
       end
     end
     expect(report.assets).not_to include(Entry.create!(:created_at => 1.day.ago))
-    expect(report.assets).to include(Entry.create!(:created_at => DateTime.now))
+    expect(report.assets).to include(Entry.create!(:created_at => Time.now))
   end
 
 

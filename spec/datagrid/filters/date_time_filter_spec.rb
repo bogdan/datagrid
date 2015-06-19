@@ -22,17 +22,17 @@ describe Datagrid::Filters::DateTimeFilter do
         end
 
         context "when single datetime paramter given" do
-          let(:_created_at) { DateTime.now }
-          it { should include(entry_dated(_created_at))}
+          let(:_created_at) { Time.now.change(sec: 0) }
+          it { should include(entry_dated(_created_at)) }
           it { should_not include(entry_dated(_created_at - 1.second))}
           it { should_not include(entry_dated(_created_at + 1.second))}
         end
 
         context "when range datetime range given" do
-          let(:_created_at) { [DateTime.now.beginning_of_day, DateTime.now.end_of_day] }
+          let(:_created_at) { [Time.now.beginning_of_day, Time.now.end_of_day] }
           it { should include(entry_dated(1.second.ago))}
-          it { should include(entry_dated(Date.today.to_datetime))}
-          it { should include(entry_dated(DateTime.now.end_of_day.to_datetime))}
+          it { should include(entry_dated(Date.today.to_time))}
+          it { should include(entry_dated(Time.now.end_of_day.to_time))}
           it { should_not include(entry_dated(Date.yesterday.end_of_day))}
           it { should_not include(entry_dated(Date.tomorrow.beginning_of_day))}
         end
@@ -42,10 +42,10 @@ describe Datagrid::Filters::DateTimeFilter do
   end
 
   it "should support datetime range given as array argument" do
-    e1 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 1, 0))
-    e2 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 2, 0))
-    e3 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 3, 0))
-    report = test_report(:created_at => [DateTime.new(2013, 1, 1, 1, 30).to_s, DateTime.new(2013, 1, 1, 2, 30).to_s]) do
+    e1 = Entry.create!(:created_at => Time.new(2013, 1, 1, 1, 0))
+    e2 = Entry.create!(:created_at => Time.new(2013, 1, 1, 2, 0))
+    e3 = Entry.create!(:created_at => Time.new(2013, 1, 1, 3, 0))
+    report = test_report(:created_at => [Time.new(2013, 1, 1, 1, 30).to_s, Time.new(2013, 1, 1, 2, 30).to_s]) do
       scope { Entry }
       filter(:created_at, :datetime, :range => true)
     end
@@ -55,10 +55,10 @@ describe Datagrid::Filters::DateTimeFilter do
   end
 
   it "should support minimum datetime argument" do
-    e1 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 1, 0))
-    e2 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 2, 0))
-    e3 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 3, 0))
-    report = test_report(:created_at => [DateTime.new(2013, 1, 1, 1, 30).to_s, nil]) do
+    e1 = Entry.create!(:created_at => Time.new(2013, 1, 1, 1, 0))
+    e2 = Entry.create!(:created_at => Time.new(2013, 1, 1, 2, 0))
+    e3 = Entry.create!(:created_at => Time.new(2013, 1, 1, 3, 0))
+    report = test_report(:created_at => [Time.new(2013, 1, 1, 1, 30).to_s, nil]) do
       scope { Entry }
       filter(:created_at, :datetime, :range => true)
     end
@@ -68,10 +68,10 @@ describe Datagrid::Filters::DateTimeFilter do
   end
 
   it "should support maximum datetime argument" do
-    e1 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 1, 0))
-    e2 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 2, 0))
-    e3 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 3, 0))
-    report = test_report(:created_at => [nil, DateTime.new(2013, 1, 1, 2, 30).to_s]) do
+    e1 = Entry.create!(:created_at => Time.new(2013, 1, 1, 1, 0))
+    e2 = Entry.create!(:created_at => Time.new(2013, 1, 1, 2, 0))
+    e3 = Entry.create!(:created_at => Time.new(2013, 1, 1, 3, 0))
+    report = test_report(:created_at => [nil, Time.new(2013, 1, 1, 2, 30).to_s]) do
       scope { Entry }
       filter(:created_at, :datetime, :range => true)
     end
@@ -82,10 +82,10 @@ describe Datagrid::Filters::DateTimeFilter do
 
   it "should find something in one second interval" do
 
-    e1 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 1, 0))
-    e2 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 2, 0))
-    e3 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 3, 0))
-    report = test_report(:created_at => (DateTime.new(2013, 1, 1, 2, 0)..DateTime.new(2013, 1, 1, 2, 0))) do
+    e1 = Entry.create!(:created_at => Time.new(2013, 1, 1, 1, 0))
+    e2 = Entry.create!(:created_at => Time.new(2013, 1, 1, 2, 0))
+    e3 = Entry.create!(:created_at => Time.new(2013, 1, 1, 3, 0))
+    report = test_report(:created_at => (Time.new(2013, 1, 1, 2, 0)..Time.new(2013, 1, 1, 2, 0))) do
       scope { Entry }
       filter(:created_at, :datetime, :range => true)
     end
@@ -95,10 +95,10 @@ describe Datagrid::Filters::DateTimeFilter do
   end
   it "should support invalid range" do
 
-    e1 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 1, 0))
-    e2 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 2, 0))
-    e3 = Entry.create!(:created_at => DateTime.new(2013, 1, 1, 3, 0))
-    report = test_report(:created_at => (DateTime.new(2013, 1, 1, 3, 0)..DateTime.new(2013, 1, 1, 1, 0))) do
+    e1 = Entry.create!(:created_at => Time.new(2013, 1, 1, 1, 0))
+    e2 = Entry.create!(:created_at => Time.new(2013, 1, 1, 2, 0))
+    e3 = Entry.create!(:created_at => Time.new(2013, 1, 1, 3, 0))
+    report = test_report(:created_at => (Time.new(2013, 1, 1, 3, 0)..Time.new(2013, 1, 1, 1, 0))) do
       scope { Entry }
       filter(:created_at, :datetime, :range => true)
     end
@@ -109,14 +109,14 @@ describe Datagrid::Filters::DateTimeFilter do
 
 
   it "should support block" do
-    report = test_report(:created_at => DateTime.now) do
+    report = test_report(:created_at => Time.now) do
       scope { Entry }
       filter(:created_at, :datetime, :range => true) do |value|
         where("created_at >= ?", value)
       end
     end
     expect(report.assets).not_to include(Entry.create!(:created_at => 1.day.ago))
-    expect(report.assets).to include(Entry.create!(:created_at => DateTime.tomorrow))
+    expect(report.assets).to include(Entry.create!(:created_at => Time.now+1.day))
   end
 
 
@@ -132,15 +132,15 @@ describe Datagrid::Filters::DateTimeFilter do
         scope  {Entry}
         filter(:created_at, :datetime)
       end
-      expect(report.created_at).to eq(DateTime.new(2013,10,01,1,0))
+      expect(report.created_at).to eq(Time.new(2013,10,01,1,0))
     end
 
     it "should support default explicit datetime" do
-      report = test_report(:created_at => DateTime.parse("2013-10-01 01:00")) do
+      report = test_report(:created_at => Time.parse("2013-10-01 01:00")) do
         scope  {Entry}
         filter(:created_at, :datetime)
       end
-      expect(report.created_at).to eq(DateTime.new(2013,10,01,1,0))
+      expect(report.created_at).to eq(Time.new(2013,10,01,1,0))
     end
   end
 
@@ -150,6 +150,6 @@ describe Datagrid::Filters::DateTimeFilter do
       scope  {Entry}
       filter(:created_at, :datetime, :range => true)
     end
-    expect(report.created_at).to eq([DateTime.new(2012, 01, 01, 1, 0), DateTime.new(2013, 01, 01, 1, 0)])
+    expect(report.created_at).to eq([Time.new(2012, 01, 01, 1, 0), Time.new(2013, 01, 01, 1, 0)])
   end
 end

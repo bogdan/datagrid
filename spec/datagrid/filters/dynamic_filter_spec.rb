@@ -77,33 +77,33 @@ describe Datagrid::Filters::DynamicFilter do
   it "should support date comparation operation by timestamp column" do
     report.condition = [:created_at, "<=", '1986-08-05']
     expect(report.condition).to eq([:created_at, "<=", Date.parse('1986-08-05')])
-    expect(report.assets).to include(Entry.create!(:created_at => DateTime.parse('1986-08-04 01:01:01')))
-    expect(report.assets).to include(Entry.create!(:created_at => DateTime.parse('1986-08-05 23:59:59')))
-    expect(report.assets).to include(Entry.create!(:created_at => DateTime.parse('1986-08-05 00:00:00')))
-    expect(report.assets).not_to include(Entry.create!(:created_at => DateTime.parse('1986-08-06 00:00:00')))
-    expect(report.assets).not_to include(Entry.create!(:created_at => DateTime.parse('1986-08-06 23:59:59')))
+    expect(report.assets).to include(Entry.create!(:created_at => Time.parse('1986-08-04 01:01:01')))
+    expect(report.assets).to include(Entry.create!(:created_at => Time.parse('1986-08-05 23:59:59')))
+    expect(report.assets).to include(Entry.create!(:created_at => Time.parse('1986-08-05 00:00:00')))
+    expect(report.assets).not_to include(Entry.create!(:created_at => Time.parse('1986-08-06 00:00:00')))
+    expect(report.assets).not_to include(Entry.create!(:created_at => Time.parse('1986-08-06 23:59:59')))
   end
 
   it "should support date = operation by timestamp column" do
     report.condition = [:created_at, "=", '1986-08-05']
     expect(report.condition).to eq([:created_at, "=", Date.parse('1986-08-05')])
-    expect(report.assets).not_to include(Entry.create!(:created_at => DateTime.parse('1986-08-04 23:59:59')))
-    expect(report.assets).to include(Entry.create!(:created_at => DateTime.parse('1986-08-05 23:59:59')))
-    expect(report.assets).to include(Entry.create!(:created_at => DateTime.parse('1986-08-05 00:00:01')))
+    expect(report.assets).not_to include(Entry.create!(:created_at => Time.parse('1986-08-04 23:59:59')))
+    expect(report.assets).to include(Entry.create!(:created_at => Time.parse('1986-08-05 23:59:59')))
+    expect(report.assets).to include(Entry.create!(:created_at => Time.parse('1986-08-05 00:00:01')))
     #TODO: investigate SQLite issue and uncomment this line
-    #report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-05 00:00:00')))
-    expect(report.assets).not_to include(Entry.create!(:created_at => DateTime.parse('1986-08-06 23:59:59')))
+    #report.assets.should include(Entry.create!(:created_at => Time.parse('1986-08-05 00:00:00')))
+    expect(report.assets).not_to include(Entry.create!(:created_at => Time.parse('1986-08-06 23:59:59')))
   end
 
   it "should support date =~ operation by timestamp column" do
     report.condition = [:created_at, "=~", '1986-08-05']
     expect(report.condition).to eq([:created_at, "=~", Date.parse('1986-08-05')])
-    expect(report.assets).not_to include(Entry.create!(:created_at => DateTime.parse('1986-08-04 23:59:59')))
-    expect(report.assets).to include(Entry.create!(:created_at => DateTime.parse('1986-08-05 23:59:59')))
-    expect(report.assets).to include(Entry.create!(:created_at => DateTime.parse('1986-08-05 00:00:01')))
+    expect(report.assets).not_to include(Entry.create!(:created_at => Time.parse('1986-08-04 23:59:59')))
+    expect(report.assets).to include(Entry.create!(:created_at => Time.parse('1986-08-05 23:59:59')))
+    expect(report.assets).to include(Entry.create!(:created_at => Time.parse('1986-08-05 00:00:01')))
     #TODO: investigate SQLite issue and uncomment this line
-    #report.assets.should include(Entry.create!(:created_at => DateTime.parse('1986-08-05 00:00:00')))
-    expect(report.assets).not_to include(Entry.create!(:created_at => DateTime.parse('1986-08-06 23:59:59')))
+    #report.assets.should include(Entry.create!(:created_at => Time.parse('1986-08-05 00:00:00')))
+    expect(report.assets).not_to include(Entry.create!(:created_at => Time.parse('1986-08-06 23:59:59')))
   end
 
   it "should support operations for invalid date" do
