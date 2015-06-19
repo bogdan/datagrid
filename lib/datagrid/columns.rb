@@ -184,10 +184,15 @@ module Datagrid
       #             #    ]
       def dynamic(&block)
         previous_block = dynamic_block
-        self.dynamic_block = proc {
-          instance_eval(&previous_block) if previous_block
-          instance_eval(&block)
-        }
+        self.dynamic_block = 
+          if previous_block
+            proc {
+              instance_eval(&previous_block)
+              instance_eval(&block)
+            }
+          else
+            block
+          end
       end
 
       def inherited(child_class) #:nodoc:

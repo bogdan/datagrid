@@ -31,6 +31,7 @@ describe Datagrid::Helper do
     let(:grid) do
       test_report do
         scope { Entry.where("1 != 1") }
+        column(:id)
       end
     end
 
@@ -55,6 +56,7 @@ describe Datagrid::Helper do
         class TestGrid
           include Datagrid
           scope { Entry }
+          column(:id)
         end
       end
       expect(subject.datagrid_table(::Ns23::TestGrid.new)).to match_css_pattern(
@@ -125,6 +127,18 @@ describe Datagrid::Helper do
           "table.datagrid th.category" => 0,
           "table.datagrid td.category" => 0
         )
+      end
+    end
+
+    context "when grid has no columns" do
+      let(:grid) do
+        test_report do
+          scope {Entry}
+        end
+      end
+
+      it "should render no_columns message" do
+        expect(subject.datagrid_table(grid, [entry])).to equal_to_dom("No columns selected")
       end
     end
 

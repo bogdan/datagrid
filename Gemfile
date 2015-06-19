@@ -18,7 +18,7 @@ group :development do
 
   group :mongo do
     gem "mongoid", "3.1.6"
-    gem "mongo_mapper", ">=0.11.0"
+    gem "mongo_mapper", "~> 0.11.0"
     gem "bson", "1.4.0"
     gem "bson_ext", "1.4.0"
   end
