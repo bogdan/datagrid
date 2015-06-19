@@ -94,6 +94,17 @@ module Datagrid
         raise NotImplementedError
       end
 
+      def where_by_timestamp_gotcha(scope, name, value)
+        value = Datagrid::Utils.format_date_as_timestamp(value)
+        if value.first
+          scope = greater_equal(scope, name, value.first)
+        end
+        if value.last
+          scope = less_equal(scope, name, value.last)
+        end
+        scope
+      end
+
       protected
       def timestamp_class?(klass)
         TIMESTAMP_CLASSES.include?(klass)

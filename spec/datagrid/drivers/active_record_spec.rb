@@ -20,4 +20,34 @@ describe Datagrid::Drivers::ActiveRecord do
     scope = subject.append_column_queries(Entry.where({}), [Datagrid::Columns::Column.new(test_report_class, :sum_group_id, 'sum(entries.group_id)')])
     expect(scope.to_sql.strip).to eq('SELECT "entries".*, sum(entries.group_id) AS sum_group_id FROM "entries"')
   end
+
+
+  describe "gotcha #datagrid_where_by_timestamp" do
+
+    subject do
+      test_report(created_at: 10.days.ago..5.days.ago) do
+        scope {Entry}
+
+        filter(:created_at, :date, range: true) do |value, scope, grid|
+          scope.joins(:group).datagrid_where_by_timestamp("groups.created_at", value)
+        end
+      end.assets
+    end
+    it "includes object created in proper range" do
+      expect(subject).to include(
+        Entry.create!(group: Group.create!(created_at: 7.days.ago)),
+      )
+    end
+
+    it "excludes object created before the range" do
+      expect(subject).to_not include(
+        Entry.create!(created_at: 7.days.ago, group: Group.create!(created_at: 11.days.ago)),
+      )
+    end
+    it "excludes object created after the range" do
+      expect(subject).to_not include(
+        Entry.create!(created_at: 7.days.ago, group: Group.create!(created_at: 4.days.ago)),
+      )
+    end
+  end
 end

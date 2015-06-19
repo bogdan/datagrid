@@ -127,3 +127,11 @@ module Datagrid
     end
   end
 end
+
+if defined?(ActiveRecord::Base)
+  ActiveRecord::Base.class_eval do
+    def self.datagrid_where_by_timestamp(column, value)
+      Datagrid::Drivers::ActiveRecord.new.where_by_timestamp_gotcha(self, column, value)
+    end
+  end
+end
