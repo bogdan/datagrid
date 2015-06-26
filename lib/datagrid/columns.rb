@@ -324,7 +324,7 @@ module Datagrid
       def to_csv(*column_names)
         options = column_names.extract_options!
         csv_class.generate(
-          {:headers => self.header(*column_names), :write_headers => true}.merge(options)
+          {:headers => self.header(*column_names), :write_headers => true}.merge!(options)
         ) do |csv|
           each_with_batches do |asset|
             csv << row_for(asset, *column_names)
