@@ -39,6 +39,12 @@ describe Datagrid::ColumnNamesAttribute do
     expect(subject.row_for(entry)).to eq(["hello", "greeting"])
   end
 
+  it "should show mandatory columns even if they are unselected" do
+    subject.column_names = ["category"]
+    expect(subject.row_for(entry)).to eq(["hello", "greeting"])
+    expect(subject.data).to eq([["Name", "Category"], ["hello", "greeting"]])
+  end
+
   it "should find any column by name" do
     expect(subject.column_by_name(:id)).not_to be_nil
     expect(subject.column_by_name(:name)).not_to be_nil
