@@ -89,15 +89,6 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     end
   end
 
-  def default_filter(value, scope, grid)
-    return nil if dummy?
-    if !driver.has_column?(scope, name) && driver.to_scope(scope).respond_to?(name)
-      driver.to_scope(scope).send(name, value)
-    else
-      default_filter_where(scope, value)
-    end
-  end
-
   def supports_range?
     self.class.ancestors.include?(::Datagrid::Filters::RangedFilter)
   end
@@ -151,6 +142,15 @@ class Datagrid::Filters::BaseFilter #:nodoc:
 
   def driver
     grid_class.driver
+  end
+
+  def default_filter(value, scope, grid)
+    return nil if dummy?
+    if !driver.has_column?(scope, name) && driver.to_scope(scope).respond_to?(name)
+      driver.to_scope(scope).send(name, value)
+    else
+      default_filter_where(scope, value)
+    end
   end
 
 end
