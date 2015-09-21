@@ -15,6 +15,7 @@ group :development do
   gem "nokogiri" # used to test html output
 
   gem "sqlite3"
+  gem "sequel"
 
   group :mongo do
     gem "mongoid", "3.1.6"
