@@ -15,6 +15,7 @@ Ruby library that helps you to build and represent table-like data with:
 * ActiveRecord
 * Mongoid
 * MongoMapper
+* Sequel
 * Array (slow but possible)
 
 [Create an issue](https://github.com/bogdan/datagrid/issues/new) if you want more.
@@ -31,7 +32,7 @@ Ruby library that helps you to build and represent table-like data with:
 In order to create a grid:
 
 ``` ruby
-class SimpleReport
+class UsersGrid
 
   include Datagrid
 
@@ -61,7 +62,7 @@ end
 Basic grid api:
 
 ``` ruby
-report = SimpleReport.new(
+report = UsersGrid.new(
         :group_id => [1,2], :from_logins_count => 1,
         :category => "first",
         :order => :group,

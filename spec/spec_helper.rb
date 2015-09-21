@@ -75,6 +75,7 @@ RSpec.configure do |config|
     #TODO better database truncation
     Group.delete_all
     Entry.delete_all
+    SequelEntry.where.delete
     unless NO_MONGO
       MongoidEntry.delete_all
       MongoMapperEntry.delete_all
@@ -99,6 +100,4 @@ end
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/schema.rb"].each {|f| require f}
-Dir["#{File.dirname(__FILE__)}/support/mongoid.rb"].each {|f| require f}
-Dir["#{File.dirname(__FILE__)}/support/mongo_mapper.rb"].each {|f| require f}
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}

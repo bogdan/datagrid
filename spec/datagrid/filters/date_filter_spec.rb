@@ -15,7 +15,7 @@ describe Datagrid::Filters::DateFilter do
     expect(report.assets).not_to include(e3)
   end
 
-  {:active_record => Entry, :mongoid => MongoidEntry}.each do |orm, klass|
+  {:active_record => Entry, :mongoid => MongoidEntry, :sequel => SequelEntry}.each do |orm, klass|
     describe "with orm #{orm}", orm => true do
       describe "date to timestamp conversion" do
         let(:klass) { klass }

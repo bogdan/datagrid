@@ -56,7 +56,7 @@ module Datagrid
       end
 
       def default_order(scope, column_name)
-        has_column?(scope, column_name) ? [scope.table_name, column_name].join(".") : nil
+        has_column?(scope, column_name) ? prefix_table_name(scope, column_name) : nil
       end
 
       def greater_equal(scope, field, value)
