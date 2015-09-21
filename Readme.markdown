@@ -122,9 +122,9 @@ Datagrid supports different type of filters including:
 * datetime
 * boolean
 * xboolean - the select of "yes", "no" and any
-* enum
+* enum - selection of the given values
 * string
-* dynamic
+* dynamic - build dynamic SQL condition 
 
 [More about filters](https://github.com/bogdan/datagrid/wiki/Filters)
 
