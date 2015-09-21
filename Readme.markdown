@@ -63,10 +63,11 @@ Basic grid api:
 
 ``` ruby
 report = UsersGrid.new(
-        :group_id => [1,2], :from_logins_count => 1,
-        :category => "first",
-        :order => :group,
-        :descending => true
+  :group_id => [1,2], 
+  :logins_count => [1, nil],
+  :category => "first",
+  :order => :group,
+  :descending => true
 )
 
 report.assets # => Array of User instances:
