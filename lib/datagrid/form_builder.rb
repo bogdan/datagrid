@@ -33,7 +33,7 @@ module Datagrid
     end
 
     def datagrid_boolean_filter(attribute_or_filter, options = {})
-      check_box(datagrid_get_attribute(attribute_or_filter), options.reverse_merge(datagrid_extra_checkbox_options))
+      check_box(datagrid_get_attribute(attribute_or_filter), options)
     end
 
     def datagrid_date_filter(attribute_or_filter, options = {})

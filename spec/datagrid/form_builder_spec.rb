@@ -346,6 +346,19 @@ describe Datagrid::FormBuilder do
       end
     end
 
+    context "with boolean filter type" do
+      let(:_filter) { :disabled }
+      let(:_grid) do
+        test_report do
+          scope {Entry}
+          filter(:disabled, :boolean, default: true)
+        end
+      end
+      it { should equal_to_dom(
+        # hidden is important when default is set to true
+        '<input name="report[disabled]" type="hidden" value="0"><input checked class="disabled boolean_filter" id="report_disabled" name="report[disabled]" type="checkbox" value="1">'
+      )}
+    end
     context "with xboolean filter type" do
       let(:_filter) { :disabled }
       let(:_grid) do
