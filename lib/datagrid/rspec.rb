@@ -38,7 +38,7 @@ shared_examples_for "Datagrid" do
             "text"
           when :date
             1.day.ago
-          when :eboolean
+          when :xboolean, :eboolean
             Datagrid::Filters::BooleanEnumFilter::YES
           when :boolean
             true

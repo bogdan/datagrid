@@ -29,7 +29,7 @@ class SimpleReport
 
   filter(:group_id, :integer, :multiple => true)
   filter(:category, :enum, :select => ["first", "second"])
-  filter(:disabled, :eboolean)
+  filter(:disabled, :xboolean)
   filter(:confirmed, :boolean)
 
   filter(:name) do |value|

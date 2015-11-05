@@ -346,16 +346,16 @@ describe Datagrid::FormBuilder do
       end
     end
 
-    context "with eboolean filter type" do
+    context "with xboolean filter type" do
       let(:_filter) { :disabled }
       let(:_grid) do
         test_report do
           scope {Entry}
-          filter(:disabled, :eboolean)
+          filter(:disabled, :xboolean)
         end
       end
       it { should equal_to_dom(
-        '<select class="disabled boolean_enum_filter" id="report_disabled" name="report[disabled]"><option value=""></option>
+        '<select class="disabled extended_boolean_filter" id="report_disabled" name="report[disabled]"><option value=""></option>
        <option value="YES">Yes</option>
        <option value="NO">No</option></select>'
       )}
