@@ -52,9 +52,23 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     options[:header] || Datagrid::Utils.translate_from_namespace(:filters, grid_class, name)
   end
 
-  def default
+  def default(object = nil)
+    unless object
+      Datagrid::Utils.warn_once("#{self.class.name}#default without argument is deprecated")
+    end
     default = self.options[:default]
-    default.respond_to?(:call) ? default.call : default
+    if default.is_a?(Symbol)
+      if object.respond_to?(default)
+        object.send(default)
+      else
+        Datagrid::Utils.warn_once(":default as a Symbol is now treated as a method name. Use String instead or -> { default } if you really want default value to be a Symbol but not a String.")
+        default
+      end
+    elsif default.respond_to?(:call) 
+      Datagrid::Utils.apply_args(object, &default)
+    else
+      default
+    end
   end
 
   def multiple
