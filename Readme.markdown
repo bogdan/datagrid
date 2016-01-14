@@ -180,6 +180,10 @@ All advanced frontend things are described in:
 
 [Frontend section on wiki](https://github.com/bogdan/datagrid/wiki/Frontend)
 
+## Questions & Issues
+
+If you have a question of any kind, just make an issue and describe your problem in details.
+
 ## Self-Promotion
 
 Like datagrid?
