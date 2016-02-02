@@ -50,4 +50,17 @@ describe Datagrid::Drivers::ActiveRecord do
       )
     end
   end
+
+  describe "batches usage" do
+
+    it "should be incompatible with scope with limit" do
+      report = test_report do
+        scope {Entry.limit(5)}
+        self.batch_size = 20
+      end
+      expect { report.assets }.to raise_error(Datagrid::ConfigurationError)
+    end
+  end
+
+
 end
