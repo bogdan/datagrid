@@ -109,7 +109,7 @@ describe Datagrid::FormBuilder do
         )}
       end
       context "with only left bound" do
-        
+
         let(:_range) { [10, nil]}
         it { should equal_to_dom(
           '<input class="group_id integer_filter from" multiple name="report[group_id][]" size="30" type="text" value="10"/>' +
@@ -151,7 +151,7 @@ describe Datagrid::FormBuilder do
         it { should equal_to_dom(
           '<input class="group_id integer_filter from" multiple name="report[group_id][]" size="30" type="text"><span class="separator integer"> - </span><input class="group_id integer_filter to" multiple name="report[group_id][]" size="30" type="text">'
         ) }
-        
+
       end
 
       context "when deprecated format translation specified" do
@@ -207,7 +207,7 @@ describe Datagrid::FormBuilder do
         end
       }
       context "with only left bound" do
-        
+
         let(:_range) { ["2012-01-03", nil]}
         it { should equal_to_dom(
           '<input class="created_at date_filter from" multiple name="report[created_at][]" size="30" type="text" value="2012-01-03"/>' +
@@ -230,7 +230,7 @@ describe Datagrid::FormBuilder do
         )}
       end
       context "with only right bound" do
-        
+
         let(:_range) { [nil, "2012-01-03"]}
         it { should equal_to_dom(
           '<input class="created_at date_filter from" multiple name="report[created_at][]" size="30" type="text"/>' +
@@ -280,7 +280,7 @@ describe Datagrid::FormBuilder do
 
       context "when block is given" do
         before(:each) do
-          pending("not supported by rails < 4.1") if Rails.version < '4.1'
+          skip("not supported by rails < 4.1") if Rails.version < '4.1'
         end
         let(:_filter_block ) { proc { template.content_tag(:option, 'block option', :value => 'block_value') }}
         it { should equal_to_dom(
@@ -463,7 +463,7 @@ describe Datagrid::FormBuilder do
           column(:id)
           column(:name)
           column(:category)
-        end       
+        end
       end
       let(:_filter) { :column_names }
       let(:expected_html) do
@@ -494,7 +494,7 @@ describe Datagrid::FormBuilder do
           column(:id)
           column(:name)
           column(:category)
-        end       
+        end
       end
       let(:_filter) { :column_names }
       let(:expected_html) do
@@ -514,7 +514,7 @@ DOM
       let(:filter_options) do
         {}
       end
-      
+
       let(:_grid) do
         options = filter_options
         test_report do

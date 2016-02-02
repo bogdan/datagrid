@@ -57,8 +57,9 @@ describe Datagrid::Drivers::ActiveRecord do
       report = test_report do
         scope {Entry.limit(5)}
         self.batch_size = 20
+        column(:id)
       end
-      expect { report.assets }.to raise_error(Datagrid::ConfigurationError)
+      expect { report.data }.to raise_error(Datagrid::ConfigurationError)
     end
   end
 

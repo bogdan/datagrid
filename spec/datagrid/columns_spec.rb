@@ -26,7 +26,7 @@ describe Datagrid::Columns do
       grid = test_report do
         scope {Entry}
         column(:name)
-        column(:action, :html => true) do 
+        column(:action, :html => true) do
           'dummy'
         end
       end
@@ -37,7 +37,7 @@ describe Datagrid::Columns do
       grid = test_report do
         scope {Entry}
         column(:name)
-        column(:action, :html => true) do 
+        column(:action, :html => true) do
           'dummy'
         end
       end
@@ -47,7 +47,7 @@ describe Datagrid::Columns do
       grid = test_report do
         scope {Entry}
         column(:name)
-        column(:action, :html => true) do 
+        column(:action, :html => true) do
           'dummy'
         end
       end
@@ -55,7 +55,7 @@ describe Datagrid::Columns do
     end
 
     describe "translations" do
-      
+
       module ::Ns45
         class TranslatedReport
           include Datagrid
@@ -270,7 +270,7 @@ describe Datagrid::Columns do
       first = Entry.create(:name => '1st')
       second = Entry.create(:name => '2nd')
       expect do
-        report.attributes = {:order => :id} 
+        report.attributes = {:order => :id}
         report.assets
       end.to raise_error(Datagrid::OrderUnsupported)
       report.attributes = {:order => :name, :descending => true}
@@ -289,6 +289,7 @@ describe Datagrid::Columns do
       fake_assets = double(:assets)
       expect(report).to receive(:assets) { fake_assets }
       expect(fake_assets).to receive(:find_each).with(batch_size: 25)
+      expect(fake_assets).to receive(:limit_value).and_return(nil)
       report.rows
     end
     it "should be able to disable batches" do
@@ -305,7 +306,7 @@ describe Datagrid::Columns do
       expect(fake_assets).not_to receive(:find_each)
       report.rows
     end
-    
+
     it "should support instance level batch size" do
       grid = test_report do
         scope {Entry}
@@ -340,7 +341,7 @@ describe Datagrid::Columns do
       expect(row.name).to eq("Hello")
       expect {
         row.actions
-      }.to raise_error
+      }.to raise_error(RuntimeError)
     end
   end
 
@@ -371,7 +372,7 @@ describe Datagrid::Columns do
       end
       grid.column(:name)
       grid
-    end 
+    end
 
     let(:basic_grid) { modified_grid.class.new }
     let!(:entry) { Entry.create!(:name => "Hello", :category => 'first') }
@@ -432,7 +433,7 @@ describe Datagrid::Columns do
   describe 'dynamic helper' do
     it "should work" do
       grid = test_report do
-        scope {Entry} 
+        scope {Entry}
         column(:id)
         dynamic {
           column(:name)
