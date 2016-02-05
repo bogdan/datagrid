@@ -53,10 +53,18 @@ module Datagrid
       end
 
       def extract_position_from_options(array, options)
-        if options[:before]
-          array.index {|c| c.name.to_sym == options[:before].to_sym }
-        elsif options[:after]
-          array.index {|c| c.name.to_sym == options[:after].to_sym } + 1
+        before, after = options[:before], options[:after]
+        if before && after
+          raise Datagrid::ConfigurationError, "Options :before and :after can not be used together"
+        end
+        # Consider as before all
+        return 0 if before == true
+        if before
+          before = before.to_sym
+          array.index {|c| c.name.to_sym == before }
+        elsif after
+          after = after.to_sym
+          array.index {|c| c.name.to_sym == after } + 1
         else
           -1
         end

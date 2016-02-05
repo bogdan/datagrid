@@ -214,6 +214,15 @@ describe Datagrid::Columns do
       expect(report.available_columns.map(&:name)).to eq([:category])
     end
 
+    it "raises when :before and :after used together" do
+      expect do
+        test_report do
+          column(:id)
+          column(:name, :before => :id, :after => :name)
+        end
+      end.to raise_error(Datagrid::ConfigurationError)
+    end
+
   describe ".column_names attributes" do
     let(:grid) do
       test_report(:column_names => ["id", "name"]) do
@@ -393,9 +402,14 @@ describe Datagrid::Columns do
       expect(basic_grid.rows).to eq([[entry.id]])
     end
 
-    it "should support possitioning" do
+    it "should support :before column name" do
       modified_grid.column(:category, :before => :name)
       expect(modified_grid.header).to eq(["Id", "Category", "Name"])
+    end
+
+    it "should support :before all" do
+      modified_grid.column(:category, :before => true)
+      expect(modified_grid.header).to eq(["Category", "Id", "Name"])
     end
 
     it "should support columns block" do
