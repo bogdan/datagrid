@@ -53,11 +53,10 @@ module Datagrid
       end
 
       def extract_position_from_options(array, options)
-        position = options.extract!(:before, :after)
-        if position[:before]
-          array.index {|c| c.name.to_sym == position[:before].to_sym }
-        elsif position[:after]
-          array.index {|c| c.name.to_sym == position[:after].to_sym } + 1
+        if options[:before]
+          array.index {|c| c.name.to_sym == options[:before].to_sym }
+        elsif options[:after]
+          array.index {|c| c.name.to_sym == options[:after].to_sym } + 1
         else
           -1
         end
