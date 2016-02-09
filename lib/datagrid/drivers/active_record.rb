@@ -48,7 +48,11 @@ module Datagrid
       end
 
       def desc(scope, order)
-        scope.reorder(order).reverse_order
+        if order.respond_to?(:desc)
+          scope.reorder(order.desc)
+        else
+          scope.reorder(order).reverse_order
+        end
       end
 
       def reverse_order(scope)

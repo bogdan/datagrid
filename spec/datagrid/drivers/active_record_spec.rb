@@ -21,6 +21,18 @@ describe Datagrid::Drivers::ActiveRecord do
     expect(scope.to_sql.strip).to eq('SELECT "entries".*, sum(entries.group_id) AS sum_group_id FROM "entries"')
   end
 
+  describe "Arel" do
+    subject do
+      test_report(:order => :test, :descending => true) do
+        scope { Entry }
+        column(:test, order: Arel::Nodes::Count.new(["entries.group_id"]))
+      end.assets
+    end
+
+    it "should support ordering by Arel columns" do
+      expect(subject.to_sql.strip).to include "ORDER BY COUNT('entries.group_id') DESC"
+    end
+  end
 
   describe "gotcha #datagrid_where_by_timestamp" do
 
