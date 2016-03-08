@@ -192,6 +192,17 @@ describe Datagrid::Filters do
 
   end
 
+    
+  it "supports dynamic header" do
+    grid = test_report do
+      scope {Entry}
+      filter(:id, :integer, header: proc { rand(10**9) })
+    end
+
+    filter = grid.filter_by_name(:id)
+    expect(filter.header).to_not eq(filter.header)
+  end
+
 
   describe "#filter_by_name" do
     it "should return filter object" do

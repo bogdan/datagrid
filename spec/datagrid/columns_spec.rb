@@ -118,6 +118,15 @@ describe Datagrid::Columns do
       ])
     end
 
+    it "supports dynamic header" do
+      grid = test_report do
+        scope {Entry}
+        column(:id, header: proc { rand(10**9) })
+      end
+
+      expect(grid.header).to_not eq(grid.header)
+    end
+
     it "should generate hash for given asset" do
       expect(subject.hash_for(entry)).to eq({
         :group => "Pop",

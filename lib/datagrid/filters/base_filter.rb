@@ -49,7 +49,11 @@ class Datagrid::Filters::BaseFilter #:nodoc:
   end
 
   def header
-    options[:header] || Datagrid::Utils.translate_from_namespace(:filters, grid_class, name)
+    if header = options[:header] 
+      callable(header)
+    else
+      Datagrid::Utils.translate_from_namespace(:filters, grid_class, name)
+    end
   end
 
   def default(object = nil)
