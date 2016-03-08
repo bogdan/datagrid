@@ -41,8 +41,6 @@ class Datagrid::Columns::Column
       end
     end
     self.query = query
-    options[:if] = convert_option_to_proc(options[:if])
-    options[:unless] = convert_option_to_proc(options[:unless])
   end
 
   def data_value(model, grid)
@@ -101,11 +99,12 @@ class Datagrid::Columns::Column
   end
 
   def enabled?(grid)
-    (!options[:if] || (options[:if] && options[:if].call(grid))) && !options[:unless] || (options[:unless] && !options[:unless].call(grid))
+    column_availability(grid, options[:if], true) &&
+      !column_availability(grid, options[:unless], false)
   end
 
   def inspect
-    "#<Datagrid::Columns::Column #{grid_class}##{name} #{options.inspect}>"
+    "#<#{self.class} #{grid_class}##{name} #{options.inspect}>"
   end
 
   def to_s
@@ -127,11 +126,20 @@ class Datagrid::Columns::Column
   end
 
   private
-  def convert_option_to_proc(option)
-    if option.is_a?(Proc)
-      option
-    elsif option
-      proc {|object| object.send(option.to_sym) }
+  def column_availability(grid, option, default)
+    case option
+    when nil
+      default
+    when Proc
+      option.call(grid)
+    when Symbol, String
+      grid.send(option.to_sym) 
+    else
+      raise Datagrid::ConfigurationError, "Incorrect column availability option: #{option.insepct}"
     end
+  end
+
+  def callable(value)
+    value.respond_to?(:call) ? value.call : value
   end
 end

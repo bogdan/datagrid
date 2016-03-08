@@ -154,6 +154,10 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     ','
   end
 
+  def callable(value)
+    value.respond_to?(:call) ? value.call : value
+  end
+
   def driver
     grid_class.driver
   end
