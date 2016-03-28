@@ -9,7 +9,7 @@ group :development do
 
 
   gem "debugger", :platform => :ruby_19
-  gem "byebug", :platform => [:ruby_20, :ruby_21, :ruby_22] & Bundler::Dsl::VALID_PLATFORMS
+  gem "byebug", :platform => [:ruby_20, :ruby_21, :ruby_22, :ruby_23] & Bundler::Dsl::VALID_PLATFORMS
 
   gem "rspec", ">= 3"
   gem "nokogiri" # used to test html output
