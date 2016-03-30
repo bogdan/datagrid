@@ -1,10 +1,6 @@
 class <%= grid_controller_name %> < ApplicationController
 
-  def index
-    @grid = <%= grid_class_name %>.new(params[:<%= grid_ivar_name %>]) do |scope|
-      scope.<%= paginate_code %>
-    end
-  end
+<%= index_action -%>
 
 end
 
