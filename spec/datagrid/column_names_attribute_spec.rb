@@ -63,4 +63,24 @@ describe Datagrid::ColumnNamesAttribute do
     end
 
   end
+
+  context "when some columns are disabled" do
+    subject do
+      test_report do
+        scope {Entry}
+        column(:id, :mandatory => true)
+        column(:name)
+        column(:category, if: proc { false })
+        column(:group, :mandatory => true, if: proc { false })
+      end
+    end
+
+    it "excludes them from mandatory_columns" do
+      expect(subject.mandatory_columns.map(&:name)).to eq([:id])
+    end
+
+    it "excludes them from optional_columns" do
+      expect(subject.optional_columns.map(&:name)).to eq([:name])
+    end
+  end
 end
