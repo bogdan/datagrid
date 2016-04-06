@@ -90,14 +90,6 @@ describe Datagrid::Helper do
       })
     end
 
-    it "should support cycle option" do
-      expect(subject.datagrid_rows(grid, [entry], :cycle => ["odd", "even"])).to match_css_pattern({
-        "tr.odd td.group" => "Pop",
-        "tr.odd td.name" => "Star"
-      })
-
-    end
-
     it "should support no order given" do
       expect(subject.datagrid_table(grid, [entry], :order => false)).to match_css_pattern("table.datagrid th .order" => 0)
     end
@@ -383,7 +375,7 @@ describe Datagrid::Helper do
     it "should escape html" do
       entry.update_attributes!(:name => "<div>hello</div>")
       expect(subject.datagrid_rows(grid, [entry], :columns => [:name])).to equal_to_dom(<<-HTML)
-       <tr class=""><td class="name">&lt;div&gt;hello&lt;/div&gt;</td></tr>
+       <tr><td class="name">&lt;div&gt;hello&lt;/div&gt;</td></tr>
         HTML
     end
 
@@ -393,7 +385,7 @@ describe Datagrid::Helper do
         model.name.html_safe
       end
       expect(subject.datagrid_rows(grid, [entry], :columns => [:safe_name])).to equal_to_dom(<<-HTML)
-       <tr class=""><td class="safe_name"><div>hello</div></td></tr>
+       <tr><td class="safe_name"><div>hello</div></td></tr>
         HTML
 
     end
@@ -546,7 +538,7 @@ describe Datagrid::Helper do
         scope {Entry}
         column(:name) do |e|
           format(e.name) do |value|
-             link_to value, "/profile" 
+             link_to value, "/profile"
           end
         end
       end
@@ -576,11 +568,11 @@ describe Datagrid::Helper do
       expect(data_row.random2).to_not eq(html_row.random2)
       expect(data_row.random2).to_not eq(html_row.random1)
     end
-  
+
   end
 
   describe ".datagrid_header" do
-    
+
     it "should support order_by_value colums" do
       grid = test_report(:order => "category") do
         scope { Entry }
