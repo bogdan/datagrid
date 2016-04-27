@@ -49,7 +49,7 @@ class UsersGrid
   end
 
   column(:name)
-  column(:group, :order => "groups.name") do |user|
+  column(:group, order: -> { joins(:group).order(groups: :name) }) do |user|
     user.name
   end
   column(:active, :header => "Activated") do |user|
