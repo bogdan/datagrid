@@ -20,6 +20,10 @@ class Datagrid::Columns::Column
       data_block.call
     end
 
+    def to_s
+      call_data.to_s
+    end
+
     def call_html(context)
       context.instance_eval(&html_block)
     end
@@ -54,7 +58,7 @@ class Datagrid::Columns::Column
   end
 
   def header
-    if header = options[:header] 
+    if header = options[:header]
       callable(header)
     else
       Datagrid::Utils.translate_from_namespace(:columns, grid_class, name)
@@ -137,7 +141,7 @@ class Datagrid::Columns::Column
     when Proc
       option.call(grid)
     when Symbol, String
-      grid.send(option.to_sym) 
+      grid.send(option.to_sym)
     else
       raise Datagrid::ConfigurationError, "Incorrect column availability option: #{option.insepct}"
     end
