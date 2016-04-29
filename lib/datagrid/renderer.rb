@@ -39,11 +39,6 @@ module Datagrid
       options[:html] ||= {}
       options[:html][:class] ||= "datagrid #{@template.dom_class(grid)}"
       assets = args.any? ? args.shift : grid.assets
-      paginate = options[:paginate]
-      if paginate
-        ::Datagrid::Utils.warn_once(":paginate option is deprecated. Look to https://github.com/bogdan/datagrid/wiki/Frontend.")
-        assets = assets.paginate(paginate)
-      end
 
       _render_partial('table', options[:partials],
                       {

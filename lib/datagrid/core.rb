@@ -115,11 +115,6 @@ module Datagrid
         attributes
       end
 
-      def paginate(*args, &block) # :nodoc:
-        ::Datagrid::Utils.warn_once("#paginate is deprecated. Call it like object.assets.paginate(...).")
-        self.assets.paginate(*args, &block)
-      end
-
       # Redefines scope at instance level
       #
       #   class MyGrid
