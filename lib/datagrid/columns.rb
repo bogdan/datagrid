@@ -21,9 +21,12 @@ module Datagrid
         self.columns_array = []
 
         class_attribute :dynamic_block, :instance_writer => false
-        
+
         class_attribute :cached
         self.cached = false
+
+
+        class_attribute :decorator, instance_writer: false
 
       end
       base.send :include, InstanceMethods
@@ -184,7 +187,7 @@ module Datagrid
       #             #    ]
       def dynamic(&block)
         previous_block = dynamic_block
-        self.dynamic_block = 
+        self.dynamic_block =
           if previous_block
             proc {
               instance_eval(&previous_block)
@@ -193,6 +196,23 @@ module Datagrid
           else
             block
           end
+      end
+
+      # Defines a model decorator that will be used to define a column value.
+      # All column blocks will be given a decorated version of the model.
+      #
+      #   decorate { |user| UserPresenter.new(user) }
+      #
+      #   decorate { UserPresenter } # a shortcut
+      def decorate(model = nil, &block)
+        if !model && !block
+          raise ArgumentError, "decorate needs either a block to define decoration or a model to decorate"
+        end
+        return self.decorator = block unless model
+        return model unless decorator
+        presenter = ::Datagrid::Utils.apply_args(model, &decorator)
+        presenter = presenter.is_a?(Class) ?  presenter.new(model) : presenter
+        block_given? ? yield(presenter) : presenter
       end
 
       def inherited(child_class) #:nodoc:
@@ -342,7 +362,7 @@ module Datagrid
       #   grid.columns # => id and name columns
       #   grid.columns(:id, :category) # => id and category column
       def columns(*args)
-        self.class.filter_columns(columns_array, *args).select {|column| column.enabled?(self)} 
+        self.class.filter_columns(columns_array, *args).select {|column| column.enabled?(self)}
       end
 
       # Returns all columns that can be represented in plain data(non-html) way
@@ -425,19 +445,21 @@ module Datagrid
       end
 
       # Returns all columns available for current grid configuration.
-      #   
+      #
       #   class MyGrid
-      #     filter(:search)
+      #     filter(:search) {|scope, value| scope.full_text_search(value)}
       #     column(:id)
       #     column(:name, :mandatory => true)
-      #     column(:search_match, :if => proc {|grid| grid.search.present? }
+      #     column(:search_match, :if => proc {|grid| grid.search.present? }) do |model, grid|
+      #       search_match_line(model.searchable_content, grid.search)
+      #     end
       #   end
       #
       #   grid = MyGrid.new
-      #   grid.columns # => [ <#Column:name> ]
-      #   grid.available_columns # => [ <#Column:id>, <#Column:name> ]
+      #   grid.columns # => [ #<Column:name> ]
+      #   grid.available_columns # => [ #<Column:id>, #<Column:name> ]
       #   grid.search = "keyword"
-      #   grid.available_columns # => [ <#Column:id>, <#Column:name>, <#Column:search_match> ] 
+      #   grid.available_columns # => [ #<Column:id>, #<Column:name>, #<Column:search_match> ]
       #
       def available_columns
         columns_array.select do |column|
@@ -468,17 +490,22 @@ module Datagrid
         end
       end
 
+      # Returns a decorated version of given model if decorator is specified or the model otherwise.
+      def decorate(model)
+        self.class.decorate(model)
+      end
 
       def generic_value(column, model) #:nodoc:
         cache(column, model, :generic_value) do
+          presenter = decorate(model)
           unless column.enabled?(self)
             raise Datagrid::ColumnUnavailableError, "Column #{column.name} disabled for #{inspect}"
           end
 
           if column.data_block.arity >= 1
-            Datagrid::Utils.apply_args(model, self, data_row(model), &column.data_block)
+            Datagrid::Utils.apply_args(presenter, self, data_row(model), &column.data_block)
           else
-            model.instance_eval(&column.data_block)
+            presenter.instance_eval(&column.data_block)
           end
         end
 

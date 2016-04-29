@@ -521,4 +521,45 @@ describe Datagrid::Columns do
       expect(row.random2).to_not eq(row.random1)
     end
   end
+
+  describe "decoration" do
+    class EntryDecorator
+      attr_reader :model
+      def initialize(model)
+        @model = model
+      end
+      def capitalized_name
+        model.name.capitalize
+      end
+    end
+
+    let!(:entry) do
+      Entry.create!(name: 'hello', category: 'first')
+    end
+
+    it "delegates column values to decorator" do
+      grid = test_report do
+        scope { Entry }
+        decorate { |model| EntryDecorator.new(model) }
+        column(:capitalized_name)
+        column(:category) do |presenter|
+          presenter.model.category
+        end
+        column(:capitalized_name_dup) do |_, _, row|
+          row.capitalized_name
+        end
+      end
+
+      expect(grid.rows).to eq([['Hello', 'first', 'Hello']])
+    end
+
+    it "allows class decorator" do
+      grid = test_report do
+        scope { Entry }
+        decorate { EntryDecorator }
+        column(:capitalized_name)
+      end
+      expect(grid.rows).to eq([['Hello']])
+    end
+  end
 end
