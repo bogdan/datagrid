@@ -505,6 +505,7 @@ describe Datagrid::Helper do
       expect(r.name).to eq("Hello")
       expect(r.category).to eq("greetings")
     end
+
     it "should yield block" do
       subject.datagrid_row(grid, entry) do |row|
         expect(row.name).to eq("Hello")
@@ -520,6 +521,36 @@ describe Datagrid::Helper do
       end
       expect(name).to eq("Hello,greetings")
     end
+
+    it "should give access to grid and asset" do
+      r = subject.datagrid_row(grid, entry)
+      expect(r.grid).to eq(grid)
+      expect(r.asset).to eq(entry)
+    end
+
+    it "should use cache" do
+      grid = test_report do
+        scope {Entry}
+        self.cached = true
+        column(:random1, html: true) {rand(10**9)}
+        column(:random2) {|model| format(rand(10**9)) {|value| value}}
+      end
+
+      entry = Entry.create!
+
+      data_row = grid.data_row(entry)
+      html_row = subject.datagrid_row(grid, entry)
+      expect(html_row.random1).to eq(html_row.random1)
+      expect(html_row.random2).to_not eq(html_row.random1)
+      expect(data_row.random2).to eq(html_row.random2)
+      expect(data_row.random2).to_not eq(html_row.random1)
+      grid.cached = false
+      expect(html_row.random2).to_not eq(html_row.random2)
+      expect(html_row.random2).to_not eq(html_row.random1)
+      expect(data_row.random2).to_not eq(html_row.random2)
+      expect(data_row.random2).to_not eq(html_row.random1)
+    end
+
   end
 
   describe ".datagrid_value" do
@@ -544,29 +575,6 @@ describe Datagrid::Helper do
       end
       expect(subject.datagrid_value(report, :name, entry)).to be_html_safe
       expect(subject.datagrid_value(report, :name, entry)).to eq("<a href=\"/profile\">Star</a>")
-    end
-
-    it "should use cache" do
-      grid = test_report do
-        scope {Entry}
-        self.cached = true
-        column(:random1, html: true) {rand(10**9)}
-        column(:random2) {|model| format(rand(10**9)) {|value| value}}
-      end
-
-      entry = Entry.create!
-
-      data_row = grid.data_row(entry)
-      html_row = subject.datagrid_row(grid, entry)
-      expect(html_row.random1).to eq(html_row.random1)
-      expect(html_row.random2).to_not eq(html_row.random1)
-      expect(data_row.random2).to eq(html_row.random2)
-      expect(data_row.random2).to_not eq(html_row.random1)
-      grid.cached = false
-      expect(html_row.random2).to_not eq(html_row.random2)
-      expect(html_row.random2).to_not eq(html_row.random1)
-      expect(data_row.random2).to_not eq(html_row.random2)
-      expect(data_row.random2).to_not eq(html_row.random1)
     end
 
   end

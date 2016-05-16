@@ -22,19 +22,19 @@ module Datagrid
     end
 
     # Renders html table with columns defined in grid class.
-    # In the most common used you need to pass paginated collection 
+    # In the most common used you need to pass paginated collection
     # to datagrid table because datagrid do not have pagination compatibilities:
-    #     
+    #
     #   assets = grid.assets.page(params[:page])
     #   datagrid_table(grid, assets, options)
     #
     # Supported options:
     #
     # * <tt>:html</tt> - hash of attributes for <table> tag
-    # * <tt>:order</tt> - If false do not generate ordering controlls. 
+    # * <tt>:order</tt> - If false do not generate ordering controlls.
     #   Default: true.
-    # * <tt>:columns</tt> - Array of column names to display. 
-    #   Used in case when same grid class is used in different places 
+    # * <tt>:columns</tt> - Array of column names to display.
+    #   Used in case when same grid class is used in different places
     #   and needs different columns. Default: all defined columns.
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
@@ -59,8 +59,8 @@ module Datagrid
     #
     # Supported options:
     #
-    # * <tt>:columns</tt> - Array of column names to display. 
-    #   Used in case when same grid class is used in different places 
+    # * <tt>:columns</tt> - Array of column names to display.
+    #   Used in case when same grid class is used in different places
     #   and needs different columns. Default: all defined columns.
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
@@ -108,12 +108,21 @@ module Datagrid
       end
     end
 
-    class HtmlRow #:nodoc:
-      def initialize(context, grid, asset)
+    # Represents a datagrid row that provides access to column values for the given asset
+    #
+    #   row = datagrid_row(grid, user)
+    #   row.first_name # => "<strong>Bogdan</strong>"
+    #   row.grid       # => Grid object
+    #   row.asset      # => User object
+    class HtmlRow
+
+      attr_reader :grid, :asset
+
+      def initialize(context, grid, asset) # :nodoc:
         @context = context
         @grid = grid
         @asset = asset
-      end 
+      end
 
       def method_missing(method, *args, &blk)
         if column = @grid.column_by_name(method)
