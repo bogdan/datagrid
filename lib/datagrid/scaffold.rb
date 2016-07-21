@@ -10,12 +10,12 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
   def create_scaffold
     template "grid.rb.erb", "app/grids/#{grid_class_name.underscore}.rb"
     if File.exists?(grid_controller_file)
-      inject_into_file grid_controller_file, index_action, :after => %r{class .*#{grid_controller_name}.*\n}
+      inject_into_file grid_controller_file, index_action, :after => %r{class .*#{grid_controller_class_name}.*\n}
     else
       template "controller.rb.erb", grid_controller_file
     end
-    template "index.html.erb", "app/views/#{grid_controller_short_name}/index.html.erb"
-    route("resources :#{grid_controller_short_name}")
+    template "index.html.erb", view_file
+    route(generate_routing_namespace("resources :#{grid_controller_short_name}"))
     unless defined?(::Kaminari) || defined?(::WillPaginate)
       gem 'kaminari'
     end
@@ -33,20 +33,24 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
     end
   end
 
+  def view_file
+    Rails.root.join("app/views").join(controller_file_path).join("index.html.erb")
+  end
+
   def grid_class_name
     file_name.camelize.pluralize + "Grid"
   end
 
-  def grid_controller_name
-    grid_controller_short_name.camelize + "Controller"
+  def grid_controller_class_name
+    controller_class_name.camelize + "Controller"
   end
 
   def grid_controller_file
-    Rails.root.join("app/controllers/#{grid_controller_name.underscore}.rb")
+    Rails.root.join("app/controllers").join("#{grid_controller_class_name.underscore}.rb")
   end
 
   def grid_controller_short_name
-    file_name.underscore.pluralize
+    controller_file_name
   end
 
   def grid_model_name
@@ -68,7 +72,7 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
   end
 
   def grid_route_name
-    grid_controller_short_name + "_path"
+    controller_class_name.underscore.gsub("/", "_") + "_path"
   end
 
   def index_action
@@ -81,4 +85,28 @@ end
 RUBY
   end
 
+  protected
+  def generate_routing_namespace(code)
+    depth = regular_class_path.length
+    # Create 'namespace' ladder
+    # namespace :foo do
+    #   namespace :bar do
+    namespace_ladder = regular_class_path.each_with_index.map do |ns, i|
+      indent("namespace :#{ns} do\n", i * 2)
+    end.join
+
+    # Create route
+    #     get 'baz/index'
+    route = indent(code, depth * 2)
+
+    # Create `end` ladder
+    #   end
+    # end
+    end_ladder = (1..depth).reverse_each.map do |i|
+      indent("end\n", i * 2)
+    end.join
+
+    # Combine the 3 parts to generate complete route entry
+    namespace_ladder + route + "\n" + end_ladder
+  end
 end
