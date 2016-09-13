@@ -144,7 +144,12 @@ module Datagrid
 
       # Resets current instance scope to default scope defined in a class
       def reset_scope
-        scope(&self.class.scope_value)
+        self.scope_value = self.class.scope_value
+      end
+
+      # Returns true if the scope was redefined for this instance of grid object
+      def redefined_scope?
+        self.class.scope_value != scope_value
       end
 
       def driver #:nodoc:

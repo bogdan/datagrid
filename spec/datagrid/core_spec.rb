@@ -16,6 +16,7 @@ describe Datagrid::Core do
         let(:report) { report_class.new }
 
         it { expect(report.scope.to_a.size).to eq(2) }
+        it { expect(report).to_not be_redefined_scope }
       end
 
       context 'changes scope on the fly' do
@@ -26,11 +27,13 @@ describe Datagrid::Core do
         end
 
         it { expect(report.scope.to_a.size).to eq(1) }
+        it { expect(report).to be_redefined_scope }
       end
 
       context 'overriding scope by initializer' do
         let(:report) { report_class.new { Entry.limit(1) } }
 
+        it { expect(report).to be_redefined_scope }
         it { expect(report.scope.to_a.size).to eq(1) }
 
         context "reset scope to default" do
@@ -38,6 +41,7 @@ describe Datagrid::Core do
             report.reset_scope
           end
           it { expect(report.scope.to_a.size).to eq(2) }
+          it { expect(report).to_not be_redefined_scope }
         end
       end
 
@@ -45,6 +49,7 @@ describe Datagrid::Core do
         let(:report) { report_class.new {|scope| scope.limit(1)} }
         it { expect(report.scope.to_a.size).to eq(1) }
         it { expect(report.scope.order_values.size).to eq(1) }
+        it { expect(report).to be_redefined_scope }
       end
     end
   end
