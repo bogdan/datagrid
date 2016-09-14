@@ -21,6 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{This allows you to easily build datagrid aka data tables with sortable columns and filters}
   gem.email = "agresso@gmail.com"
   gem.authors = ["Bogdan Gusiev"]
+  gem.required_ruby_version = '>= 2.0'
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new

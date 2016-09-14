@@ -20,6 +20,12 @@ Ruby library that helps you to build and represent table-like data with:
 
 [Create an issue](https://github.com/bogdan/datagrid/issues/new) if you want more.
 
+
+### Dependencies
+
+* Ruby >= 2.0
+* Rails >= 3.2
+
 ### Live Demo
 
 [Datagrid DEMO application](http://datagrid.herokuapp.com) is available live!
