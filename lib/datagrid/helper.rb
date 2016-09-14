@@ -55,7 +55,8 @@ module Datagrid
     end
 
 
-    # Renders HTML table rows using given grid definition using columns defined in it
+    # Renders HTML table rows using given grid definition using columns defined in it.
+    # Allows to provide a custom layout for each for in place with a block
     #
     # Supported options:
     #
@@ -64,8 +65,15 @@ module Datagrid
     #   and needs different columns. Default: all defined columns.
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
-    def datagrid_rows(grid, assets, options = {})
-      datagrid_renderer.rows(grid, assets, options)
+    #
+    #   = datagrid_rows(grid) # Generic table rows layout
+    #
+    #   = datagrid_rows(grid) do |row|
+    #     %tr
+    #       %td= row.project_name
+    #       %td.project-status{class: row.status}= row.status
+    def datagrid_rows(grid, assets = grid.assets, **options, &block)
+      datagrid_renderer.rows(grid, assets, options, &block)
     end
 
     # Renders ordering controls for the given column name
@@ -116,6 +124,8 @@ module Datagrid
     #   row.asset      # => User object
     class HtmlRow
 
+      include Enumerable
+
       attr_reader :grid, :asset
 
       def initialize(context, grid, asset) # :nodoc:
@@ -124,9 +134,22 @@ module Datagrid
         @asset = asset
       end
 
+      # Return a column value for given column name
+      def get(column)
+        @context.datagrid_value(@grid, column, @asset)
+      end
+
+      # Iterates over all column values that are available in the row
+      def each
+        @grid.columns.each do |column|
+          yield(get(column))
+        end
+      end
+
+      protected
       def method_missing(method, *args, &blk)
         if column = @grid.column_by_name(method)
-          @context.datagrid_value(@grid, column, @asset)
+          get(column)
         else
           super
         end

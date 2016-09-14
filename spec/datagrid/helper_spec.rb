@@ -221,6 +221,19 @@ describe Datagrid::Helper do
         "tr td.name.ordered.asc" => "Star"
       )
     end
+    it "should add ordering classes to column" do
+      rp = test_report(:order => :name) do
+        scope { Entry }
+        column(:name)
+      end
+      expect(
+        subject.datagrid_rows(rp) do |row|
+          subject.content_tag(:strong, row.name)
+        end
+      ).to match_css_pattern(
+        "strong" => "Star"
+      )
+    end
 
     it "should add ordering classes to column" do
       rp = test_report(:order => :name, :descending => true) do
@@ -502,6 +515,12 @@ describe Datagrid::Helper do
 
     it "should provide access to row data" do
       r = subject.datagrid_row(grid, entry)
+      expect(r.name).to eq("Hello")
+      expect(r.category).to eq("greetings")
+    end
+    it "should provide an interator" do
+      r = subject.datagrid_row(grid, entry)
+      expect(r.map {|z| z.upcase}).to eq(["HELLO", "GREETINGS"])
       expect(r.name).to eq("Hello")
       expect(r.category).to eq("greetings")
     end

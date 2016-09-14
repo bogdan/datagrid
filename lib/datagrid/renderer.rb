@@ -55,15 +55,19 @@ module Datagrid
                       { :grid => grid, :options => options })
     end
 
-    def rows(grid, assets, options = {})
+    def rows(grid, assets = grid.assets, **options, &block)
       result = assets.map do |asset|
-        _render_partial(
-          'row', options[:partials],
-          {
+        if block_given?
+          @template.capture do
+            yield(Datagrid::Helper::HtmlRow.new(@template, grid, asset))
+          end
+        else
+          _render_partial( 'row', options[:partials], {
             :grid => grid,
             :options => options,
             :asset => asset
           })
+        end
       end.to_a.join
 
       _safe(result)
