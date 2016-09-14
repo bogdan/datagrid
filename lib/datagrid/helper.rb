@@ -66,9 +66,9 @@ module Datagrid
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
     #
-    #   = datagrid_rows(grid) # Generic table rows layout
+    #   = datagrid_rows(grid) # Generic table rows Layout
     #
-    #   = datagrid_rows(grid) do |row|
+    #   = datagrid_rows(grid) do |row| # Custom Layout
     #     %tr
     #       %td= row.project_name
     #       %td.project-status{class: row.status}= row.status
