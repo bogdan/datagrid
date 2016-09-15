@@ -171,6 +171,15 @@ describe Datagrid::Filters::DateFilter do
     expect(report.created_at).to eq([Date.new(2012, 01, 01), Date.new(2013, 01, 01)])
   end
 
+  it "should nullify blank range" do
+    report = test_report(:created_at => [nil, nil]) do
+      scope  {Entry}
+      filter(:created_at, :date, :range => true)
+    end
+
+    expect(report.created_at).to eq(nil)
+  end
+
   it "should properly format date in filter_value_as_string" do
     with_date_format do
       report = test_report(:created_at => "2012-01-02") do

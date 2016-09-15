@@ -1,5 +1,5 @@
 module Datagrid::Filters::RangedFilter
-  
+
 
   def initialize(grid, name, options, &block)
     super(grid, name, options, &block)
@@ -23,6 +23,8 @@ module Datagrid::Filters::RangedFilter
       if result.first && result.last && result.first > result.last
         # If wrong range is given - reverse it to be always valid
         result.reverse
+      elsif !result.first && !result.last
+        nil
       else
         result
       end
@@ -46,7 +48,7 @@ module Datagrid::Filters::RangedFilter
         scope = driver.less_equal(scope, name, right)
       end
       scope
-    else 
+    else
       super(scope, value)
     end
   end
