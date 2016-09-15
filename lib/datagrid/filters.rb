@@ -101,6 +101,14 @@ module Datagrid
 
       end
 
+      def inspect
+        attrs = filters.map do |filter|
+          "#{filter.name}: #{filter.type}"
+        end.join(", ")
+        "#{super}(#{attrs})"
+      end
+
+
       protected
 
       def inherited(child_class)
@@ -133,7 +141,7 @@ module Datagrid
       def filter_value_as_string(name)
         filter = filter_by_name(name)
         value = filter_value(filter)
-        if value.is_a?(Array) 
+        if value.is_a?(Array)
           value.map {|v| filter.format(v) }.join(filter.separator)
         else
           filter.format(value)

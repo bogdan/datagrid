@@ -44,7 +44,7 @@ module Datagrid
       end
 
       # Returns a column definition that is currently used to order assets
-      # 
+      #
       #   class MyGrid
       #     scope { Model }
       #     column(:id)
@@ -87,11 +87,11 @@ module Datagrid
       def check_order_valid!
         return unless order
         column = column_by_name(order)
-        unless column 
+        unless column
           self.class.order_unsupported(order, "no column #{order} in #{self.class}")
         end
         unless column.supports_order?
-          self.class.order_unsupported(column.name, "column don't support order" ) 
+          self.class.order_unsupported(column.name, "column don't support order" )
         end
       end
 
@@ -99,7 +99,7 @@ module Datagrid
         if order.respond_to?(:call)
           apply_block_order(assets, order)
         else
-          driver.asc(assets, order) 
+          driver.asc(assets, order)
         end
       end
 
@@ -118,7 +118,7 @@ module Datagrid
       end
 
       def apply_block_order(assets, order)
-        case order.arity 
+        case order.arity
         when -1, 0
           assets.instance_eval(&order)
         when 1

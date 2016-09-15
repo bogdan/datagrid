@@ -112,7 +112,7 @@ describe Datagrid::Filters do
       end
       expect(grid.assets.to_a.size).to eq(1)
     end
-    
+
   end
   describe "default filter as scope" do
     it "should create default filter if scope respond to filter name method" do
@@ -192,7 +192,7 @@ describe Datagrid::Filters do
 
   end
 
-    
+
   it "supports dynamic header" do
     grid = test_report do
       scope {Entry}
@@ -217,7 +217,7 @@ describe Datagrid::Filters do
   end
 
   describe "tranlations" do
-    
+
     module ::Ns46
       class TranslatedReport
         include Datagrid
@@ -261,6 +261,25 @@ describe Datagrid::Filters do
       expect {
         grid.select_options(:id)
       }.to raise_error(Datagrid::ArgumentError)
+    end
+  end
+
+  describe "#inspect" do
+    it "should list all fitlers with types" do
+
+      module ::NsInspect
+        class TestGrid
+          include Datagrid
+          scope {Entry}
+          filter(:id, :integer)
+          filter(:name, :string)
+          filter(:current_user)
+        end
+      end
+
+      expect(NsInspect::TestGrid.inspect).to eq(
+        "NsInspect::TestGrid(id: integer, name: string, current_user: default)"
+      )
     end
   end
 end
