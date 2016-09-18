@@ -24,10 +24,15 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     return scope if unapplicable_value?(value)
 
     result = execute(value, scope, grid_object)
+
     return scope unless result
+    if result.is_a?(Datagrid::Filters::DefaultFilterScope)
+      result = default_filter(value, scope, grid_object)
+    end
     unless grid_object.driver.match?(result)
       raise Datagrid::FilteringError, "Can not apply #{name.inspect} filter: result #{result.inspect} no longer match #{grid_object.driver.class}."
     end
+
     result
   end
 

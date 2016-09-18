@@ -31,6 +31,9 @@ module Datagrid
       :dynamic => Filters::DynamicFilter
     }
 
+    class DefaultFilterScope
+    end
+
     def self.included(base) #:nodoc:
       base.extend         ClassMethods
       base.class_eval do
@@ -167,6 +170,14 @@ module Datagrid
           raise ::Datagrid::ArgumentError, "#{filter.name} with type #{FILTER_TYPES.invert[filter.class].inspect} can not have select options"
         end
         filter.select(self)
+      end
+
+      def default_filter
+        self.class.default_filter
+      end
+
+      def self.default_filter
+        DefaultFilterScope.new
       end
 
       protected

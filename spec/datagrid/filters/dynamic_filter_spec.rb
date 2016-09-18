@@ -139,6 +139,32 @@ describe Datagrid::Filters::DynamicFilter do
     expect(grid.assets).to_not include(Entry.create!(disabled: false, group_id: 2))
   end
 
+  it "should support custom operations" do
+    entry = Entry.create!(name: 'hello')
+
+    grid = test_grid do
+      scope {Entry}
+      filter(
+        :condition, :dynamic, operations: ["=", "!="]
+      ) do |(field, operation, value), scope|
+        if operation == "!="
+          scope.where.not(field => value)
+        else
+          default_filter
+        end
+      end
+    end
+
+    grid.condition = ["name", "=", "hello"]
+    expect(grid.assets).to include(entry)
+    grid.condition = ["name", "!=", "hello"]
+    expect(grid.assets).to_not include(entry)
+    grid.condition = ["name", "=", "hello1"]
+    expect(grid.assets).to_not include(entry)
+    grid.condition = ["name", "!=", "hello1"]
+    expect(grid.assets).to include(entry)
+  end
+
   it "should raise if unknown operation" do
     report.condition = [:shipping_date, "<>", '1996-08-05']
     expect{
