@@ -104,6 +104,10 @@ module Datagrid
 
       end
 
+      def default_filter
+        DefaultFilterScope.new
+      end
+
       def inspect
         attrs = filters.map do |filter|
           "#{filter.name}: #{filter.type}"
@@ -174,10 +178,6 @@ module Datagrid
 
       def default_filter
         self.class.default_filter
-      end
-
-      def self.default_filter
-        DefaultFilterScope.new
       end
 
       protected

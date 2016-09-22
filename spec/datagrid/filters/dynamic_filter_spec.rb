@@ -1,4 +1,4 @@
-require "spec_helper" 
+require "spec_helper"
 
 
 describe Datagrid::Filters::DynamicFilter do
@@ -142,13 +142,13 @@ describe Datagrid::Filters::DynamicFilter do
   it "should support custom operations" do
     entry = Entry.create!(name: 'hello')
 
-    grid = test_grid do
+    grid = test_report do
       scope {Entry}
       filter(
         :condition, :dynamic, operations: ["=", "!="]
       ) do |(field, operation, value), scope|
         if operation == "!="
-          scope.where.not(field => value)
+          scope.where("#{field} != ?", value)
         else
           default_filter
         end
