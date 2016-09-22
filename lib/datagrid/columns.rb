@@ -256,7 +256,11 @@ module Datagrid
     module InstanceMethods
 
       def assets
-        driver.append_column_queries(super, columns.select(&:query))
+        append_column_preload(
+          driver.append_column_queries(
+            super, columns.select(&:query)
+          )
+        )
       end
 
       # Returns <tt>Array</tt> of human readable column names. See also "Localization" section
@@ -512,6 +516,12 @@ module Datagrid
       end
 
       protected
+
+      def append_column_preload(scope)
+        columns.inject(scope) do |current, column|
+          column.append_preload(current)
+        end
+      end
 
       def cache(column, asset, type)
         @cache ||= {}

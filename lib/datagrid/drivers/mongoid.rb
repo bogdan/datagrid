@@ -94,6 +94,11 @@ module Datagrid
       def default_cache_key(asset)
         asset.id || raise(NotImplementedError)
       end
+
+      def default_preload(scope, value)
+        scope.includes(value)
+      end
+
     end
   end
 end

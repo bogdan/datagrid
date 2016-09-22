@@ -133,6 +133,21 @@ class Datagrid::Columns::Column
     grid.generic_value(self, model)
   end
 
+  def append_preload(scope)
+    preload = options[:preload]
+    return scope unless preload
+    if preload.respond_to?(:call)
+      return scope unless preload
+      if preload.arity == 1
+        preload.call(scope)
+      else
+        scope.instance_eval(&preload)
+      end
+    else
+      grid_class.driver.default_preload(scope, preload)
+    end
+  end
+
   private
   def column_availability(grid, option, default)
     case option

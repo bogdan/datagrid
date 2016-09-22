@@ -116,6 +116,10 @@ module Datagrid
         asset.id || raise(NotImplementedError)
       end
 
+      def default_preload(scope, value)
+        scope.preload(value)
+      end
+
       protected
 
       def prefix_table_name(scope, field)

@@ -562,4 +562,39 @@ describe Datagrid::Columns do
       expect(grid.rows).to eq([['Hello']])
     end
   end
+
+  describe "column scope" do
+    it "appends preload as non block" do
+      grid = test_report do
+        scope { Entry }
+        column(:id, preload: [:group])
+      end
+      expect(grid.assets.preload_values).to_not be_blank
+    end
+
+    it "appends preload with no args" do
+      grid = test_report do
+        scope { Entry }
+        column(:id, preload: -> { order(:id) })
+      end
+      expect(grid.assets.order_values).to_not be_blank
+    end
+    it "appends preload with arg" do
+      grid = test_report do
+        scope { Entry }
+        column(:id, preload: ->(a) { a.order(:id) })
+      end
+      expect(grid.assets.order_values).to_not be_blank
+    end
+    it "doesn't append preload when column is invisible" do
+      grid = test_report do
+        scope { Entry }
+        column(:id1, preload: ->(a) { a.order(:id) })
+        column(:id2, preload: ->(a) { a.order(:id) }, if: ->(a) { false })
+        column(:name)
+      end
+      grid.column_names = [:name]
+      expect(grid.assets.order_values).to be_blank
+    end
+  end
 end

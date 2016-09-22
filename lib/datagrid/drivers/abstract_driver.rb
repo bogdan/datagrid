@@ -105,6 +105,10 @@ module Datagrid
         scope
       end
 
+      def default_preload(scope, value)
+        raise NotImplementedError
+      end
+
       protected
       def timestamp_class?(klass)
         TIMESTAMP_CLASSES.include?(klass)
