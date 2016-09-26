@@ -120,6 +120,10 @@ module Datagrid
         scope.preload(value)
       end
 
+      def can_preload?(scope, association)
+        !! scope.klass.reflect_on_association(association)
+      end
+
       protected
 
       def prefix_table_name(scope, field)

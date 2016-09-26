@@ -99,6 +99,10 @@ module Datagrid
         scope.includes(value)
       end
 
+      def can_preload?(scope, association)
+        !! scope.klass.reflect_on_association(association)
+      end
+
     end
   end
 end

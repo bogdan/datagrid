@@ -109,6 +109,10 @@ module Datagrid
         raise NotImplementedError
       end
 
+      def can_preload?(scope, association)
+        raise NotImplementedError
+      end
+
       protected
       def timestamp_class?(klass)
         TIMESTAMP_CLASSES.include?(klass)

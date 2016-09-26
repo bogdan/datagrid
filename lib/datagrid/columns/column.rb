@@ -69,7 +69,7 @@ class Datagrid::Columns::Column
     if options.has_key?(:order) && options[:order] != true
       self.options[:order]
     else
-      grid_class.driver.default_order(grid_class.scope, name)
+      driver.default_order(grid_class.scope, name)
     end
   end
 
@@ -134,18 +134,28 @@ class Datagrid::Columns::Column
   end
 
   def append_preload(scope)
-    preload = options[:preload]
     return scope unless preload
     if preload.respond_to?(:call)
       return scope unless preload
       if preload.arity == 1
         preload.call(scope)
       else
-        scope.instance_eval(&preload)
+        scope.instance_exec(&preload)
       end
     else
-      grid_class.driver.default_preload(scope, preload)
+      driver.default_preload(scope, preload)
     end
+  end
+
+  def preload
+    preload = options[:preload]
+
+    if [nil, true].include?(preload) && driver.can_preload?(driver.to_scope(grid_class.scope), name)
+      name
+    else
+      preload
+    end
+
   end
 
   private
@@ -164,5 +174,9 @@ class Datagrid::Columns::Column
 
   def callable(value)
     value.respond_to?(:call) ? value.call : value
+  end
+
+  def driver
+    grid_class.driver
   end
 end

@@ -90,6 +90,15 @@ module Datagrid
         end
       end
 
+      def default_preload(scope, value)
+        scope.eager(value)
+      end
+
+      def can_preload?(scope, association)
+        !! scope.model.association_reflection(association)
+      end
+
+
       protected
 
       def prefix_table_name(scope, field)

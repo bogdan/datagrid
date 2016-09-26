@@ -68,9 +68,13 @@ module Datagrid
       def batch_each(scope, batch_size, &block)
         scope.each(&block)
       end
-      
+
       def default_cache_key(asset)
         asset
+      end
+
+      def can_preload?(scope, association)
+        false
       end
     end
   end

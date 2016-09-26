@@ -579,6 +579,7 @@ describe Datagrid::Columns do
       end
       expect(grid.assets.order_values).to_not be_blank
     end
+
     it "appends preload with arg" do
       grid = test_report do
         scope { Entry }
@@ -586,6 +587,15 @@ describe Datagrid::Columns do
       end
       expect(grid.assets.order_values).to_not be_blank
     end
+
+    it "appends preload as true value" do
+      grid = test_report do
+        scope { Entry }
+        column(:group, preload: true)
+      end
+      expect(grid.assets.preload_values).to eq([:group])
+    end
+
     it "doesn't append preload when column is invisible" do
       grid = test_report do
         scope { Entry }
