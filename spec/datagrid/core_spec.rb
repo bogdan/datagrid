@@ -6,9 +6,11 @@ describe Datagrid::Core do
     before { 2.times { Entry.create } }
 
     let(:report_class) do
-      test_report_class do
+      class ScopeTestReport
+        include Datagrid
         scope { Entry.order("id desc") }
       end
+      ScopeTestReport
     end
 
     describe '#scope' do
@@ -17,6 +19,21 @@ describe Datagrid::Core do
 
         it { expect(report.scope.to_a.size).to eq(2) }
         it { expect(report).to_not be_redefined_scope }
+
+        context "when redefined" do
+          it "should accept previous scope" do
+            module Ns83827
+              class TestGrid < ScopeTestReport
+                scope do |previous|
+                  previous.reorder("id asc")
+                end
+              end
+            end
+
+            expect(Ns83827::TestGrid.new.assets.order_values).to eq(["id asc"])
+          end
+        end
+
       end
 
       context 'changes scope on the fly' do

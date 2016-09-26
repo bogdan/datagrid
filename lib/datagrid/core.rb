@@ -35,7 +35,11 @@ module Datagrid
       # Defines a scope at class level
       def scope(&block)
         if block
-          self.scope_value = block
+          current_scope = scope_value
+          self.scope_value = proc {
+            Datagrid::Utils.apply_args(current_scope ? current_scope.call : nil, &block)
+          }
+          self
         else
           check_scope_defined!
           scope_value.call
