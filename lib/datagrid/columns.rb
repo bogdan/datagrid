@@ -272,6 +272,15 @@ module Datagrid
         data_columns(*column_names).map(&:header)
       end
 
+      # Returns <tt>Array</tt> of raw column names.
+      #
+      # Arguments:
+      #
+      #   * <tt>column_names</tt> - list of column names if you want to limit data only to specified columns
+      def data_column_names(*column_names)
+        data_columns(*column_names).map(&:name)
+      end
+
       # Returns <tt>Array</tt> column values for given asset
       #
       # Arguments:
@@ -347,8 +356,15 @@ module Datagrid
       #   grid.to_csv(:col_sep => ';')
       def to_csv(*column_names)
         options = column_names.extract_options!
+
+        headers = if Datagrid.configuration.raw_csv_headers
+          self.data_column_names(*column_names)
+        else
+          self.header(*column_names)
+        end
+
         csv_class.generate(
-          {:headers => self.header(*column_names), :write_headers => true}.merge!(options)
+          {:headers => headers, :write_headers => true}.merge!(options)
         ) do |csv|
           each_with_batches do |asset|
             csv << row_for(asset, *column_names)

@@ -26,3 +26,16 @@ def with_datetime_format(format = "%m/%d/%Y")
   end
 end
 
+def with_raw_csv_headers
+  begin
+    old_value = Datagrid.configuration.raw_csv_headers
+    Datagrid.configure do |config|
+      config.raw_csv_headers = true
+    end
+    yield
+  ensure
+    Datagrid.configure do |config|
+      config.raw_csv_headers = old_value
+    end
+  end
+end
