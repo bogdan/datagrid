@@ -119,6 +119,7 @@ module Datagrid
       #   * <tt>:after</tt> - determines the position of this column, by adding it after the column passed here
       #   * <tt>:if</tt> - the column is shown if the reult of calling this argument is true
       #   * <tt>:unless</tt> - the column is shown unless the reult of calling this argument is true
+      #   * <tt>:preload</tt> - spefies which associations of the scope should be preloaded for this column
       #
       # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
       def column(name, options_or_query = {}, options = {}, &block)
