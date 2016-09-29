@@ -113,10 +113,7 @@ module Datagrid
       end
 
       def inspect
-        attrs = filters.map do |filter|
-          "#{filter.name}: #{filter.type}"
-        end.join(", ")
-        "#{super}(#{attrs})"
+        "#{super}(#{filters_inspection})"
       end
 
       def filters
@@ -130,6 +127,12 @@ module Datagrid
         child_class.filters_array = self.filters_array.clone
       end
 
+      def filters_inspection
+        return "no filters" if filters.empty?
+        filters.map do |filter|
+          "#{filter.name}: #{filter.type}"
+        end.join(", ")
+      end
     end # ClassMethods
 
     module InstanceMethods

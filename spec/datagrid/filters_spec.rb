@@ -264,6 +264,15 @@ describe Datagrid::Filters do
         "NsInspect::TestGrid(id: integer, name: string, current_user: default)"
       )
     end
+
+    it "dislays no filters" do
+      class TestGrid8728
+        include Datagrid
+        scope {Entry}
+      end
+
+      expect(TestGrid8728.inspect).to eq("TestGrid8728(no filters)")
+    end
   end
 
 
