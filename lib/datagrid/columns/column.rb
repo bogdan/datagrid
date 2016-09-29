@@ -107,8 +107,7 @@ class Datagrid::Columns::Column
   end
 
   def enabled?(grid)
-    column_availability(grid, options[:if], true) &&
-      !column_availability(grid, options[:unless], false)
+    ::Datagrid::Utils.process_availability(grid, options[:if], options[:unless])
   end
 
   def inspect
@@ -156,20 +155,6 @@ class Datagrid::Columns::Column
       preload
     end
 
-  end
-
-  private
-  def column_availability(grid, option, default)
-    case option
-    when nil
-      default
-    when Proc
-      option.call(grid)
-    when Symbol, String
-      grid.send(option.to_sym)
-    else
-      raise Datagrid::ConfigurationError, "Incorrect column availability option: #{option.insepct}"
-    end
   end
 
   def callable(value)

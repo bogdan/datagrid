@@ -176,23 +176,6 @@ describe Datagrid::Filters do
     end
   end
 
-  it "should support instance filter rejection" do
-    grid = test_report(:name => 'hello') do
-      scope { Entry }
-      filter(:id)
-      filter(:name)
-    end
-
-    Entry.create!(:name => 'hello1')
-    expect(grid.assets).to be_empty
-    grid.filters.reject! {|f| f.name == :name }
-    expect(grid.filters.map(&:name)).to eq([:id])
-    expect(grid.assets).to_not be_empty
-    expect(grid.class.filters.map(&:name)).to eq([:id, :name])
-
-  end
-
-
   it "supports dynamic header" do
     grid = test_report do
       scope {Entry}
@@ -280,6 +263,25 @@ describe Datagrid::Filters do
       expect(NsInspect::TestGrid.inspect).to eq(
         "NsInspect::TestGrid(id: integer, name: string, current_user: default)"
       )
+    end
+  end
+
+
+  describe ":if :unless options" do
+    it "supports :if option" do
+      klass = test_report_class do
+        scope {Entry}
+        filter(:admin_mode, :boolean, dummy: true)
+        filter(:id, :integer, if: :admin_mode)
+        filter(:name, :integer, unless: :admin_mode)
+      end
+
+      admin_filters = klass.new(admin_mode: true).filters.map(&:name)
+      non_admin_filters = klass.new(admin_mode: false).filters.map(&:name)
+      expect(admin_filters).to include(:id)
+      expect(admin_filters).to_not include(:name)
+      expect(non_admin_filters).to_not include(:id)
+      expect(non_admin_filters).to include(:name)
     end
   end
 end

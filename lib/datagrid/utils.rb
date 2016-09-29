@@ -127,6 +127,24 @@ module Datagrid
         end
       end
 
+      def process_availability(grid, if_option, unless_option)
+        property_availability(grid, if_option, true) &&
+          !property_availability(grid, unless_option, false)
+      end
+
+      protected
+      def property_availability(grid, option, default)
+        case option
+        when nil
+          default
+        when Proc
+          option.call(grid)
+        when Symbol, String
+          grid.send(option.to_sym)
+        else
+          raise Datagrid::ConfigurationError, "Incorrect column availability option: #{option.insepct}"
+        end
+      end
     end
   end
 end

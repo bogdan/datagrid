@@ -54,7 +54,7 @@ class Datagrid::Filters::BaseFilter #:nodoc:
   end
 
   def header
-    if header = options[:header] 
+    if header = options[:header]
       callable(header)
     else
       Datagrid::Utils.translate_from_namespace(:filters, grid_class, name)
@@ -73,7 +73,7 @@ class Datagrid::Filters::BaseFilter #:nodoc:
         Datagrid::Utils.warn_once(":default as a Symbol is now treated as a method name. Use String instead or -> { default } if you really want default value to be a Symbol but not a String.")
         default
       end
-    elsif default.respond_to?(:call) 
+    elsif default.respond_to?(:call)
       Datagrid::Utils.apply_args(object, &default)
     else
       default
@@ -131,6 +131,10 @@ class Datagrid::Filters::BaseFilter #:nodoc:
       end
     end
     raise "wtf is #{inspect}"
+  end
+
+  def enabled?(grid)
+    ::Datagrid::Utils.process_availability(grid, options[:if], options[:unless])
   end
 
   protected

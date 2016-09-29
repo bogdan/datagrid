@@ -40,8 +40,8 @@ module Datagrid
 
         include Datagrid::Core
         include Datagrid::Filters::CompositeFilters
-        class_attribute :filters
-        self.filters = []
+        class_attribute :filters_array
+        self.filters_array = []
 
       end
       base.send :include, InstanceMethods
@@ -83,6 +83,10 @@ module Datagrid
       #   by adding it after the filter passed here (when using datagrid_form_for helper)
       # * <tt>:dummy</tt> - if true, this filter will not be applied automatically
       #   and will be just displayed in form. In case you may want to apply it manually.
+      # * <tt>:if</tt> - specify the condition when the filter can be dislayed and used.
+      #   Accepts a block or a symbol with an instance method name
+      # * <tt>:unless</tt> - specify the reverse condition when the filter can be dislayed and used.
+      #   Accepts a block or a symbol with an instance method name
       #
       # See: https://github.com/bogdan/datagrid/wiki/Filters for examples
       def filter(name, type = :default, options = {}, &block)
@@ -94,9 +98,9 @@ module Datagrid
         klass = type.is_a?(Class) ? type : FILTER_TYPES[type]
         raise ConfigurationError, "filter class #{type.inspect} not found" unless klass
 
-        position = Datagrid::Utils.extract_position_from_options(self.filters, options)
+        position = Datagrid::Utils.extract_position_from_options(filters_array, options)
         filter = klass.new(self, name, options, &block)
-        self.filters.insert(position, filter)
+        filters_array.insert(position, filter)
 
         datagrid_attribute(name) do |value|
           filter.parse_values(value)
@@ -115,12 +119,15 @@ module Datagrid
         "#{super}(#{attrs})"
       end
 
+      def filters
+        filters_array
+      end
 
       protected
 
       def inherited(child_class)
         super(child_class)
-        child_class.filters = self.filters.clone
+        child_class.filters_array = self.filters_array.clone
       end
 
     end # ClassMethods
@@ -128,8 +135,8 @@ module Datagrid
     module InstanceMethods
 
       def initialize(*args, &block) # :nodoc:
-        self.filters = self.class.filters.clone
-        self.filters.each do |filter|
+        self.filters_array = self.class.filters_array.clone
+        filters.each do |filter|
           self[filter.name] = filter.default(self)
         end
         super(*args, &block)
@@ -178,6 +185,13 @@ module Datagrid
 
       def default_filter
         self.class.default_filter
+      end
+
+      # Returns all currently enabled filters
+      def filters
+        self.class.filters.select do |filter|
+          filter.enabled?(self)
+        end
       end
 
       protected

@@ -226,7 +226,9 @@ module Datagrid
         args.compact!
         args.map!(&:to_sym)
         columns.select do |column|
-          (!options[:data] || column.data?) && (!options[:html] || column.html?) && (column.mandatory? || args.empty? || args.include?(column.name))
+          (!options[:data] || column.data?) &&
+            (!options[:html] || column.html?) &&
+            (column.mandatory? || args.empty? || args.include?(column.name))
         end
       end
 
@@ -241,7 +243,9 @@ module Datagrid
           model.send(name)
         end
         position = Datagrid::Utils.extract_position_from_options(columns, options)
-        column = Datagrid::Columns::Column.new(self, name, query, default_column_options.merge(options), &block)
+        column = Datagrid::Columns::Column.new(
+          self, name, query, default_column_options.merge(options), &block
+        )
         columns.insert(position, column)
       end
 
