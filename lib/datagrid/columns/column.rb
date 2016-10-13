@@ -158,7 +158,7 @@ class Datagrid::Columns::Column
   end
 
   def callable(value)
-    value.respond_to?(:call) ? value.call : value
+    value.respond_to?(:call) ? value.call : value.html_safe
   end
 
   def driver
