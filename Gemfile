@@ -5,7 +5,7 @@ gem "rails", ">= 3.2.22.2"
 group :development do
 
   gem "bundler"
-  gem "jeweler"
+  gem "jeweler", github: "technicalpickles/jeweler"
 
 
   gem "debugger", :platform => :ruby_19
