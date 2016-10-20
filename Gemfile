@@ -8,7 +8,6 @@ group :development do
   gem "jeweler", github: "technicalpickles/jeweler"
 
 
-  gem "debugger", :platform => :ruby_19
   gem "pry-byebug", :platform => [:ruby_20, :ruby_21, :ruby_22, :ruby_23] & Bundler::Dsl::VALID_PLATFORMS
 
   gem "rspec", ">= 3"
