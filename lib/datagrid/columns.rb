@@ -96,30 +96,30 @@ module Datagrid
       #
       # Arguments:
       #
-      #   * <tt>name</tt> - column name
-      #   * <tt>query</tt> - a string representing the query to select this column (supports only ActiveRecord)
-      #   * <tt>options</tt> - hash of options
-      #   * <tt>block</tt> - proc to calculate a column value
+      # * <tt>name</tt> - column name
+      # * <tt>query</tt> - a string representing the query to select this column (supports only ActiveRecord)
+      # * <tt>options</tt> - hash of options
+      # * <tt>block</tt> - proc to calculate a column value
       #
       # Available options:
       #
-      #   * <tt>:html</tt> - determines if current column should be present in html table and how is it formatted
-      #   * <tt>:order</tt> - determines if this column could be sortable and how.
-      #     The value of order is explicitly passed to ORM ordering method.
-      #     Ex: <tt>"created_at, id"</tt> for ActiveRecord, <tt>[:created_at, :id]</tt> for Mongoid
-      #   * <tt>:order_desc</tt> - determines a descending order for given column
-      #     (only in case when <tt>:order</tt> can not be easily reversed by ORM)
-      #   * <tt>:order_by_value</tt> - used in case it is easier to perform ordering at ruby level not on database level.
-      #     Warning: using ruby to order large datasets is very unrecommended.
-      #     If set to true - datagrid will use column value to order by this column
-      #     If block is given - datagrid will use value returned from block
-      #   * <tt>:mandatory</tt> - if true, column will never be hidden with #column_names selection
-      #   * <tt>:url</tt> - a proc with one argument, pass this option to easily convert the value into an URL
-      #   * <tt>:before</tt> - determines the position of this column, by adding it before the column passed here
-      #   * <tt>:after</tt> - determines the position of this column, by adding it after the column passed here
-      #   * <tt>:if</tt> - the column is shown if the reult of calling this argument is true
-      #   * <tt>:unless</tt> - the column is shown unless the reult of calling this argument is true
-      #   * <tt>:preload</tt> - spefies which associations of the scope should be preloaded for this column
+      # * <tt>:html</tt> - determines if current column should be present in html table and how is it formatted
+      # * <tt>:order</tt> - determines if this column could be sortable and how.
+      #   The value of order is explicitly passed to ORM ordering method.
+      #   Ex: <tt>"created_at, id"</tt> for ActiveRecord, <tt>[:created_at, :id]</tt> for Mongoid
+      # * <tt>:order_desc</tt> - determines a descending order for given column
+      #   (only in case when <tt>:order</tt> can not be easily reversed by ORM)
+      # * <tt>:order_by_value</tt> - used in case it is easier to perform ordering at ruby level not on database level.
+      #   Warning: using ruby to order large datasets is very unrecommended.
+      #   If set to true - datagrid will use column value to order by this column
+      #   If block is given - datagrid will use value returned from block
+      # * <tt>:mandatory</tt> - if true, column will never be hidden with #column_names selection
+      # * <tt>:url</tt> - a proc with one argument, pass this option to easily convert the value into an URL
+      # * <tt>:before</tt> - determines the position of this column, by adding it before the column passed here
+      # * <tt>:after</tt> - determines the position of this column, by adding it after the column passed here
+      # * <tt>:if</tt> - the column is shown if the reult of calling this argument is true
+      # * <tt>:unless</tt> - the column is shown unless the reult of calling this argument is true
+      # * <tt>:preload</tt> - spefies which associations of the scope should be preloaded for this column
       #
       # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
       def column(name, options_or_query = {}, options = {}, &block)
