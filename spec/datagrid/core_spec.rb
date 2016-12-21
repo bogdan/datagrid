@@ -71,7 +71,7 @@ describe Datagrid::Core do
     end
   end
 
-  describe ".inspect" do
+  describe "#inspect" do
     it "should show all attribute values" do
       class InspectTest
         include Datagrid
@@ -82,6 +82,31 @@ describe Datagrid::Core do
 
       grid = InspectTest.new(:created_at => ['2014-01-01', '2014-08-05'], :descending => true, :order => 'name')
       expect(grid.inspect).to eq('#<InspectTest order: :name, descending: true, created_at: [Wed, 01 Jan 2014, Tue, 05 Aug 2014]>')
+    end
+  end
+
+  describe "#==" do
+    class EqualTest
+      include Datagrid
+      scope {Entry}
+      filter(:created_at, :date)
+      column(:name)
+      column(:created_at)
+    end
+    it "work on empty objects" do
+      expect(EqualTest.new).to eq(EqualTest.new)
+    end
+    it "sees the difference on the filter value" do
+      expect(EqualTest.new(created_at: Date.yesterday)).to_not eq(EqualTest.new(created_at: Date.today))
+    end
+    it "sees the difference on order" do
+      expect(EqualTest.new(order: :created_at)).to_not eq(EqualTest.new(order: :name))
+    end
+    it "doesn't destinguish between String and Symbol order" do
+      expect(EqualTest.new(order: :created_at)).to eq(EqualTest.new(order: "created_at"))
+    end
+    it "checks for redefined scope" do
+      expect(EqualTest.new).to_not eq(EqualTest.new {|s| s.reorder(:name)})
     end
   end
 end

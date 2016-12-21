@@ -171,6 +171,12 @@ module Datagrid
         "#<#{self.class} #{attrs}>"
       end
 
+      def ==(other)
+        self.class == other.class &&
+          attributes == other.attributes &&
+          scope == other.scope
+      end
+
     end # InstanceMethods
   end
 end
