@@ -124,7 +124,9 @@ module Datagrid
 
       def inherited(child_class)
         super(child_class)
-        child_class.filters_array = self.filters_array.clone
+        child_class.filters_array = self.filters_array.collect do |x|
+          x.dup.tap {|y| y.grid_class = child_class}
+        end
       end
 
       def filters_inspection
