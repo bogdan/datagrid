@@ -5,7 +5,7 @@ gem "rails", ">= 3.2.22.2"
 group :development do
 
   gem "bundler"
-  gem "jeweler", ">= 2.1.2"
+  gem "jeweler", ">= 2.1.2", platform: [:ruby_23]
 
 
   gem "pry-byebug", :platform => [:ruby_20, :ruby_21, :ruby_22, :ruby_23] & Bundler::Dsl::VALID_PLATFORMS
