@@ -11,20 +11,22 @@ rescue Bundler::BundlerError => e
 end
 require 'rake'
 
-require 'jeweler'
-Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "datagrid"
-  gem.homepage = "http://github.com/bogdan/datagrid"
-  gem.license = "MIT"
-  gem.summary = %Q{Ruby gem to create datagrids}
-  gem.description = %Q{This allows you to easily build datagrid aka data tables with sortable columns and filters}
-  gem.email = "agresso@gmail.com"
-  gem.authors = ["Bogdan Gusiev"]
-  gem.required_ruby_version = '>= 2.0'
-  # dependencies defined in Gemfile
+if RUBY_VERSION >= "2.3"
+  require 'jeweler'
+  Jeweler::Tasks.new do |gem|
+    # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+    gem.name = "datagrid"
+    gem.homepage = "http://github.com/bogdan/datagrid"
+    gem.license = "MIT"
+    gem.summary = %Q{Ruby gem to create datagrids}
+    gem.description = %Q{This allows you to easily build datagrid aka data tables with sortable columns and filters}
+    gem.email = "agresso@gmail.com"
+    gem.authors = ["Bogdan Gusiev"]
+    gem.required_ruby_version = '>= 2.0'
+    # dependencies defined in Gemfile
+  end
+  Jeweler::RubygemsDotOrgTasks.new
 end
-Jeweler::RubygemsDotOrgTasks.new
 
 require 'rspec/core'
 require 'rspec/core/rake_task'
