@@ -1,9 +1,10 @@
 language: ruby
 #bundler_args: --without development
 rvm:
-  - 2.0.0
   - 2.1.1
   - 2.2.0
+  - 2.3.0
+  - 2.4.0
   #- jruby
   #- jruby-head
 #env: JRUBY_OPTS="--server -J-Xms512m -J-Xmx1024m"
