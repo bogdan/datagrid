@@ -10,6 +10,7 @@ group :development do
   end
 
 
+  #gem "json", ">= 1.9"
   gem "pry-byebug", :platform => [:ruby_20, :ruby_21, :ruby_22, :ruby_23] & Bundler::Dsl::VALID_PLATFORMS
 
   gem "rspec", ">= 3"
@@ -20,7 +21,7 @@ group :development do
 
   group :mongo do
     gem "mongoid", "3.1.7"
-    gem "mongo_mapper", "~> 0.13.0"
+    #gem "mongo_mapper", "~> 0.13.0"
     gem "bson"
     gem "bson_ext"
   end

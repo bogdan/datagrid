@@ -1,9 +1,5 @@
 require 'rubygems'
 require 'bundler'
-require 'mongoid'
-require 'mongo_mapper'
-
-
 
 begin
   Bundler.setup(:default, :development)
@@ -20,7 +16,13 @@ require "active_record"
 require 'action_view'
 require "rails"
 require "mongoid"
-require "mongo_mapper"
+begin
+require 'mongo_mapper'
+rescue LoadError
+end
+
+
+
 require 'datagrid'
 begin
   require 'ruby-debug'
@@ -47,7 +49,7 @@ begin
   Mongoid.load_configuration({
     "sessions" =>
     {
-      "default" => 
+      "default" =>
       {
         "hosts" => ["localhost:27017"],
         "database" =>"datagrid_mongoid",
@@ -56,8 +58,11 @@ begin
       }
     }
   })
-  MongoMapper.connection = Mongo::Connection.new('localhost', 27017)
-  MongoMapper.database = "datagrid_mongo_mapper"
+
+  if defined?(MongoMapper)
+    MongoMapper.connection = Mongo::Connection.new('localhost', 27017)
+    MongoMapper.database = "datagrid_mongo_mapper"
+  end
 
 rescue Mongo::ConnectionFailure
   message = "Didn't find mongodb at localhost:27017."
@@ -78,7 +83,7 @@ RSpec.configure do |config|
     SequelEntry.where.delete
     unless NO_MONGO
       MongoidEntry.delete_all
-      MongoMapperEntry.delete_all
+      MongoMapperEntry.delete_all if defined?(MongoMapperEntry)
     end
 
   end
