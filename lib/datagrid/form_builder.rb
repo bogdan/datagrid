@@ -19,10 +19,6 @@ module Datagrid
       label(filter.name, text, options, &block)
     end
 
-    def datagrid_extra_checkbox_options
-      ::ActionPack::VERSION::MAJOR >= 4 ? {:include_hidden => false} : {}
-    end
-
     protected
     def datagrid_boolean_enum_filter(attribute_or_filter, options = {})
       datagrid_enum_filter(attribute_or_filter, options)
@@ -62,18 +58,18 @@ module Datagrid
         @template.render(
           :partial => partial,
           :locals => {
-            :elements => elements, 
-            :form => self, 
+            :elements => elements,
+            :form => self,
             :filter => filter,
             :options => options,
-          } 
+          }
         )
       else
         if !options.has_key?(:multiple) && filter.multiple?
           options[:multiple] = true
         end
         select(
-          filter.name, 
+          filter.name,
           object.select_options(filter) || [],
           {:include_blank => filter.include_blank,
            :prompt => filter.prompt,
@@ -219,7 +215,7 @@ module Datagrid
     def partial_path(options, name)
       if partials = options.delete(:partials)
         partial_name = File.join(partials, name)
-        # Second argument is []: no magical namespaces to lookup added from controller 
+        # Second argument is []: no magical namespaces to lookup added from controller
         if @template.lookup_context.template_exists?(partial_name, [], true)
           return partial_name
         end
