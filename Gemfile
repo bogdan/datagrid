@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", ">= 3.2.22.2"
+gem "rails", ">= 4.0"
 
 group :development do
 
@@ -20,7 +20,7 @@ group :development do
   gem "sequel"
 
   group :mongo do
-    gem "mongoid", "3.1.7"
+    gem "mongoid"
     #gem "mongo_mapper", "~> 0.13.0"
     gem "bson"
     gem "bson_ext"

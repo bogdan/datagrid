@@ -77,7 +77,7 @@ describe Datagrid::Helper do
     end
 
     it "should support giving assets explicitly" do
-      Entry.create!(entry.attributes)
+      Entry.create!(entry.attributes.except("id"))
       datagrid_table = subject.datagrid_table(grid, [entry])
 
       expect(datagrid_table).to match_css_pattern({
@@ -415,8 +415,8 @@ describe Datagrid::Helper do
       object = OrderedGrid.new(:descending => true, :order => :category)
       expect(subject.datagrid_order_for(object, object.column_by_name(:category))).to equal_to_dom(<<-HTML)
 <div class="order">
-<a href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category" class="asc">&uarr;</a>
-<a href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category" class="desc">&darr;</a>
+<a class="asc" href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category">&uarr;</a>
+<a class="desc" href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category">&darr;</a>
 </div>
       HTML
     end
@@ -611,7 +611,7 @@ describe Datagrid::Helper do
       end
       expect(subject.datagrid_header(grid)).to equal_to_dom(<<HTML)
 <tr><th class="category ordered asc">Category<div class="order">
-<a href="/location?grid%5Bdescending%5D=false&amp;grid%5Border%5D=category" class="asc">&uarr;</a><a href="/location?grid%5Bdescending%5D=true&amp;grid%5Border%5D=category" class="desc">&darr;</a>
+<a class="asc" href="/location?grid%5Bdescending%5D=false&amp;grid%5Border%5D=category">&uarr;</a><a class="desc" href="/location?grid%5Bdescending%5D=true&amp;grid%5Border%5D=category">&darr;</a>
 </div>
 </th></tr>
 HTML

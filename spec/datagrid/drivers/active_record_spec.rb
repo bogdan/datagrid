@@ -25,12 +25,12 @@ describe Datagrid::Drivers::ActiveRecord do
     subject do
       test_report(:order => :test, :descending => true) do
         scope { Entry }
-        column(:test, order: Arel::Nodes::Count.new(["entries.group_id"]))
+        column(:test, order: Entry.arel_table[:group_id].count)
       end.assets
     end
 
     it "should support ordering by Arel columns" do
-      expect(subject.to_sql.strip).to include "ORDER BY COUNT('entries.group_id') DESC"
+      expect(subject.to_sql.strip).to include 'ORDER BY COUNT("entries"."group_id") DESC'
     end
   end
 

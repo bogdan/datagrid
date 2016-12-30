@@ -47,7 +47,7 @@ NO_MONGO = ENV['NO_MONGO']
 
 begin
   Mongoid.load_configuration({
-    "sessions" =>
+    "clients" =>
     {
       "default" =>
       {
@@ -55,16 +55,22 @@ begin
         "database" =>"datagrid_mongoid",
         "autocreate_indexes" => true,
         "logger" => nil,
+        "options" => {
+          "connect_timeout" => 2,
+          wait_queue_timeout: 2
+        }
       }
     }
   })
+
+  Mongoid.client(:default).collections # check mongo connection
 
   if defined?(MongoMapper)
     MongoMapper.connection = Mongo::Connection.new('localhost', 27017)
     MongoMapper.database = "datagrid_mongo_mapper"
   end
 
-rescue Mongo::ConnectionFailure
+rescue Mongo::Error::NoServerAvailable
   message = "Didn't find mongodb at localhost:27017."
   if NO_MONGO
     warn("MONGODB WARNING: #{message}. Skipping Mongoid and Mongomapper tests.")

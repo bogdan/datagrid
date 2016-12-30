@@ -1,6 +1,6 @@
 
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
-ActiveRecord::Base.configurations = true
+#ActiveRecord::Base.configurations = true
 
 ActiveRecord::Base.logger = TEST_LOGGER
 
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 1) do
 
   create_table :groups do |t|
     t.string :name
-    t.float :rating 
+    t.float :rating
     t.timestamps
   end
 
