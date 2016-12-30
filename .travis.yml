@@ -1,8 +1,7 @@
 language: ruby
 #bundler_args: --without development
 rvm:
-  - 2.1.1
-  - 2.2.0
+  - 2.2.2
   - 2.3.0
   - 2.4.0
   #- jruby
