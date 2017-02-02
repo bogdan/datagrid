@@ -82,7 +82,7 @@ module Datagrid
       end
 
       def is_timestamp?(scope, field)
-        column_type(scope, field) == :datetime
+        normalized_column_type(scope, field) == :timestamp
       end
 
       def contains(scope, field, value)
@@ -91,8 +91,8 @@ module Datagrid
       end
 
       def normalized_column_type(scope, field)
-        type = column_type(scope, field)
-        return nil unless type
+        return nil unless has_column?(scope, field)
+        builtin_type = scope.columns_hash[field.to_s].type
         {
           [:string, :text, :time, :binary] => :string,
           [:integer, :primary_key] => :integer,
@@ -101,7 +101,7 @@ module Datagrid
           [:datetime, :timestamp] => :timestamp,
           [:boolean] => :boolean
         }.each do |keys, value|
-          return value if keys.include?(type)
+          return value if keys.include?(builtin_type)
         end
       end
 
@@ -134,10 +134,6 @@ module Datagrid
         defined?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) &&
           ::ActiveRecord::Base.connection.is_a?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) ?
           'ilike' : 'like'
-      end
-
-      def column_type(scope, field)
-        has_column?(scope, field) ? scope.columns_hash[field.to_s].type : nil
       end
     end
   end
