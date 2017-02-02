@@ -65,7 +65,7 @@ module Datagrid
 
           TIMESTAMP_CLASSES => :timestamp,
 
-          [Float] => :fload,
+          [Float] => :float,
 
           [Integer] => :integer,
         }.each do |keys, value|
