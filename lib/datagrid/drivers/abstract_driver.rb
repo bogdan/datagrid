@@ -63,7 +63,7 @@ module Datagrid
       end
 
       def is_timestamp?(scope, field)
-        raise NotImplementedError
+        normalized_column_type(scope, field) == :timestamp
       end
 
       def contains(scope, field, value)

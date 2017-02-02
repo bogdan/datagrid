@@ -46,11 +46,6 @@ module Datagrid
         column_names(scope).include?(column_name.to_s)
       end
 
-      def is_timestamp?(scope, column_name)
-        has_column?(scope, column_name) &&
-          timestamp_class?(to_scope(scope).klass.fields[column_name.to_s].type)
-      end
-
       def contains(scope, field, value)
         scope.where(field => Regexp.compile(Regexp.escape(value)))
       end

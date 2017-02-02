@@ -56,10 +56,6 @@ module Datagrid
         scope.columns
       end
 
-      def is_timestamp?(scope, column_name)
-        column_type(scope, column_name) == :datetime
-      end
-
       def contains(scope, field, value)
         field = prefix_table_name(scope, field)
         scope.where(Sequel.like(field, "%#{value}%"))
@@ -73,7 +69,7 @@ module Datagrid
           [:integer, :primary_key] => :integer,
           [:float, :decimal] => :float,
           [:date] => :date,
-          [:datetime] => :datetime,
+          [:datetime] => :timestamp,
           [:boolean] => :boolean
         }.each do |keys, value|
           return value if keys.include?(type)

@@ -81,10 +81,6 @@ module Datagrid
         scope.column_names
       end
 
-      def is_timestamp?(scope, field)
-        normalized_column_type(scope, field) == :timestamp
-      end
-
       def contains(scope, field, value)
         field = prefix_table_name(scope, field)
         scope.where("#{field} #{contains_predicate} ?", "%#{value}%")
