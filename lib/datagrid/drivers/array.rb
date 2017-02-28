@@ -32,6 +32,10 @@ module Datagrid
         column_name
       end
 
+      def reverse_order(scope)
+        scope.reverse
+      end
+
       def greater_equal(scope, field, value)
         scope.select do |object|
           compare_value = object.send(field)
