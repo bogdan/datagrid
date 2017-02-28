@@ -132,6 +132,10 @@ module Datagrid
           !property_availability(grid, unless_option, false)
       end
 
+      def callable(value)
+        value.respond_to?(:call) ? value.call : value
+      end
+
       protected
       def property_availability(grid, option, default)
         case option

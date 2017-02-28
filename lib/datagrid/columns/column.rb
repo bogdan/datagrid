@@ -59,7 +59,7 @@ class Datagrid::Columns::Column
 
   def header
     if header = options[:header]
-      callable(header)
+      Datagrid::Utils.callable(header)
     else
       Datagrid::Utils.translate_from_namespace(:columns, grid_class, name)
     end
@@ -155,10 +155,6 @@ class Datagrid::Columns::Column
       preload
     end
 
-  end
-
-  def callable(value)
-    value.respond_to?(:call) ? value.call : value
   end
 
   def driver

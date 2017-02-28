@@ -55,7 +55,7 @@ class Datagrid::Filters::BaseFilter #:nodoc:
 
   def header
     if header = options[:header]
-      callable(header)
+      Datagrid::Utils.callable(header)
     else
       Datagrid::Utils.translate_from_namespace(:filters, grid_class, name)
     end
@@ -165,10 +165,6 @@ class Datagrid::Filters::BaseFilter #:nodoc:
 
   def default_separator
     ','
-  end
-
-  def callable(value)
-    value.respond_to?(:call) ? value.call : value
   end
 
   def driver

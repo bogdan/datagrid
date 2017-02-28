@@ -16,11 +16,12 @@ module Datagrid::Filters::SelectOptions
 
   def include_blank
     unless prompt
-      options.has_key?(:include_blank) ? options[:include_blank] : !multiple?
+      options.has_key?(:include_blank) ?
+        Datagrid::Utils.callable(options[:include_blank]) : !multiple?
     end
   end
-  
+
   def prompt
-    options.has_key?(:prompt) ? options[:prompt] : false
+    options.has_key?(:prompt) ? Datagrid::Utils.callable(options[:prompt]) : false
   end
 end

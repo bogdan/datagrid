@@ -26,7 +26,7 @@ describe Datagrid::Filters::EnumFilter do
     instance = klass.new
     expect(klass.filter_by_name(:group_id).select(instance)).to eq(instance.object_id)
   end
-  
+
   it "should initialize select option only on instanciation" do
     class ReportWithLazySelect
       include Datagrid
@@ -37,7 +37,7 @@ describe Datagrid::Filters::EnumFilter do
 
 
   it "should support select given as symbol" do
-    report = test_report do 
+    report = test_report do
       scope {Entry}
       filter(:group_id, :enum, :select => :selectable_group_ids)
       def selectable_group_ids

@@ -310,6 +310,22 @@ describe Datagrid::FormBuilder do
          <option value="second">second</option></select>'
         )}
       end
+      context "with dynamic include_blank option" do
+        let(:_grid) do
+          test_report do
+            scope {Entry}
+              filter(:category, :enum, :select => ["first", "second"], :include_blank => proc { "Choose plz" })
+          end
+        end
+        let(:_filter) { :category }
+        it { should equal_to_dom(
+          '<select class="category enum_filter" name="report[category]" id="report_category">
+         <option value="">Choose plz</option>
+         <option value="first">first</option>
+         <option value="second">second</option></select>'
+        )}
+      end
+
       context "with prompt option" do
         let(:_filter) { :category_with_prompt }
         it { should equal_to_dom(
