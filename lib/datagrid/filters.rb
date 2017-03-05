@@ -139,7 +139,7 @@ module Datagrid
 
       def initialize(*args, &block) # :nodoc:
         self.filters_array = self.class.filters_array.clone
-        filters.each do |filter|
+        self.filters_array.each do |filter|
           self[filter.name] = filter.default(self)
         end
         super(*args, &block)
