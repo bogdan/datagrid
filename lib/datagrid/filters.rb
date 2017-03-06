@@ -49,8 +49,6 @@ module Datagrid
 
     module ClassMethods
 
-      alias_attribute :filters, :filters_array
-
       # Returns filter definition object by name
       def filter_by_name(attribute)
         return attribute if attribute.is_a?(Datagrid::Filters::BaseFilter)
@@ -118,6 +116,10 @@ module Datagrid
         "#{super}(#{filters_inspection})"
       end
 
+      def filters
+        filters_array
+      end
+
       protected
 
       def inherited(child_class)
@@ -134,8 +136,6 @@ module Datagrid
     end # ClassMethods
 
     module InstanceMethods
-
-      delegate :filter_by_name, :default_filter, to: :class
 
       def initialize(*args, &block) # :nodoc:
         self.filters_array = self.class.filters_array.clone
@@ -165,6 +165,11 @@ module Datagrid
         end
       end
 
+      # Returns filter object with the given name
+      def filter_by_name(name)
+        self.class.filter_by_name(name)
+      end
+
       # Returns assets filtered only by specified filters
       # Allows partial filtering
       def filter_by(*filters)
@@ -179,6 +184,10 @@ module Datagrid
           raise ::Datagrid::ArgumentError, "#{filter.name} with type #{FILTER_TYPES.invert[filter.class].inspect} can not have select options"
         end
         filter.select(self)
+      end
+
+      def default_filter
+        self.class.default_filter
       end
 
       # Returns all currently enabled filters
