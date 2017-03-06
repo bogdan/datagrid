@@ -292,5 +292,33 @@ describe Datagrid::Filters do
       expect(non_admin_filters).to_not include(:id)
       expect(non_admin_filters).to include(:name)
     end
+
+    context 'with delegation to attribute' do
+      let(:role) { OpenStruct.new('admin?' => admin) }
+      let(:klass) do
+        test_report_class do
+          attr_accessor :role
+          delegate :admin?, to: :role
+
+          scope { Entry }
+
+          filter(:id, :integer, if: :admin?)
+        end
+      end
+
+      subject { klass.new(role: role).filters.map(&:name) }
+
+      context 'when condition is true' do
+        let(:admin) { true }
+
+        it { is_expected.to include(:id) }
+      end
+
+      context 'when condition is false' do
+        let(:admin) { false }
+
+        it { is_expected.to_not include(:id) }
+      end
+    end
   end
 end
