@@ -103,7 +103,7 @@ module Datagrid
       input_name = "#{object_name}[#{filter.name.to_s}][]"
       field, operation, value = object.filter_value(filter)
       options = options.merge(:name => input_name)
-      field_input = select(
+      field_input = dynamic_filter_select(
         filter.name,
         object.select_options(filter) || [],
         {
@@ -114,13 +114,25 @@ module Datagrid
         },
         add_html_classes(options, "field")
       )
-      operation_input = select(
+      operation_input = dynamic_filter_select(
         filter.name, filter.operations_select,
         {:include_blank => false, :include_hidden => false, :prompt => false, :selected => operation },
         add_html_classes(options, "operation")
       )
       value_input = text_field(filter.name, add_html_classes(options, "value").merge(:value => value))
       [field_input, operation_input, value_input].join("\n").html_safe
+    end
+
+    def dynamic_filter_select(name, variants, select_options, html_options)
+      if variants.size <= 1
+        value = variants.first
+        # select options format may vary
+        value = value.last if value.is_a?(Array)
+        # don't render any visible input when there is nothing to choose from
+        hidden_field(name, html_options.merge(value: value))
+      else
+        select(name, variants, select_options, html_options)
+      end
     end
 
     def datagrid_range_filter(type, attribute_or_filter, options = {})

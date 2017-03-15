@@ -567,35 +567,44 @@ DOM
         it {should equal_to_dom(expected_html)}
 
       end
-      context "when select option passed" do
+
+      context "when operations and options are defined" do
         let(:filter_options) do
-          {:select => [:id, :name]}
+          {:operations => %w(>= <=), :select => [:id, :name]}
         end
         let(:expected_html) do
           <<-HTML
-        <select class="condition dynamic_filter field" name="report[condition][]" id="report_condition"><option value="id">id</option>
-       <option value="name">name</option></select><select class="condition dynamic_filter operation" name="report[condition][]" id="report_condition"><option value="=">=</option>
-       <option value="=~">&asymp;</option>
-       <option value="&gt;=">&ge;</option>
-       <option value="&lt;=">&le;</option></select><input class="condition dynamic_filter value" name="report[condition][]" type="text" id="report_condition">
-          HTML
-        end
-        it {should equal_to_dom(expected_html)}
-
-      end
-
-      context "when operation options passed" do
-        let(:filter_options) do
-          {:operations => %w(>= <=), :select => [:id]}
-        end
-        let(:expected_html) do
-          <<-HTML
-          <select class="condition dynamic_filter field" name="report[condition][]" id="report_condition"><option value="id">id</option></select><select class="condition dynamic_filter operation" name="report[condition][]" id="report_condition"><option value="&gt;=">≥</option>
+          <select class="condition dynamic_filter field" name="report[condition][]" id="report_condition"><option value="id">id</option><option value="name">name</option></select><select class="condition dynamic_filter operation" name="report[condition][]" id="report_condition"><option value="&gt;=">≥</option>
        <option value="&lt;=">≤</option></select><input class="condition dynamic_filter value" name="report[condition][]" type="text" id="report_condition">
           HTML
         end
         it {should equal_to_dom(expected_html)}
       end
+
+      context "when the field is predefined" do
+        let(:filter_options) do
+          {:operations => %w(>= <=), :select => [:id]}
+        end
+        let(:expected_html) do
+          <<-HTML
+          <input class="condition dynamic_filter field" name="report[condition][]" value="id" type="hidden" id="report_condition"><select class="condition dynamic_filter operation" name="report[condition][]" id="report_condition"><option value="&gt;=">≥</option>
+       <option value="&lt;=">≤</option></select><input class="condition dynamic_filter value" name="report[condition][]" type="text" id="report_condition">
+          HTML
+        end
+        it {should equal_to_dom(expected_html)}
+      end
+      context "when operation is predefined" do
+        let(:filter_options) do
+          {:operations => %w(=), :select => [:id, :name]}
+        end
+        let(:expected_html) do
+          <<-HTML
+          <select class="condition dynamic_filter field" name="report[condition][]" id="report_condition"><option value="id">id</option><option value="name">name</option></select><input class="condition dynamic_filter operation" name="report[condition][]" value="=" type="hidden" id="report_condition"><input class="condition dynamic_filter value" name="report[condition][]" type="text" id="report_condition">
+          HTML
+        end
+        it {should equal_to_dom(expected_html)}
+      end
+
     end
   end
 
