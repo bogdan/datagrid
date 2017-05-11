@@ -61,7 +61,7 @@ class Datagrid::Columns::Column
     if header = options[:header]
       Datagrid::Utils.callable(header)
     else
-      Datagrid::Utils.translate_from_namespace(:columns, grid_class, name)
+      grid_class.human_column_name(name)
     end
   end
 

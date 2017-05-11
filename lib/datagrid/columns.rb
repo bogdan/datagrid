@@ -218,7 +218,9 @@ module Datagrid
 
       def inherited(child_class) #:nodoc:
         super(child_class)
-        child_class.columns_array = self.columns_array.clone
+        child_class.columns_array = self.columns_array.collect do |x|
+          x.dup.tap {|y| y.grid_class = child_class}
+        end
       end
 
       def filter_columns(columns, *args) #:nodoc:

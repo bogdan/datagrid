@@ -57,7 +57,7 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     if header = options[:header]
       Datagrid::Utils.callable(header)
     else
-      Datagrid::Utils.translate_from_namespace(:filters, grid_class, name)
+      grid_class.human_filter_name(name)
     end
   end
 
