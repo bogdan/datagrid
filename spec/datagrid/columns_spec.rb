@@ -149,6 +149,17 @@ describe Datagrid::Columns do
       expect(subject.to_csv(:col_sep => ";")).to eq("Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n")
     end
 
+    context "with raw_csv_headers true" do
+      around(:each) do |example|
+        with_raw_csv_headers do
+          example.run
+        end
+      end
+
+      it "should use raw headers" do
+        expect(subject.to_csv.split("\n")[0]).to eq("shipping_date,group,name,access_level,pet")
+      end
+    end
   end
 
   it "should support columns with model and report arguments" do
