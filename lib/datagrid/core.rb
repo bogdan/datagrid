@@ -68,7 +68,7 @@ module Datagrid
       def initialize(attributes = nil, &block)
         super()
 
-        if attributes
+        unless attributes.blank?
           self.attributes = attributes
         end
 
