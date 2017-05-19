@@ -224,6 +224,13 @@ describe Datagrid::Filters do
       end
     end
 
+    it "translates filter using defaults namespace" do
+      grid = Ns46::TranslatedReport.new
+      store_translations(:en, datagrid: {filters: {defaults: {name: "Navn"}}}) do
+        expect(grid.filters.map(&:header)).to eq(["Navn"])
+      end
+    end
+
   end
 
 

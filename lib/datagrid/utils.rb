@@ -14,16 +14,23 @@ module Datagrid
 
       def translate_from_namespace(namespace, grid_class, key)
         deprecated_key = :"datagrid.#{grid_class.param_name}.#{namespace}.#{key}"
-        live_key = :"datagrid.#{grid_class.model_name.i18n_key}.#{namespace}.#{key}"
         i18n_key = grid_class.model_name.i18n_key.to_s
+
+        lookups = []
+        lookups << :"datagrid.#{grid_class.model_name.i18n_key}.#{namespace}.#{key}"
+        lookups << :"datagrid.#{namespace}.defaults.#{key}"
+        lookups << key.to_s.humanize
 
         if grid_class.param_name != i18n_key && I18n.exists?(deprecated_key)
           Datagrid::Utils.warn_once(
-            "Deprecated translation namespace 'datagrid.#{grid_class.param_name}' for #{grid_class}. Use 'datagrid.#{i18n_key}' instead."
+            "Deprecated translation namespace 'datagrid.#{grid_class.param_name}'" +
+              " for #{grid_class}. Use 'datagrid.#{i18n_key}' instead."
           )
+
           return I18n.t(deprecated_key)
         end
-        I18n.t(live_key, default: key.to_s.humanize).presence
+
+        I18n.t(lookups.shift, default: lookups).presence
       end
 
       def warn_once(message, delay = 5)

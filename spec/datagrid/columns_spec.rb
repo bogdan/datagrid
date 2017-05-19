@@ -63,7 +63,7 @@ describe Datagrid::Columns do
           column(:name)
         end
       end
-      it "translates column with deprecated namespace" do
+      it "translates column-header with deprecated namespace" do
         silence_warnings do
           store_translations(:en, datagrid: {ns45_translated_report: {columns: {name: "Navn"}}}) do
             expect(Ns45::TranslatedReport.new.header.first).to eq("Navn")
@@ -71,22 +71,36 @@ describe Datagrid::Columns do
         end
       end
 
-      it "translates column with namespace" do
+      it "translates column-header with namespace" do
         store_translations(:en, datagrid: {:"ns45/translated_report" => {columns: {name: "Navn"}}}) do
           expect(Ns45::TranslatedReport.new.header.first).to eq("Navn")
         end
       end
 
-      it "translates column without namespace" do
+      it "translates column-header without namespace" do
         class Report27
           include Datagrid
           scope {Entry}
           column(:name)
         end
+
         store_translations(:en, datagrid: {:"report27" => {columns: {name: "Nombre"}}}) do
           expect(Report27.new.header.first).to eq("Nombre")
         end
       end
+
+      it "translates column-header in using defaults namespace" do
+        class Report27
+          include Datagrid
+          scope {Entry}
+          column(:name)
+        end
+
+        store_translations(:en, datagrid: {columns: {defaults: {name: "Nombre"}}}) do
+          expect(Report27.new.header.first).to eq("Nombre")
+        end
+      end
+
     end
 
     it "should return html_columns" do
