@@ -63,14 +63,6 @@ describe Datagrid::Columns do
           column(:name)
         end
       end
-      it "translates column-header with deprecated namespace" do
-        silence_warnings do
-          store_translations(:en, datagrid: {ns45_translated_report: {columns: {name: "Navn"}}}) do
-            expect(Ns45::TranslatedReport.new.header.first).to eq("Navn")
-          end
-        end
-      end
-
       it "translates column-header with namespace" do
         store_translations(:en, datagrid: {:"ns45/translated_report" => {columns: {name: "Navn"}}}) do
           expect(Ns45::TranslatedReport.new.header.first).to eq("Navn")

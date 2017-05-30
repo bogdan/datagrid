@@ -208,14 +208,6 @@ describe Datagrid::Filters do
         filter(:name)
       end
     end
-    it "translates filter with deprecated namespace" do
-      grid = Ns46::TranslatedReport.new
-      silence_warnings do
-        store_translations(:en, datagrid: {ns46_translated_report: {filters: {name: "Navn"}}}) do
-          expect(grid.filters.map(&:header)).to eq(["Navn"])
-        end
-      end
-    end
 
     it "translates filter with namespace" do
       grid = Ns46::TranslatedReport.new
