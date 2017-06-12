@@ -3,5 +3,4 @@ def store_translations(locale, translations, &block)
   yield
 ensure
   I18n.reload!
-  I18n.backend.send :init_translations
 end
