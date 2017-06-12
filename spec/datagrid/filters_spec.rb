@@ -207,6 +207,9 @@ describe Datagrid::Filters do
         scope { Entry }
         filter(:name)
       end
+
+      class InheritedReport < TranslatedReport
+      end
     end
 
     it "translates filter with namespace" do
@@ -218,11 +221,17 @@ describe Datagrid::Filters do
 
     it "translates filter using defaults namespace" do
       grid = Ns46::TranslatedReport.new
-      store_translations(:en, datagrid: {filters: {defaults: {name: "Navn"}}}) do
+      store_translations(:en, datagrid: {defaults: {filters: {name: "Navn"}}}) do
         expect(grid.filters.map(&:header)).to eq(["Navn"])
       end
     end
 
+    it "translates filter using parent report" do
+      grid = Ns46::InheritedReport.new
+      store_translations(:en, datagrid: {:"ns46/translated_report" => {filters: {name: "Navn"}}}) do
+        expect(grid.filters.map(&:header)).to eq(["Navn"])
+      end
+    end
   end
 
 

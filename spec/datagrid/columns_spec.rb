@@ -88,7 +88,7 @@ describe Datagrid::Columns do
           column(:name)
         end
 
-        store_translations(:en, datagrid: {columns: {defaults: {name: "Nombre"}}}) do
+        store_translations(:en, datagrid: {defaults: {columns: {name: "Nombre"}}}) do
           expect(Report27.new.header.first).to eq("Nombre")
         end
       end

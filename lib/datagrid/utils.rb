@@ -15,10 +15,15 @@ module Datagrid
       def translate_from_namespace(namespace, grid_class, key)
 
         lookups = []
-        lookups << :"datagrid.#{grid_class.model_name.i18n_key}.#{namespace}.#{key}"
-        lookups << :"datagrid.#{namespace}.defaults.#{key}"
-        lookups << key.to_s.humanize
+        namespaced_key = "#{namespace}.#{key}"
 
+        grid_class.ancestors.each do |ancestor|
+          if ancestor.respond_to?(:model_name)
+            lookups << :"datagrid.#{ancestor.model_name.i18n_key}.#{namespaced_key}"
+          end
+        end
+        lookups << :"datagrid.defaults.#{namespaced_key}"
+        lookups << key.to_s.humanize
         I18n.t(lookups.shift, default: lookups).presence
       end
 
