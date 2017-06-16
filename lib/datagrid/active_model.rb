@@ -13,6 +13,12 @@ module Datagrid
           extend ::ActiveModel::Naming
         rescue LoadError
         end
+        begin
+          require 'active_model/attributes_assignment'
+          extend ::ActiveModel::AttributesAssignment
+        rescue LoadError
+        end
+
       end
       base.send :include, InstanceMethods
     end # self.included

@@ -103,14 +103,18 @@ module Datagrid
 
 
       # Updates datagrid attributes with a passed hash argument
-      def assign_attributes(attributes)
-        attributes.each do |name, value|
-          self[name] = value
+      def attributes=(attributes)
+        if respond_to?(:assign_attributes)
+          assign_attributes(attributes)
+        else
+          attributes.each do |name, value|
+            self[name] = value
+          end
+          self
         end
-        self
       end
-      alias attributes= assign_attributes
 
+      # Returns serializable query arguments skipping all nil values
       def as_query
         attributes = self.attributes.clone
         attributes.each do |key, value|
