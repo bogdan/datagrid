@@ -13,7 +13,7 @@ module Datagrid
 
       def to_scope(scope)
         return scope if scope.is_a?(::Sequel::Dataset)
-        scope.where
+        scope.where({})
       end
 
       def append_column_queries(assets, columns)
