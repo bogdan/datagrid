@@ -41,11 +41,11 @@ module Datagrid
       end
 
       def greater_equal(scope, field, value)
-        scope.where(["#{prefix_table_name(scope, field)} >= ?", value])
+        scope.where(::Sequel.lit("#{prefix_table_name(scope, field)} >= ?", value))
       end
 
       def less_equal(scope, field, value)
-        scope.where(["#{prefix_table_name(scope, field)} <= ?", value])
+        scope.where(::Sequel.lit("#{prefix_table_name(scope, field)} <= ?", value))
       end
 
       def has_column?(scope, column_name)
