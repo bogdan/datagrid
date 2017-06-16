@@ -86,7 +86,7 @@ RSpec.configure do |config|
     #TODO better database truncation
     Group.delete_all
     Entry.delete_all
-    SequelEntry.where.delete
+    SequelEntry.where({}).delete
     unless NO_MONGO
       MongoidEntry.delete_all
       MongoMapperEntry.delete_all if defined?(MongoMapperEntry)
