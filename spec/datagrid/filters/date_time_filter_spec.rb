@@ -85,7 +85,7 @@ describe Datagrid::Filters::DateTimeFilter do
     e1 = Entry.create!(:created_at => Time.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(:created_at => Time.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(:created_at => Time.new(2013, 1, 1, 3, 0))
-    report = test_report(:created_at => (Time.new(2013, 1, 1, 2, 0)..Time.new(2013, 1, 1, 2, 0))) do
+    report = test_report(:created_at => Time.new(2013, 1, 1, 2, 0)..Time.new(2013, 1, 1, 2, 0)) do
       scope { Entry }
       filter(:created_at, :datetime, :range => true)
     end
@@ -93,18 +93,20 @@ describe Datagrid::Filters::DateTimeFilter do
     expect(report.assets).to include(e2)
     expect(report.assets).not_to include(e3)
   end
-  it "should support invalid range" do
+  it "should reverse invalid range" do
 
+    range = Time.new(2013, 1, 1, 3, 0)..Time.new(2013, 1, 1, 1, 0)
     e1 = Entry.create!(:created_at => Time.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(:created_at => Time.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(:created_at => Time.new(2013, 1, 1, 3, 0))
-    report = test_report(:created_at => (Time.new(2013, 1, 1, 3, 0)..Time.new(2013, 1, 1, 1, 0))) do
+    report = test_report(:created_at => range) do
       scope { Entry }
       filter(:created_at, :datetime, :range => true)
     end
-    expect(report.assets).not_to include(e1)
-    expect(report.assets).not_to include(e2)
-    expect(report.assets).not_to include(e3)
+    expect(report.created_at).to eq([range.last, range.first])
+    expect(report.assets).to include(e1)
+    expect(report.assets).to include(e2)
+    expect(report.assets).to include(e3)
   end
 
 

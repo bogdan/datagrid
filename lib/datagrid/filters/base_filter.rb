@@ -156,6 +156,8 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     when String
       #TODO: write tests and doc
       value.split(separator)
+    when Range
+      [value.first, value.last]
     when Array
       value
     else

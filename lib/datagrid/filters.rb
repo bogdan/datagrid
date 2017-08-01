@@ -105,7 +105,6 @@ module Datagrid
         datagrid_attribute(name) do |value|
           filter.parse_values(value)
         end
-
       end
 
       def default_filter

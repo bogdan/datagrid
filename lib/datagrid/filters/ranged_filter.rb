@@ -12,7 +12,7 @@ module Datagrid::Filters::RangedFilter
     result = super(value)
     return result if !range? || result.nil?
     # Simulate single point range
-    return result..result unless result.is_a?(Array)
+    return [result, result] unless result.is_a?(Array)
 
     case result.size
     when 0

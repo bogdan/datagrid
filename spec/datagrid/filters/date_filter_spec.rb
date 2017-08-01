@@ -104,18 +104,20 @@ describe Datagrid::Filters::DateFilter do
     expect(report.assets).to include(e2)
     expect(report.assets).not_to include(e3)
   end
-  it "should support invalid range" do
 
+  it "should invert invalid range" do
+    range = 1.days.ago..7.days.ago
     e1 = Entry.create!(:created_at => 7.days.ago)
     e2 = Entry.create!(:created_at => 4.days.ago)
     e3 = Entry.create!(:created_at => 1.day.ago)
-    report = test_report(:created_at => (1.days.ago.to_date..7.days.ago.to_date)) do
+    report = test_report(:created_at => range) do
       scope { Entry }
       filter(:created_at, :date, :range => true)
     end
-    expect(report.assets).not_to include(e1)
-    expect(report.assets).not_to include(e2)
-    expect(report.assets).not_to include(e3)
+    expect(report.created_at).to eq([range.last.to_date, range.first.to_date])
+    expect(report.assets).to include(e1)
+    expect(report.assets).to include(e2)
+    expect(report.assets).to include(e3)
   end
 
 

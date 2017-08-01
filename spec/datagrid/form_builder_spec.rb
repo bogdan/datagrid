@@ -131,9 +131,9 @@ describe Datagrid::FormBuilder do
       context "with invalid range value" do
         let(:_range) { 2..1 }
         it { should equal_to_dom(
-          '<input class="group_id integer_filter from" multiple value="2" type="text" name="report[group_id][]"/>' +
+          '<input class="group_id integer_filter from" multiple value="1" type="text" name="report[group_id][]"/>' +
           '<span class="separator integer"> - </span>' +
-          '<input class="group_id integer_filter to" multiple value="1" type="text" name="report[group_id][]"/>'
+          '<input class="group_id integer_filter to" multiple value="2" type="text" name="report[group_id][]"/>'
         )}
       end
 
@@ -243,9 +243,9 @@ describe Datagrid::FormBuilder do
       context "with invalid range value" do
         let(:_range) { Date.parse('2012-01-02')..Date.parse('2012-01-01') }
         it { should equal_to_dom(
-          '<input class="created_at date_filter from" multiple value="2012-01-02" type="text" name="report[created_at][]"/>' +
+          '<input class="created_at date_filter from" multiple value="2012-01-01" type="text" name="report[created_at][]"/>' +
           '<span class="separator date"> - </span>' +
-          '<input class="created_at date_filter to" multiple value="2012-01-01" type="text" name="report[created_at][]"/>'
+          '<input class="created_at date_filter to" multiple value="2012-01-02" type="text" name="report[created_at][]"/>'
         )}
       end
       context "with blank range value" do

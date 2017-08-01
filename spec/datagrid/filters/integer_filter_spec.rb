@@ -59,15 +59,17 @@ describe Datagrid::Filters::IntegerFilter do
     expect(report.assets).to include(entry4)
     expect(report.assets).not_to include(entry1)
   end
+
   it "should support invalid range" do
 
     report = test_report(:group_id => (7..1)) do
       scope { Entry }
       filter(:group_id, :integer, :range => true)
     end
-    expect(report.assets).not_to include(entry7)
-    expect(report.assets).not_to include(entry4)
-    expect(report.assets).not_to include(entry1)
+    expect(report.group_id).to eq([1,7])
+    expect(report.assets).to include(entry7)
+    expect(report.assets).to include(entry4)
+    expect(report.assets).to include(entry1)
   end
 
 
