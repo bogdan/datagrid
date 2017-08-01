@@ -13,6 +13,9 @@ module Datagrid
         self.datagrid_attributes = []
 
         class_attribute :dynamic_block, :instance_writer => false
+        if defined?(::ActiveModel::AttributeAssignment)
+          include ::ActiveModel::AttributeAssignment
+        end
       end
       base.send :include, InstanceMethods
     end # self.included
