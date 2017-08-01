@@ -109,4 +109,53 @@ describe Datagrid::Core do
       expect(EqualTest.new).to_not eq(EqualTest.new {|s| s.reorder(:name)})
     end
   end
+
+  describe 'dynamic helper' do
+    it "should work" do
+      grid = test_report do
+        scope {Entry}
+        column(:id)
+        dynamic {
+          column(:name)
+          column(:category)
+        }
+      end
+
+      expect(grid.columns.map(&:name)).to eq([:id, :name, :category])
+      expect(grid.class.columns.map(&:name)).to eq([:id])
+
+      expect(grid.column_by_name(:id)).not_to be_nil
+      expect(grid.column_by_name(:name)).not_to be_nil
+    end
+
+    it "has access to attributes" do
+      grid = test_report(:attribute_name => 'value') do
+        scope {Entry}
+        datagrid_attribute :attribute_name
+        dynamic {
+          value = attribute_name
+          column(:name) { value }
+        }
+      end
+
+      expect(grid.data_value(:name, Entry.create!)).to eq('value')
+    end
+
+    it "applies before instance scope" do
+      klass = test_report_class do
+        scope {Entry}
+        dynamic do
+          scope do |s|
+            s.limit(1)
+          end
+        end
+      end
+
+      grid = klass.new do |s|
+        s.limit(2)
+      end
+
+      expect(grid.assets.limit_value).to eq(2)
+    end
+  end
 end

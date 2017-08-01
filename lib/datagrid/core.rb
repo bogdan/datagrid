@@ -8,8 +8,11 @@ module Datagrid
       base.extend         ClassMethods
       base.class_eval do
         class_attribute :scope_value
+
         class_attribute :datagrid_attributes
         self.datagrid_attributes = []
+
+        class_attribute :dynamic_block, :instance_writer => false
       end
       base.send :include, InstanceMethods
     end # self.included
@@ -50,6 +53,42 @@ module Datagrid
         @driver ||= Drivers::AbstractDriver.guess_driver(scope).new
       end
 
+      # Allows dynamic columns definition, that could not be defined at class level
+      #
+      #   class MerchantsGrid
+      #
+      #     scope { Merchant }
+      #
+      #     column(:name)
+      #
+      #     dynamic do
+      #       PurchaseCategory.all.each do |category|
+      #         column(:"#{category.name.underscore}_sales") do |merchant|
+      #           merchant.purchases.where(:category_id => category.id).count
+      #         end
+      #       end
+      #     end
+      #   end
+      #
+      #   grid = MerchantsGrid.new
+      #   grid.data # => [
+      #             #      [ "Name",   "Swimwear Sales", "Sportswear Sales", ... ]
+      #             #      [ "Reebok", 2083382,            8382283,          ... ]
+      #             #      [ "Nike",   8372283,            18734783,         ... ]
+      #             #    ]
+      def dynamic(&block)
+        previous_block = dynamic_block
+        self.dynamic_block =
+          if previous_block
+            proc {
+              instance_eval(&previous_block)
+              instance_eval(&block)
+            }
+          else
+            block
+          end
+      end
+
       protected
       def check_scope_defined!(message = nil)
         message ||= "#{self}.scope is not defined"
@@ -72,6 +111,7 @@ module Datagrid
           self.attributes = attributes
         end
 
+        instance_eval(&dynamic_block) if dynamic_block
         if block_given?
           self.scope(&block)
         end

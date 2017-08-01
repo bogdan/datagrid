@@ -459,38 +459,6 @@ describe Datagrid::Columns do
     end
   end
 
-  describe 'dynamic helper' do
-    it "should work" do
-      grid = test_report do
-        scope {Entry}
-        column(:id)
-        dynamic {
-          column(:name)
-          column(:category)
-        }
-      end
-
-      expect(grid.columns.map(&:name)).to eq([:id, :name, :category])
-      expect(grid.class.columns.map(&:name)).to eq([:id])
-
-      expect(grid.column_by_name(:id)).not_to be_nil
-      expect(grid.column_by_name(:name)).not_to be_nil
-    end
-
-    it "has access to attributes" do
-      grid = test_report(:attribute_name => 'value') do
-        scope {Entry}
-        datagrid_attribute :attribute_name
-        dynamic {
-          value = attribute_name
-          column(:name) { value }
-        }
-      end
-
-      expect(grid.data_value(:name, Entry.create!)).to eq('value')
-    end
-  end
-
   describe ".data_value" do
     it "should return value" do
       grid = test_report do
