@@ -78,6 +78,13 @@ module Datagrid
                       { :grid => grid, :column => column })
     end
 
+    def order_url(grid, column, descending)
+      column = column.to_s if column.is_a?(::Datagrid::Columns::Column)
+      query = request ? request.query_parameters : {}
+      order_parameter = {grid.param_name => grid.as_query.merge(:order => column.name, :descending => descending)}
+      url_for(query.merge(order_parameter))
+    end
+
     private
 
     def _safe(string)
