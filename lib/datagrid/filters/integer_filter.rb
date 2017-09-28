@@ -11,7 +11,6 @@ class Datagrid::Filters::IntegerFilter < Datagrid::Filters::BaseFilter
       return value.id
     end
     return value if value.is_a?(Range)
-    value.gsub(/[^\d]/, '').to_i
+    value.to_s.gsub(/[^\d]/, '').to_i
   end
 end
-
