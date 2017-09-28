@@ -141,4 +141,13 @@ describe Datagrid::Filters::IntegerFilter do
 
     expect(report.group_id).to eq(group.id)
   end
+
+  it "should remove non-number characters" do
+    report = test_report(:group_id => ["$3", "$5,000"]) do
+      scope { Entry }
+      filter(:group_id, :integer, :range => true)
+    end
+    expect(report.assets).to include(entry7)
+    expect(report.assets).not_to include(entry2)
+  end
 end
