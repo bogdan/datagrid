@@ -15,6 +15,9 @@ describe Datagrid::Helper do
 
   before(:each) do
     allow(subject).to receive(:params).and_return({})
+    allow(subject).to receive(:request) do
+      Struct.new(:path, :query_parameters).new("/location", {})
+    end
     allow(subject).to receive(:url_for) do |options|
       options.is_a?(String) ? options : ["/location", options.to_param.presence].compact.join('?')
     end

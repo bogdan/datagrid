@@ -117,8 +117,8 @@ module Datagrid
     end
 
     # Generates an ascending or descending order url for the given column
-    def datagrid_order_url(grid, column, descending)
-      datagrid_renderer.order_url(grid, column, descending)
+    def datagrid_order_path(grid, column, descending)
+      datagrid_renderer.order_path(grid, column, descending, request)
     end
 
     # Represents a datagrid row that provides access to column values for the given asset
