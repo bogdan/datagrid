@@ -70,7 +70,7 @@ class CssPattern
         if !html.match(pattern_or_string)
           return error!("#{css.inspect} did not match #{pattern_or_string.inspect}. It was \n:#{html.inspect}")
         end
-      elsif amount_or_pattern_or_string_or_proc.is_a? Fixnum
+      elsif amount_or_pattern_or_string_or_proc.is_a? Numeric
         expected_amount = amount_or_pattern_or_string_or_proc
         amount = path.size
         if amount != expected_amount
