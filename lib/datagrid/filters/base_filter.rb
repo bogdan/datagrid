@@ -154,7 +154,6 @@ class Datagrid::Filters::BaseFilter #:nodoc:
   def normalize_multiple_value(value)
     case value
     when String
-      #TODO: write tests and doc
       value.split(separator)
     when Range
       [value.first, value.last]
