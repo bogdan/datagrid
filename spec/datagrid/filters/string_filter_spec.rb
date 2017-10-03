@@ -1,5 +1,4 @@
-require "spec_helper" 
-
+require "spec_helper"
 
 describe Datagrid::Filters::StringFilter do
 
@@ -23,4 +22,14 @@ describe Datagrid::Filters::StringFilter do
     expect(report.assets).not_to include(Entry.create!( :name => "two"))
   end
 
+  it "supports range" do
+    report = test_report(:name => ['ab', 'lm']) do
+      scope {Entry}
+      filter(:name, :string, range: true)
+    end
+    expect(report.assets).to include(Entry.create!( :name => "ac"))
+    expect(report.assets).to include(Entry.create!( :name => "kl"))
+    expect(report.assets).not_to include(Entry.create!( :name => "aa"))
+    expect(report.assets).not_to include(Entry.create!( :name => "mn"))
+  end
 end
