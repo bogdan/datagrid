@@ -8,7 +8,7 @@ module Datagrid
       filter = datagrid_get_filter(filter_or_attribute)
       options = add_html_classes(options, filter.name, datagrid_filter_html_class(filter))
       # Prevent partials option from appearing in HTML attributes
-      options.delete(:partials) unless supports_partial?(filter)
+      options.delete(:partials) # Legacy option
       self.send(filter.form_builder_helper_name, filter, options, &block)
     end
 
@@ -48,7 +48,7 @@ module Datagrid
     def datagrid_enum_filter(attribute_or_filter, options = {}, &block)
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.checkboxes?
-        partial = partial_path(options, 'enum_checkboxes')
+        partial = partial_path('enum_checkboxes')
         options = add_html_classes(options, 'checkboxes')
         elements = object.select_options(filter).map do |element|
           text, value = @template.send(:option_text_and_value, element)
@@ -138,7 +138,7 @@ module Datagrid
     def datagrid_range_filter(type, attribute_or_filter, options = {})
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.range?
-        partial = partial_path(options, 'range_filter')
+        partial = partial_path('range_filter')
         options = options.merge(:multiple => true)
 
 
@@ -224,8 +224,8 @@ module Datagrid
       Datagrid::Utils.add_html_classes(options, *classes)
     end
 
-    def partial_path(options, name)
-      if partials = options.delete(:partials)
+    def partial_path(name)
+      if partials = self.options[:partials]
         partial_name = File.join(partials, name)
         # Second argument is []: no magical namespaces to lookup added from controller
         if @template.lookup_context.template_exists?(partial_name, [], true)
@@ -233,10 +233,6 @@ module Datagrid
         end
       end
       File.join('datagrid', name)
-    end
-
-    def supports_partial?(filter)
-      (filter.supports_range? && filter.range?) || (filter.type == :enum && filter.checkboxes?)
     end
 
     class Error < StandardError

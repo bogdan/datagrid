@@ -18,7 +18,8 @@ describe Datagrid::FormBuilder do
       v.view_paths << File.expand_path("../../support/test_partials", __FILE__)
     end
   end
-  let(:view) { ActionView::Helpers::FormBuilder.new(:report, _grid, template, {})}
+  let(:view) { ActionView::Helpers::FormBuilder.new(:report, _grid, template, view_options)}
+  let(:view_options) { {} }
 
 
   describe ".datagrid_filter" do
@@ -60,7 +61,7 @@ describe Datagrid::FormBuilder do
       )}
 
       context "when partials option is passed for filter that don't support range" do
-        let(:_filter_options) { {partials: 'anything' } }
+        let(:view_options) { {partials: 'anything' } }
         it { should equal_to_dom(
           '<input class="group_id integer_filter" type="text" name="report[group_id]" id="report_group_id"/>'
         )}
@@ -138,7 +139,7 @@ describe Datagrid::FormBuilder do
       end
 
       context "with custom partials option and template exists" do
-        let(:_filter_options) { { :partials => 'custom_range' } }
+        let(:view_options) { { :partials => 'custom_range' } }
         let(:_range) { nil }
         it { should equal_to_dom(
           "custom_range_partial"
@@ -146,7 +147,7 @@ describe Datagrid::FormBuilder do
       end
 
       context "when custom partial doesn't exist" do
-        let(:_filter_options) { { :partials => 'not_existed' } }
+        let(:view_options) { { :partials => 'not_existed' } }
         let(:_range) { nil }
         it { should equal_to_dom(
           '<input class="group_id integer_filter from" multiple type="text" name="report[group_id][]"><span class="separator integer"> - </span><input class="group_id integer_filter to" multiple type="text" name="report[group_id][]">'
@@ -361,7 +362,7 @@ describe Datagrid::FormBuilder do
         end
 
         context "when partials option passed and partial exists" do
-          let(:_filter_options) { {partials: 'custom_checkboxes'} }
+          let(:view_options) { {partials: 'custom_checkboxes'} }
           it { should equal_to_dom('custom_enum_checkboxes') }
         end
       end
