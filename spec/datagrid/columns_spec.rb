@@ -229,6 +229,14 @@ describe Datagrid::Columns do
       expect(report.available_columns.map(&:name)).to eq([:category])
     end
 
+    it "raises when incorrect unless option is given" do
+      expect do
+        test_report do
+          column(:id, if: Object.new)
+        end
+      end.to raise_error(Datagrid::ConfigurationError)
+    end
+
     it "raises when :before and :after used together" do
       expect do
         test_report do

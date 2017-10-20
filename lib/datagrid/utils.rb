@@ -146,8 +146,10 @@ module Datagrid
           option.call(grid)
         when Symbol, String
           grid.send(option.to_sym)
+        when TrueClass, FalseClass
+          option
         else
-          raise Datagrid::ConfigurationError, "Incorrect column availability option: #{option.insepct}"
+          raise Datagrid::ConfigurationError, "Incorrect column availability option: #{option.inspect}"
         end
       end
     end
