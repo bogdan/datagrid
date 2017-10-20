@@ -1,6 +1,5 @@
 module Datagrid::Filters::RangedFilter
 
-
   def initialize(grid, name, options, &block)
     super(grid, name, options, &block)
     if range?

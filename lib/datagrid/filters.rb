@@ -72,8 +72,11 @@ module Datagrid
       #
       # * <tt>:header</tt> - determines the header of the filter
       # * <tt>:default</tt> - the default filter value. Able to accept a <tt>Proc</tt> in case default should be recalculated
+      # * <tt>:range</tt> - if true, filter can accept two values that are treated as a range that will be used for filtering
+      #   Not all of the filter types support this option. Here are the list of types that do:
+      #   <tt>:integer</tt>, <tt>:float</tt>, <tt>:date</tt>, <tt>:datetime</tt>, <tt>:string</tt>
       # * <tt>:multiple</tt> -  if true multiple values can be assigned to this filter.
-      #   By default multiple values are parsed from string using `,` separator.
+      #   If String is assigned as a filter value, it is parsed from string using a separator symbol (`,` by default).
       #   But you can specify a different separator as option value. Default: false.
       # * <tt>:allow_nil</tt> - determines if the value can be nil
       # * <tt>:allow_blank</tt> - determines if the value can be blank
