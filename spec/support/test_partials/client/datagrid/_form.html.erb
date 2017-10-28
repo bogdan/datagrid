@@ -1,9 +1,13 @@
 <%= form_for grid, options do |f| -%>
   <p>Namespaced form partial.</p>
-  <% grid.filters.each do |filter| %>
-    <div class="datagrid-filter filter">
-      <%= f.datagrid_label filter %>
-      <%= f.datagrid_filter filter %>
+  <% grid.filters.group_by(&:filter_group).each do |group, filters| %>
+    <div class="datagrid-filter-group <%= group %>">
+      <% filters.each do |filter| %>
+        <div class="datagrid-filter filter">
+          <%= f.datagrid_label filter %>
+          <%= f.datagrid_filter filter %>
+        </div>
+      <% end %>
     </div>
   <% end %>
   <div class="datagrid-actions">
