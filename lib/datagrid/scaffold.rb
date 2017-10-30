@@ -84,9 +84,15 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
   def index_action
     indent(<<-RUBY)
 def index
-  @grid = #{grid_class_name}.new(params[:#{grid_param_name}]) do |scope|
+  @grid = #{grid_class_name}.new(grid_params) do |scope|
     scope.page(params[:page])
   end
+end
+
+protected
+
+def grid_params
+ params.fetch(:#{grid_param_name}, {}).permit!
 end
 RUBY
   end
