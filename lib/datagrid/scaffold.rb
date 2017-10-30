@@ -8,8 +8,11 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
   source_root File.expand_path(__FILE__ + "/../../../templates")
 
   def create_scaffold
+    unless file_exists?(base_grid_file)
+      template "base.rb.erb", base_grid_file
+    end
     template "grid.rb.erb", "app/grids/#{grid_class_name.underscore}.rb"
-    if File.exists?(grid_controller_file)
+    if file_exists?(grid_controller_file)
       inject_into_file grid_controller_file, index_action, :after => %r{class .*#{grid_controller_class_name}.*\n}
     else
       template "controller.rb.erb", grid_controller_file
@@ -26,7 +29,7 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
         "css.scss" => " *= require datagrid",
       }.each do |extension, string|
         file = "app/assets/stylesheets/application.#{extension}"
-        if File.exists?(Rails.root.join(file))
+        if file_exists?(file)
           inject_into_file file, string + "\n", {:before => %r{.*require_self}} # before all
         end
       end
@@ -68,7 +71,10 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
       # Kaminari is default
       "paginate(@grid.assets)"
     end
+  end
 
+  def base_grid_file
+    "app/grids/base_grid.rb"
   end
 
   def grid_route_name
@@ -108,5 +114,10 @@ RUBY
 
     # Combine the 3 parts to generate complete route entry
     namespace_ladder + route + "\n" + end_ladder
+  end
+
+  def file_exists?(name)
+    name = Rails.root.join(name) unless name.to_s.first == "/"
+    File.exists?(name)
   end
 end
