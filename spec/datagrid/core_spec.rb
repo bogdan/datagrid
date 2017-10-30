@@ -1,4 +1,5 @@
 require 'spec_helper'
+require "action_controller/metal/strong_parameters"
 
 describe Datagrid::Core do
 
@@ -156,6 +157,40 @@ describe Datagrid::Core do
       end
 
       expect(grid.assets.limit_value).to eq(2)
+    end
+  end
+
+  describe "ActionController::Parameters" do
+
+    let(:params) do
+      ::ActionController::Parameters.new(name: 'one')
+    end
+
+    it "permites all attributes by default" do
+      expect {
+        test_report(params) do
+          scope { Entry }
+          filter(:name)
+        end
+      }.to_not raise_error
+    end
+    it "doesn't permit attributes when forbidden_attributes_protection is set" do
+      expect {
+        test_report(params) do
+          scope { Entry }
+          self.forbidden_attributes_protection = true
+          filter(:name)
+        end
+      }.to raise_error(ActiveModel::ForbiddenAttributesError)
+    end
+    it "permits attributes when forbidden_attributes_protection is set and attributes are permitted" do
+      expect {
+        test_report(params.permit!) do
+          scope { Entry }
+          self.forbidden_attributes_protection = true
+          filter(:name)
+        end
+      }.to_not raise_error
     end
   end
 end

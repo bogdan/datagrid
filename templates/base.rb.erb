@@ -8,6 +8,8 @@ class BaseGrid
     # Uncomment to make all columns HTML by default
     # html: true,
   }
+  # Enable forbidden attributes protection
+  # self.forbidden_attributes_protection = true
 
   def self.date_column(name, *args)
     column(name, *args) do |model|

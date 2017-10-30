@@ -13,6 +13,8 @@ module Datagrid
         self.datagrid_attributes = []
 
         class_attribute :dynamic_block, :instance_writer => false
+        class_attribute :forbidden_attributes_protection, instance_writer: false
+        self.forbidden_attributes_protection = false
         if defined?(::ActiveModel::AttributeAssignment)
           include ::ActiveModel::AttributeAssignment
         end
@@ -148,6 +150,9 @@ module Datagrid
       # Updates datagrid attributes with a passed hash argument
       def attributes=(attributes)
         if respond_to?(:assign_attributes)
+          if !forbidden_attributes_protection && attributes.respond_to?(:permit!)
+            attributes.permit!
+          end
           assign_attributes(attributes)
         else
           attributes.each do |name, value|
@@ -223,7 +228,6 @@ module Datagrid
           attributes == other.attributes &&
           scope == other.scope
       end
-
     end # InstanceMethods
   end
 end

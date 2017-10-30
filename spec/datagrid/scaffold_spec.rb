@@ -28,9 +28,15 @@ describe Datagrid::Scaffold do
     it "works" do
       expect(subject.index_action).to eq(<<-RUBY)
   def index
-    @grid = UsersGrid.new(params[:users_grid]) do |scope|
+    @grid = UsersGrid.new(grid_params) do |scope|
       scope.page(params[:page])
     end
+  end
+
+  protected
+
+  def grid_params
+    params.fetch(:users_grid, {}).permit!
   end
 RUBY
     end

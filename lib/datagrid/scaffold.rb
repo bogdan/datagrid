@@ -92,7 +92,7 @@ end
 protected
 
 def grid_params
- params.fetch(:#{grid_param_name}, {}).permit!
+  params.fetch(:#{grid_param_name}, {}).permit!
 end
 RUBY
   end
