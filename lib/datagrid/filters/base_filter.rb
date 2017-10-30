@@ -3,13 +3,14 @@ end
 
 class Datagrid::Filters::BaseFilter #:nodoc:
 
-  attr_accessor :grid_class, :options, :block, :name
+  attr_accessor :grid_class, :options, :block, :name, :filter_group
 
   def initialize(grid_class, name, options = {}, &block)
     self.grid_class = grid_class
     self.name = name
     self.options = options
     self.block = block || default_filter_block
+    self.filter_group = options[:filter_group] || ""
   end
 
   def parse(value)

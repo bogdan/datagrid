@@ -16,4 +16,13 @@ describe Datagrid::Filters::BaseFilter do
     expect(report.assets).not_to include(Entry.create!(:name => ""))
   end
 
+  it "supports a filter_group accessor" do
+    report = test_report do
+      scope {Entry}
+      filter(:name, :string, filter_group: "my group name")
+    end
+
+    expect(report.filters.first.filter_group).to eq("my group name")
+  end
+
 end
