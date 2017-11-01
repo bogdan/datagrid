@@ -149,7 +149,7 @@ class Datagrid::Columns::Column
   def preload
     preload = options[:preload]
 
-    if [nil, true].include?(preload) && driver.can_preload?(driver.to_scope(grid_class.scope), name)
+    if preload == true && driver.can_preload?(driver.to_scope(grid_class.scope), name)
       name
     else
       preload
