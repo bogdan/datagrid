@@ -599,6 +599,21 @@ describe Datagrid::Helper do
       expect(subject.datagrid_value(report, :name, entry)).to eq("<a href=\"/profile\">Star</a>")
     end
 
+    it "applies decorator" do
+      report = test_report do
+        scope {Entry}
+        decorate do |model|
+          Class.new(Struct.new(:model)) do
+            def name
+              model.name.upcase
+            end
+          end
+        end
+        column(:name, html: true)
+      end
+      entry = Entry.create!(name: 'hello')
+      expect(subject.datagrid_value(report, :name, entry)).to eq("HELLO")
+    end
   end
 
   describe ".datagrid_header" do
