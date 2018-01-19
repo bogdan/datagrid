@@ -1,11 +1,11 @@
 en:
   datagrid:
     no_results:
-      "&mdash;&mdash;"
+      "――"
     table:
       order:
-        asc: "&uarr;"
-        desc: "&darr;"
+        asc: "↑"
+        desc: "↓"
       no_columns: "No columns selected"
     form:
       search: "Search"
@@ -17,7 +17,7 @@ en:
 
       dynamic:
         operations:
-          ">=": "&ge;"
-          "<=": "&le;"
+          ">=": "≥"
+          "<=": "≤"
           "=": "="
-          "=~": "&asymp;"
+          "=~": "≈"

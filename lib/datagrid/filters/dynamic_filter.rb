@@ -4,12 +4,22 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
 
   include Datagrid::Filters::SelectOptions
 
+  EQUAL_OPERATION = '='
+  LIKE_OPERATION = '=~'
+  MORE_EQUAL_OPERATION = '>='
+  LESS_EQUAL_OPERATION = '<='
+  DEFAULT_OPERATIONS = [
+    EQUAL_OPERATION,
+    LIKE_OPERATION,
+    MORE_EQUAL_OPERATION,
+    LESS_EQUAL_OPERATION,
+  ]
   AVAILABLE_OPERATIONS = %w(= =~ >= <=)
 
   def initialize(*)
     super
     options[:select] ||= default_select
-    options[:operations] ||= AVAILABLE_OPERATIONS
+    options[:operations] ||= DEFAULT_OPERATIONS
     unless options.has_key?(:include_blank)
       options[:include_blank] = false
     end
@@ -35,12 +45,12 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
       raise Datagrid::FilteringError, "Unknown operation: #{operation.inspect}. Available operations: #{operations.join(' ')}"
     end
     case operation
-    when '='
+    when EQUAL_OPERATION
       if date_conversion
         value = Datagrid::Utils.format_date_as_timestamp(value)
       end
       driver.where(scope, field, value)
-    when '=~'
+    when LIKE_OPERATION
       if column_type(field) == :string
         driver.contains(scope, field, value)
       else
@@ -49,12 +59,12 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
         end
         driver.where(scope, field, value)
       end
-    when '>='
+    when MORE_EQUAL_OPERATION
       if date_conversion
         value = value.beginning_of_day
       end
       driver.greater_equal(scope, field, value)
-    when '<='
+    when LESS_EQUAL_OPERATION
       if date_conversion
         value = value.end_of_day
       end
