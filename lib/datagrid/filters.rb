@@ -53,7 +53,7 @@ module Datagrid
       def filter_by_name(attribute)
         return attribute if attribute.is_a?(Datagrid::Filters::BaseFilter)
         self.filters.find do |filter|
-          filter.name.to_sym == attribute.to_sym
+          filter.name == attribute.to_sym
         end
       end
 

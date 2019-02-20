@@ -11,12 +11,12 @@ group :development do
 
 
   #gem "json", ">= 1.9"
-  gem "pry-byebug", :platform => [:ruby_20, :ruby_21, :ruby_22, :ruby_23] & Bundler::Dsl::VALID_PLATFORMS
+  gem "pry-byebug", :platform => [:ruby_24, :ruby_25, :ruby_22, :ruby_23] & Bundler::Dsl::VALID_PLATFORMS
 
   gem "rspec", ">= 3"
   gem "nokogiri" # used to test html output
 
-  gem "sqlite3"
+  gem "sqlite3", "~> 1.3.6"
   gem "sequel"
 
   group :mongo do

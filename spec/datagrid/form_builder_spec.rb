@@ -154,34 +154,8 @@ describe Datagrid::FormBuilder do
         ) }
 
       end
-
-      context "when deprecated format translation specified" do
-        let(:_range) { nil }
-        around(:each) do |example|
-          store_translations(:en, datagrid: {filters: {integer: {range_format: "from %{from_input} to %{to_input}"}}}) do
-            silence_warnings do
-              example.run
-            end
-          end
-        end
-        it { should equal_to_dom(
-          'from <input class="group_id integer_filter from" multiple type="text" name="report[group_id][]"> to <input class="group_id integer_filter to" multiple type="text" name="report[group_id][]">'
-        )}
-      end
-      context "when deprecated separator is specified" do
-        let(:_range) { nil }
-        around(:each) do |example|
-          store_translations(:en, datagrid: {filters: {integer: {range_separator: " | "}}}) do
-            silence_warnings do
-              example.run
-            end
-          end
-        end
-        it { should equal_to_dom(
-          '<input class="group_id integer_filter from" multiple type="text" name="report[group_id][]"> | <input class="group_id integer_filter to" multiple type="text" name="report[group_id][]">'
-        )}
-      end
     end
+
     context "with float filter type and range option" do
       let(:_filter) { :rating }
       let(:_grid) {
@@ -197,7 +171,6 @@ describe Datagrid::FormBuilder do
         '<input class="rating float_filter to" multiple value="2.5" type="text" name="report[rating][]"/>'
       )}
     end
-
 
     context "with date filter type and range option" do
       let(:_filter) { :created_at }

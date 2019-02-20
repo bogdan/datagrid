@@ -140,41 +140,14 @@ module Datagrid
       if filter.range?
         partial = partial_path('range_filter')
         options = options.merge(:multiple => true)
-
-
         from_options = datagrid_range_filter_options(object, filter, :from, options)
         to_options = datagrid_range_filter_options(object, filter, :to, options)
-        from_input = text_field(filter.name, from_options)
-        to_input = text_field(filter.name, to_options)
-
-        format_key = "datagrid.filters.#{type}.range_format"
-        separator_key = "datagrid.filters.#{type}.range_separator"
-        # 2 inputs: "from date" and "to date" to specify a range
-        if I18n.exists?(separator_key)
-          # Support deprecated translation option: range_separator
-          warn_deprecated_range_localization(separator_key)
-          separator = I18n.t(separator_key, default: '').presence
-          [from_input, separator, to_input].join.html_safe
-        elsif I18n.exists?(format_key)
-          # Support deprecated translation option: range_format
-          warn_deprecated_range_localization(format_key)
-          I18n.t(format_key, :from_input => from_input, :to_input => to_input).html_safe
-        else
-          # More flexible way to render via partial
-          @template.render :partial => partial, :locals => {
-            :from_options => from_options, :to_options => to_options, :filter => filter, :form => self
-          }
-        end
+        @template.render :partial => partial, :locals => {
+          :from_options => from_options, :to_options => to_options, :filter => filter, :form => self
+        }
       else
         datagrid_default_filter(filter, options)
       end
-    end
-
-    def warn_deprecated_range_localization(key)
-      Datagrid::Utils.warn_once(
-        "#{key} localization key is deprectated. " +
-        "Customize formatting by rake datagrid:copy_partials and editing app/views/datagrid/range_filter partial."
-      )
     end
 
     def datagrid_range_filter_options(object, filter, type, options)

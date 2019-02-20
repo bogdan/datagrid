@@ -7,7 +7,7 @@ class Datagrid::Filters::BaseFilter #:nodoc:
 
   def initialize(grid_class, name, options = {}, &block)
     self.grid_class = grid_class
-    self.name = name
+    self.name = name.to_sym
     self.options = options
     self.block = block || default_filter_block
   end
@@ -61,28 +61,15 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     end
   end
 
-  def default(object = nil)
-    unless object
-      Datagrid::Utils.warn_once("#{self.class.name}#default without argument is deprecated")
-    end
+  def default(object)
     default = self.options[:default]
     if default.is_a?(Symbol)
-      if object.respond_to?(default)
-        object.send(default)
-      else
-        Datagrid::Utils.warn_once(":default as a Symbol is now treated as a method name. Use String instead or -> { default } if you really want default value to be a Symbol but not a String.")
-        default
-      end
+      object.send(default)
     elsif default.respond_to?(:call)
       Datagrid::Utils.apply_args(object, &default)
     else
       default
     end
-  end
-
-  def multiple
-    Datagrid::Utils.warn_once("Filter#multiple method is deprecated. Use Filter#multiple? instead")
-    multiple?
   end
 
   def multiple?

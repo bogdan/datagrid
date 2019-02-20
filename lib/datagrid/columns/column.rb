@@ -123,11 +123,6 @@ class Datagrid::Columns::Column
   end
 
 
-  def block
-    Datagrid::Utils.warn_once("Datagrid::Columns::Column#block is deprecated. Use #html_block or #data_block instead")
-    data_block
-  end
-
   def generic_value(model, grid)
     grid.generic_value(self, model)
   end
