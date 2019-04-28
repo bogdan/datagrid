@@ -204,6 +204,9 @@ module Datagrid
         block ||= lambda do |model|
           model.send(name)
         end
+
+        remove_defined_column(columns, name, options)
+
         position = Datagrid::Utils.extract_position_from_options(columns, options)
         column = Datagrid::Columns::Column.new(
           self, name, query, default_column_options.merge(options), &block
@@ -215,6 +218,13 @@ module Datagrid
         return name if name.is_a?(Datagrid::Columns::Column)
         columns.find do |col|
           col.name.to_sym == name.to_sym
+        end
+      end
+
+      def remove_defined_column(columns, name, options)
+        existed_column = find_column_by_name(columns, name)
+        if existed_column.present? && existed_column.options[:header] == options[:header]
+          columns.delete(existed_column)
         end
       end
 

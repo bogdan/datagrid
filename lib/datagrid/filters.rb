@@ -101,6 +101,8 @@ module Datagrid
         klass = type.is_a?(Class) ? type : FILTER_TYPES[type]
         raise ConfigurationError, "filter class #{type.inspect} not found" unless klass
 
+        remove_defined_filter(name)
+
         position = Datagrid::Utils.extract_position_from_options(filters_array, options)
         filter = klass.new(self, name, options, &block)
         filters_array.insert(position, filter)
@@ -120,6 +122,11 @@ module Datagrid
 
       def filters
         filters_array
+      end
+
+      def remove_defined_filter(name)
+        existed_filter = filter_by_name(name)
+        filters_array.delete(existed_filter) if existed_filter.present?
       end
 
       protected
