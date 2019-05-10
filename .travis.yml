@@ -4,6 +4,7 @@ rvm:
   - 2.2.2
   - 2.3.0
   - 2.4.1
+  - 2.5.1
   #- jruby
   #- jruby-head
 #env: JRUBY_OPTS="--server -J-Xms512m -J-Xmx1024m"

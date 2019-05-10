@@ -6,7 +6,7 @@ group :development do
 
   gem "bundler"
   if RUBY_VERSION >= "2.3"
-    gem "jeweler", ">= 2.1.2", platform: [:ruby_23, :ruby_24]
+    gem "jeweler", ">= 2.1.2", platform: [:ruby_23, :ruby_24, :ruby_25]
   end
 
 
