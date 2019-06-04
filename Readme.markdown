@@ -1,6 +1,7 @@
 # Datagrid
 
 [![Build Status](https://travis-ci.org/bogdan/datagrid.svg?branch=master)](https://travis-ci.org/bogdan/datagrid)
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbogdan%2Fdatagrid.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbogdan%2Fdatagrid?ref=badge_shield)
 
 Ruby library that helps you to build and represent table-like data with:
