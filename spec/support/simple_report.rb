@@ -45,7 +45,7 @@ class SimpleReport
   end
 
   column(:actions, :html => true) do |model|
-    render :partial => "actions", :locals => {:model => model}
+    render :partial => "/actions", :locals => {:model => model}
   end
 
   column(:pet, :html => lambda {|data| content_tag :em, data}) do

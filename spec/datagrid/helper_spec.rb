@@ -11,7 +11,7 @@ describe Datagrid::Helper do
       File.expand_path("../../../app/views", __FILE__),
       File.expand_path("../../support/test_partials", __FILE__),
     ], {})
-    template = ActionView::Base.new(context, {}, ::ActionController::Base.new)
+    template = ActionView::Base.with_empty_template_cache.new(context, {}, ::ActionController::Base.new)
     allow(template).to receive(:protect_against_forgery?).and_return(false)
     template
   end
