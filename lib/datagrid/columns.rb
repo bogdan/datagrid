@@ -15,7 +15,8 @@ module Datagrid
         class_attribute :default_column_options, :instance_writer => false
         self.default_column_options = {}
 
-        class_attribute :batch_size, default: 1000
+        class_attribute :batch_size
+        self.batch_size = 1000
 
         class_attribute :columns_array
         self.columns_array = []
