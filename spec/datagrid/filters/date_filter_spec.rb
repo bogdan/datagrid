@@ -1,4 +1,5 @@
 require 'spec_helper'
+require "active_support/testing/time_helpers"
 
 describe Datagrid::Filters::DateFilter do
 
@@ -122,14 +123,16 @@ describe Datagrid::Filters::DateFilter do
 
 
   it "should support block" do
-    report = test_report(:created_at => Date.today) do
+    date = Date.new(2018, 01, 07)
+    time = date.to_time + 2.hours + 2.minutes
+    report = test_report(:created_at => date) do
       scope { Entry }
       filter(:created_at, :date, :range => true) do |value|
         where("created_at >= ?", value)
       end
     end
-    expect(report.assets).not_to include(Entry.create!(:created_at => 1.day.ago))
-    expect(report.assets).to include(Entry.create!(:created_at => Time.now))
+    expect(report.assets).not_to include(Entry.create!(:created_at => time - 1.day))
+    expect(report.assets).to include(Entry.create!(:created_at => time))
   end
 
 
