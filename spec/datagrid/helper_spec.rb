@@ -7,13 +7,7 @@ require 'datagrid/renderer'
 
 describe Datagrid::Helper do
   subject do
-    context = ActionView::LookupContext.new([
-      File.expand_path("../../../app/views", __FILE__),
-      File.expand_path("../../support/test_partials", __FILE__),
-    ], {})
-    template = ActionView::Base.with_empty_template_cache.new(context, {}, ::ActionController::Base.new)
-    allow(template).to receive(:protect_against_forgery?).and_return(false)
-    template
+    action_view_template
   end
 
   before(:each) do

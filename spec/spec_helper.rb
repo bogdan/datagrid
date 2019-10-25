@@ -17,7 +17,7 @@ require 'action_view'
 require "rails"
 require "mongoid"
 begin
-require 'mongo_mapper'
+  require 'mongo_mapper'
 rescue LoadError
 end
 
@@ -80,8 +80,6 @@ rescue Mongo::Error::NoServerAvailable
 end
 
 RSpec.configure do |config|
-
-
   config.after(:each) do
     #TODO better database truncation
     Group.delete_all
@@ -103,6 +101,19 @@ RSpec.configure do |config|
     #c.syntax = :expect
     c.syntax = [:should, :expect]
   end
+end
+
+def action_view_template
+  @action_view_template ||= begin
+    context = ActionView::LookupContext.new([
+      File.expand_path("../../app/views", __FILE__),
+      File.expand_path("../support/test_partials", __FILE__),
+    ], {})
+    klass = ActionView::Base.respond_to?(:with_empty_template_cache) ? ActionView::Base.with_empty_template_cache : ActionView::Base
+    template = klass.new(context, {}, ::ActionController::Base.new)
+    allow(template).to receive(:protect_against_forgery?).and_return(false)
+    template
+  end
 
 end
 
@@ -110,5 +121,4 @@ end
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
-Dir["#{File.dirname(__FILE__)}/support/schema.rb"].each {|f| require f}
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}

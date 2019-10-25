@@ -12,16 +12,10 @@ end
 
 
 describe Datagrid::FormBuilder do
-
-  let(:context) do
-    ActionView::LookupContext.new([
-      File.expand_path("../../../app/views", __FILE__),
-      File.expand_path("../../support/test_partials", __FILE__),
-    ], {})
-  end
   let(:template) do
-    ActionView::Base.with_empty_template_cache.new(context, {}, ::ActionController::Base.new)
+    action_view_template
   end
+
   let(:view) { ActionView::Helpers::FormBuilder.new(:report, _grid, template, view_options)}
   let(:view_options) { {} }
 
