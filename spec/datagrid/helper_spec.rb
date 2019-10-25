@@ -6,10 +6,12 @@ require 'datagrid/renderer'
 
 describe Datagrid::Helper do
   subject do
-    template = ActionView::Base.new
+    context = ActionView::LookupContext.new([
+      File.expand_path("../../../app/views", __FILE__),
+      File.expand_path("../../support/test_partials", __FILE__),
+    ], {})
+    template = ActionView::Base.new(context)
     allow(template).to receive(:protect_against_forgery?).and_return(false)
-    template.view_paths << File.expand_path("../../../app/views", __FILE__)
-    template.view_paths << File.expand_path("../../support/test_partials", __FILE__)
     template
   end
 
