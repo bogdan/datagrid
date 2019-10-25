@@ -60,8 +60,8 @@ describe Datagrid do
 
   describe ".batch_size" do
     context "when not defined on class level" do
-      it "returns nil" do
-        expect(subject.batch_size).to eq(nil)
+      it "returns 1000" do
+        expect(subject.batch_size).to eq(1000)
       end
     end
 
@@ -77,6 +77,17 @@ describe Datagrid do
       end
     end
 
+    context "when set to nil in the grid class" do
+      subject do
+        test_report do
+          self.batch_size = nil
+        end
+      end
+
+      it "returns nil" do
+        expect(subject.batch_size).to eq(nil)
+      end
+    end
   end
 
 
