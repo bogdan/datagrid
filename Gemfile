@@ -11,12 +11,16 @@ group :development do
 
 
   #gem "json", ">= 1.9"
-  gem "pry-byebug", :platform => [:ruby_24, :ruby_25, :ruby_22, :ruby_23] & Bundler::Dsl::VALID_PLATFORMS
+  gem "pry-byebug"
 
   gem "rspec", ">= 3"
   gem "nokogiri" # used to test html output
 
-  gem "sqlite3", "~> 1.3.6"
+  if RUBY_VERSION >= "2.5"
+    gem "sqlite3", "~> 1.4", platform: [:ruby_25]
+  else
+    gem "sqlite3", "~> 1.3.6"
+  end
   gem "sequel"
 
   group :mongo do
