@@ -391,14 +391,14 @@ describe Datagrid::Helper do
     end
 
     it "should escape html" do
-      entry.update_attributes!(:name => "<div>hello</div>")
+      entry.update!(:name => "<div>hello</div>")
       expect(subject.datagrid_rows(grid, [entry], :columns => [:name])).to equal_to_dom(<<-HTML)
        <tr><td class="name">&lt;div&gt;hello&lt;/div&gt;</td></tr>
         HTML
     end
 
     it "should not escape safe html" do
-      entry.update_attributes!(:name => "<div>hello</div>")
+      entry.update!(:name => "<div>hello</div>")
       grid.column(:safe_name) do |model|
         model.name.html_safe
       end

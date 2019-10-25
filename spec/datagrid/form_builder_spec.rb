@@ -19,7 +19,7 @@ describe Datagrid::FormBuilder do
     ], {})
   end
   let(:template) do
-    ActionView::Base.new(context)
+    ActionView::Base.new(context, {}, Object.new)
   end
   let(:view) { ActionView::Helpers::FormBuilder.new(:report, _grid, template, view_options)}
   let(:view_options) { {} }
