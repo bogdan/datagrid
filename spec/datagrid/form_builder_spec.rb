@@ -1,5 +1,6 @@
 # encoding: UTF-8
 require 'spec_helper'
+require "action_controller"
 
 class MyFormBuilder
   include Datagrid::FormBuilder
@@ -19,7 +20,7 @@ describe Datagrid::FormBuilder do
     ], {})
   end
   let(:template) do
-    ActionView::Base.new(context, {}, Object.new)
+    ActionView::Base.new(context, {}, ::ActionController::Base.new)
   end
   let(:view) { ActionView::Helpers::FormBuilder.new(:report, _grid, template, view_options)}
   let(:view_options) { {} }
