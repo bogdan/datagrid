@@ -313,16 +313,21 @@ module Datagrid
       #   grid.to_csv
       #   grid.to_csv(:id, :name)
       #   grid.to_csv(:col_sep => ';')
+      #   grid.to_csv(:io => [FileObject])
       def to_csv(*column_names)
         require "csv"
         options = column_names.extract_options!
-        CSV.generate(
+        has_io = options.delete(:io)
+        io = has_io || StringIO.new
+        csv = CSV.new(io,
           {:headers => self.header(*column_names), :write_headers => true}.merge!(options)
-        ) do |csv|
-          each_with_batches do |asset|
-            csv << row_for(asset, *column_names)
-          end
+        )
+
+        each_with_batches do |asset|
+          csv << row_for(asset, *column_names)
         end
+
+        io.string unless has_io
       end
 
 

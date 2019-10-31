@@ -155,6 +155,12 @@ describe Datagrid::Columns do
       expect(subject.to_csv(:col_sep => ";")).to eq("Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n")
     end
 
+    it "should support csv option io" do
+      io = StringIO.new
+      expect(subject.to_csv(:io => io)).to be_nil
+      expect(io.string).to eq("Shipping date,Group,Name,Access level,Pet\n#{date},Pop,Star,admin,ROTTWEILER\n")
+    end
+
   end
 
   it "should support columns with model and report arguments" do
