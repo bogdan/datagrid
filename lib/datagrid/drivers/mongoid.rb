@@ -12,7 +12,11 @@ module Datagrid
       end
 
       def to_scope(scope)
-        scope.where(nil)
+        if scope.respond_to?(:all)
+          scope.all
+        else
+          scope.where(nil)
+        end
       end
 
       def where(scope, attribute, value)
