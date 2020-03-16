@@ -55,9 +55,11 @@ begin
         "database" =>"datagrid_mongoid",
         "autocreate_indexes" => true,
         "logger" => nil,
-        "options" => {
-          "connect_timeout" => 2,
-          wait_queue_timeout: 2
+        options: {
+          connect_timeout: 2,
+          wait_queue_timeout: 2,
+          server_selection_timeout: 2,
+          socket_timeout: 1
         }
       }
     }
