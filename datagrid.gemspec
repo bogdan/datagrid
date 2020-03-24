@@ -130,7 +130,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/bogdan/datagrid".freeze
   s.licenses = ["MIT".freeze]
   s.required_ruby_version = Gem::Requirement.new(">= 2.0".freeze)
-  s.rubygems_version = "2.7.8".freeze
+  s.rubygems_version = "3.0.8".freeze
   s.summary = "Ruby gem to create datagrids".freeze
 
   if s.respond_to? :specification_version then
