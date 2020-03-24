@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
   s.authors = ["Bogdan Gusiev".freeze]
-  s.date = "2020-03-16"
+  s.date = "2020-03-24"
   s.description = "This allows you to easily build datagrid aka data tables with sortable columns and filters".freeze
   s.email = "agresso@gmail.com".freeze
   s.extra_rdoc_files = [
