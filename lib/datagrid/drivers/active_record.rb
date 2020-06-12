@@ -105,7 +105,8 @@ module Datagrid
         if scope.limit_value
           raise Datagrid::ConfigurationError, "ActiveRecord can not use batches in combination with SQL limit"
         end
-        scope.find_each(batch_size ? { :batch_size => batch_size} : {}, &block)
+        options = batch_size ? { batch_size: batch_size } : {}
+        scope.find_each(**options, &block)
       end
 
       def default_cache_key(asset)
