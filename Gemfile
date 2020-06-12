@@ -6,7 +6,7 @@ group :development do
 
   gem "bundler"
   if RUBY_VERSION >= "2.3"
-    gem "jeweler", ">= 2.1.2", platform: [:ruby_23, :ruby_24, :ruby_25, :ruby_26], git: 'git@github.com:technicalpickles/jeweler.git'
+    gem "jeweler", ">= 2.1.2", platform: :mri, github: 'technicalpickles/jeweler'
   end
 
 
@@ -17,7 +17,7 @@ group :development do
   gem "nokogiri" # used to test html output
 
   if RUBY_VERSION >= "2.5"
-    gem "sqlite3", "~> 1.4", platform: [:ruby_25, :ruby_26]
+    gem "sqlite3", "~> 1.4", platform: :mri
   else
     gem "sqlite3", "~> 1.3.6"
   end
