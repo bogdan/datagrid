@@ -73,7 +73,7 @@ module Datagrid
     #       %td= row.project_name
     #       %td.project-status{class: row.status}= row.status
     def datagrid_rows(grid, assets = grid.assets, **options, &block)
-      datagrid_renderer.rows(grid, assets, options, &block)
+      datagrid_renderer.rows(grid, assets, **options, &block)
     end
 
     # Renders ordering controls for the given column name

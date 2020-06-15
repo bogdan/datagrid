@@ -13,7 +13,7 @@ Local variables:
     <% if assets.empty? %>
     <tr><td class="noresults" colspan="100%"><%= I18n.t('datagrid.no_results').html_safe %></td></tr>
     <% else %>
-    <%= datagrid_rows(grid, assets, options) %>
+    <%= datagrid_rows(grid, assets, **options) %>
     <% end %>
   </tbody>
 <% end %>
