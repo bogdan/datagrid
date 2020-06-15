@@ -124,7 +124,7 @@ describe Datagrid::Filters::DateFilter do
 
   it "should support block" do
     date = Date.new(2018, 01, 07)
-    time = date.to_time + 2.hours + 2.minutes
+    time = Time.utc(2018, 01, 07, 2, 2)
     report = test_report(:created_at => date) do
       scope { Entry }
       filter(:created_at, :date, :range => true) do |value|
