@@ -416,7 +416,7 @@ module Datagrid
         super
       end
 
-      # Returns all columns available for current grid configuration.
+      # Returns all columns that are possible to be displayed for the current grid object
       #
       #   class MyGrid
       #     filter(:search) {|scope, value| scope.full_text_search(value)}
