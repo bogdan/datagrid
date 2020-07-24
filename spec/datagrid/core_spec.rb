@@ -193,4 +193,18 @@ describe Datagrid::Core do
       }.to_not raise_error
     end
   end
+
+
+  describe ".query_param" do
+    it "works" do
+      grid = test_report(name: 'value') do
+        scope {Entry}
+        filter(:name)
+        def param_name
+          'grid'
+        end
+      end
+      expect(grid.query_params).to eq({grid: {name: 'value'}})
+    end
+  end
 end

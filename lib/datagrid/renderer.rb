@@ -81,10 +81,9 @@ module Datagrid
     def order_path(grid, column, descending, request)
       column = grid.column_by_name(column)
       query = request ? request.query_parameters : {}
-      order_parameter = {grid.param_name => grid.as_query.merge(:order => column.name, :descending => descending)}
       ActionDispatch::Http::URL.path_for(
         path: request ? request.path : '/',
-        params: query.merge(order_parameter)
+        params: query.merge(grid.query_params(order: column.name, descending: descending))
       )
     end
 

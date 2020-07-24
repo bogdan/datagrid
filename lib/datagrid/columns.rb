@@ -406,7 +406,7 @@ module Datagrid
       # Defines a column at instance level
       #
       # See Datagrid::Columns::ClassMethods#column for more info
-      def column(name, options_or_query = {}, options = {}, &block) #:nodoc:
+      def column(name, options_or_query = {}, options = {}, &block)
         self.class.define_column(columns_array, name, options_or_query, options, &block)
       end
 

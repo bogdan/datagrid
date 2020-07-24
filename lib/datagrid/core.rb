@@ -9,7 +9,7 @@ module Datagrid
       base.class_eval do
         class_attribute :scope_value
 
-        class_attribute :datagrid_attributes
+        class_attribute :datagrid_attributes, instance_writer: false
         self.datagrid_attributes = []
 
         class_attribute :dynamic_block, :instance_writer => false
@@ -163,12 +163,24 @@ module Datagrid
       end
 
       # Returns serializable query arguments skipping all nil values
+      #
+      #   grid = ProductsGrid.new(category: 'dresses', available: true)
+      #   grid.as_query # => {category: 'dresses', available: true}
       def as_query
         attributes = self.attributes.clone
         attributes.each do |key, value|
           attributes.delete(key) if value.nil?
         end
         attributes
+      end
+
+      # Returns query parameters to link this grid from a page
+      #
+      #   grid = ProductsGrid.new(category: 'dresses', available: true)
+      #   Rails.application.routes.url_helpers.products_path(grid.query_params)
+      #     # => "/products?products_grid[category]=dresses&products_grid[available]=true"
+      def query_params(attributes = {})
+        { param_name.to_sym => as_query.merge(attributes) }
       end
 
       # Redefines scope at instance level
