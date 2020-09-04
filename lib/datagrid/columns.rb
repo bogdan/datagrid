@@ -535,6 +535,8 @@ module Datagrid
       def value_from_html_block(context, asset, column)
         args = []
         remaining_arity = column.html_block.arity
+        remaining_arity = 1 if remaining_arity < 0
+
         asset = decorate(asset)
 
         if column.data?
