@@ -245,6 +245,17 @@ describe Datagrid::Helper do
       )
     end
 
+    it "should render columns with &:symbol block" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, &:name)
+      end
+
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name" => "Star"
+      )
+    end
+
     it "should render html columns" do
       rp = test_report do
         scope { Entry }
@@ -254,6 +265,41 @@ describe Datagrid::Helper do
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name span" => "Star"
+      )
+    end
+
+    it "should render :html columns with &:symbol block" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :html => true, &:name)
+      end
+
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name" => "Star"
+      )
+    end
+
+    it "should render format columns with &:symbol block" do
+      rp = test_report do
+        scope { Entry }
+        column(:name) do |record|
+          format(record, &:name)
+        end
+      end
+
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name" => "Star"
+      )
+    end
+
+    it "should render :html columns with &:symbol block with a data attribute" do
+      rp = test_report do
+        scope { Entry }
+        column(:name, :html => true, data: 'DATA', &:name)
+      end
+
+      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
+        "tr td.name" => "Star"
       )
     end
 
