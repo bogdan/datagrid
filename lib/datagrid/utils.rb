@@ -72,12 +72,8 @@ module Datagrid
       end
 
       def apply_args(*args, &block)
-        return block.call(*args) if block.arity < 0
-        args = args.clone
-        (args.size - block.arity).times do
-          args.pop
-        end
-        block.call(*args)
+        size = block.arity < 0 ? args.size : block.arity
+        block.call(*args.slice(0, size))
       end
 
       def parse_date(value)
