@@ -45,39 +45,38 @@ File.open('spec.log', "w").close
 TEST_LOGGER = Logger.new('spec.log')
 NO_MONGO = ENV['NO_MONGO']
 
-begin
-  Mongoid.load_configuration({
-    "clients" =>
-    {
-      "default" =>
+if NO_MONGO
+  warn("MONGODB WARNING: Skipping Mongoid and Mongomapper tests.")
+else
+  begin
+    Mongoid.load_configuration({
+      "clients" =>
       {
-        "hosts" => ["localhost:27017"],
-        "database" =>"datagrid_mongoid",
-        "autocreate_indexes" => true,
-        "logger" => nil,
-        options: {
-          connect_timeout: 2,
-          wait_queue_timeout: 2,
-          server_selection_timeout: 2,
-          socket_timeout: 1
+        "default" =>
+        {
+          "hosts" => ["localhost:27017"],
+          "database" =>"datagrid_mongoid",
+          options: {
+            max_read_retries: 0,
+            retry_reads: false,
+            connect_timeout: 2,
+            wait_queue_timeout: 2,
+            server_selection_timeout: 2,
+            socket_timeout: 1
+          }
         }
       }
-    }
-  })
+    })
 
-  Mongoid.client(:default).collections # check mongo connection
+    Mongoid.client(:default).collections # check mongo connection
 
-  if defined?(MongoMapper)
-    MongoMapper.connection = Mongo::Connection.new('localhost', 27017)
-    MongoMapper.database = "datagrid_mongo_mapper"
-  end
-
-rescue Mongo::Error::NoServerAvailable
-  message = "Didn't find mongodb at localhost:27017."
-  if NO_MONGO
-    warn("MONGODB WARNING: #{message}. Skipping Mongoid and Mongomapper tests.")
-  else
-    raise "#{message}. Run with NO_MONGO=true env variable to skip mongodb tests"
+    if defined?(MongoMapper)
+      MongoMapper.connection = Mongo::Connection.new('localhost', 27017)
+      MongoMapper.database = "datagrid_mongo_mapper"
+    end
+  rescue Mongo::Error::NoServerAvailable => e
+    warn "Didn't find mongodb at localhost:27017. Run with NO_MONGO=true env variable to skip mongodb tests"
+    raise e
   end
 end
 

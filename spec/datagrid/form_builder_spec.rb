@@ -19,6 +19,8 @@ describe Datagrid::FormBuilder do
   let(:view) { ActionView::Helpers::FormBuilder.new(:report, _grid, template, view_options)}
   let(:view_options) { {} }
 
+  SELECT_EMPTY_OPTION = Rails.version >= "6.0" ? '<option value="" label=" "></option>' : '<option value=""></option>'
+
 
   describe ".datagrid_filter" do
     it "should work for every filter type" do
@@ -244,9 +246,10 @@ describe Datagrid::FormBuilder do
         end
       }
       it { should equal_to_dom(
-        '<select class="category enum_filter" name="report[category]" id="report_category"><option value=""></option>
+        %(<select class="category enum_filter" name="report[category]" id="report_category">
+        #{SELECT_EMPTY_OPTION}
        <option value="first">first</option>
-       <option value="second">second</option></select>'
+       <option value="second">second</option></select>)
       )}
 
       context "when block is given" do
@@ -259,8 +262,9 @@ describe Datagrid::FormBuilder do
           end
         end
         it { should equal_to_dom(
-          '<select class="category enum_filter" name="report[category]" id="report_category"><option value=""></option>
-          <option value="block_value">block option</option></select>'
+          %(<select class="category enum_filter" name="report[category]" id="report_category">
+          #{SELECT_EMPTY_OPTION}
+          <option value="block_value">block option</option></select>)
         )}
       end
       context "when first option is selected" do
@@ -268,9 +272,10 @@ describe Datagrid::FormBuilder do
           _grid.category = "first"
         end
         it { should equal_to_dom(
-          '<select class="category enum_filter" name="report[category]" id="report_category"><option value=""></option>
+          %(<select class="category enum_filter" name="report[category]" id="report_category">
+          #{SELECT_EMPTY_OPTION}
        <option selected value="first">first</option>
-       <option value="second">second</option></select>'
+       <option value="second">second</option></select>)
         )}
       end
       context "with include_blank option set to false" do
@@ -360,9 +365,10 @@ describe Datagrid::FormBuilder do
         end
       end
       it { should equal_to_dom(
-        '<select class="disabled extended_boolean_filter" name="report[disabled]" id="report_disabled"><option value=""></option>
-       <option value="YES">Yes</option>
-       <option value="NO">No</option></select>'
+        %(<select class="disabled extended_boolean_filter" name="report[disabled]" id="report_disabled">
+          #{SELECT_EMPTY_OPTION}
+          <option value="YES">Yes</option>
+          <option value="NO">No</option></select>)
       )}
     end
     context "with string filter" do

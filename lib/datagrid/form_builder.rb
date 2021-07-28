@@ -13,6 +13,12 @@ module Datagrid
     end
 
     # Returns a form label html for the corresponding filter name
+    # def datagrid_label(
+      # filter_or_attribute,
+      # text = datagrid_get_filter(filter_or_attribute).header,
+      # **options, &block)
+      # label(datagrid_get_filter(filter_or_attribute).name, text, options, &block)
+    # end
     def datagrid_label(filter_or_attribute, options_or_text = {}, options = {}, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       text, options = options_or_text.is_a?(Hash) ? [filter.header, options_or_text] : [options_or_text, options]
