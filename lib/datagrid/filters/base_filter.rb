@@ -84,6 +84,14 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     options[:allow_blank]
   end
 
+  def input_options
+    options[:input_options] || {}
+  end
+
+  def label_options
+    options[:label_options] || {}
+  end
+
   def form_builder_helper_name
     self.class.form_builder_helper_name
   end

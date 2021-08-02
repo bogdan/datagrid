@@ -121,8 +121,8 @@ module Datagrid
       # * <tt>:preload</tt> - spefies which associations of the scope should be preloaded for this column
       #
       # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
-      def column(name, options_or_query = {}, options = {}, &block)
-        define_column(columns_array, name, options_or_query, options, &block)
+      def column(name, query = nil, **options, &block)
+        define_column(columns_array, name, query, options, &block)
       end
 
       # Returns column definition with given name
@@ -195,12 +195,7 @@ module Datagrid
         end
       end
 
-      def define_column(columns, name, options_or_query = {}, options = {}, &block) #:nodoc:
-        if options_or_query.is_a?(String)
-          query = options_or_query
-        else
-          options = options_or_query
-        end
+      def define_column(columns, name, query = nil, **options, &block) #:nodoc:
         check_scope_defined!("Scope should be defined before columns")
         block ||= lambda do |model|
           model.send(name)
@@ -406,8 +401,8 @@ module Datagrid
       # Defines a column at instance level
       #
       # See Datagrid::Columns::ClassMethods#column for more info
-      def column(name, options_or_query = {}, options = {}, &block)
-        self.class.define_column(columns_array, name, options_or_query, options, &block)
+      def column(name, query = nil, **options, &block)
+        self.class.define_column(columns_array, name, query, options, &block)
       end
 
       def initialize(*) #:nodoc:

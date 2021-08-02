@@ -90,6 +90,18 @@ describe Datagrid::FormBuilder do
         )}
       end
     end
+    context "with input_options" do
+      let(:_filter) { :created_at }
+      let(:_grid) {
+        test_report do
+          scope {Entry}
+          filter(:created_at, :date, input_options: {type: :date})
+        end
+      }
+      it { should equal_to_dom(
+        '<input type="date" class="created_at date_filter" name="report[created_at]" id="report_created_at"/>'
+      )}
+    end
 
     context "with integer filter type and range option" do
       let(:_filter) { :group_id }
@@ -436,7 +448,7 @@ describe Datagrid::FormBuilder do
       let(:_filter) { :group_id }
       let(:expected_html) do
         <<-HTML
-<select class="group_id enum_filter" multiple name="report[group_id][]" id="report_group_id">
+<select multiple class="group_id enum_filter" name="report[group_id][]" id="report_group_id">
 <option value="hello">hello</option></select>
         HTML
       end
@@ -459,7 +471,7 @@ describe Datagrid::FormBuilder do
       let(:_filter) { :column_names }
       let(:expected_html) do
         <<-HTML
-<select class="column_names enum_filter" multiple name="report[column_names][]" id="report_column_names"><option selected value="id">Id</option>
+<select multiple class="column_names enum_filter" name="report[column_names][]" id="report_column_names"><option selected value="id">Id</option>
 <option selected value="name">Name</option>
 <option value="category">Category</option></select>
         HTML
@@ -591,7 +603,13 @@ DOM
       test_report do
         scope {Entry}
         filter(:name, :string)
+        filter(:created_at, :date, label_options: {class: 'js-date-selector'})
       end
+    end
+    it "should generate label for filter" do
+      expect(view.datagrid_label(:created_at)).to equal_to_dom(
+        '<label class="js-date-selector" for="report_created_at">Created at</label>'
+      )
     end
     it "should generate label for filter" do
       expect(view.datagrid_label(:name)).to equal_to_dom(

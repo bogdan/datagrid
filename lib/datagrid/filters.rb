@@ -90,14 +90,11 @@ module Datagrid
       #   Accepts a block or a symbol with an instance method name
       # * <tt>:unless</tt> - specify the reverse condition when the filter can be dislayed and used.
       #   Accepts a block or a symbol with an instance method name
+      # * <tt>:input_options</tt> - options passed when rendering html input tag attributes
+      # * <tt>:label_options</tt> - options passed when rendering html label tag attributes
       #
       # See: https://github.com/bogdan/datagrid/wiki/Filters for examples
-      def filter(name, type = :default, options = {}, &block)
-        if type.is_a?(Hash)
-          options = type
-          type = :default
-        end
-
+      def filter(name, type = :default, **options, &block)
         klass = type.is_a?(Class) ? type : FILTER_TYPES[type]
         raise ConfigurationError, "filter class #{type.inspect} not found" unless klass
 
