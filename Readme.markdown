@@ -25,11 +25,9 @@ Ruby library that helps you to build and represent table-like data with:
 
 ### Documentation
 
-[Readme](/Readme.markdown) - this read-me for basic information
-[Wiki](/wiki) - general reference on how to use the gem
-[Rdoc](https://rdoc.info/github/bogdan/datagrid) - API reference
-
-* Rails >= 3.2
+* [Readme](/Readme.markdown) - this read-me for basic information
+* [Wiki](https://github.com/bogdan/datagrid/wiki) - general reference on how to use the gem
+* [Rdoc](https://rdoc.info/github/bogdan/datagrid) - API reference
 
 ### Live Demo
 
