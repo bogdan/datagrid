@@ -1,14 +1,11 @@
 source "https://rubygems.org"
 
-gem "rails", ">= 4.0"
+gemspec
 
 group :development do
 
   gem "bundler"
-  if RUBY_VERSION >= "2.3"
-    gem "jeweler", ">= 2.1.2", platform: :mri, github: 'technicalpickles/jeweler'
-  end
-
+  gem "bump"
 
   #gem "json", ">= 1.9"
   gem "pry-byebug"
