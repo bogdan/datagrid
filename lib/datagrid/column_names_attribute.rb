@@ -23,23 +23,22 @@ module Datagrid
       # Accepts same options as <tt>:enum</tt> filter
       #
       # Examples:
-      # 
-      #   column_names_filter(:header => "Choose columns")
-      #   
-      def column_names_filter(options = {})
-        filter(:column_names, :enum, {
-          :select => :optional_columns_select,
-          :multiple => true,
-          :dummy => true
-        }.merge(options || {}))
+      #
+      #   column_names_filter(header: "Choose columns")
+      #
+      def column_names_filter(**options)
+        filter(
+          :column_names, :enum,
+          select: :optional_columns_select,
+          multiple: true,
+          dummy: true,
+          **options,
+        )
       end
     end
 
-    def columns(*args) #:nodoc:
-      options = args.extract_options!
-      column_names = selected_column_names(*args)
-      column_names << options
-      super(*column_names)
+    def columns(*args, **options) #:nodoc:
+      super(*selected_column_names(*args), **options)
     end
 
     # Returns a list of enabled columns with <tt>:mandatory => true</tt> option
@@ -59,7 +58,7 @@ module Datagrid
       optional_columns.map {|c| [c.header, c.name] }
     end
 
-    def selected_column_names(*args)                  
+    def selected_column_names(*args)
       if args.any?
         args.compact!
         args.map!(&:to_sym)
@@ -75,7 +74,7 @@ module Datagrid
 
     def columns_visibility_enabled?
       columns_array.any? do |column|
-        column.options.key?(:mandatory)
+        column.mandatory_explicitly_set?
       end
     end
 

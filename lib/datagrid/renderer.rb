@@ -34,11 +34,9 @@ module Datagrid
       _render_partial('form', options[:partials], {:grid => grid, :options => options})
     end
 
-    def table(grid, *args)
-      options = args.extract_options!
+    def table(grid, assets, **options)
       options[:html] ||= {}
       options[:html][:class] ||= "datagrid #{@template.dom_class(grid)}"
-      assets = args.any? ? args.shift : grid.assets
 
       _render_partial('table', options[:partials],
                       {

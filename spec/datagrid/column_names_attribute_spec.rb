@@ -10,7 +10,7 @@ describe Datagrid::ColumnNamesAttribute do
     options = column_names_filter_options
     test_report do
       scope { Entry }
-      column_names_filter(options)
+      column_names_filter(**options)
       column(:id)
       column(:name, :mandatory => true)
       column(:category)

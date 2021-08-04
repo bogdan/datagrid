@@ -106,6 +106,10 @@ class Datagrid::Columns::Column
     !! options[:mandatory]
   end
 
+  def mandatory_explicitly_set?
+    options.key?(:mandatory)
+  end
+
   def enabled?(grid)
     ::Datagrid::Utils.process_availability(grid, options[:if], options[:unless])
   end

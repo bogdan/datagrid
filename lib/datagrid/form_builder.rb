@@ -4,11 +4,11 @@ module Datagrid
   module FormBuilder
 
     # Returns a form input html for the corresponding filter name
-    def datagrid_filter(filter_or_attribute, **options, &block)
+    def datagrid_filter(filter_or_attribute, options = {}, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       options = {
         **filter.input_options,
-        **add_html_classes(options, filter.name, datagrid_filter_html_class(filter))
+        **add_html_classes(options, filter.name, datagrid_filter_html_class(filter)),
       }
       # Prevent partials option from appearing in HTML attributes
       options.delete(:partials) # Legacy option
@@ -70,9 +70,11 @@ module Datagrid
         select(
           filter.name,
           object.select_options(filter) || [],
-          {:include_blank => filter.include_blank,
-           :prompt => filter.prompt,
-           :include_hidden => false},
+          {
+            include_blank: filter.include_blank,
+            prompt: filter.prompt,
+            include_hidden: false
+          },
            multiple: filter.multiple?,
            **options,
            &block

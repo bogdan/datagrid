@@ -30,7 +30,7 @@ describe Datagrid::FormBuilder do
     end
 
     subject do
-      view.datagrid_filter(_filter, _filter_options, &_filter_block)
+      view.datagrid_filter(_filter, **_filter_options, &_filter_block)
     end
 
     let(:_filter_options) { {} }
@@ -514,7 +514,7 @@ DOM
         options = filter_options
         test_report do
           scope {Entry}
-          filter(:condition, :dynamic, options)
+          filter(:condition, :dynamic, **options)
         end
       end
       let(:_filter) { :condition }

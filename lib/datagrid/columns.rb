@@ -86,9 +86,10 @@ module Datagrid
       #
       # Supported options:
       #
-      # * :data - if true returns only non-html columns. Default: false.
-      def columns(*args)
-        filter_columns(columns_array, *args)
+      # * :data - if true returns only columns with data representation. Default: false.
+      # * :html - if true returns only columns with html columns. Default: false.
+      def columns(*args, data: false, html: false)
+        filter_columns(columns_array, *args, data: data, html: html)
       end
 
       # Defines new datagrid column
@@ -122,7 +123,7 @@ module Datagrid
       #
       # See: https://github.com/bogdan/datagrid/wiki/Columns for examples
       def column(name, query = nil, **options, &block)
-        define_column(columns_array, name, query, options, &block)
+        define_column(columns_array, name, query, **options, &block)
       end
 
       # Returns column definition with given name
@@ -184,14 +185,13 @@ module Datagrid
         child_class.columns_array = self.columns_array.clone
       end
 
-      def filter_columns(columns, *args) #:nodoc:
-        options = args.extract_options!
-        args.compact!
-        args.map!(&:to_sym)
-        columns.select do |column|
-          (!options[:data] || column.data?) &&
-            (!options[:html] || column.html?) &&
-            (column.mandatory? || args.empty? || args.include?(column.name))
+      def filter_columns(columns_array, *names, data: false, html: false) #:nodoc:
+        names.compact!
+        names.map!(&:to_sym)
+        columns_array.select do |column|
+          (!data || column.data?) &&
+            (!html || column.html?) &&
+            (column.mandatory? || names.empty? || names.include?(column.name))
         end
       end
 
@@ -308,11 +308,13 @@ module Datagrid
       #   grid.to_csv
       #   grid.to_csv(:id, :name)
       #   grid.to_csv(:col_sep => ';')
-      def to_csv(*column_names)
+      def to_csv(*column_names, **options)
         require "csv"
-        options = column_names.extract_options!
-        options = {:headers => self.header(*column_names), :write_headers => true}.merge!(options)
-        CSV.generate(**options) do |csv|
+        CSV.generate(
+          headers: self.header(*column_names),
+          write_headers: true,
+          **options
+        ) do |csv|
           each_with_batches do |asset|
             csv << row_for(asset, *column_names)
           end
@@ -328,24 +330,22 @@ module Datagrid
       #   grid = MyGrid.new(:column_names => [:id, :name])
       #   grid.columns # => id and name columns
       #   grid.columns(:id, :category) # => id and category column
-      def columns(*args)
-        self.class.filter_columns(columns_array, *args).select {|column| column.enabled?(self)}
+      def columns(*args, data: false, html: false)
+        self.class.filter_columns(
+          columns_array, *args, data: data, html: html
+        ).select do |column|
+          column.enabled?(self)
+        end
       end
 
       # Returns all columns that can be represented in plain data(non-html) way
-      def data_columns(*names)
-        options = names.extract_options!
-        options[:data] = true
-        names << options
-        self.columns(*names)
+      def data_columns(*names, **options)
+        self.columns(*names, **options, data: true)
       end
 
       # Returns all columns that can be represented in HTML table
-      def html_columns(*names)
-        options = names.extract_options!
-        options[:html] = true
-        names << options
-        self.columns(*names)
+      def html_columns(*names, **options)
+        self.columns(*names, **options, html: true)
       end
 
       # Finds a column definition by name
@@ -402,7 +402,7 @@ module Datagrid
       #
       # See Datagrid::Columns::ClassMethods#column for more info
       def column(name, query = nil, **options, &block)
-        self.class.define_column(columns_array, name, query, options, &block)
+        self.class.define_column(columns_array, name, query, **options, &block)
       end
 
       def initialize(*) #:nodoc:

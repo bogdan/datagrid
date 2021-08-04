@@ -71,11 +71,11 @@ describe Datagrid::Filters do
 
   describe "allow_blank and allow_nil options" do
 
-    def check_performed(value, result, options)
+    def check_performed(value, result, **options)
       $FILTER_PERFORMED = false
       report = test_report(:name => value) do
         scope {Entry}
-        filter(:name, options) do |_|
+        filter(:name, **options) do |_|
           $FILTER_PERFORMED = true
           self
         end

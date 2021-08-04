@@ -144,9 +144,9 @@ describe Datagrid::Helper do
       end
 
       it 'renders namespaced table partial' do
-        rendered_partial = subject.datagrid_table(grid, [entry], {
-                                    :partials => 'client/datagrid'
-                                    })
+        rendered_partial = subject.datagrid_table(
+          grid, [entry], partials: 'client/datagrid'
+        )
         expect(rendered_partial).to include 'Namespaced table partial.'
         expect(rendered_partial).to include 'Namespaced row partial.'
         expect(rendered_partial).to include 'Namespaced head partial.'

@@ -38,8 +38,8 @@ module Datagrid
     #   and needs different columns. Default: all defined columns.
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
-    def datagrid_table(grid, *args)
-      datagrid_renderer.table(grid, *args)
+    def datagrid_table(grid, assets = grid.assets, **options)
+      datagrid_renderer.table(grid, assets, **options)
     end
 
     # Renders HTML table header for given grid instance using columns defined in it
