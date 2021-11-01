@@ -237,11 +237,23 @@ describe Datagrid::Filters do
 
   describe "#select_options" do
     it "should return select options" do
+      filters = {
+        id: [1,2],
+        name: [['a', 1], ['b', 2]],
+        category: {a: 1, b: 2},
+      }
       grid = test_report do
         scope {Entry}
-        filter(:id, :enum, select: [1,2,3])
+        filters.each do |name, options|
+          filter(name, :enum, select: options, multiple: true)
+        end
       end
-      expect(grid.select_options(:id)).to eq([1,2,3])
+      filters.each do |name, options|
+        expect(grid.select_options(name)).to eq(options)
+        expect(grid.select_values(name)).to eq([1,2])
+        grid.select_all(name)
+        expect(grid.public_send(name)).to eq([1,2])
+      end
     end
 
     it "should raise ArgumentError for filter without options" do

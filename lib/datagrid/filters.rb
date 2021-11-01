@@ -51,7 +51,12 @@ module Datagrid
 
       # Returns filter definition object by name
       def filter_by_name(attribute)
-        return attribute if attribute.is_a?(Datagrid::Filters::BaseFilter)
+        if attribute.is_a?(Datagrid::Filters::BaseFilter)
+          unless ancestors.include?(attribute.grid_class)
+            raise "#{attribute.grid_class}##{attribute.name} filter doen't belong to #{self.class}"
+          end
+          return attribute
+        end
         self.filters.find do |filter|
           filter.name == attribute.to_sym
         end
@@ -178,11 +183,18 @@ module Datagrid
       # Returns select options for specific filter or filter name
       # If given filter doesn't support select options raises `ArgumentError`
       def select_options(filter)
-        filter = filter_by_name(filter)
-        unless filter.class.included_modules.include?(::Datagrid::Filters::SelectOptions)
-          raise ::Datagrid::ArgumentError, "#{filter.name} with type #{FILTER_TYPES.invert[filter.class].inspect} can not have select options"
-        end
-        filter.select(self)
+        find_select_filter(filter).select(self)
+      end
+
+      # Sets all options as selected for a filter that has options
+      def select_all(filter)
+        filter = find_select_filter(filter)
+        self[filter.name] = select_values(filter)
+      end
+
+      # Returns all values that can be set to a filter with select options
+      def select_values(filter)
+        find_select_filter(filter).select_values(self)
       end
 
       def default_filter
@@ -197,6 +209,15 @@ module Datagrid
       end
 
       protected
+
+      def find_select_filter(filter)
+        filter = filter_by_name(filter)
+        unless filter.class.included_modules.include?(::Datagrid::Filters::SelectOptions)
+          raise ::Datagrid::ArgumentError,
+            "#{self.class.name}##{filter.name} with type #{FILTER_TYPES.invert[filter.class].inspect} can not have select options"
+        end
+        filter
+      end
 
       def apply_filters(current_scope, filters)
         filters.inject(current_scope) do |result, filter|
