@@ -4,6 +4,11 @@ module Datagrid
   module FormBuilder
 
     # Returns a form input html for the corresponding filter name
+    # <tt>options</tt> are proxied to the related rails input helper:
+    #
+    # * <tt>select</tt> for enum, xboolean filter types
+    # * <tt>check_box</tt> for boolean filter type
+    # * <tt>text_field</tt> for other filter types
     def datagrid_filter(filter_or_attribute, options = {}, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       options = {
@@ -16,6 +21,7 @@ module Datagrid
     end
 
     # Returns a form label html for the corresponding filter name
+    # <tt>options</tt> are proxied to rails <tt>label</tt> helper
     def datagrid_label(filter_or_attribute, text = nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       label(filter.name, text || filter.header, **filter.label_options, **options, &block)
