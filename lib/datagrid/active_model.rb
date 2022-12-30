@@ -2,9 +2,9 @@
 module Datagrid
 
   # Required to be ActiveModel compatible
-  # @visibility private
-  module ActiveModel #:nodoc:
-
+  # @!visibility private
+  module ActiveModel
+    # @!visibility private
     def self.included(base)
       base.extend         ClassMethods
       base.class_eval do
@@ -18,7 +18,6 @@ module Datagrid
           extend ::ActiveModel::AttributesAssignment
         rescue LoadError
         end
-
       end
       base.send :include, InstanceMethods
     end # self.included
