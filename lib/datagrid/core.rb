@@ -4,6 +4,7 @@ require "active_support/core_ext/class/attribute"
 module Datagrid
   module Core
 
+    # @!visibility private
     def self.included(base)
       base.extend         ClassMethods
       base.class_eval do
@@ -20,11 +21,12 @@ module Datagrid
         end
       end
       base.send :include, InstanceMethods
-    end # self.included
+    end
 
     module ClassMethods
 
-      def datagrid_attribute(name, &block) #:nodoc:
+      # @!visibility private
+      def datagrid_attribute(name, &block)
         unless datagrid_attributes.include?(name)
           block ||= lambda do |value|
             value
@@ -41,6 +43,10 @@ module Datagrid
       end
 
       # Defines a scope at class level
+      #
+      #     scope { User }
+      #     scope { Project.where(deleted: false) }
+      #     scope { Project.preload(:stages) }
       def scope(&block)
         if block
           current_scope = scope_value
@@ -54,11 +60,14 @@ module Datagrid
         end
       end
 
-      def driver #:nodoc:
+      # @!visibility private
+      def driver
         @driver ||= Drivers::AbstractDriver.guess_driver(scope).new
       end
 
       # Allows dynamic columns definition, that could not be defined at class level
+      # Columns that depend on the database state or third party service
+      # can be defined this way.
       #
       #   class MerchantsGrid
       #
@@ -74,6 +83,9 @@ module Datagrid
       #       end
       #     end
       #   end
+      #
+      #   ProductCategory.create!(name: 'Swimwear')
+      #   ProductCategory.create!(name: 'Sportswear')
       #
       #   grid = MerchantsGrid.new
       #   grid.data # => [
@@ -95,6 +107,7 @@ module Datagrid
       end
 
       protected
+
       def check_scope_defined!(message = nil)
         message ||= "#{self}.scope is not defined"
         raise(Datagrid::ConfigurationError, message) unless scope_value
@@ -132,11 +145,14 @@ module Datagrid
         result
       end
 
-      # Alias for <tt>send</tt> method
+      # @return [Object] Any datagrid attribute value
       def [](attribute)
         self.send(attribute)
       end
 
+      # Assigns any datagrid attribute
+      # @param attribute [Symbol, String] Datagrid attribute name
+      # @param value [Object] Datagrid attribute value
       def []=(attribute, value)
         self.send(:"#{attribute}=", value)
       end
@@ -220,11 +236,13 @@ module Datagrid
         self.class.scope_value != scope_value
       end
 
-      def driver #:nodoc:
+      # @!visibility private
+      def driver
         self.class.driver
       end
 
-      def check_scope_defined!(message = nil) #:nodoc:
+      # @!visibility private
+      def check_scope_defined!(message = nil)
         self.class.send :check_scope_defined!, message
       end
 

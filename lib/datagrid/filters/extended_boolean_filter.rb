@@ -1,4 +1,5 @@
-class Datagrid::Filters::ExtendedBooleanFilter < Datagrid::Filters::EnumFilter #:nodoc:
+# @!visibility private
+class Datagrid::Filters::ExtendedBooleanFilter < Datagrid::Filters::EnumFilter
 
   YES = "YES"
   NO = "NO"

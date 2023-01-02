@@ -1,6 +1,8 @@
 class Datagrid::Columns::Column
 
-  class ResponseFormat # :nodoc:
+  # Datagrid class holding an information of
+  # how a column should be rendered in data/console/csv format and HTML format
+  class ResponseFormat
 
     attr_accessor :data_block, :html_block
 

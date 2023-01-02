@@ -1,6 +1,7 @@
 module Datagrid
   module Drivers
-    class Sequel < AbstractDriver #:nodoc:
+    # @!visibility private
+    class Sequel < AbstractDriver
 
       def self.match?(scope)
         return false unless defined?(::Sequel)

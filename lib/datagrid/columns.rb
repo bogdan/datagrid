@@ -6,6 +6,7 @@ module Datagrid
   module Columns
     require "datagrid/columns/column"
 
+    # @!visibility private
     def self.included(base)
       base.extend         ClassMethods
       base.class_eval do
@@ -29,7 +30,7 @@ module Datagrid
 
       end
       base.send :include, InstanceMethods
-    end # self.included
+    end
 
     module ClassMethods
 
@@ -136,18 +137,22 @@ module Datagrid
         columns.map(&:name)
       end
 
-      def respond_to(&block) #:nodoc:
+      # @!visibility private
+      def respond_to(&block)
         Datagrid::Columns::Column::ResponseFormat.new(&block)
       end
 
       # Formats column value for HTML.
       # Helps to distinguish formatting as plain data and HTML
       #
-      #   column(:name) do |model|
-      #     format(model.name) do |value|
-      #       content_tag(:strong, value)
+      #     column(:name) do |model|
+      #       format(model.name) do |value|
+      #         content_tag(:strong, value)
+      #       end
       #     end
-      #   end
+      #
+      # @param value [Object] Data
+      # @return [Datagrid::Columns::Column::ResponseFormat] Format object
       def format(value, &block)
         if block_given?
           respond_to do |f|
@@ -180,12 +185,14 @@ module Datagrid
         block_given? ? yield(presenter) : presenter
       end
 
-      def inherited(child_class) #:nodoc:
+      # @!visibility private
+      def inherited(child_class)
         super(child_class)
         child_class.columns_array = self.columns_array.clone
       end
 
-      def filter_columns(columns_array, *names, data: false, html: false) #:nodoc:
+      # @!visibility private
+      def filter_columns(columns_array, *names, data: false, html: false)
         names.compact!
         names.map!(&:to_sym)
         columns_array.select do |column|
@@ -195,7 +202,8 @@ module Datagrid
         end
       end
 
-      def define_column(columns, name, query = nil, **options, &block) #:nodoc:
+      # @!visibility private
+      def define_column(columns, name, query = nil, **options, &block)
         check_scope_defined!("Scope should be defined before columns")
         block ||= lambda do |model|
           model.send(name)
@@ -207,7 +215,8 @@ module Datagrid
         columns.insert(position, column)
       end
 
-      def find_column_by_name(columns,name) #:nodoc:
+      # @!visibility private
+      def find_column_by_name(columns,name)
         return name if name.is_a?(Datagrid::Columns::Column)
         columns.find do |col|
           col.name.to_sym == name.to_sym
@@ -394,18 +403,20 @@ module Datagrid
       #  row = MyGrid.new.data_row(User.last)
       #  row.id # => user.id
       #  row.number_of_purchases # => user.purchases.count
+      # @return [Datagrid::Columns::DataRow]
       def data_row(asset)
         ::Datagrid::Columns::DataRow.new(self, asset)
       end
 
       # Defines a column at instance level
       #
-      # See Datagrid::Columns::ClassMethods#column for more info
+      # (see Datagrid::Columns::ClassMethods#column)
       def column(name, query = nil, **options, &block)
         self.class.define_column(columns_array, name, query, **options, &block)
       end
 
-      def initialize(*) #:nodoc:
+      # @!visibility private
+      def initialize(*)
         self.columns_array = self.class.columns_array.clone
         super
       end
@@ -461,7 +472,8 @@ module Datagrid
         self.class.decorate(model)
       end
 
-      def generic_value(column, model) #:nodoc:
+      # @!visibility private
+      def generic_value(column, model)
         cache(column, model, :generic_value) do
           presenter = decorate(model)
           unless column.enabled?(self)

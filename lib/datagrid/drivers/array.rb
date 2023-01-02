@@ -1,6 +1,7 @@
 module Datagrid
   module Drivers
-    class Array < AbstractDriver #:nodoc:
+    # @!visibility private
+    class Array < AbstractDriver
 
       def self.match?(scope)
         !Datagrid::Drivers::ActiveRecord.match?(scope) && (scope.is_a?(::Array) || scope.is_a?(Enumerator))

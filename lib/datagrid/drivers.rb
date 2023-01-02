@@ -7,6 +7,7 @@ require "datagrid/drivers/sequel"
 
 
 module Datagrid
-  module Drivers # :nodoc:
+  # @!visibility private
+  module Drivers
   end
 end

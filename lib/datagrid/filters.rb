@@ -34,7 +34,8 @@ module Datagrid
     class DefaultFilterScope
     end
 
-    def self.included(base) #:nodoc:
+    # @!visibility private
+    def self.included(base)
       base.extend         ClassMethods
       base.class_eval do
 
@@ -45,7 +46,7 @@ module Datagrid
 
       end
       base.send :include, InstanceMethods
-    end # self.included
+    end
 
     module ClassMethods
 
@@ -141,7 +142,8 @@ module Datagrid
 
     module InstanceMethods
 
-      def initialize(*args, &block) # :nodoc:
+      # @!visibility private
+      def initialize(*args, &block)
         self.filters_array = self.class.filters_array.clone
         self.filters_array.each do |filter|
           self[filter.name] = filter.default(self)
@@ -149,7 +151,8 @@ module Datagrid
         super(*args, &block)
       end
 
-      def assets # :nodoc:
+      # @!visibility private
+      def assets
         apply_filters(super, filters)
       end
 

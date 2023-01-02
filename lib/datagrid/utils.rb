@@ -1,4 +1,5 @@
 module Datagrid
+  # @!visibility private
   module Utils # :nodoc:
     class << self
 

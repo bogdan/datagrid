@@ -1,8 +1,5 @@
-
 module Datagrid
-
   # Required to be ActiveModel compatible
-  # @!visibility private
   module ActiveModel
     # @!visibility private
     def self.included(base)
@@ -20,38 +17,39 @@ module Datagrid
         end
       end
       base.send :include, InstanceMethods
-    end # self.included
+    end
 
     module ClassMethods
+      # @return [String] URL query parameter name of the grid class
       def param_name
         self.to_s.underscore.tr('/', '_')
       end
     end # ClassMethods
 
-    module InstanceMethods
-      def param_name
-        self.class.param_name
-      end
+    # @return [String] URL query parameter name of the grid class
+    def param_name
+      self.class.param_name
+    end
 
-      def param_key
-        param_name
-      end
+    # @return [String] URL query parameter name of the grid class
+    def param_key
+      param_name
+    end
 
-      def to_key
-        [self.class.param_name]
-      end
+    def to_key
+      [self.class.param_name]
+    end
 
-      def persisted?
-        false
-      end
+    def persisted?
+      false
+    end
 
-      def to_model
-        self
-      end
+    def to_model
+      self
+    end
 
-      def to_param
-        self.param_name
-      end
-    end # InstanceMethods
+    def to_param
+      self.param_name
+    end
   end
 end

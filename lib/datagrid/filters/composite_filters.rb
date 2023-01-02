@@ -1,15 +1,15 @@
 module Datagrid
   module Filters
-    module CompositeFilters #:nodoc:
+    # @!visibility private
+    module CompositeFilters
 
       def self.included(base)
         base.extend         ClassMethods
         base.class_eval do
-
         end
-        base.send :include, InstanceMethods
-      end # self.included
+      end
 
+      # @!visibility private
       module ClassMethods
 
         def date_range_filters(field, from_options = {}, to_options = {})
@@ -41,13 +41,7 @@ module Datagrid
           end
           options
         end
-      end # ClassMethods
-
-      module InstanceMethods
-
-
-      end # InstanceMethods
-
+      end
     end
   end
 end

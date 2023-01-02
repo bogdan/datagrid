@@ -17,7 +17,8 @@ module Datagrid
       datagrid_renderer.format_value(grid, column_name, model)
     end
 
-    def datagrid_format_value(grid, column_name, model) #:nodoc:
+    # @!visibility private
+    def datagrid_format_value(grid, column_name, model)
       datagrid_value(grid, column_name, model)
     end
 
@@ -133,7 +134,8 @@ module Datagrid
 
       attr_reader :grid, :asset
 
-      def initialize(context, grid, asset) # :nodoc:
+      # @!visibility private
+      def initialize(context, grid, asset)
         @context = context
         @grid = grid
         @asset = asset

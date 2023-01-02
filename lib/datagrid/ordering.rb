@@ -5,6 +5,7 @@ module Datagrid
   end
   module Ordering
 
+    # @!visibility private
     def self.included(base)
       base.extend         ClassMethods
       base.class_eval do
@@ -26,7 +27,7 @@ module Datagrid
 
       end
       base.send :include, InstanceMethods
-    end # self.included
+    end
 
     module ClassMethods
 
@@ -38,7 +39,8 @@ module Datagrid
 
     module InstanceMethods
 
-      def assets # :nodoc:
+      # @!visibility private
+      def assets
         check_order_valid!
         apply_order(super)
       end

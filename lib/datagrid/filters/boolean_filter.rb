@@ -1,5 +1,6 @@
 require "datagrid/utils"
-class Datagrid::Filters::BooleanFilter < Datagrid::Filters::BaseFilter #:nodoc:
+# @!visibility private
+class Datagrid::Filters::BooleanFilter < Datagrid::Filters::BaseFilter
 
   def parse(value)
     Datagrid::Utils.booleanize(value)

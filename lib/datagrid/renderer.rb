@@ -1,7 +1,8 @@
 require "action_view"
 
 module Datagrid
-  class Renderer #:nodoc:
+  # @!visibility private
+  class Renderer
 
     def self.for(template)
       new(template)

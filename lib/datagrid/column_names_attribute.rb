@@ -37,24 +37,27 @@ module Datagrid
       end
     end
 
-    def columns(*args, **options) #:nodoc:
+    # @!visibility private
+    def columns(*args, **options)
       super(*selected_column_names(*args), **options)
     end
 
     # Returns a list of enabled columns with <tt>:mandatory => true</tt> option
     # If no mandatory columns specified than all of them considered mandatory
+    # @return [Array<Column>]
     def mandatory_columns
       available_columns.select {|c| c.mandatory? }
     end
 
     # Returns a list of enabled columns without <tt>:mandatory => true</tt> option
+    # @return [Array<Column>]
     def optional_columns
       available_columns - mandatory_columns
     end
 
     protected
 
-    def optional_columns_select #:nodoc:
+    def optional_columns_select
       optional_columns.map {|c| [c.header, c.name] }
     end
 

@@ -1,6 +1,7 @@
 module Datagrid
   module Drivers
-    class AbstractDriver #:nodoc:
+    # @!visibility private
+    class AbstractDriver
 
       TIMESTAMP_CLASSES = [DateTime, Time, ActiveSupport::TimeWithZone]
 

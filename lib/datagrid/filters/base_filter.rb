@@ -1,7 +1,10 @@
+# An error raise when datagrid filter is defined incorrectly and
+# causes filtering chain to be broken
 class Datagrid::FilteringError < StandardError
 end
 
-class Datagrid::Filters::BaseFilter #:nodoc:
+# @!visibility private
+class Datagrid::Filters::BaseFilter
 
   attr_accessor :grid_class, :options, :block, :name
 

@@ -23,6 +23,7 @@ module Datagrid
 
   autoload :Engine
 
+  # @!visibility private
   def self.included(base)
     base.class_eval do
 
@@ -34,7 +35,7 @@ module Datagrid
       include ::Datagrid::Ordering
 
     end
-  end # self.included
+  end
 
   class ConfigurationError < StandardError; end
   class ArgumentError < ::ArgumentError; end
