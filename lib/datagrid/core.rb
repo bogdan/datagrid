@@ -247,6 +247,7 @@ module Datagrid
       end
 
       # Inspects datagrid attributes and their values
+      #
       # @return [String]
       def inspect
         attrs = attributes.map do |key, value|

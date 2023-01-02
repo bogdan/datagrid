@@ -25,9 +25,7 @@ module Datagrid
         class_attribute :cached
         self.cached = false
 
-
         class_attribute :decorator, instance_writer: false
-
       end
       base.send :include, InstanceMethods
     end
@@ -227,6 +225,7 @@ module Datagrid
 
     module InstanceMethods
 
+      # @!visibility private
       def assets
         append_column_preload(
           driver.append_column_queries(
@@ -438,6 +437,7 @@ module Datagrid
       #   grid.search = "keyword"
       #   grid.available_columns # => [ #<Column:id>, #<Column:name>, #<Column:search_match> ]
       #
+      # @return [Array<Datagrid::Columns::Column>]
       def available_columns
         columns_array.select do |column|
           column.enabled?(self)
@@ -558,8 +558,9 @@ module Datagrid
       end
     end
 
-    class DataRow
-
+    # Object representing a single row of data when building a datagrid table
+    # (see Datagrid::Columns::InstanceMethods#data_row)
+    class DataRow < BasicObject
       def initialize(grid, model)
         @grid = grid
         @model = model
