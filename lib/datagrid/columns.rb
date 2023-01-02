@@ -93,12 +93,11 @@ module Datagrid
 
       # Defines new datagrid column
       #
-      # Arguments:
-      #
-      # * <tt>name</tt> - column name
-      # * <tt>query</tt> - a string representing the query to select this column (supports only ActiveRecord)
-      # * <tt>options</tt> - hash of options
-      # * <tt>block</tt> - proc to calculate a column value
+      # @param name [Symbol] column name
+      # @param query [String] a string representing the query to select this column (supports only ActiveRecord)
+      # @param options [Hash<Symbol, Object>] hash of options
+      # @param block [Block] proc to calculate a column value
+      # @return [Datagrid::Columns::Column]
       #
       # Available options:
       #
@@ -126,11 +125,13 @@ module Datagrid
       end
 
       # Returns column definition with given name
+      # @return [Datagrid::Columns::Column, nil]
       def column_by_name(name)
         find_column_by_name(columns_array, name)
       end
 
       # Returns an array of all defined column names
+      # @return [Array<Datagrid::Columns::Column>]
       def column_names
         columns.map(&:name)
       end
@@ -211,6 +212,7 @@ module Datagrid
           self, name, query, default_column_options.merge(options), &block
         )
         columns.insert(position, column)
+        column
       end
 
       # @!visibility private
@@ -357,6 +359,7 @@ module Datagrid
       end
 
       # Finds a column definition by name
+      # @return [Datagrid::Columns::Column, nil]
       def column_by_name(name)
         self.class.find_column_by_name(columns_array, name)
       end
