@@ -8,6 +8,10 @@ module Datagrid
     yield(configuration)
   end
 
-  class Configuration < Struct.new(:date_formats, :datetime_formats)
+  class Configuration
+    # @return [Array<String>] Date parsing formats
+    attr_accessor :date_formats
+    # @return [Array<String>] Timestamp parsing formats
+    attr_accessor :datetime_formats
   end
 end

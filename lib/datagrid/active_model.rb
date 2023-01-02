@@ -16,7 +16,6 @@ module Datagrid
         rescue LoadError
         end
       end
-      base.send :include, InstanceMethods
     end
 
     module ClassMethods
