@@ -1,6 +1,7 @@
 require "datagrid/columns"
 
 module Datagrid
+  # Raised when grid order value is incorrect
   class OrderUnsupported < StandardError
   end
   module Ordering
@@ -29,13 +30,12 @@ module Datagrid
       base.send :include, InstanceMethods
     end
 
+    # @!visibility private
     module ClassMethods
-
       def order_unsupported(name, reason)
         raise Datagrid::OrderUnsupported, "Can not sort #{self.inspect} by ##{name}: #{reason}"
       end
-
-    end # ClassMethods
+    end
 
     module InstanceMethods
 
@@ -129,7 +129,6 @@ module Datagrid
           self.class.order_unsupported(order_column.name, "Order option proc can not handle more than one argument")
         end
       end
-    end # InstanceMethods
-
+    end
   end
 end

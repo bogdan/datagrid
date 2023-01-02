@@ -23,7 +23,7 @@ module Datagrid
       def param_name
         self.to_s.underscore.tr('/', '_')
       end
-    end # ClassMethods
+    end
 
     # @return [String] URL query parameter name of the grid class
     def param_name

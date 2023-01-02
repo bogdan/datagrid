@@ -118,7 +118,7 @@ module Datagrid
         child_class.datagrid_attributes = self.datagrid_attributes.clone
       end
 
-    end # ClassMethods
+    end
 
     module InstanceMethods
 
@@ -246,6 +246,8 @@ module Datagrid
         self.class.send :check_scope_defined!, message
       end
 
+      # Inspects datagrid attributes and their values
+      # @return [String]
       def inspect
         attrs = attributes.map do |key, value|
           "#{key}: #{value.inspect}"
@@ -258,6 +260,6 @@ module Datagrid
           attributes == other.attributes &&
           scope == other.scope
       end
-    end # InstanceMethods
+    end
   end
 end

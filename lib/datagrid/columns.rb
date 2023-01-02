@@ -223,7 +223,7 @@ module Datagrid
         end
       end
 
-    end # ClassMethods
+    end
 
     module InstanceMethods
 
@@ -556,7 +556,7 @@ module Datagrid
 
         context.instance_exec(*args, &column.html_block)
       end
-    end # InstanceMethods
+    end
 
     class DataRow
 

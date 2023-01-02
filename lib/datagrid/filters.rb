@@ -138,7 +138,7 @@ module Datagrid
           "#{filter.name}: #{filter.type}"
         end.join(", ")
       end
-    end # ClassMethods
+    end
 
     module InstanceMethods
 
@@ -227,7 +227,7 @@ module Datagrid
           filter.apply(self, result, filter_value(filter))
         end
       end
-    end # InstanceMethods
+    end
 
   end
 end
