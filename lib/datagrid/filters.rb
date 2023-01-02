@@ -31,8 +31,7 @@ module Datagrid
       :dynamic => Filters::DynamicFilter
     }
 
-    class DefaultFilterScope
-    end
+    DEFAULT_FILTER_BLOCK = Object.new
 
     # @!visibility private
     def self.included(base)
@@ -114,7 +113,7 @@ module Datagrid
       end
 
       def default_filter
-        DefaultFilterScope.new
+        DEFAULT_FILTER_BLOCK
       end
 
       def inspect

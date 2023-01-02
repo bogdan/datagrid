@@ -29,7 +29,7 @@ class Datagrid::Filters::BaseFilter
     result = execute(value, scope, grid_object)
 
     return scope unless result
-    if result.is_a?(Datagrid::Filters::DefaultFilterScope)
+    if result == Datagrid::Filters::DEFAULT_FILTER_BLOCK
       result = default_filter(value, scope, grid_object)
     end
     unless grid_object.driver.match?(result)
