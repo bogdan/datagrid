@@ -379,6 +379,7 @@ module Datagrid
       #       render :partial => "company_with_logo", :locals => {:company => model.company }
       #     end
       #   end
+      # @return [Datagrid::Columns::Column::ResponseFormat] Format object
       def format(value, &block)
         if block_given?
           self.class.format(value, &block)
@@ -412,7 +413,7 @@ module Datagrid
 
       # Defines a column at instance level
       #
-      # (see Datagrid::Columns::ClassMethods#column)
+      # @see Datagrid::Columns::ClassMethods#column
       def column(name, query = nil, **options, &block)
         self.class.define_column(columns_array, name, query, **options, &block)
       end
@@ -562,7 +563,7 @@ module Datagrid
     end
 
     # Object representing a single row of data when building a datagrid table
-    # (see Datagrid::Columns::InstanceMethods#data_row)
+    # @see Datagrid::Columns::InstanceMethods#data_row
     class DataRow < BasicObject
       def initialize(grid, model)
         @grid = grid

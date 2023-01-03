@@ -2,7 +2,6 @@ require "action_view"
 
 module Datagrid
   module FormBuilder
-
     # Returns a form input html for the corresponding filter name
     # <tt>options</tt> are proxied to the related rails input helper:
     #

@@ -8,6 +8,7 @@ module Datagrid
     yield(configuration)
   end
 
+  # Datagrid configuration object
   class Configuration
     # @return [Array<String>] Date parsing formats
     attr_accessor :date_formats
