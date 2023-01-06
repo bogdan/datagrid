@@ -1,6 +1,6 @@
 # Datagrid
 
-[![Build Status](https://travis-ci.org/bogdan/datagrid.svg?branch=master)](https://travis-ci.org/bogdan/datagrid)
+[![Build Status](https://github.com/bogdan/datagrid/workflows/CI/badge.svg?branch=master)](https://github.com/bogdan/datagrid/actions)
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbogdan%2Fdatagrid.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbogdan%2Fdatagrid?ref=badge_shield)
 
