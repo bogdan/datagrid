@@ -10,7 +10,7 @@ group :development do
   gem "rspec"
   gem "nokogiri" # used to test html output
 
-  gem "sqlite3", ">= 1.6.0.rc2", platform: :mri
+  gem "sqlite3", platform: :mri
   gem "sequel"
 
   group :mongo do
