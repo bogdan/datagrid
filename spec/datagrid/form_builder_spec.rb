@@ -365,7 +365,7 @@ describe Datagrid::FormBuilder do
       end
       it { should equal_to_dom(
         # hidden is important when default is set to true
-        '<input name="report[disabled]" type="hidden" value="0"><input class="disabled boolean_filter" type="checkbox" value="1" checked name="report[disabled]" id="report_disabled">'
+        '<input name="report[disabled]" type="hidden" value="0" autocomplete="off"><input class="disabled boolean_filter" type="checkbox" value="1" checked name="report[disabled]" id="report_disabled">'
       )}
     end
     context "with xboolean filter type" do
@@ -576,7 +576,7 @@ DOM
         end
         let(:expected_html) do
           <<-HTML
-          <input class="condition dynamic_filter field" name="report[condition][]" value="id" type="hidden" id="report_condition"><select class="condition dynamic_filter operation" name="report[condition][]" id="report_condition"><option value="&gt;=">≥</option>
+          <input class="condition dynamic_filter field" name="report[condition][]" value="id" autocomplete="off" type="hidden" id="report_condition"><select class="condition dynamic_filter operation" name="report[condition][]" id="report_condition"><option value="&gt;=">≥</option>
        <option value="&lt;=">≤</option></select><input class="condition dynamic_filter value" name="report[condition][]" type="text" id="report_condition">
           HTML
         end
@@ -588,7 +588,7 @@ DOM
         end
         let(:expected_html) do
           <<-HTML
-          <select class="condition dynamic_filter field" name="report[condition][]" id="report_condition"><option value="id">id</option><option value="name">name</option></select><input class="condition dynamic_filter operation" name="report[condition][]" value="=" type="hidden" id="report_condition"><input class="condition dynamic_filter value" name="report[condition][]" type="text" id="report_condition">
+          <select class="condition dynamic_filter field" name="report[condition][]" id="report_condition"><option value="id">id</option><option value="name">name</option></select><input class="condition dynamic_filter operation" name="report[condition][]" value="=" autocomplete="off" type="hidden" id="report_condition"><input class="condition dynamic_filter value" name="report[condition][]" type="text" id="report_condition">
           HTML
         end
         it {should equal_to_dom(expected_html)}

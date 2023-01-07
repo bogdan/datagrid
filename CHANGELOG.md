@@ -1,6 +1,11 @@
+## master (unreleased)
+
+* Drop support of old Ruby versions (< 2.7)
+* Drop support of old Rails versions (< 6.0)
+
 ## 1.6.3
 
-* Fix usage of options spread operator for ruby 3.0 [#296](https://github.com/bogdan/datagrid/issues/296)
+* Fix usage of options spread operator for Ruby 3.0 [#296](https://github.com/bogdan/datagrid/issues/296)
 
 ## 1.6.2
 
