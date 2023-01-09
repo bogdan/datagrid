@@ -22,7 +22,7 @@ module Datagrid
       # in column names selection
       # Accepts same options as <tt>:enum</tt> filter
       #
-      # Examples:
+      # @example
       #
       #   column_names_filter(header: "Choose columns")
       #
