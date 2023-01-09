@@ -21,11 +21,9 @@ module Datagrid
       # will always present in the grid table and won't be listed
       # in column names selection
       # Accepts same options as <tt>:enum</tt> filter
-      #
       # @example
-      #
       #   column_names_filter(header: "Choose columns")
-      #
+      # @see Datagrid::Filters::ClassMethods#filter
       def column_names_filter(**options)
         filter(
           :column_names, :enum,
@@ -42,7 +40,7 @@ module Datagrid
       super(*selected_column_names(*args), **options)
     end
 
-    # Returns a list of enabled columns with <tt>:mandatory => true</tt> option
+    # Returns a list of enabled columns with <tt>mandatory: true</tt> option
     # If no mandatory columns specified than all of them considered mandatory
     # @return [Array<Column>]
     def mandatory_columns
@@ -50,6 +48,7 @@ module Datagrid
     end
 
     # Returns a list of enabled columns without <tt>:mandatory => true</tt> option
+    # If no mandatory columns specified than all of them considered mandatory but not optional
     # @return [Array<Column>]
     def optional_columns
       available_columns - mandatory_columns

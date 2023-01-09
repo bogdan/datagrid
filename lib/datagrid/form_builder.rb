@@ -2,12 +2,12 @@ require "action_view"
 
 module Datagrid
   module FormBuilder
-    # Returns a form input html for the corresponding filter name
-    # <tt>options</tt> are proxied to the related rails input helper:
-    #
-    # * <tt>select</tt> for enum, xboolean filter types
-    # * <tt>check_box</tt> for boolean filter type
-    # * <tt>text_field</tt> for other filter types
+    # @param filter_or_attribute [Datagrid::Filters::Filter, String] filter object or filter name
+    # @param options [Hash] options of rails form input helper
+    # @return [String] a form input html for the corresponding filter name
+    #   * <tt>select</tt> for enum, xboolean filter types
+    #   * <tt>check_box</tt> for boolean filter type
+    #   * <tt>text_field</tt> for other filter types
     def datagrid_filter(filter_or_attribute, options = {}, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       options = {
@@ -19,8 +19,10 @@ module Datagrid
       self.send(filter.form_builder_helper_name, filter, options, &block)
     end
 
-    # Returns a form label html for the corresponding filter name
-    # <tt>options</tt> are proxied to rails <tt>label</tt> helper
+    # @param filter_or_attribute [Datagrid::Filters::Filter, String] filter object or filter name
+    # @param text [String, nil] label text, defaults to <tt>filter.header</tt>
+    # @param options [Hash] options of rails <tt>label</tt> helper
+    # @return [String] a form label html for the corresponding filter name
     def datagrid_label(filter_or_attribute, text = nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       label(filter.name, text || filter.header, **filter.label_options, **options, &block)

@@ -6,13 +6,12 @@ module Datagrid
 
     # Returns individual cell value from the given grid, column name and model
     # Allows to render custom HTML layout for grid data
-    #
+    # @example
     #   <ul>
     #     <% @grid.columns.each do |column|
     #       <li><%= column.header %>: <%= datagrid_value(@grid, column.name, @resource %></li>
     #     <% end %>
     #   </ul>
-    #
     def datagrid_value(grid, column_name, model)
       datagrid_renderer.format_value(grid, column_name, model)
     end
@@ -25,10 +24,6 @@ module Datagrid
     # Renders html table with columns defined in grid class.
     # In the most common used you need to pass paginated collection
     # to datagrid table because datagrid do not have pagination compatibilities:
-    #
-    #   assets = grid.assets.page(params[:page])
-    #   datagrid_table(grid, assets, options)
-    #
     # Supported options:
     #
     # * <tt>:html</tt> - hash of attributes for <table> tag
@@ -39,6 +34,9 @@ module Datagrid
     #   and needs different columns. Default: all defined columns.
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
+    # @example
+    #   assets = grid.assets.page(params[:page])
+    #   datagrid_table(grid, assets, options)
     def datagrid_table(grid, assets = grid.assets, **options)
       datagrid_renderer.table(grid, assets, **options)
     end
@@ -67,6 +65,7 @@ module Datagrid
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
     #
+    # @example
     #   = datagrid_rows(grid) # Generic table rows Layout
     #
     #   = datagrid_rows(grid) do |row| # Custom Layout
@@ -100,6 +99,8 @@ module Datagrid
 
     # Provides access to datagrid columns data.
     #
+    # Used in case you want to build html table completelly manually
+    # @example
     #   # Suppose that <tt>grid</tt> has first_name and last_name columns
     #   <%= datagrid_row(grid, user) do |row| %>
     #     <tr>
@@ -107,8 +108,6 @@ module Datagrid
     #       <td><%= row.last_name %></td>
     #     </tr>
     #   <% end %>
-    #
-    # Used in case you want to build html table completelly manually
     def datagrid_row(grid, asset, &block)
       HtmlRow.new(self, grid, asset).tap do |row|
         if block_given?
@@ -123,11 +122,15 @@ module Datagrid
     end
 
     # Represents a datagrid row that provides access to column values for the given asset
-    #
+    # @example
     #   row = datagrid_row(grid, user)
+    #   row.class      # => Datagrid::Helper::HtmlRow
     #   row.first_name # => "<strong>Bogdan</strong>"
     #   row.grid       # => Grid object
     #   row.asset      # => User object
+    #   row.each do |value|
+    #     puts value
+    #   end
     class HtmlRow
 
       include Enumerable
@@ -141,15 +144,16 @@ module Datagrid
         @asset = asset
       end
 
-      # Return a column value for given column name
+      # @return [Object] a column value for given column name
       def get(column)
         @context.datagrid_value(@grid, column, @asset)
       end
 
       # Iterates over all column values that are available in the row
-      def each
+      # param block [Proc] column value iterator
+      def each(&block)
         @grid.columns.each do |column|
-          yield(get(column))
+          block.call(get(column))
         end
       end
 

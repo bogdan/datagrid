@@ -45,21 +45,20 @@ module Datagrid
         apply_order(super)
       end
 
-      # Returns a column definition that is currently used to order assets
-      #
+      # @return [Datagrid::Columns::Column, nil] a column definition that is currently used to order assets
+      # @example
       #   class MyGrid
       #     scope { Model }
       #     column(:id)
       #     column(:name)
       #   end
-      #   MyGrid.new(:order => "name").order_column # => #<Column name: "name", ...>
-      #
+      #   MyGrid.new(order: "name").order_column # => #<Column name: "name", ...>
       def order_column
-        order && column_by_name(order)
+        order ? column_by_name(order) : nil
       end
 
-      # Returns true if given grid is ordered by given column.
-      # <tt>column</tt> can be given as name or as column object
+      # @param column [String, Datagrid::Columns::Column]
+      # @return [Boolean] true if given grid is ordered by given column.
       def ordered_by?(column)
         order_column == column_by_name(column)
       end
