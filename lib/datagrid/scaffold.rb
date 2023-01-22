@@ -124,6 +124,6 @@ RUBY
 
   def file_exists?(name)
     name = Rails.root.join(name) unless name.to_s.first == "/"
-    File.exists?(name)
+    File.exist?(name)
   end
 end
