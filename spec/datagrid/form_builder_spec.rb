@@ -19,7 +19,7 @@ describe Datagrid::FormBuilder do
   let(:view) { ActionView::Helpers::FormBuilder.new(:report, _grid, template, view_options)}
   let(:view_options) { {} }
 
-  SELECT_EMPTY_OPTION = Rails.version >= "6.0" ? '<option value="" label=" "></option>' : '<option value=""></option>'
+  SELECT_EMPTY_OPTION = '<option value="" label=" "></option>'
   AUTOCOMPLETE_OPTION = Rails.version >= "7.0" ? 'autocomplete="off"' : ''
 
 
@@ -266,9 +266,6 @@ describe Datagrid::FormBuilder do
       )}
 
       context "when block is given" do
-        before(:each) do
-          skip("not supported by rails < 4.1") if Rails.version < '4.1'
-        end
         let(:_filter_block ) do
           proc do
             template.content_tag(:option, 'block option', :value => 'block_value')
@@ -331,23 +328,12 @@ describe Datagrid::FormBuilder do
           end
         end
         let(:_filter) { :category }
-        if Rails.version >= "4.1"
-          it { should equal_to_dom(
-            '
+        it { should equal_to_dom(
+          '
 <label class="category enum_filter checkboxes" for="report_category_first"><input id="report_category_first" type="checkbox" value="first" name="report[category][]" />first</label>
 <label class="category enum_filter checkboxes" for="report_category_second"><input id="report_category_second" type="checkbox" value="second" name="report[category][]" />second</label>
-            '
-          )}
-        else
-          it { should equal_to_dom(
-            '
-<label class="category enum_filter checkboxes" for="report_category_first"><input id="report_category_first" name="report[category][]" type="checkbox" value="first" />first</label>
-<label class="category enum_filter checkboxes" for="report_category_second"><input id="report_category_second" name="report[category][]" type="checkbox" value="second" />second</label>
-            '
-          )}
-
-
-        end
+          '
+        )}
 
         context "when partials option passed and partial exists" do
           let(:view_options) { {partials: 'custom_checkboxes'} }

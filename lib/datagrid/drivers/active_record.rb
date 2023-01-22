@@ -19,7 +19,7 @@ module Datagrid
         # We can only reveal it by checking if it respond to some specific
         # to ActiveRecord method like #scoped
         if scope.is_a?(Class)
-          Rails.version >= "4.0" ? scope.all : scope.scoped({})
+          scope.all
         elsif scope.respond_to?(:scoped)
           scope.scoped
         else
@@ -43,7 +43,7 @@ module Datagrid
       end
 
       def asc(scope, order)
-        # Rails 3.x.x don't able to override already applied order
+        # Relation#order isn't able to override already applied order
         # Using #reorder instead
         scope.reorder(order)
       end

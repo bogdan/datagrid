@@ -42,6 +42,7 @@ end
 class CssPattern
   def initialize(pattern)
     @css_pattern = pattern
+    @error_message = nil
     unless @css_pattern.is_a?(Hash)
       @css_pattern = Array(@css_pattern).map do |key|
         [key, 1]
@@ -54,10 +55,6 @@ class CssPattern
     false
   end
 
-  def failure_message
-    @error_message || ""
-  end
-
   def matches?(text)
     text = text.clone.force_encoding("UTF-8") if "1.9.3".respond_to? :force_encoding
 
@@ -65,7 +62,7 @@ class CssPattern
     @css_pattern.each do |css, amount_or_pattern_or_string_or_proc|
       path = @matcher.css(css)
       if amount_or_pattern_or_string_or_proc.is_a?(String) or amount_or_pattern_or_string_or_proc.is_a?(Regexp)
-        pattern_or_string = amount_or_pattern_or_string_or_proc 
+        pattern_or_string = amount_or_pattern_or_string_or_proc
         html = path.inner_html
         if !html.match(pattern_or_string)
           return error!("#{css.inspect} did not match #{pattern_or_string.inspect}. It was \n:#{html.inspect}")
@@ -74,6 +71,7 @@ class CssPattern
         expected_amount = amount_or_pattern_or_string_or_proc
         amount = path.size
         if amount != expected_amount
+          puts text
           return error!("did not find #{css.inspect} #{expected_amount.inspect} times. It was #{amount.inspect}")
         end
       elsif amount_or_pattern_or_string_or_proc.is_a? Proc
@@ -84,11 +82,11 @@ class CssPattern
         raise "Instance of String, Rexexp, Proc or Fixnum required"
       end
       true
-    end 
+    end
   end
 
   def failure_message
-    "Expected to match dom pattern. But it wasn't."
+    @error_message || "Expected to match dom pattern. But it wasn't."
   end
 
   def failure_message_when_negated
