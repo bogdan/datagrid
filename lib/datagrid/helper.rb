@@ -4,21 +4,23 @@ require "action_view"
 module Datagrid
   module Helper
 
-    # Returns individual cell value from the given grid, column name and model
-    # Allows to render custom HTML layout for grid data
+    # @param grid [Datagrid] grid object
+    # @param column [Datagrid::Columns::Column, String, Symbol] column name
+    # @param model [Object] an object from grid scope
+    # @return [Object] individual cell value from the given grid, column name and model
     # @example
     #   <ul>
     #     <% @grid.columns.each do |column|
     #       <li><%= column.header %>: <%= datagrid_value(@grid, column.name, @resource %></li>
     #     <% end %>
     #   </ul>
-    def datagrid_value(grid, column_name, model)
-      datagrid_renderer.format_value(grid, column_name, model)
+    def datagrid_value(grid, column, model)
+      datagrid_renderer.format_value(grid, column, model)
     end
 
     # @!visibility private
-    def datagrid_format_value(grid, column_name, model)
-      datagrid_value(grid, column_name, model)
+    def datagrid_format_value(grid, column, model)
+      datagrid_value(grid, column, model)
     end
 
     # Renders html table with columns defined in grid class.
@@ -34,6 +36,9 @@ module Datagrid
     #   and needs different columns. Default: all defined columns.
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
+    # @param grid [Datagrid] grid object
+    # @param assets [Array] objects from grid scope
+    # @return [String] table tag HTML markup
     # @example
     #   assets = grid.assets.page(params[:page])
     #   datagrid_table(grid, assets, options)
@@ -49,6 +54,8 @@ module Datagrid
     #   Default: true
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
+    # @param grid [Datagrid] grid object
+    # @return [String] HTML table header tag markup
     def datagrid_header(grid, options = {})
       datagrid_renderer.header(grid, options)
     end
@@ -93,21 +100,30 @@ module Datagrid
     # * <tt>:partials</tt> - Path for form partial lookup.
     #   Default: 'datagrid'.
     # * All options supported by Rails <tt>form_for</tt> helper
+    # @param grid [Datagrid] grid object
+    # @return [String] form HTML tag markup
     def datagrid_form_for(grid, options = {})
       datagrid_renderer.form_for(grid, options)
     end
 
     # Provides access to datagrid columns data.
-    #
     # Used in case you want to build html table completelly manually
+    # @param grid [Datagrid] grid object
+    # @param asset [Object] object from grid scope
+    # @param block [Proc] block with Datagrid::Helper::HtmlRow as an argument returning a HTML markup as a String
+    # @return [Datagrid::Helper::HtmlRow, String] captured HTML markup if block given otherwise row object
     # @example
-    #   # Suppose that <tt>grid</tt> has first_name and last_name columns
+    #   # Suppose that grid has first_name and last_name columns
     #   <%= datagrid_row(grid, user) do |row| %>
     #     <tr>
     #       <td><%= row.first_name %></td>
     #       <td><%= row.last_name %></td>
     #     </tr>
     #   <% end %>
+    # @example
+    #   <% row = datagrid_row(grid, user) %>
+    #   First Name: <%= row.first_name %>
+    #   Last Name: <%= row.last_name %>
     def datagrid_row(grid, asset, &block)
       HtmlRow.new(self, grid, asset).tap do |row|
         if block_given?
@@ -117,6 +133,10 @@ module Datagrid
     end
 
     # Generates an ascending or descending order url for the given column
+    # @param grid [Datagrid] grid object
+    # @param column [Datagrid::Columns::Column, String, Symbol] column name
+    # @param descending [Boolean] specifies order direction. Ascending if false, otherwise descending.
+    # @return [String] order layout HTML markup
     def datagrid_order_path(grid, column, descending)
       datagrid_renderer.order_path(grid, column, descending, request)
     end

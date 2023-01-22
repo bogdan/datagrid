@@ -42,14 +42,14 @@ module Datagrid
 
     # Returns a list of enabled columns with <tt>mandatory: true</tt> option
     # If no mandatory columns specified than all of them considered mandatory
-    # @return [Array<Column>]
+    # @return [Array<Datagrid::Columns::Column>]
     def mandatory_columns
       available_columns.select {|c| c.mandatory? }
     end
 
     # Returns a list of enabled columns without <tt>:mandatory => true</tt> option
     # If no mandatory columns specified than all of them considered mandatory but not optional
-    # @return [Array<Column>]
+    # @return [Array<Datagrid::Columns::Column>]
     def optional_columns
       available_columns - mandatory_columns
     end

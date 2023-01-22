@@ -2,7 +2,7 @@ require "action_view"
 
 module Datagrid
   module FormBuilder
-    # @param filter_or_attribute [Datagrid::Filters::Filter, String] filter object or filter name
+    # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
     # @param options [Hash] options of rails form input helper
     # @return [String] a form input html for the corresponding filter name
     #   * <tt>select</tt> for enum, xboolean filter types
@@ -19,7 +19,7 @@ module Datagrid
       self.send(filter.form_builder_helper_name, filter, options, &block)
     end
 
-    # @param filter_or_attribute [Datagrid::Filters::Filter, String] filter object or filter name
+    # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
     # @param text [String, nil] label text, defaults to <tt>filter.header</tt>
     # @param options [Hash] options of rails <tt>label</tt> helper
     # @return [String] a form label html for the corresponding filter name
