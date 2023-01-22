@@ -1,5 +1,7 @@
 ## master (unreleased)
 
+* Depend on `railties` instead of `rails` to prevent loading of unnecessary frameworks
+* Bugfix `File.exist?` usage for ruby 3.0 [#307](https://github.com/bogdan/datagrid/issues/307)
 * Drop support of old Ruby versions (< 2.7)
 * Drop support of old Rails versions (< 6.0)
 
