@@ -32,6 +32,6 @@ Gem::Specification.new do |s|
     "source_code_uri" => s.homepage,
   }
 
-  s.add_dependency "rails", ">= 6.0"
+  s.add_dependency "railties", ">= 6.0"
 end
 

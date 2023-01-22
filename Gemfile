@@ -12,6 +12,7 @@ group :development do
 
   gem "sqlite3", platform: :mri
   gem "sequel"
+  gem "activerecord"
 
   group :mongo do
     gem "mongoid"
