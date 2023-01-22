@@ -12,7 +12,11 @@ jobs:
           - '3.0'
           - '3.1'
           - '3.2'
-    name: 'Ruby ${{ matrix.ruby-version }}'
+        rails-version:
+          - '6.0'
+          - '6.1'
+          - '7.0'
+    name: 'Ruby ${{ matrix.ruby-version }}, Rails ${{ matrix.rails-version }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -21,4 +25,6 @@ jobs:
         with:
           ruby-version: '${{ matrix.ruby-version }}'
           bundler-cache: true
+        env:
+          TEST_RAILS_VERSION: '${{ matrix.rails-version }}'
       - run: bundle exec rake
