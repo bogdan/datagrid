@@ -54,7 +54,7 @@ class UsersGrid
   filter(:group_id, :integer, multiple: true)
   filter(:logins_count, :integer, range: true)
   filter(:group_name, :string, header: "Group") do |value|
-    self.joins(:group).where(:groups => {:name => value})
+    self.joins(:group).where(groups: {name: value})
   end
 
   column(:name)
@@ -72,11 +72,11 @@ Basic grid api:
 
 ``` ruby
 report = UsersGrid.new(
-  :group_id => [1,2], 
-  :logins_count => [1, nil],
-  :category => "first",
-  :order => :group,
-  :descending => true
+  group_id: [1,2], 
+  logins_count: [1, nil],
+  category: "first",
+  order: :group,
+  descending: true
 )
 
 report.assets # => Array of User instances:
@@ -145,7 +145,7 @@ Datagrid supports different type of filters including:
 Each column is represented by name and code block to calculate the value.
 
 ``` ruby
-column(:activated, :header => "Active", :order => "activated", :after => :name) do
+column(:activated, header: "Active", order: "activated", after: :name) do
   self.activated?
 end
 ```
