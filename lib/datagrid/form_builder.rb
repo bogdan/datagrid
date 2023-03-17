@@ -54,6 +54,11 @@ module Datagrid
       text_field filter.name, value: object.filter_value_as_string(filter), **options
     end
 
+    def datagrid_text_filter(attribute_or_filter, options = {})
+      filter = datagrid_get_filter(attribute_or_filter)
+      text_area filter.name, value: object.filter_value_as_string(filter), **options
+    end
+
     def datagrid_enum_filter(attribute_or_filter, options = {}, &block)
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.checkboxes?

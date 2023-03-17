@@ -392,6 +392,19 @@ describe Datagrid::FormBuilder do
       end
     end
 
+    context "with text filter" do
+      let(:_grid) do
+        test_report do
+          scope {Entry}
+          filter(:name, :text)
+        end
+      end
+
+      let(:_filter) { :name }
+
+      it {should equal_to_dom('<textarea class="name text_filter" name="report[name]" id="report_name">')}
+    end
+
     context "with non multiple filter" do
       let(:_grid) do
         test_report do

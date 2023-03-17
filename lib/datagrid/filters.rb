@@ -16,6 +16,7 @@ module Datagrid
     require "datagrid/filters/string_filter"
     require "datagrid/filters/float_filter"
     require "datagrid/filters/dynamic_filter"
+    require "datagrid/filters/text_filter"
 
     FILTER_TYPES = {
       :date => Filters::DateFilter,
@@ -28,7 +29,8 @@ module Datagrid
       :integer => Filters::IntegerFilter,
       :enum => Filters::EnumFilter,
       :float => Filters::FloatFilter,
-      :dynamic => Filters::DynamicFilter
+      :dynamic => Filters::DynamicFilter,
+      :text => Filters::TextFilter
     }
 
     DEFAULT_FILTER_BLOCK = Object.new

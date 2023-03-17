@@ -34,7 +34,7 @@ shared_examples_for "Datagrid" do
         let(:filter_value) do
           
           case Datagrid::Filters::FILTER_TYPES.invert[filter.class]
-          when :default, :string
+          when :default, :string, :text
             "text"
           when :date
             1.day.ago
