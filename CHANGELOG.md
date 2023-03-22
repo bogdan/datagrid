@@ -1,3 +1,7 @@
+## master
+
+* Fixed scope wrapping to be universal
+
 ## 1.7.0
 
 * Depend on `railties` instead of `rails` to prevent loading of unnecessary frameworks
