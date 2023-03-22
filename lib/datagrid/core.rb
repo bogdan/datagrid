@@ -57,13 +57,13 @@ module Datagrid
           self
         else
           check_scope_defined!
-          scope_value.call
+          driver.to_scope(scope_value.call)
         end
       end
 
       # @!visibility private
       def driver
-        @driver ||= Drivers::AbstractDriver.guess_driver(scope).new
+        @driver ||= Drivers::AbstractDriver.guess_driver(scope_value.call).new
       end
 
       # Allows dynamic columns definition, that could not be defined at class level
@@ -162,7 +162,7 @@ module Datagrid
 
       # @return [Object] a scope relation (e.g ActiveRecord::Relation) with all applied filters
       def assets
-        driver.to_scope(scope)
+        scope
       end
 
       # Updates datagrid attributes with a passed hash argument
@@ -223,7 +223,7 @@ module Datagrid
           self
         else
           check_scope_defined!
-          scope_value.call
+          driver.to_scope(scope_value.call)
         end
       end
 

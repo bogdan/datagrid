@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Datagrid::Filters::CompositeFilters do
-  
+
   describe ".date_range_filters" do
-    
+
     it "should generate from date and to date filters" do
       e1 = Entry.create!(:shipping_date => 6.days.ago)
       e2 = Entry.create!(:shipping_date => 4.days.ago)

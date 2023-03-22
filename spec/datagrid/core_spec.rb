@@ -15,6 +15,14 @@ describe Datagrid::Core do
     end
 
     describe '#scope' do
+
+      it "wraps scope" do
+        grid = test_report do
+          scope { Entry }
+        end
+        expect(grid.scope).to be_kind_of(ActiveRecord::Relation)
+      end
+
       context 'in the class' do
         let(:report) { report_class.new }
 
@@ -34,7 +42,6 @@ describe Datagrid::Core do
             expect(Ns83827::TestGrid.new.assets.order_values).to eq(["id asc"])
           end
         end
-
       end
 
       context 'changes scope on the fly' do

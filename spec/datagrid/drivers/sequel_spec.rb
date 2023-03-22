@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Datagrid::Drivers::Sequel do
 
   describe ".match?" do
-    
+
     subject { described_class }
 
     it {should be_match(SequelEntry)}
@@ -33,7 +33,6 @@ describe Datagrid::Drivers::Sequel do
         :disabled => true
       )
     end
-
 
     describe '#assets' do
       subject { super().assets }
@@ -101,7 +100,7 @@ describe Datagrid::Drivers::Sequel do
     it "should support batch_size" do
       report = test_report do
         scope { SequelEntry }
-        self.batch_size = 1 
+        self.batch_size = 1
         column(:name)
       end
 

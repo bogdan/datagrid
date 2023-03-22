@@ -172,8 +172,8 @@ class Datagrid::Filters::BaseFilter
 
   def default_filter(value, scope, grid)
     return nil if dummy?
-    if !driver.has_column?(scope, name) && driver.to_scope(scope).respond_to?(name)
-      driver.to_scope(scope).send(name, value)
+    if !driver.has_column?(scope, name) && scope.respond_to?(name)
+      scope.send(name, value)
     else
       default_filter_where(scope, value)
     end
