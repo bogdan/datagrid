@@ -94,8 +94,8 @@ RSpec.configure do |config|
   end
 
   if NO_MONGO
-    config.filter_run_excluding :mongoid => true
-    config.filter_run_excluding :mongomapper => true
+    config.filter_run_excluding mongoid: true
+    config.filter_run_excluding mongomapper: true
   end
 
   config.expect_with :rspec do |c|

@@ -41,9 +41,9 @@ module Datagrid
 
       _render_partial('table', options[:partials],
                       {
-                        :grid => grid,
-                        :options => options,
-                        :assets => assets
+                        grid: grid,
+                        options: options,
+                        assets: assets
                       })
     end
 

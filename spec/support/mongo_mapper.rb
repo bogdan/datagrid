@@ -6,8 +6,8 @@ if defined?(MongoMapper)
     key :group_id, Integer
     key :name, String
     key :category, String
-    key :disabled, Boolean, :default => false
-    key :confirmed, Boolean, :default => false
+    key :disabled, Boolean, default: false
+    key :confirmed, Boolean, default: false
     key :shipping_date, Time
     timestamps!
 

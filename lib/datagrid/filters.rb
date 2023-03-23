@@ -18,17 +18,17 @@ module Datagrid
     require "datagrid/filters/dynamic_filter"
 
     FILTER_TYPES = {
-      :date => Filters::DateFilter,
-      :datetime => Filters::DateTimeFilter,
-      :string => Filters::StringFilter,
-      :default => Filters::DefaultFilter,
-      :eboolean => Filters::BooleanEnumFilter ,
-      :xboolean => Filters::ExtendedBooleanFilter ,
-      :boolean => Filters::BooleanFilter ,
-      :integer => Filters::IntegerFilter,
-      :enum => Filters::EnumFilter,
-      :float => Filters::FloatFilter,
-      :dynamic => Filters::DynamicFilter
+      date: Filters::DateFilter,
+      datetime: Filters::DateTimeFilter,
+      string: Filters::StringFilter,
+      default: Filters::DefaultFilter,
+      eboolean: Filters::BooleanEnumFilter ,
+      xboolean: Filters::ExtendedBooleanFilter ,
+      boolean: Filters::BooleanFilter ,
+      integer: Filters::IntegerFilter,
+      enum: Filters::EnumFilter,
+      float: Filters::FloatFilter,
+      dynamic: Filters::DynamicFilter
     }
 
     DEFAULT_FILTER_BLOCK = Object.new

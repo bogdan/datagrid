@@ -17,7 +17,7 @@ module Datagrid
       # Adds a filter that acts like a column selection
       # All defined columns will be available to select/deselect
       # as a multi-select enum filter.
-      # Columns with <tt>:mandatory => true</tt> option
+      # Columns with <tt>mandatory: true</tt> option
       # will always present in the grid table and won't be listed
       # in column names selection
       # Accepts same options as <tt>:enum</tt> filter
@@ -47,7 +47,7 @@ module Datagrid
       available_columns.select {|c| c.mandatory? }
     end
 
-    # Returns a list of enabled columns without <tt>:mandatory => true</tt> option
+    # Returns a list of enabled columns without <tt>mandatory: true</tt> option
     # If no mandatory columns specified than all of them considered mandatory but not optional
     # @return [Array<Datagrid::Columns::Column>]
     def optional_columns

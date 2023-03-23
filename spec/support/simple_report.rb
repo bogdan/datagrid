@@ -27,16 +27,16 @@ class SimpleReport
     ::Entry.includes(:group).order("entries.created_at")
   end
 
-  filter(:group_id, :integer, :multiple => true)
-  filter(:category, :enum, :select => ["first", "second"])
+  filter(:group_id, :integer, multiple: true)
+  filter(:category, :enum, select: ["first", "second"])
   filter(:disabled, :xboolean)
   filter(:confirmed, :boolean)
 
   filter(:name) do |value|
-    self.where(:name => value)
+    self.where(name: value)
   end
 
-  column(:group, :order => "groups.name") do
+  column(:group, order: "groups.name") do
     self.group.name
   end
 
@@ -44,17 +44,17 @@ class SimpleReport
     user.name
   end
 
-  column(:actions, :html => true) do |model|
-    render :partial => "/actions", :locals => {:model => model}
+  column(:actions, html: true) do |model|
+    render partial: "/actions", locals: {model: model}
   end
 
-  column(:pet, :html => lambda {|data| content_tag :em, data}) do
+  column(:pet, html: lambda {|data| content_tag :em, data}) do
     self.pet.try(:upcase)
   end
 
-  column(:shipping_date, :before => :group)
+  column(:shipping_date, before: :group)
 
-  column(:access_level, :html => lambda {|data| content_tag :h1, data}, :after => :actions)
+  column(:access_level, html: lambda {|data| content_tag :h1, data}, after: :actions)
 
   def param_name
     :report

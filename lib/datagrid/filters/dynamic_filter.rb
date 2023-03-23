@@ -80,7 +80,7 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
 
   def operations_select
     operations.map do |operation|
-      [I18n.t(operation, :scope => "datagrid.filters.dynamic.operations").html_safe, operation]
+      [I18n.t(operation, scope: "datagrid.filters.dynamic.operations").html_safe, operation]
     end
   end
 

@@ -5,7 +5,7 @@ class <%= grid_class_name %> < BaseGrid
   end
 
   filter(:id, :integer)
-  filter(:created_at, :date, :range => true)
+  filter(:created_at, :date, range: true)
 
   column(:id)
   column(:name)

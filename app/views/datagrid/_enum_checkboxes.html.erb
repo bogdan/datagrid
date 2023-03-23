@@ -4,8 +4,8 @@ You can add indent if whitespace doesn't matter for you
 %>
 <%- elements.each do |value, text, checked| -%>
 <%- id = [form.object_name, filter.name, value].join('_').underscore -%>
-<%= form.label filter.name, options.merge(:for => id) do -%>
-<%= form.check_box(filter.name, {:multiple => true, :id => id, :checked => checked, :include_hidden => false}, value.to_s, nil) -%>
+<%= form.label filter.name, options.merge(for: id) do -%>
+<%= form.check_box(filter.name, {multiple: true, id: id, checked: checked, include_hidden: false}, value.to_s, nil) -%>
 <%= text -%>
 <%- end -%>
 <%- end -%>

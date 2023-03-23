@@ -1,6 +1,6 @@
 require "sqlite3"
 
-ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
+ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 #ActiveRecord::Base.configurations = true
 
 ActiveRecord::Base.logger = TEST_LOGGER
@@ -9,7 +9,7 @@ ActiveRecord::Base.logger = TEST_LOGGER
 
 
 ActiveRecord::Schema.verbose = false
-ActiveRecord::Schema.define(:version => 1) do
+ActiveRecord::Schema.define(version: 1) do
 
   create_table :entries do |t|
     t.integer :group_id
@@ -17,8 +17,8 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string :category
     t.string :access_level
     t.string :pet
-    t.boolean :disabled, :null => false, :default => false
-    t.boolean :confirmed, :null => false, :default => false
+    t.boolean :disabled, null: false, default: false
+    t.boolean :confirmed, null: false, default: false
     t.date :shipping_date
     t.timestamps
   end

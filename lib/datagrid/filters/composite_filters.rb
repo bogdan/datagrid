@@ -39,7 +39,7 @@ module Datagrid
 
         def normalize_composite_filter_options(options, field)
           if options.is_a?(String) || options.is_a?(Symbol)
-            options = {:name => options}
+            options = {name: options}
           end
           options
         end

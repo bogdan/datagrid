@@ -3,9 +3,9 @@
   <%= link_to(
       I18n.t("datagrid.table.order.asc").html_safe,
       url_for(grid.query_params(order: column.name, descending: false)),
-      :class => "asc") %>
+      class: "asc") %>
   <%= link_to(
       I18n.t("datagrid.table.order.desc").html_safe,
       url_for(grid.query_params(order: column.name, descending: true)),
-      :class => "desc") %>
+      class: "desc") %>
 </div>

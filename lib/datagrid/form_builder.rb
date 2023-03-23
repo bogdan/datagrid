@@ -65,12 +65,12 @@ module Datagrid
           [value, text, checked]
         end
         @template.render(
-          :partial => partial,
-          :locals => {
-            :elements => elements,
-            :form => self,
-            :filter => filter,
-            :options => options,
+          partial: partial,
+          locals: {
+            elements: elements,
+            form: self,
+            filter: filter,
+            options: options,
           }
         )
       else
@@ -112,21 +112,26 @@ module Datagrid
       filter = datagrid_get_filter(attribute_or_filter)
       input_name = "#{object_name}[#{filter.name.to_s}][]"
       field, operation, value = object.filter_value(filter)
-      options = options.merge(:name => input_name)
+      options = options.merge(name: input_name)
       field_input = dynamic_filter_select(
         filter.name,
         object.select_options(filter) || [],
         {
-          :include_blank => filter.include_blank,
-          :prompt => filter.prompt,
-          :include_hidden => false,
-          :selected => field
+          include_blank: filter.include_blank,
+          prompt: filter.prompt,
+          include_hidden: false,
+          selected: field
         },
         add_html_classes(options, "field")
       )
       operation_input = dynamic_filter_select(
         filter.name, filter.operations_select,
-        {:include_blank => false, :include_hidden => false, :prompt => false, :selected => operation },
+        {
+          include_blank: false,
+          include_hidden: false,
+          prompt: false,
+          selected: operation,
+        },
         add_html_classes(options, "operation")
       )
       value_input = text_field(filter.name, **add_html_classes(options, "value"), value: value)
@@ -149,11 +154,11 @@ module Datagrid
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.range?
         partial = partial_path('range_filter')
-        options = options.merge(:multiple => true)
+        options = options.merge(multiple: true)
         from_options = datagrid_range_filter_options(object, filter, :from, options)
         to_options = datagrid_range_filter_options(object, filter, :to, options)
-        @template.render :partial => partial, :locals => {
-          :from_options => from_options, :to_options => to_options, :filter => filter, :form => self
+        @template.render partial: partial, locals: {
+          from_options: from_options, to_options: to_options, filter: filter, form: self
         }
       else
         datagrid_default_filter(filter, options)
@@ -161,7 +166,7 @@ module Datagrid
     end
 
     def datagrid_range_filter_options(object, filter, type, options)
-      type_method_map = {:from => :first, :to => :last}
+      type_method_map = {from: :first, to: :last}
       options = add_html_classes(options, type)
       options[:value] = filter.format(object[filter.name].try(type_method_map[type]))
       # In case of datagrid ranged filter
