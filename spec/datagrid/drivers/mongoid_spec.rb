@@ -3,7 +3,7 @@ require "spec_helper"
 describe Datagrid::Drivers::Mongoid, :mongoid do
 
   describe ".match?" do
-    
+
     subject { described_class }
 
     it {should be_match(MongoidEntry)}
@@ -65,7 +65,7 @@ describe Datagrid::Drivers::Mongoid, :mongoid do
 
 
     describe "when some filters specified" do
-      let(:_attributes) { {:from_group_id => 3} }
+      let(:_attributes) { {group_id: [3, nil]} }
 
       describe '#assets' do
         subject { super().assets.map(&:_id) }
@@ -99,7 +99,7 @@ describe Datagrid::Drivers::Mongoid, :mongoid do
     it "should support batch_size" do
       report = test_report do
         scope { MongoidEntry }
-        self.batch_size = 1 
+        self.batch_size = 1
         column(:name)
       end
 

@@ -67,7 +67,7 @@ describe Datagrid::Drivers::MongoMapper, :mongomapper do
 
 
       describe "when some filters specified" do
-        let(:_attributes) { {:from_group_id => 3} }
+        let(:_attributes) { {group_id: [3, nil]} }
 
         describe '#assets' do
           subject { super().assets }
