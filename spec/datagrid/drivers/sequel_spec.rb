@@ -75,7 +75,7 @@ describe Datagrid::Drivers::Sequel do
 
 
     describe "when some filters specified" do
-      let(:_attributes) { {:from_group_id => 3} }
+      let(:_attributes) { {group_id: 3..100} }
 
       describe '#assets' do
         subject { super().assets.map(&:id) }

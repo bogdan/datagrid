@@ -2,6 +2,7 @@ require "sequel"
 
 
 DB = Sequel.sqlite # memory database
+DB.extension(:pagination)
 
 DB.create_table :sequel_entries do
   primary_key :id
@@ -28,7 +29,7 @@ class SequelGrid
   end
 
   filter :name
-  integer_range_filters(:group_id, {:default => 0}, {:default => 100})
+  filter(:group_id, :integer, range: true, default: [0, 100])
   filter :disabled, :xboolean
 
   column :name

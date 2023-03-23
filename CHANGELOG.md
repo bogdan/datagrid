@@ -1,6 +1,7 @@
 ## master
 
 * Fixed scope wrapping to be universal
+* Deprecated `integer_range_filters` and `date_range_filters`. Use `filter(name, type, range: true)` instead.
 
 ## 1.7.0
 

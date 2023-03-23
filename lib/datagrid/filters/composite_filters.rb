@@ -13,6 +13,7 @@ module Datagrid
       module ClassMethods
 
         def date_range_filters(field, from_options = {}, to_options = {})
+          Utils.warn_once('date_range_filters is deprecated in favor of range option for date filter')
           from_options = normalize_composite_filter_options(from_options, field)
           to_options = normalize_composite_filter_options(to_options, field)
 
@@ -25,6 +26,7 @@ module Datagrid
         end
 
         def integer_range_filters(field, from_options = {}, to_options = {})
+          Utils.warn_once('integer_range_filters is deprecated in favor of range option for integer filter')
           from_options = normalize_composite_filter_options(from_options, field)
           to_options = normalize_composite_filter_options(to_options, field)
           filter(from_options[:name] || :"from_#{field.to_s.tr('.', '_')}", :integer, **from_options) do |value, scope, grid|
