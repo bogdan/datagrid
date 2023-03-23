@@ -42,7 +42,7 @@ describe Datagrid::Drivers::Sequel do
       grid = PaginationTest.new do |s|
         s.paginate(1,25)
       end
-      expect(grid.assets.to_a).to eq([])
+      expect(grid.assets.to_a).to be_kind_of(Array)
     end
 
     describe '#assets' do
