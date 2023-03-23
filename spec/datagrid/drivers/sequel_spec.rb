@@ -34,6 +34,17 @@ describe Datagrid::Drivers::Sequel do
       )
     end
 
+    it "supports pagination" do
+      class PaginationTest
+        include Datagrid
+        scope { SequelEntry }
+      end
+      grid = PaginationTest.new do |s|
+        s.paginate(1,25)
+      end
+      expect(grid.assets.to_a).to eq([])
+    end
+
     describe '#assets' do
       subject { super().assets }
       it {should include(first, second)}
