@@ -39,9 +39,10 @@ describe Datagrid::Drivers::Sequel do
         include Datagrid
         scope { SequelEntry }
       end
-      grid = PaginationTest.new do |s|
-        s.paginate(1,25)
+      grid = PaginationTest.new do |scope|
+        scope.paginate(1,25)
       end
+      expect(grid.rows.to_a).to be_kind_of(Array)
       expect(grid.assets.to_a).to be_kind_of(Array)
     end
 

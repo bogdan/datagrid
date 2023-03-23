@@ -82,8 +82,12 @@ module Datagrid
       end
 
       def batch_each(scope, batch_size, &block)
-        scope.extension(:pagination).each_page(batch_size) do |page|
-          page.each(&block)
+        if scope.opts[:limit]
+          scope.each(&block)
+        else
+          scope.extension(:pagination).each_page(batch_size) do |page|
+            page.each(&block)
+          end
         end
       end
 
