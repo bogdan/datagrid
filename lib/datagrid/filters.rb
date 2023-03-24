@@ -35,7 +35,7 @@ module Datagrid
 
     # @!visibility private
     def self.included(base)
-      base.extend         ClassMethods
+      base.extend ClassMethods
       base.class_eval do
 
         include Datagrid::Core
@@ -44,7 +44,7 @@ module Datagrid
         self.filters_array = []
 
       end
-      base.send :include, InstanceMethods
+      base.include InstanceMethods
     end
 
     module ClassMethods
