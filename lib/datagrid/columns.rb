@@ -44,12 +44,10 @@ module Datagrid
         class_attribute :cached, default: false
         class_attribute :decorator, instance_writer: false
       end
-      base.send :include, InstanceMethods
+      base.include InstanceMethods
     end
 
     module ClassMethods
-
-
 
       # @param data [Boolean] if true returns only columns with data representation. Default: false.
       # @param html [Boolean] if true returns only columns with html columns. Default: false.

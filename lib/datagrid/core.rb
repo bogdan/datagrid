@@ -6,7 +6,7 @@ module Datagrid
 
     # @!visibility private
     def self.included(base)
-      base.extend         ClassMethods
+      base.extend ClassMethods
       base.class_eval do
         class_attribute :scope_value
 
@@ -20,7 +20,7 @@ module Datagrid
           include ::ActiveModel::AttributeAssignment
         end
       end
-      base.send :include, InstanceMethods
+      base.include InstanceMethods
     end
 
     module ClassMethods
@@ -56,9 +56,15 @@ module Datagrid
           }
           self
         else
-          check_scope_defined!
-          driver.to_scope(scope_value.call)
+          scope = original_scope
+          driver.to_scope(scope)
         end
+      end
+
+      # @!visibility private
+      def original_scope
+        check_scope_defined!
+        scope_value.call
       end
 
       # @!visibility private
@@ -222,9 +228,15 @@ module Datagrid
           }
           self
         else
-          check_scope_defined!
-          driver.to_scope(scope_value.call)
+          scope = original_scope
+          driver.to_scope(scope)
         end
+      end
+
+      # @!visibility private
+      def original_scope
+        check_scope_defined!
+        scope_value.call
       end
 
       # Resets current instance scope to default scope defined in a class

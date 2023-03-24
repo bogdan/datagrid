@@ -27,7 +27,7 @@ module Datagrid
         alias descending? descending
 
       end
-      base.send :include, InstanceMethods
+      base.include InstanceMethods
     end
 
     # @!visibility private

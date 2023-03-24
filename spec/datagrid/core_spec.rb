@@ -2,6 +2,23 @@ require 'spec_helper'
 require "action_controller/metal/strong_parameters"
 
 describe Datagrid::Core do
+  describe '#original_scope' do
+    it 'does not wrap instance scope' do
+      grid = test_report do
+        scope { Entry }
+      end
+
+      expect(grid.original_scope).to eq(Entry)
+    end
+
+    it 'does not wrap class scope' do
+      klass = test_report_class do
+        scope { Entry }
+      end
+
+      expect(klass.original_scope).to eq(Entry)
+    end
+  end
 
   context 'with 2 persisted entries' do
     before { 2.times { Entry.create } }
