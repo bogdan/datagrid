@@ -71,7 +71,6 @@ class CssPattern
         expected_amount = amount_or_pattern_or_string_or_proc
         amount = path.size
         if amount != expected_amount
-          puts text
           return error!("did not find #{css.inspect} #{expected_amount.inspect} times. It was #{amount.inspect}")
         end
       elsif amount_or_pattern_or_string_or_proc.is_a? Proc

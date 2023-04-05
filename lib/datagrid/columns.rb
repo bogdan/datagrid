@@ -446,8 +446,8 @@ module Datagrid
 
       protected
 
-      def append_column_preload(scope)
-        columns.inject(scope) do |current, column|
+      def append_column_preload(relation)
+        columns.inject(relation) do |current, column|
           column.append_preload(current)
         end
       end

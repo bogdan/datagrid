@@ -133,17 +133,17 @@ class Datagrid::Columns::Column
     grid.generic_value(self, model)
   end
 
-  def append_preload(scope)
-    return scope unless preload
+  def append_preload(relation)
+    return relation unless preload
     if preload.respond_to?(:call)
-      return scope unless preload
+      return relation unless preload
       if preload.arity == 1
-        preload.call(scope)
+        preload.call(relation)
       else
-        scope.instance_exec(&preload)
+        relation.instance_exec(&preload)
       end
     else
-      driver.default_preload(scope, preload)
+      driver.default_preload(relation, preload)
     end
   end
 

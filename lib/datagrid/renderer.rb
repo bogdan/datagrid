@@ -56,20 +56,18 @@ module Datagrid
 
     def rows(grid, assets = grid.assets, **options, &block)
       result = assets.map do |asset|
-        if block_given?
-          @template.capture do
-            yield(Datagrid::Helper::HtmlRow.new(@template, grid, asset))
-          end
-        else
-          _render_partial( 'row', options[:partials], {
-            :grid => grid,
-            :options => options,
-            :asset => asset
-          })
-        end
+        row(grid, asset, **options, &block)
       end.to_a.join
 
       _safe(result)
+    end
+
+    def row(grid, asset, **options, &block)
+      Datagrid::Helper::HtmlRow.new(self, grid, asset, options).tap do |row|
+        if block_given?
+          return @template.capture(row, &block)
+        end
+      end
     end
 
     def order_for(grid, column, options = {})
@@ -97,6 +95,63 @@ module Datagrid
         :partial => File.join(partials_path || 'datagrid', partial_name),
         :locals => locals
       })
+    end
+  end
+
+  module Helper
+    # Represents a datagrid row that provides access to column values for the given asset
+    # @example
+    #   row = datagrid_row(grid, user)
+    #   row.class      # => Datagrid::Helper::HtmlRow
+    #   row.first_name # => "<strong>Bogdan</strong>"
+    #   row.grid       # => Grid object
+    #   row.asset      # => User object
+    #   row.each do |value|
+    #     puts value
+    #   end
+    class HtmlRow
+
+      include Enumerable
+
+      attr_reader :grid, :asset, :options
+
+      # @!visibility private
+      def initialize(renderer, grid, asset, options)
+        @renderer = renderer
+        @grid = grid
+        @asset = asset
+        @options = options
+      end
+
+      # @return [Object] a column value for given column name
+      def get(column)
+        @renderer.format_value(@grid, column, @asset)
+      end
+
+      # Iterates over all column values that are available in the row
+      # param block [Proc] column value iterator
+      def each(&block)
+        (@options[:columns] || @grid.html_columns).each do |column|
+          block.call(get(column))
+        end
+      end
+
+      def to_s
+        @renderer.send(:_render_partial, 'row', options[:partials], {
+          :grid => grid,
+          :options => options,
+          :asset => asset
+        })
+      end
+
+      protected
+      def method_missing(method, *args, &blk)
+        if column = @grid.column_by_name(method)
+          get(column)
+        else
+          super
+        end
+      end
     end
   end
 end

@@ -613,6 +613,11 @@ describe Datagrid::Helper do
       expect(data_row.random2).to_not eq(html_row.random1)
     end
 
+    it "converts to string using columns option" do
+      r = subject.datagrid_row(grid, entry, columns: [:name]).to_s
+      expect(r).to match_css_pattern('tr td.name')
+      expect(r).to_not match_css_pattern('tr td.category')
+    end
   end
 
   describe ".datagrid_value" do

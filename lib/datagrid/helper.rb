@@ -52,6 +52,9 @@ module Datagrid
     #
     # * <tt>:order</tt> - display ordering controls built-in into header
     #   Default: true
+    # * <tt>:columns</tt> - Array of column names to display.
+    #   Used in case when same grid class is used in different places
+    #   and needs different columns. Default: all defined columns.
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
     # @param grid [Datagrid] grid object
@@ -124,12 +127,10 @@ module Datagrid
     #   <% row = datagrid_row(grid, user) %>
     #   First Name: <%= row.first_name %>
     #   Last Name: <%= row.last_name %>
-    def datagrid_row(grid, asset, &block)
-      HtmlRow.new(self, grid, asset).tap do |row|
-        if block_given?
-          return capture(row, &block)
-        end
-      end
+    # @example
+    #   <%= datagrid_row(grid, user, columns: [:first_name, :last_name, :actions]) %>
+    def datagrid_row(grid, asset, **options, &block)
+      datagrid_renderer.row(grid, asset, **options, &block)
     end
 
     # Generates an ascending or descending order url for the given column
@@ -141,51 +142,6 @@ module Datagrid
       datagrid_renderer.order_path(grid, column, descending, request)
     end
 
-    # Represents a datagrid row that provides access to column values for the given asset
-    # @example
-    #   row = datagrid_row(grid, user)
-    #   row.class      # => Datagrid::Helper::HtmlRow
-    #   row.first_name # => "<strong>Bogdan</strong>"
-    #   row.grid       # => Grid object
-    #   row.asset      # => User object
-    #   row.each do |value|
-    #     puts value
-    #   end
-    class HtmlRow
-
-      include Enumerable
-
-      attr_reader :grid, :asset
-
-      # @!visibility private
-      def initialize(context, grid, asset)
-        @context = context
-        @grid = grid
-        @asset = asset
-      end
-
-      # @return [Object] a column value for given column name
-      def get(column)
-        @context.datagrid_value(@grid, column, @asset)
-      end
-
-      # Iterates over all column values that are available in the row
-      # param block [Proc] column value iterator
-      def each(&block)
-        @grid.columns.each do |column|
-          block.call(get(column))
-        end
-      end
-
-      protected
-      def method_missing(method, *args, &blk)
-        if column = @grid.column_by_name(method)
-          get(column)
-        else
-          super
-        end
-      end
-    end
 
     protected
 
