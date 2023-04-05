@@ -3,6 +3,7 @@
 * Fixed scope wrapping to be universal
 * Deprecated `integer_range_filters` and `date_range_filters`. Use `filter(name, type, range: true)` instead.
 * Add `original_scope` method that returns scope as it was defined without any wrapping [#313](https://github.com/bogdan/datagrid/pull/313)
+* Add ability to specify `columns` option for `datagrid_row`. [#314](https://github.com/bogdan/datagrid/pull/314)
 
 ## 1.7.0
 
