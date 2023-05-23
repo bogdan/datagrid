@@ -32,14 +32,14 @@ shared_examples_for "Datagrid" do
       describe "filter ##{filter.name}" do
 
         let(:filter_value) do
-          
+
           case Datagrid::Filters::FILTER_TYPES.invert[filter.class]
           when :default, :string
             "text"
           when :date
             1.day.ago
-          when :xboolean, :eboolean
-            Datagrid::Filters::BooleanEnumFilter::YES
+          when :xboolean
+            Datagrid::Filters::ExtendedBooleanFilter::YES
           when :boolean
             true
           when :integer
@@ -58,7 +58,7 @@ shared_examples_for "Datagrid" do
         end
 
         it "should be supported" do
-          subject.assets.should_not be_nil 
+          subject.assets.should_not be_nil
           #TODO: better matcher.
         end
       end
