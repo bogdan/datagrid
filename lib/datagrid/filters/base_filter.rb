@@ -6,6 +6,7 @@ end
 # @!visibility private
 class Datagrid::Filters::BaseFilter
 
+  class_attribute :input_helper_name, instance_writer: false
   attr_accessor :grid_class, :options, :block, :name
 
   def initialize(grid_class, name, options = {}, &block)

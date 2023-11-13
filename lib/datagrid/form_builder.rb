@@ -8,14 +8,12 @@ module Datagrid
     #   * <tt>select</tt> for enum, xboolean filter types
     #   * <tt>check_box</tt> for boolean filter type
     #   * <tt>text_field</tt> for other filter types
-    def datagrid_filter(filter_or_attribute, options = {}, &block)
+    def datagrid_filter(filter_or_attribute, partials: nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       options = {
         **filter.input_options,
         **add_html_classes(options, filter.name, datagrid_filter_html_class(filter)),
       }
-      # Prevent partials option from appearing in HTML attributes
-      options.delete(:partials) # Legacy option
       self.send(filter.form_builder_helper_name, filter, options, &block)
     end
 
@@ -26,6 +24,11 @@ module Datagrid
     def datagrid_label(filter_or_attribute, text = nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       label(filter.name, text || filter.header, **filter.label_options, **options, &block)
+    end
+
+    def datagrid_filter_input(attribute_or_filter, **options)
+      filter = datagrid_get_filter(attribute_or_filter)
+      text_field filter.name, value: object.filter_value_as_string(filter), **options
     end
 
     protected
@@ -46,23 +49,21 @@ module Datagrid
     end
 
     def datagrid_default_filter(attribute_or_filter, options = {})
-      filter = datagrid_get_filter(attribute_or_filter)
-      text_field filter.name, value: object.filter_value_as_string(filter), **options
+      datagrid_filter_input(attribute_or_filter, **options)
     end
 
     def datagrid_enum_filter(attribute_or_filter, options = {}, &block)
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.checkboxes?
-        partial = partial_path('enum_checkboxes')
         options = add_html_classes(options, 'checkboxes')
         elements = object.select_options(filter).map do |element|
           text, value = @template.send(:option_text_and_value, element)
           checked = enum_checkbox_checked?(filter, value)
           [value, text, checked]
         end
-        @template.render(
-          partial: partial,
-          locals: {
+        render_partial(
+          'enum_checkboxes',
+          {
             elements: elements,
             form: self,
             filter: filter,
@@ -149,15 +150,14 @@ module Datagrid
     def datagrid_range_filter(type, attribute_or_filter, options = {})
       filter = datagrid_get_filter(attribute_or_filter)
       if filter.range?
-        partial = partial_path('range_filter')
         options = options.merge(multiple: true)
         from_options = datagrid_range_filter_options(object, filter, :from, options)
         to_options = datagrid_range_filter_options(object, filter, :to, options)
-        @template.render partial: partial, locals: {
+        render_partial 'range_filter', {
           from_options: from_options, to_options: to_options, filter: filter, form: self
         }
       else
-        datagrid_default_filter(filter, options)
+        datagrid_filter_input(filter, **options)
       end
     end
 
@@ -180,7 +180,7 @@ module Datagrid
     end
 
     def datagrid_string_filter(attribute_or_filter, options = {})
-      datagrid_default_filter(attribute_or_filter, options)
+      datagrid_range_filter(:string, attribute_or_filter, options)
     end
 
     def datagrid_float_filter(attribute_or_filter, options = {})
@@ -217,6 +217,10 @@ module Datagrid
         end
       end
       File.join('datagrid', name)
+    end
+
+    def render_partial(name, locals)
+      @template.render partial: partial_path(name), locals: locals
     end
 
     class Error < StandardError
