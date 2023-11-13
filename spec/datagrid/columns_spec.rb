@@ -589,4 +589,21 @@ describe Datagrid::Columns do
       expect(grid.assets.order_values).to be_blank
     end
   end
+
+  describe "#data_hash" do
+    it "works" do
+      pending
+      class DataHashGrid
+        include Datagrid
+        scope { Entry }
+        column(:name, order: true)
+      end
+      grid1 = DataHashGrid.new(order: :name)
+      grid2 = DataHashGrid.new(order: :name, descending: true)
+      Entry.create!(name: 'one')
+      Entry.create!(name: 'two')
+      expect(grid1.data_hash).to eq([{name: 'one'}, {name: 'two'}])
+      expect(grid2.data_hash).to eq([{name: 'two'}, {name: 'one'}])
+    end
+  end
 end
