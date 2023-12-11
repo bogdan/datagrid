@@ -1,5 +1,8 @@
 ## master
 
+## 1.8.0
+
+* Support `input_options: {type: "textarea"}` as `<textarea/>` tag
 * Remove deprecated `eboolean` filter
 * Fixed scope wrapping to be universal
 * Deprecated `integer_range_filters` and `date_range_filters`. Use `filter(name, type, range: true)` instead.
