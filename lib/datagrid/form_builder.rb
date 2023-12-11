@@ -10,11 +10,12 @@ module Datagrid
     #   * <tt>text_field</tt> for other filter types
     def datagrid_filter(filter_or_attribute, partials: nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
-      options = {
+      self.send(
+        filter.form_builder_helper_name, filter,
         **filter.input_options,
         **add_html_classes(options, filter.name, datagrid_filter_html_class(filter)),
-      }
-      self.send(filter.form_builder_helper_name, filter, options, &block)
+        &block
+      )
     end
 
     # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
@@ -28,7 +29,12 @@ module Datagrid
 
     def datagrid_filter_input(attribute_or_filter, **options)
       filter = datagrid_get_filter(attribute_or_filter)
-      text_field filter.name, value: object.filter_value_as_string(filter), **options
+      value = object.filter_value_as_string(filter)
+      if options[:type]&.to_sym == :textarea
+        text_area filter.name, value: value, **options, type: nil
+      else
+        text_field filter.name, value: value, **options
+      end
     end
 
     protected

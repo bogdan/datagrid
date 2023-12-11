@@ -88,16 +88,30 @@ describe Datagrid::FormBuilder do
       end
     end
     context "with input_options" do
-      let(:_filter) { :created_at }
-      let(:_grid) {
-        test_report do
-          scope {Entry}
-          filter(:created_at, :date, input_options: {type: :date})
-        end
-      }
-      it { should equal_to_dom(
-        '<input type="date" class="created_at date_filter" name="report[created_at]" id="report_created_at"/>'
-      )}
+      context "type is date" do
+        let(:_filter) { :created_at }
+        let(:_grid) {
+          test_report do
+            scope {Entry}
+            filter(:created_at, :date, input_options: {type: :date})
+          end
+        }
+        it { should equal_to_dom(
+          '<input type="date" class="created_at date_filter" name="report[created_at]" id="report_created_at"/>'
+        )}
+      end
+      context "type is textarea" do
+        let(:_filter) { :name }
+        let(:_grid) {
+          test_report do
+            scope {Entry}
+            filter(:name, :string, input_options: {type: :textarea})
+          end
+        }
+        it { should equal_to_dom(
+          '<textarea class="name string_filter" name="report[name]" id="report_name"/>'
+        )}
+      end
     end
 
     context "with integer filter type and range option" do
@@ -296,7 +310,7 @@ describe Datagrid::FormBuilder do
         let(:_grid) do
           test_report do
             scope {Entry}
-              filter(:category, :enum, :select => ["first", "second"], :include_blank => proc { "Choose plz" })
+            filter(:category, :enum, :select => ["first", "second"], :include_blank => proc { "Choose plz" })
           end
         end
         let(:_filter) { :category }
@@ -379,16 +393,16 @@ describe Datagrid::FormBuilder do
       it {should equal_to_dom('<input class="name string_filter" type="text" name="report[name]" id="report_name">')}
 
       context "when multiple option is set" do
-      let(:_grid) do
-        test_report(:name => "one,two") do
-          scope {Entry}
-          filter(:name, :string, :multiple => true)
+        let(:_grid) do
+          test_report(:name => "one,two") do
+            scope {Entry}
+            filter(:name, :string, :multiple => true)
+          end
         end
-      end
 
-      let(:_filter) { :name }
+        let(:_filter) { :name }
 
-      it {should equal_to_dom('<input value="one,two" class="name string_filter" type="text" name="report[name]" id="report_name">')}
+        it {should equal_to_dom('<input value="one,two" class="name string_filter" type="text" name="report[name]" id="report_name">')}
       end
     end
 
@@ -418,7 +432,6 @@ describe Datagrid::FormBuilder do
       it { should equal_to_dom(
         '<input class="group_id float_filter" type="text" name="report[group_id]" id="report_group_id"/>'
       )}
-
     end
 
     context "with enum multiple filter" do

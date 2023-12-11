@@ -93,7 +93,8 @@ module Datagrid
       #   Accepts a block or a symbol with an instance method name
       # * <tt>:unless</tt> - specify the reverse condition when the filter can be dislayed and used.
       #   Accepts a block or a symbol with an instance method name
-      # * <tt>:input_options</tt> - options passed when rendering html input tag attributes
+      # * <tt>:input_options</tt> - options passed when rendering html input tag attributes.
+      #   Use <tt>input_options.type</tt> to control input type including <tt>textarea</tt>.
       # * <tt>:label_options</tt> - options passed when rendering html label tag attributes
       #
       # See: https://github.com/bogdan/datagrid/wiki/Filters for examples
