@@ -260,12 +260,12 @@ describe Datagrid::FormBuilder do
     end
     context "with enum filter type" do
       let(:_filter) { :category }
+      let(:_category_filter_options) { {} }
       let(:_grid) {
+        filter_options = _category_filter_options
         test_report do
           scope {Entry}
-          filter(:category, :enum, :select => ["first", "second"])
-          filter(:category_without_include_blank, :enum, :select => ["first", "second"], :include_blank => false)
-          filter(:category_with_prompt, :enum, :select => ["first", "second"], :prompt => "My Prompt")
+          filter(:category, :enum, select: ["first", "second"], **filter_options)
         end
       }
       it { should equal_to_dom(
@@ -299,21 +299,15 @@ describe Datagrid::FormBuilder do
         )}
       end
       context "with include_blank option set to false" do
-        let(:_filter) { :category_without_include_blank }
+        let(:_category_filter_options) { { include_blank: false } }
         it { should equal_to_dom(
-          '<select class="category_without_include_blank enum_filter" name="report[category_without_include_blank]" id="report_category_without_include_blank">
+          '<select class="category enum_filter" name="report[category]" id="report_category">
          <option value="first">first</option>
          <option value="second">second</option></select>'
         )}
       end
       context "with dynamic include_blank option" do
-        let(:_grid) do
-          test_report do
-            scope {Entry}
-            filter(:category, :enum, :select => ["first", "second"], :include_blank => proc { "Choose plz" })
-          end
-        end
-        let(:_filter) { :category }
+        let(:_category_filter_options) { {include_blank: proc { "Choose plz" }} }
         it { should equal_to_dom(
           '<select class="category enum_filter" name="report[category]" id="report_category">
          <option value="">Choose plz</option>
@@ -323,21 +317,24 @@ describe Datagrid::FormBuilder do
       end
 
       context "with prompt option" do
-        let(:_filter) { :category_with_prompt }
+        let(:_category_filter_options) { {prompt: 'My Prompt'} }
         it { should equal_to_dom(
-          '<select class="category_with_prompt enum_filter" name="report[category_with_prompt]" id="report_category_with_prompt"><option value="">My Prompt</option>
+          '<select class="category enum_filter" name="report[category]" id="report_category"><option value="">My Prompt</option>
+         <option value="first">first</option>
+         <option value="second">second</option></select>'
+        )}
+      end
+
+      context "with input_options class" do
+        let(:_category_filter_options) { {input_options: {class: 'custom-class'}} }
+        it { should equal_to_dom(
+          '<select class="custom-class category enum_filter" name="report[category]" id="report_category"><option value="" label=" "></option>
          <option value="first">first</option>
          <option value="second">second</option></select>'
         )}
       end
       context "with checkboxes option" do
-        let(:_grid) do
-          test_report do
-            scope {Entry}
-            filter(:category, :enum, :select => ["first", "second"], :checkboxes => true)
-          end
-        end
-        let(:_filter) { :category }
+        let(:_category_filter_options) { {checkboxes: true} }
         it { should equal_to_dom(
           '
 <label class="category enum_filter checkboxes" for="report_category_first"><input id="report_category_first" type="checkbox" value="first" name="report[category][]" />first</label>
