@@ -49,7 +49,7 @@ class SimpleReport
   end
 
   column(:pet, html: lambda {|data| content_tag :em, data}) do
-    self.pet.try(:upcase)
+    self.pet&.upcase
   end
 
   column(:shipping_date, before: :group)

@@ -117,7 +117,7 @@ module Datagrid
         if !value
           value
         elsif value.is_a?(Array)
-          [value.first.try(:beginning_of_day), value.last.try(:end_of_day)]
+          [value.first&.beginning_of_day, value.last&.end_of_day]
         elsif value.is_a?(Range)
           (value.first.beginning_of_day..value.last.end_of_day)
         else

@@ -60,7 +60,7 @@ module Datagrid
       end
 
       def normalized_column_type(scope, field)
-        type = to_scope(scope).klass.fields[field.to_s].try(:type)
+        type = to_scope(scope).klass.fields[field.to_s]&.type
         return nil unless type
         {
           [BigDecimal , String, Symbol, Range, Array, Hash, ] => :string,

@@ -46,7 +46,7 @@ shared_examples_for "Datagrid" do
             1
           when :enum
             select = subject.select_options(filter)
-            select.first.try(:last)
+            select.first&.last
           else
             raise "unknown filter type: #{filter.class}"
           end.to_s
