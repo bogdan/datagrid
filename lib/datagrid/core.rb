@@ -16,9 +16,7 @@ module Datagrid
         class_attribute :dynamic_block, instance_writer: false
         class_attribute :forbidden_attributes_protection, instance_writer: false
         self.forbidden_attributes_protection = false
-        if defined?(::ActiveModel::AttributeAssignment)
-          include ::ActiveModel::AttributeAssignment
-        end
+        include ::ActiveModel::AttributeAssignment
       end
       base.include InstanceMethods
     end
@@ -155,7 +153,7 @@ module Datagrid
 
       # @return [Object] Any datagrid attribute value
       def [](attribute)
-        self.send(attribute)
+        self.public_send(attribute)
       end
 
       # Assigns any datagrid attribute
@@ -163,27 +161,12 @@ module Datagrid
       # @param value [Object] Datagrid attribute value
       # @return [void]
       def []=(attribute, value)
-        self.send(:"#{attribute}=", value)
+        self.public_send(:"#{attribute}=", value)
       end
 
       # @return [Object] a scope relation (e.g ActiveRecord::Relation) with all applied filters
       def assets
         scope
-      end
-
-      # Updates datagrid attributes with a passed hash argument
-      def attributes=(attributes)
-        if respond_to?(:assign_attributes)
-          if !forbidden_attributes_protection && attributes.respond_to?(:permit!)
-            attributes.permit!
-          end
-          assign_attributes(attributes)
-        else
-          attributes.each do |name, value|
-            self[name] = value
-          end
-          self
-        end
       end
 
       # Returns serializable query arguments skipping all nil values
@@ -272,6 +255,11 @@ module Datagrid
         self.class == other.class &&
           attributes == other.attributes &&
           scope == other.scope
+      end
+
+      protected
+      def sanitize_for_mass_assignment(attributes)
+        forbidden_attributes_protection ? super(attributes) : attributes
       end
     end
   end
