@@ -142,6 +142,7 @@ module Datagrid
         end
       end
 
+
       # @return [Hash<Symbol, Object>] grid attributes including filter values and ordering values
       def attributes
         result = {}
@@ -149,6 +150,12 @@ module Datagrid
           result[name] = self[name]
         end
         result
+      end
+
+      # Updates datagrid attributes with a passed hash argument
+      # @param attributes [Hash<Symbol, Object>]
+      def attributes=(attributes)
+        super(attributes)
       end
 
       # @return [Object] Any datagrid attribute value
