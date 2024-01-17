@@ -38,8 +38,7 @@ module Datagrid
 
         include Datagrid::Core
         include Datagrid::Filters::CompositeFilters
-        class_attribute :filters_array
-        self.filters_array = []
+        class_attribute :filters_array, default: []
 
       end
       base.include InstanceMethods

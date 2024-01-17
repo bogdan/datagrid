@@ -9,13 +9,9 @@ module Datagrid
       base.extend ClassMethods
       base.class_eval do
         class_attribute :scope_value
-
-        class_attribute :datagrid_attributes, instance_writer: false
-        self.datagrid_attributes = []
-
+        class_attribute :datagrid_attributes, instance_writer: false, default: []
         class_attribute :dynamic_block, instance_writer: false
-        class_attribute :forbidden_attributes_protection, instance_writer: false
-        self.forbidden_attributes_protection = false
+        class_attribute :forbidden_attributes_protection, instance_writer: false, default: false
         include ::ActiveModel::AttributeAssignment
       end
       base.include InstanceMethods
@@ -154,6 +150,11 @@ module Datagrid
 
       # Updates datagrid attributes with a passed hash argument
       # @param attributes [Hash<Symbol, Object>]
+      # @example
+      #   grid = MyGrid.new
+      #   grid.attributes = {first_name: 'John', last_name: 'Smith'}
+      #   grid.first_name # => 'John'
+      #   grid.last_name # => 'Smith'
       def attributes=(attributes)
         super(attributes)
       end
