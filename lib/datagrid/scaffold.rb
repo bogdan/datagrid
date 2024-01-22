@@ -4,7 +4,7 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
 
   include Rails::Generators::ResourceHelpers
 
-  check_class_collision :suffix => "Grid"
+  check_class_collision suffix: "Grid"
   source_root File.expand_path(__FILE__ + "/../../../templates")
 
   def create_scaffold
@@ -13,7 +13,7 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
     end
     template "grid.rb.erb", "app/grids/#{grid_class_name.underscore}.rb"
     if file_exists?(grid_controller_file)
-      inject_into_file grid_controller_file, index_action, :after => %r{class .*#{grid_controller_class_name}.*\n}
+      inject_into_file grid_controller_file, index_action, after: %r{class .*#{grid_controller_class_name}.*\n}
     else
       template "controller.rb.erb", grid_controller_file
     end
@@ -30,7 +30,7 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
       }.each do |extension, string|
         file = "app/assets/stylesheets/application.#{extension}"
         if file_exists?(file)
-          inject_into_file file, string + "\n", {:before => %r{.*require_self}} # before all
+          inject_into_file file, string + "\n", {before: %r{.*require_self}} # before all
         end
       end
     end
