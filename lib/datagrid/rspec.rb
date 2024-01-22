@@ -54,7 +54,7 @@ shared_examples_for "Datagrid" do
 
         before(:each) do
           subject.attributes = {filter.name => filter_value}
-          subject.send(filter.name).should_not be_nil
+          subject.public_send(filter.name).should_not be_nil
         end
 
         it "should be supported" do

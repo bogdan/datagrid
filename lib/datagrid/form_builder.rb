@@ -89,7 +89,7 @@ module Datagrid
     end
 
     def enum_checkbox_checked?(filter, option_value)
-      current_value = object.send(filter.name)
+      current_value = object.public_send(filter.name)
       if current_value.respond_to?(:include?)
         # Typecast everything to string
         # to remove difference between String and Symbol

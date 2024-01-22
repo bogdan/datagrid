@@ -68,7 +68,7 @@ class Datagrid::Filters::BaseFilter
   def default(object)
     default = self.options[:default]
     if default.is_a?(Symbol)
-      object.send(default)
+      object.public_send(default)
     elsif default.respond_to?(:call)
       Datagrid::Utils.apply_args(object, &default)
     else
@@ -174,7 +174,7 @@ class Datagrid::Filters::BaseFilter
   def default_filter(value, scope, grid)
     return nil if dummy?
     if !driver.has_column?(scope, name) && scope.respond_to?(name)
-      scope.send(name, value)
+      scope.public_send(name, value)
     else
       default_filter_where(scope, value)
     end
