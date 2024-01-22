@@ -161,6 +161,9 @@ module Datagrid
       # @!visibility private
       def filter_columns(columns_array, *names, data: false, html: false)
         names.compact!
+        if names.size >= 1 && names.all? {|n| n.is_a?(Datagrid::Columns::Column) && n.grid_class == self.class}
+          return names
+        end
         names.map!(&:to_sym)
         columns_array.select do |column|
           (!data || column.data?) &&
@@ -173,7 +176,7 @@ module Datagrid
       def define_column(columns, name, query = nil, **options, &block)
         check_scope_defined!("Scope should be defined before columns")
         block ||= lambda do |model|
-          model.send(name)
+          model.public_send(name)
         end
         position = Datagrid::Utils.extract_position_from_options(columns, options)
         column = Datagrid::Columns::Column.new(

@@ -10,34 +10,46 @@ describe Datagrid::Columns do
 
   describe "basic methods" do
 
-    let!(:entry) {  Entry.create!(
-      :group => group,
-      :name => "Star",
-      :disabled => false,
-      :confirmed => false,
-      :category => "first",
-      :access_level => 'admin',
-      :pet => 'rottweiler',
-      :shipping_date => Date.new(2013, 8, 1)
-    ) }
+    let!(:entry) do
+      Entry.create!(
+        group: group,
+        name: "Star",
+        disabled: false,
+        confirmed: false,
+        category: "first",
+        access_level: 'admin',
+        pet: 'rottweiler',
+        shipping_date: Date.new(2013, 8, 1)
+      )
+    end
+
     let(:date) { Date.new(2013, 8, 1) }
 
     it "should have data columns without html columns" do
       grid = test_report do
         scope {Entry}
         column(:name)
-        column(:action, :html => true) do
+        column(:action, html: true) do
           'dummy'
         end
       end
       expect(grid.data_columns.map(&:name)).to eq([:name])
       expect(grid.html_columns.map(&:name)).to eq([:name, :action])
     end
+
+    it "allows a column argument" do
+      grid = test_report do
+        scope {Entry}
+        column(:name)
+      end
+      expect(grid.data_columns(grid.column_by_name(:name)).map(&:name)).to eq([:name])
+    end
+
     it "should build rows of data" do
       grid = test_report do
         scope {Entry}
         column(:name)
-        column(:action, :html => true) do
+        column(:action, html: true) do
           'dummy'
         end
       end

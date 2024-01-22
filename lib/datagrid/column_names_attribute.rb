@@ -63,7 +63,9 @@ module Datagrid
     def selected_column_names(*args)
       if args.any?
         args.compact!
-        args.map!(&:to_sym)
+        args.map! do |column|
+          column.is_a?(Datagrid::Columns::Column) ? column.name : column.to_sym
+        end
         args
       else
         if column_names && column_names.any?
