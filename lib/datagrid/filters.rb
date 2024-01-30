@@ -225,6 +225,5 @@ module Datagrid
         end
       end
     end
-
   end
 end
