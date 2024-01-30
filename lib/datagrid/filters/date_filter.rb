@@ -6,7 +6,7 @@ class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
 
   def apply(grid_object, scope, value)
     if value.is_a?(Range)
-      value = value.first.beginning_of_day..value.last.end_of_day
+      value = value.begin&.beginning_of_day..value.end&.end_of_day
     end
     super(grid_object, scope, value)
   end

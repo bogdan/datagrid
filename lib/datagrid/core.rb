@@ -1,5 +1,6 @@
 require "datagrid/drivers"
 require "active_support/core_ext/class/attribute"
+require "active_model/attribute_assignment"
 
 module Datagrid
   module Core

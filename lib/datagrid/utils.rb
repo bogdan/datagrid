@@ -116,7 +116,7 @@ module Datagrid
         elsif value.is_a?(Array)
           [value.first&.beginning_of_day, value.last&.end_of_day]
         elsif value.is_a?(Range)
-          (value.first.beginning_of_day..value.last.end_of_day)
+          (value.begin&.beginning_of_day..value.end&.end_of_day)
         else
           value.beginning_of_day..value.end_of_day
         end

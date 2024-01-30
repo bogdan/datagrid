@@ -3,7 +3,7 @@ require "active_support/testing/time_helpers"
 
 describe Datagrid::Filters::DateFilter do
 
-  it "should support date range argument" do
+  it "supports date range argument" do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
     e3 = Entry.create!(created_at: 1.day.ago)
@@ -14,6 +14,20 @@ describe Datagrid::Filters::DateFilter do
     expect(report.assets).not_to include(e1)
     expect(report.assets).to include(e2)
     expect(report.assets).not_to include(e3)
+  end
+
+  it "endless date range argument" do
+    e1 = Entry.create!(created_at: 7.days.ago)
+    e2 = Entry.create!(created_at: 4.days.ago)
+    report = test_report(created_at: 5.days.ago..) do
+      scope { Entry }
+      filter(:created_at, :date)
+    end
+    expect(report.assets).not_to include(e1)
+    expect(report.assets).to include(e2)
+    report.created_at = ..5.days.ago
+    expect(report.assets).to include(e1)
+    expect(report.assets).not_to include(e2)
   end
 
   {active_record: Entry, mongoid: MongoidEntry, sequel: SequelEntry}.each do |orm, klass|
@@ -49,7 +63,6 @@ describe Datagrid::Filters::DateFilter do
           it { should_not include(entry_dated(Date.today.end_of_day + 1.second))}
         end
       end
-
     end
   end
 
