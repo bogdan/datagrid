@@ -155,7 +155,7 @@ class Datagrid::Filters::BaseFilter
     when String
       value.split(separator)
     when Range
-      [value.first, value.last]
+      [value.begin, value.end]
     when Array
       value
     else

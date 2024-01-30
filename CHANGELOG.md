@@ -1,6 +1,6 @@
 ## master
 
-* Support infinite ranges for date filter
+* Support infinite ranges for date, datetime and integer filters
 
 ## 1.8.1
 
