@@ -41,7 +41,6 @@ module Datagrid
         class_attribute :filters_array, default: []
 
       end
-      base.include InstanceMethods
     end
 
     module ClassMethods
@@ -137,92 +136,90 @@ module Datagrid
       end
     end
 
-    module InstanceMethods
 
-      # @!visibility private
-      def initialize(*args, &block)
-        self.filters_array = self.class.filters_array.clone
-        self.filters_array.each do |filter|
-          self[filter.name] = filter.default(self)
-        end
-        super(*args, &block)
+    # @!visibility private
+    def initialize(*args, &block)
+      self.filters_array = self.class.filters_array.clone
+      self.filters_array.each do |filter|
+        self[filter.name] = filter.default(self)
       end
+      super(*args, &block)
+    end
 
-      # @!visibility private
-      def assets
-        apply_filters(super, filters)
+    # @!visibility private
+    def assets
+      apply_filters(super, filters)
+    end
+
+    # Returns filter value for given filter definition
+    def filter_value(filter)
+      self[filter.name]
+    end
+
+    # Returns string representation of filter value
+    def filter_value_as_string(name)
+      filter = filter_by_name(name)
+      value = filter_value(filter)
+      if value.is_a?(Array)
+        value.map {|v| filter.format(v) }.join(filter.separator)
+      else
+        filter.format(value)
       end
+    end
 
-      # Returns filter value for given filter definition
-      def filter_value(filter)
-        self[filter.name]
+    # Returns filter object with the given name
+    def filter_by_name(name)
+      self.class.filter_by_name(name)
+    end
+
+    # Returns assets filtered only by specified filters
+    # Allows partial filtering
+    def filter_by(*filters)
+      apply_filters(scope, filters.map{|f| filter_by_name(f)})
+    end
+
+    # Returns select options for specific filter or filter name
+    # If given filter doesn't support select options raises `ArgumentError`
+    def select_options(filter)
+      find_select_filter(filter).select(self)
+    end
+
+    # Sets all options as selected for a filter that has options
+    def select_all(filter)
+      filter = find_select_filter(filter)
+      self[filter.name] = select_values(filter)
+    end
+
+    # Returns all values that can be set to a filter with select options
+    def select_values(filter)
+      find_select_filter(filter).select_values(self)
+    end
+
+    def default_filter
+      self.class.default_filter
+    end
+
+    # Returns all currently enabled filters
+    def filters
+      self.class.filters.select do |filter|
+        filter.enabled?(self)
       end
+    end
 
-      # Returns string representation of filter value
-      def filter_value_as_string(name)
-        filter = filter_by_name(name)
-        value = filter_value(filter)
-        if value.is_a?(Array)
-          value.map {|v| filter.format(v) }.join(filter.separator)
-        else
-          filter.format(value)
-        end
+    protected
+
+    def find_select_filter(filter)
+      filter = filter_by_name(filter)
+      unless filter.class.included_modules.include?(::Datagrid::Filters::SelectOptions)
+        raise ::Datagrid::ArgumentError,
+          "#{self.class.name}##{filter.name} with type #{FILTER_TYPES.invert[filter.class].inspect} can not have select options"
       end
+      filter
+    end
 
-      # Returns filter object with the given name
-      def filter_by_name(name)
-        self.class.filter_by_name(name)
-      end
-
-      # Returns assets filtered only by specified filters
-      # Allows partial filtering
-      def filter_by(*filters)
-        apply_filters(scope, filters.map{|f| filter_by_name(f)})
-      end
-
-      # Returns select options for specific filter or filter name
-      # If given filter doesn't support select options raises `ArgumentError`
-      def select_options(filter)
-        find_select_filter(filter).select(self)
-      end
-
-      # Sets all options as selected for a filter that has options
-      def select_all(filter)
-        filter = find_select_filter(filter)
-        self[filter.name] = select_values(filter)
-      end
-
-      # Returns all values that can be set to a filter with select options
-      def select_values(filter)
-        find_select_filter(filter).select_values(self)
-      end
-
-      def default_filter
-        self.class.default_filter
-      end
-
-      # Returns all currently enabled filters
-      def filters
-        self.class.filters.select do |filter|
-          filter.enabled?(self)
-        end
-      end
-
-      protected
-
-      def find_select_filter(filter)
-        filter = filter_by_name(filter)
-        unless filter.class.included_modules.include?(::Datagrid::Filters::SelectOptions)
-          raise ::Datagrid::ArgumentError,
-            "#{self.class.name}##{filter.name} with type #{FILTER_TYPES.invert[filter.class].inspect} can not have select options"
-        end
-        filter
-      end
-
-      def apply_filters(current_scope, filters)
-        filters.inject(current_scope) do |result, filter|
-          filter.apply(self, result, filter_value(filter))
-        end
+    def apply_filters(current_scope, filters)
+      filters.inject(current_scope) do |result, filter|
+        filter.apply(self, result, filter_value(filter))
       end
     end
   end

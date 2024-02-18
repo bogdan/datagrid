@@ -4,6 +4,7 @@ require "active_model/attribute_assignment"
 
 module Datagrid
   module Core
+    include ::ActiveModel::AttributeAssignment
 
     # @!visibility private
     def self.included(base)
@@ -13,9 +14,7 @@ module Datagrid
         class_attribute :datagrid_attributes, instance_writer: false, default: []
         class_attribute :dynamic_block, instance_writer: false
         class_attribute :forbidden_attributes_protection, instance_writer: false, default: false
-        include ::ActiveModel::AttributeAssignment
       end
-      base.include InstanceMethods
     end
 
     module ClassMethods
@@ -124,152 +123,149 @@ module Datagrid
 
     end
 
-    module InstanceMethods
+    def initialize(attributes = nil, &block)
+      super()
 
-      def initialize(attributes = nil, &block)
-        super()
-
-        if attributes
-          self.attributes = attributes
-        end
-
-        instance_eval(&dynamic_block) if dynamic_block
-        if block_given?
-          self.scope(&block)
-        end
+      if attributes
+        self.attributes = attributes
       end
 
-
-      # @return [Hash<Symbol, Object>] grid attributes including filter values and ordering values
-      def attributes
-        result = {}
-        self.datagrid_attributes.each do |name|
-          result[name] = self[name]
-        end
-        result
+      instance_eval(&dynamic_block) if dynamic_block
+      if block_given?
+        self.scope(&block)
       end
+    end
 
-      # Updates datagrid attributes with a passed hash argument
-      # @param attributes [Hash<Symbol, Object>]
-      # @example
-      #   grid = MyGrid.new
-      #   grid.attributes = {first_name: 'John', last_name: 'Smith'}
-      #   grid.first_name # => 'John'
-      #   grid.last_name # => 'Smith'
-      def attributes=(attributes)
-        super(attributes)
-      end
 
-      # @return [Object] Any datagrid attribute value
-      def [](attribute)
-        self.public_send(attribute)
+    # @return [Hash<Symbol, Object>] grid attributes including filter values and ordering values
+    def attributes
+      result = {}
+      self.datagrid_attributes.each do |name|
+        result[name] = self[name]
       end
+      result
+    end
 
-      # Assigns any datagrid attribute
-      # @param attribute [Symbol, String] Datagrid attribute name
-      # @param value [Object] Datagrid attribute value
-      # @return [void]
-      def []=(attribute, value)
-        self.public_send(:"#{attribute}=", value)
-      end
+    # Updates datagrid attributes with a passed hash argument
+    # @param attributes [Hash<Symbol, Object>]
+    # @example
+    #   grid = MyGrid.new
+    #   grid.attributes = {first_name: 'John', last_name: 'Smith'}
+    #   grid.first_name # => 'John'
+    #   grid.last_name # => 'Smith'
+    def attributes=(attributes)
+      super(attributes)
+    end
 
-      # @return [Object] a scope relation (e.g ActiveRecord::Relation) with all applied filters
-      def assets
-        scope
-      end
+    # @return [Object] Any datagrid attribute value
+    def [](attribute)
+      self.public_send(attribute)
+    end
 
-      # Returns serializable query arguments skipping all nil values
-      # @example
-      #   grid = ProductsGrid.new(category: 'dresses', available: true)
-      #   grid.as_query # => {category: 'dresses', available: true}
-      def as_query
-        attributes = self.attributes.clone
-        attributes.each do |key, value|
-          attributes.delete(key) if value.nil?
-        end
-        attributes
-      end
+    # Assigns any datagrid attribute
+    # @param attribute [Symbol, String] Datagrid attribute name
+    # @param value [Object] Datagrid attribute value
+    # @return [void]
+    def []=(attribute, value)
+      self.public_send(:"#{attribute}=", value)
+    end
 
-      # @return [Hash<Symbol, Hash<Symbol, Object>>] query parameters to link this grid from a page
-      # @example
-      #   grid = ProductsGrid.new(category: 'dresses', available: true)
-      #   Rails.application.routes.url_helpers.products_path(grid.query_params)
-      #     # => "/products?products_grid[category]=dresses&products_grid[available]=true"
-      def query_params(attributes = {})
-        { param_name.to_sym => as_query.merge(attributes) }
-      end
+    # @return [Object] a scope relation (e.g ActiveRecord::Relation) with all applied filters
+    def assets
+      scope
+    end
 
-      # Redefines scope at instance level
-      # @example
-      #   class MyGrid
-      #     scope { Article.order('created_at desc') }
-      #   end
-      #
-      #   grid = MyGrid.new
-      #   grid.scope do |scope|
-      #     scope.where(author_id: current_user.id)
-      #   end
-      #   grid.assets
-      #       # => SELECT * FROM articles WHERE author_id = ?
-      #       #    ORDER BY created_at desc
-      def scope(&block)
-        if block_given?
-          current_scope = scope
-          self.scope_value = proc {
-            Datagrid::Utils.apply_args(current_scope, &block)
-          }
-          self
-        else
-          scope = original_scope
-          driver.to_scope(scope)
-        end
+    # Returns serializable query arguments skipping all nil values
+    # @example
+    #   grid = ProductsGrid.new(category: 'dresses', available: true)
+    #   grid.as_query # => {category: 'dresses', available: true}
+    def as_query
+      attributes = self.attributes.clone
+      attributes.each do |key, value|
+        attributes.delete(key) if value.nil?
       end
+      attributes
+    end
 
-      # @!visibility private
-      def original_scope
-        check_scope_defined!
-        scope_value.call
-      end
+    # @return [Hash<Symbol, Hash<Symbol, Object>>] query parameters to link this grid from a page
+    # @example
+    #   grid = ProductsGrid.new(category: 'dresses', available: true)
+    #   Rails.application.routes.url_helpers.products_path(grid.query_params)
+    #     # => "/products?products_grid[category]=dresses&products_grid[available]=true"
+    def query_params(attributes = {})
+      { param_name.to_sym => as_query.merge(attributes) }
+    end
 
-      # Resets current instance scope to default scope defined in a class
-      # @return [void]
-      def reset_scope
-        self.scope_value = self.class.scope_value
+    # Redefines scope at instance level
+    # @example
+    #   class MyGrid
+    #     scope { Article.order('created_at desc') }
+    #   end
+    #
+    #   grid = MyGrid.new
+    #   grid.scope do |scope|
+    #     scope.where(author_id: current_user.id)
+    #   end
+    #   grid.assets
+    #       # => SELECT * FROM articles WHERE author_id = ?
+    #       #    ORDER BY created_at desc
+    def scope(&block)
+      if block_given?
+        current_scope = scope
+        self.scope_value = proc {
+          Datagrid::Utils.apply_args(current_scope, &block)
+        }
+        self
+      else
+        scope = original_scope
+        driver.to_scope(scope)
       end
+    end
 
-      # @return [Boolean] true if the scope was redefined for this instance of grid object
-      def redefined_scope?
-        self.class.scope_value != scope_value
-      end
+    # @!visibility private
+    def original_scope
+      check_scope_defined!
+      scope_value.call
+    end
 
-      # @!visibility private
-      def driver
-        self.class.driver
-      end
+    # Resets current instance scope to default scope defined in a class
+    # @return [void]
+    def reset_scope
+      self.scope_value = self.class.scope_value
+    end
 
-      # @!visibility private
-      def check_scope_defined!(message = nil)
-        self.class.send :check_scope_defined!, message
-      end
+    # @return [Boolean] true if the scope was redefined for this instance of grid object
+    def redefined_scope?
+      self.class.scope_value != scope_value
+    end
 
-      # @return [String] a datagrid attributes and their values in inspection form
-      def inspect
-        attrs = attributes.map do |key, value|
-          "#{key}: #{value.inspect}"
-        end.join(", ")
-        "#<#{self.class} #{attrs}>"
-      end
+    # @!visibility private
+    def driver
+      self.class.driver
+    end
 
-      def ==(other)
-        self.class == other.class &&
-          attributes == other.attributes &&
-          scope == other.scope
-      end
+    # @!visibility private
+    def check_scope_defined!(message = nil)
+      self.class.send :check_scope_defined!, message
+    end
 
-      protected
-      def sanitize_for_mass_assignment(attributes)
-        forbidden_attributes_protection ? super(attributes) : attributes
-      end
+    # @return [String] a datagrid attributes and their values in inspection form
+    def inspect
+      attrs = attributes.map do |key, value|
+        "#{key}: #{value.inspect}"
+      end.join(", ")
+      "#<#{self.class} #{attrs}>"
+    end
+
+    def ==(other)
+      self.class == other.class &&
+        attributes == other.attributes &&
+        scope == other.scope
+    end
+
+    protected
+    def sanitize_for_mass_assignment(attributes)
+      forbidden_attributes_protection ? super(attributes) : attributes
     end
   end
 end

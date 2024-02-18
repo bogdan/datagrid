@@ -27,7 +27,6 @@ module Datagrid
         alias descending? descending
 
       end
-      base.include InstanceMethods
     end
 
     # @!visibility private
@@ -37,96 +36,94 @@ module Datagrid
       end
     end
 
-    module InstanceMethods
 
-      # @!visibility private
-      def assets
-        check_order_valid!
-        apply_order(super)
-      end
+    # @!visibility private
+    def assets
+      check_order_valid!
+      apply_order(super)
+    end
 
-      # @return [Datagrid::Columns::Column, nil] a column definition that is currently used to order assets
-      # @example
-      #   class MyGrid
-      #     scope { Model }
-      #     column(:id)
-      #     column(:name)
-      #   end
-      #   MyGrid.new(order: "name").order_column # => #<Column name: "name", ...>
-      def order_column
-        order ? column_by_name(order) : nil
-      end
+    # @return [Datagrid::Columns::Column, nil] a column definition that is currently used to order assets
+    # @example
+    #   class MyGrid
+    #     scope { Model }
+    #     column(:id)
+    #     column(:name)
+    #   end
+    #   MyGrid.new(order: "name").order_column # => #<Column name: "name", ...>
+    def order_column
+      order ? column_by_name(order) : nil
+    end
 
-      # @param column [String, Datagrid::Columns::Column]
-      # @return [Boolean] true if given grid is ordered by given column.
-      def ordered_by?(column)
-        order_column == column_by_name(column)
-      end
+    # @param column [String, Datagrid::Columns::Column]
+    # @return [Boolean] true if given grid is ordered by given column.
+    def ordered_by?(column)
+      order_column == column_by_name(column)
+    end
 
-      private
+    private
 
-      def apply_order(assets)
-        return assets unless order
-        if order_column.order_by_value?
-          assets = assets.sort_by do |asset|
-            order_column.order_by_value(asset, self)
-          end
-          descending? ? assets.reverse : assets
-        else
-          if descending?
-            if order_column.order_desc
-              apply_asc_order(assets, order_column.order_desc)
-            else
-              apply_desc_order(assets, order_column.order)
-            end
+    def apply_order(assets)
+      return assets unless order
+      if order_column.order_by_value?
+        assets = assets.sort_by do |asset|
+          order_column.order_by_value(asset, self)
+        end
+        descending? ? assets.reverse : assets
+      else
+        if descending?
+          if order_column.order_desc
+            apply_asc_order(assets, order_column.order_desc)
           else
-            apply_asc_order(assets, order_column.order)
+            apply_desc_order(assets, order_column.order)
           end
-        end
-      end
-
-      def check_order_valid!
-        return unless order
-        column = column_by_name(order)
-        unless column
-          self.class.order_unsupported(order, "no column #{order} in #{self.class}")
-        end
-        unless column.supports_order?
-          self.class.order_unsupported(column.name, "column don't support order" )
-        end
-      end
-
-      def apply_asc_order(assets, order)
-        if order.respond_to?(:call)
-          apply_block_order(assets, order)
         else
-          driver.asc(assets, order)
+          apply_asc_order(assets, order_column.order)
         end
       end
+    end
 
-      def apply_desc_order(assets, order)
-        if order.respond_to?(:call)
-          reverse_order(apply_asc_order(assets, order))
-        else
-          driver.desc(assets, order)
-        end
+    def check_order_valid!
+      return unless order
+      column = column_by_name(order)
+      unless column
+        self.class.order_unsupported(order, "no column #{order} in #{self.class}")
       end
-
-      def reverse_order(assets)
-        driver.reverse_order(assets)
-      rescue NotImplementedError
-        self.class.order_unsupported(order_column.name, "Your ORM do not support reverse order: please specify :order_desc option manually")
+      unless column.supports_order?
+        self.class.order_unsupported(column.name, "column don't support order" )
       end
+    end
 
-      def apply_block_order(assets, order)
-        case order.arity
-        when -1, 0
-          assets.instance_eval(&order)
-        when 1
-          order.call(assets)
-        else
-          self.class.order_unsupported(order_column.name, "Order option proc can not handle more than one argument")
-        end
+    def apply_asc_order(assets, order)
+      if order.respond_to?(:call)
+        apply_block_order(assets, order)
+      else
+        driver.asc(assets, order)
+      end
+    end
+
+    def apply_desc_order(assets, order)
+      if order.respond_to?(:call)
+        reverse_order(apply_asc_order(assets, order))
+      else
+        driver.desc(assets, order)
+      end
+    end
+
+    def reverse_order(assets)
+      driver.reverse_order(assets)
+    rescue NotImplementedError
+      self.class.order_unsupported(order_column.name, "Your ORM do not support reverse order: please specify :order_desc option manually")
+    end
+
+    def apply_block_order(assets, order)
+      case order.arity
+      when -1, 0
+        assets.instance_eval(&order)
+      when 1
+        order.call(assets)
+      else
+        self.class.order_unsupported(order_column.name, "Order option proc can not handle more than one argument")
       end
     end
   end
