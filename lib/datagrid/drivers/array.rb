@@ -39,15 +39,13 @@ module Datagrid
 
       def greater_equal(scope, field, value)
         scope.select do |object|
-          compare_value = object.public_send(field)
-          compare_value.respond_to?(:>=) && compare_value >= value
+          object.public_send(field) >= value
         end
       end
 
       def less_equal(scope, field, value)
         scope.select do |object|
-          compare_value = object.public_send(field)
-          compare_value.respond_to?(:<=) && compare_value <= value
+          object.public_send(field) <= value
         end
       end
 

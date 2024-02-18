@@ -101,11 +101,11 @@ describe Datagrid::Core do
       class InspectTest
         include Datagrid
         scope {Entry}
-        filter(:created_at, :date, :range => true)
+        filter(:created_at, :date, range: true)
         column(:name)
       end
 
-      grid = InspectTest.new(:created_at => ['2014-01-01', '2014-08-05'], :descending => true, :order => 'name')
+      grid = InspectTest.new(created_at: ['2014-01-01', '2014-08-05'], descending: true, order: 'name')
       expect(grid.inspect).to eq('#<InspectTest order: :name, descending: true, created_at: [Wed, 01 Jan 2014, Tue, 05 Aug 2014]>')
     end
   end
@@ -154,7 +154,7 @@ describe Datagrid::Core do
     end
 
     it "has access to attributes" do
-      grid = test_report(:attribute_name => 'value') do
+      grid = test_report(attribute_name: 'value') do
         scope {Entry}
         datagrid_attribute :attribute_name
         dynamic do
