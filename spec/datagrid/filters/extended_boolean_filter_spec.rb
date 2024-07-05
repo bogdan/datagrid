@@ -41,6 +41,10 @@ describe Datagrid::Filters::ExtendedBooleanFilter do
     expect(grid.disabled).to eq("YES")
     grid.disabled = false
     expect(grid.disabled).to eq("NO")
+    grid.disabled = "true"
+    expect(grid.disabled).to eq("YES")
+    grid.disabled = "false"
+    expect(grid.disabled).to eq("NO")
   end
 
 end

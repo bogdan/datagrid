@@ -3,6 +3,8 @@ class Datagrid::Filters::ExtendedBooleanFilter < Datagrid::Filters::EnumFilter
 
   YES = "YES"
   NO = "NO"
+  TRUTH_VALUES = [true, 'true', "y", "yes"]
+  FALSE_VALUES = [false, 'false', "n", "no"]
 
   def initialize(report, attribute, options = {}, &block)
     options[:select] = -> { boolean_select }
@@ -15,10 +17,11 @@ class Datagrid::Filters::ExtendedBooleanFilter < Datagrid::Filters::EnumFilter
   end
 
   def parse(value)
-    case
-    when value == true
+    value = value.downcase if value.is_a?(String)
+    case value
+    when *TRUTH_VALUES
       YES
-    when value == false
+    when *FALSE_VALUES
       NO
     when value.blank?
       nil

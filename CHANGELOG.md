@@ -1,5 +1,6 @@
 ## master
 
+* Treat true/false as YES/NO when assigned as strings for xboolean filter
 * Support infinite ranges for date, datetime and integer filters
 
 ## 1.8.1
