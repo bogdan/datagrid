@@ -17,7 +17,7 @@ group :development do
   gem "activerecord"
 
   group :mongo do
-    gem "mongoid"
+    gem "mongoid", '~> 9.0.0'
     gem "bson"
   end
 end
