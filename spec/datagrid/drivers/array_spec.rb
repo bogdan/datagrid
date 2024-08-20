@@ -6,11 +6,12 @@ describe Datagrid::Drivers::Array do
     subject { described_class }
 
     it {should be_match(Array.new)}
+    it {should be_match(ActiveRecord::Result.new([], []))}
     it {should_not be_match({})}
   end
-  
+
   describe "api" do
-  
+
     class ArrayGrid
       class User < Struct.new(:name, :age); end
       include Datagrid
@@ -36,8 +37,8 @@ describe Datagrid::Drivers::Array do
         [ first, second, third ]
       end
     end
-  
-          
+
+
     describe '#assets' do
       subject { super().assets }
       describe '#size' do
@@ -55,13 +56,13 @@ describe Datagrid::Drivers::Array do
       subject { super().header }
       it {should ==[ "Name", "Age"]}
     end
-      
+
     describe '#data' do
       subject { super().data }
       it {should == [[ "Name", "Age"], ["Vasya", 15], ["Petya", 12], ["Vova", 13]]}
     end
-      
-      
+
+
     describe "when some filters specified" do
       let(:_attributes) { {:age => [12,14]} }
 
@@ -80,7 +81,7 @@ describe Datagrid::Drivers::Array do
         it {should include(third)}
       end
     end
-      
+
     describe "when reverse ordering is specified" do
       let(:_attributes) { {:order => :name, :descending => true} }
 

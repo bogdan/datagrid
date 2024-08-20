@@ -4,7 +4,10 @@ module Datagrid
     class Array < AbstractDriver
 
       def self.match?(scope)
-        !Datagrid::Drivers::ActiveRecord.match?(scope) && (scope.is_a?(::Array) || scope.is_a?(Enumerator))
+        !Datagrid::Drivers::ActiveRecord.match?(scope) && (
+          scope.is_a?(::Array) || scope.is_a?(Enumerator) ||
+          (defined?(::ActiveRecord::Result) && scope.is_a?(::ActiveRecord::Result))
+        )
       end
 
       def to_scope(scope)
