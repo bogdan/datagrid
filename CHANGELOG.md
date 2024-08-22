@@ -3,6 +3,7 @@
 * Treat true/false as YES/NO when assigned as strings for xboolean filter
 * Support infinite ranges for date, datetime and integer filters
 * Treat `ActiveRecord::Result` class as `Array` driver
+* Drop support of Rails 6.0 [#326](https://github.com/bogdan/datagrid/pull/326)
 
 ## 1.8.1
 
@@ -20,9 +21,9 @@
 ## 1.7.0
 
 * Depend on `railties` instead of `rails` to prevent loading of unnecessary frameworks
-* Bugfix `File.exist?` usage for ruby 3.0 [#307](https://github.com/bogdan/datagrid/issues/307)
-* Drop support of old Ruby versions (< 2.7)
-* Drop support of old Rails versions (< 6.0)
+* Bugfix `File.exist?` usage for Ruby 3.0 [#307](https://github.com/bogdan/datagrid/issues/307)
+* Drop support of old Ruby versions (< 2.7) [#305](https://github.com/bogdan/datagrid/pull/305)
+* Drop support of old Rails versions (< 6.0) [#305](https://github.com/bogdan/datagrid/pull/305)
 
 ## 1.6.3
 
