@@ -22,7 +22,6 @@ A really mighty and flexible ruby library that generates reports including admin
 
 [Create an issue](https://github.com/bogdan/datagrid/issues/new) if you want more.
 
-
 ### Documentation
 
 * [Readme](/Readme.markdown) - this read-me for basic information
@@ -101,7 +100,6 @@ In order to create a report, you need to define:
 * filters that will be used to filter data
 * columns that should be displayed and sortable (if possible)
 
-
 ### Scope
 
 Default scope of objects to filter and display.
@@ -138,7 +136,6 @@ Datagrid supports different type of filters including:
 * dynamic - build dynamic SQL condition 
 
 [More about filters](https://github.com/bogdan/datagrid/wiki/Filters)
-
 
 ### Columns
 
@@ -193,6 +190,10 @@ All advanced frontend things are described in:
 
 If you have a question of any kind, just make an issue and describe your problem in details.
 
+## Contribution
+
+If you are interested in contributing to this project, please follow the [instructions here](CONTRIBUTING.md).
+
 ## Self-Promotion
 
 Like datagrid?
@@ -200,7 +201,6 @@ Like datagrid?
 Follow the repository on [GitHub](https://github.com/bogdan/datagrid).
 
 Read [author blog](http://gusiev.com).
-
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbogdan%2Fdatagrid.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbogdan%2Fdatagrid?ref=badge_large)
