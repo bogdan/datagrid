@@ -508,8 +508,15 @@ describe Datagrid::Columns do
       end
 
       row = grid.data_row(Entry.create!)
-      expect(row.random1).to eq(row.random1)
-      expect(row.random2).to_not eq(row.random1)
+      row_value1 = row.random1
+      row_value2 = row.random2
+      expect(row_value1).to_not eq(row_value2)
+      expect(row.random1).to eq(row_value1)
+      expect(row.random2).to eq(row_value2)
+      grid.reset
+      expect(row.random1).to_not eq(row_value1)
+      expect(row.random2).to_not eq(row_value2)
+
       grid.cached = false
       expect(row.random2).to_not eq(row.random2)
       expect(row.random2).to_not eq(row.random1)

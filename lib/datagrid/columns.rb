@@ -439,7 +439,12 @@ module Datagrid
           presenter.instance_eval(&column.data_block)
         end
       end
+    end
 
+    # @!visibility private
+    def reset
+      super
+      @cache = {}
     end
 
     protected

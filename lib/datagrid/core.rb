@@ -263,6 +263,12 @@ module Datagrid
         scope == other.scope
     end
 
+    # Resets loaded assets and column values cache
+    # @return [void]
+    def reset
+      assets.reset
+    end
+
     protected
     def sanitize_for_mass_assignment(attributes)
       forbidden_attributes_protection ? super(attributes) : attributes

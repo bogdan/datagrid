@@ -1,8 +1,11 @@
+# Changelog
+
 ## master
 
-* Treat true/false as YES/NO when assigned as strings for xboolean filter
-* Support infinite ranges for date, datetime and integer filters
-* Treat `ActiveRecord::Result` class as `Array` driver
+* Treat true/false as YES/NO when assigned as strings for xboolean filter.
+* Support infinite ranges for date, datetime and integer filters.
+* Treat `ActiveRecord::Result` class as `Array` driver.
+* Add `Datagrid#reset` method to reset a column cache.
 
 ## 1.8.1
 
@@ -13,9 +16,13 @@
 * Support `input_options: {type: "textarea"}` as `<textarea/>` tag
 * Remove deprecated `eboolean` filter
 * Fixed scope wrapping to be universal
-* Deprecated `integer_range_filters` and `date_range_filters`. Use `filter(name, type, range: true)` instead.
-* Add `original_scope` method that returns scope as it was defined without any wrapping [#313](https://github.com/bogdan/datagrid/pull/313)
-* Add ability to specify `columns` option for `datagrid_row`. [#314](https://github.com/bogdan/datagrid/pull/314)
+* Deprecated `integer_range_filters` and `date_range_filters`.
+  Use `filter(name, type, range: true)` instead.
+* Add `original_scope` method that returns scope
+  as it was defined without any wrapping
+  [#313](https://github.com/bogdan/datagrid/pull/313)
+* Add ability to specify `columns` option for `datagrid_row`.
+  [#314](https://github.com/bogdan/datagrid/pull/314)
 
 ## 1.7.0
 
