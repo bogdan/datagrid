@@ -4,6 +4,7 @@ gemspec
 
 group :development do
   gem "appraisal"
+  gem "activerecord"
   gem "bump"
   gem "csv" # removed from standard library in Ruby 3.4
   gem "nokogiri" # used to test html output
