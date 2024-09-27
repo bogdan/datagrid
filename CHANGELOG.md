@@ -1,6 +1,8 @@
 # Changelog
 
-## master
+## 1.8.3
+
+* Fix rails hooking for version 7.1. [#327](https://github.com/bogdan/datagrid/issues/327)
 
 ## 1.8.2
 
