@@ -14,10 +14,14 @@ module Datagrid
   autoload :Configuration
 
   autoload :Helper
-  ActionView::Base.send(:include, Datagrid::Helper)
+  ::ActiveSupport.on_load(:action_view) do
+    ActionView::Base.send(:include, Datagrid::Helper)
+  end
 
   autoload :FormBuilder
-  ActionView::Helpers::FormBuilder.send(:include, Datagrid::FormBuilder)
+  ::ActiveSupport.on_load(:action_view) do
+    ActionView::Helpers::FormBuilder.send(:include, Datagrid::FormBuilder)
+  end
 
   autoload :Renderer
 
