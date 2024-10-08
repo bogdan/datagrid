@@ -18,7 +18,7 @@ A really mighty and flexible ruby library that generates reports including admin
 * Mongoid
 * MongoMapper
 * Sequel
-* Array (slow but possible)
+* Array (in-memory data of smaller scale)
 
 [Create an issue](https://github.com/bogdan/datagrid/issues/new) if you want more.
 
