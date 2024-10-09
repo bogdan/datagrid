@@ -1,4 +1,3 @@
-require "datagrid/engine"
 require "action_view"
 
 module Datagrid

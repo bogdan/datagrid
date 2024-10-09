@@ -1,12 +1,14 @@
 require "rails/engine"
+require 'datagrid/helper'
+require 'datagrid/form_builder'
 
 module Datagrid
   # @!private
   class Engine < ::Rails::Engine
     initializer "datagrid.helpers" do
-      #TODO: check why it doesn't work
       ActiveSupport.on_load :action_view do
-        include Datagrid::Helper
+        ActionView::Base.send(:include, Datagrid::Helper)
+        ActionView::Helpers::FormBuilder.send(:include, Datagrid::FormBuilder)
       end
     end
   end

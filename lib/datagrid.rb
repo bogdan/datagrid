@@ -1,5 +1,6 @@
 require "action_view"
 require "datagrid/configuration"
+require "datagrid/engine"
 
 module Datagrid
 
@@ -14,14 +15,7 @@ module Datagrid
   autoload :Configuration
 
   autoload :Helper
-  ::ActiveSupport.on_load(:action_view) do
-    ActionView::Base.send(:include, Datagrid::Helper)
-  end
-
   autoload :FormBuilder
-  ::ActiveSupport.on_load(:action_view) do
-    ActionView::Helpers::FormBuilder.send(:include, Datagrid::FormBuilder)
-  end
 
   autoload :Renderer
 
