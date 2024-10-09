@@ -109,8 +109,8 @@ def action_view_template
     File.expand_path("../../app/views", __FILE__),
     File.expand_path("../support/test_partials", __FILE__),
   ], {})
-  klass = ActionView::Base.respond_to?(:with_empty_template_cache) ? ActionView::Base.with_empty_template_cache : ActionView::Base
-  template = klass.new(context, {}, ::ActionController::Base.new)
+  Datagrid::Engine.extend_modules
+  template = ActionView::Base.with_empty_template_cache.new(context, {}, ::ActionController::Base.new)
   allow(template).to receive(:protect_against_forgery?).and_return(false)
   template
 end

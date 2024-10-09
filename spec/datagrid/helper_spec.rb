@@ -662,7 +662,6 @@ describe Datagrid::Helper do
   end
 
   describe ".datagrid_header" do
-
     it "should support order_by_value colums" do
       grid = test_report(order: "category") do
         scope { Entry }
