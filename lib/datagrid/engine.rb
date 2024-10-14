@@ -6,8 +6,8 @@ module Datagrid
   # @!private
   class Engine < ::Rails::Engine
     def self.extend_modules
-      ActionView::Base.send(:include, Datagrid::Helper)
-      ActionView::Helpers::FormBuilder.send(:include, Datagrid::FormBuilder)
+      ActionView::Base.include(Datagrid::Helper)
+      ActionView::Helpers::FormBuilder.include(Datagrid::FormBuilder)
     end
 
     initializer "datagrid.helpers" do
