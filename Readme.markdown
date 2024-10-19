@@ -22,6 +22,12 @@ A really mighty and flexible ruby library that generates reports including admin
 
 [Create an issue](https://github.com/bogdan/datagrid/issues/new) if you want more.
 
+### Datagrid Phylosophy
+
+1. Expressive DSL complements OOD instead of replacing it
+2. Extensible in every way while providing a lot of defaults
+3. If your ORM supports that, datagrid also supports that!
+
 ### Documentation
 
 * [Readme](/Readme.markdown) - this read-me for basic information
