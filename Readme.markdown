@@ -4,7 +4,8 @@
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbogdan%2Fdatagrid.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbogdan%2Fdatagrid?ref=badge_shield)
 
-A really mighty and flexible ruby library that generates reports including admin panels, analytics and data representation:
+A really mighty and flexible ruby library that generates reports
+including admin panels, analytics and data representation:
 
 * Filtering
 * Columns
@@ -12,7 +13,7 @@ A really mighty and flexible ruby library that generates reports including admin
 * Localization
 * Export to CSV
 
-### ORM Support
+## ORM Support
 
 * ActiveRecord
 * Mongoid
@@ -22,17 +23,17 @@ A really mighty and flexible ruby library that generates reports including admin
 
 [Create an issue](https://github.com/bogdan/datagrid/issues/new) if you want more.
 
-### Datagrid Phylosophy
+## Datagrid Philosophy
 
-1. Expressive DSL complements OOD instead of replacing it
-2. Extensible in every way while providing a lot of defaults
-3. If your ORM supports that, datagrid also supports that!
+1. Expressive DSL complements OOD instead of replacing it.
+1. Extensible in every way while providing a lot of defaults.
+1. If your ORM supports that, datagrid also supports that!
 
-### Documentation
+## Documentation
 
-* [Readme](/Readme.markdown) - this read-me for basic information
-* [Wiki](https://github.com/bogdan/datagrid/wiki) - general reference on how to use the gem
-* [Rdoc](https://rubydoc.info/gems/datagrid) - API reference
+* [Readme](/Readme.markdown) - this read-me for basic information.
+* [Wiki](https://github.com/bogdan/datagrid/wiki) - general reference on how to use the gem.
+* [Rdoc](https://rubydoc.info/gems/datagrid) - API reference.
 
 ### Live Demo
 
@@ -77,7 +78,7 @@ Basic grid api:
 
 ``` ruby
 report = UsersGrid.new(
-  group_id: [1,2], 
+  group_id: [1,2],
   logins_count: [1, nil],
   category: "first",
   order: :group,
@@ -85,7 +86,10 @@ report = UsersGrid.new(
 )
 
 report.assets # => Array of User instances:
-              # SELECT * FROM users WHERE users.group_id in (1,2) AND users.logins_count >= 1 AND users.category = 'first' ORDER BY groups.name DESC
+              # SELECT * FROM users WHERE users.group_id in (1,2) AND
+              #   users.logins_count >= 1 AND
+              #   users.category = 'first'
+              # ORDER BY groups.name DESC
 
 report.header # => ["Name", "Group", "Activated"]
 report.rows   # => [
@@ -109,7 +113,8 @@ In order to create a report, you need to define:
 ### Scope
 
 Default scope of objects to filter and display.
-In common case it is `ActiveRecord::Base` (or any other supported ORM) subclass with some generic scopes like:
+In common case it is `ActiveRecord::Base` (or any other supported ORM)
+subclass with some generic scopes like:
 
 ``` ruby
 scope do
@@ -139,7 +144,7 @@ Datagrid supports different type of filters including:
 * xboolean - the select of "yes", "no" and any
 * enum - selection of the given values
 * string
-* dynamic - build dynamic SQL condition 
+* dynamic - build dynamic SQL condition
 
 [More about filters](https://github.com/bogdan/datagrid/wiki/Filters)
 
@@ -160,7 +165,7 @@ Each column is sortable.
 
 ### Front end
 
-### Using Generator
+#### Using Generator
 
 Datagrid has a builtin generator:
 
@@ -178,7 +183,7 @@ route  resources :skills
 insert  app/assets/stylesheet/application.css
 ```
 
-### Customize Built-in partials
+#### Customize Built-in partials
 
 In order to get a control on datagrid built-in partials run:
 
@@ -186,7 +191,7 @@ In order to get a control on datagrid built-in partials run:
 rake datagrid:copy_partials
 ```
 
-### Advanced frontend
+#### Advanced frontend
 
 All advanced frontend things are described in:
 
@@ -194,11 +199,13 @@ All advanced frontend things are described in:
 
 ## Questions & Issues
 
-If you have a question of any kind, just make an issue and describe your problem in details.
+If you have a question of any kind, just make an issue and
+describe your problem in details.
 
 ## Contribution
 
-If you are interested in contributing to this project, please follow the [instructions here](CONTRIBUTING.md).
+If you are interested in contributing to this project,
+please follow the [instructions here](CONTRIBUTING.md).
 
 ## Self-Promotion
 
@@ -209,4 +216,5 @@ Follow the repository on [GitHub](https://github.com/bogdan/datagrid).
 Read [author blog](http://gusiev.com).
 
 ## License
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbogdan%2Fdatagrid.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbogdan%2Fdatagrid?ref=badge_large)
