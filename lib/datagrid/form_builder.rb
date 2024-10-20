@@ -23,6 +23,7 @@ module Datagrid
       label(filter.name, text || filter.header, **filter.label_options, **options, &block)
     end
 
+    # @visibility private
     def datagrid_filter_input(attribute_or_filter, **options)
       filter = datagrid_get_filter(attribute_or_filter)
       value = object.filter_value_as_string(filter)
@@ -34,28 +35,27 @@ module Datagrid
     end
 
     protected
-    def datagrid_extended_boolean_filter(attribute_or_filter, options = {})
-      datagrid_enum_filter(attribute_or_filter, options)
+    def datagrid_extended_boolean_filter(filter, options = {})
+      datagrid_enum_filter(filter, options)
     end
 
-    def datagrid_boolean_filter(attribute_or_filter, options = {})
-      check_box(datagrid_get_attribute(attribute_or_filter), options)
+    def datagrid_boolean_filter(filter, options = {})
+      check_box(filter.name, options)
     end
 
-    def datagrid_date_filter(attribute_or_filter, options = {})
-      datagrid_range_filter(:date, attribute_or_filter, options)
+    def datagrid_date_filter(filter, options = {})
+      datagrid_range_filter(:date, filter, options)
     end
 
-    def datagrid_date_time_filter(attribute_or_filter, options = {})
-      datagrid_range_filter(:datetime, attribute_or_filter, options)
+    def datagrid_date_time_filter(filter, options = {})
+      datagrid_range_filter(:datetime, filter, options)
     end
 
-    def datagrid_default_filter(attribute_or_filter, options = {})
-      datagrid_filter_input(attribute_or_filter, **options)
+    def datagrid_default_filter(filter, options = {})
+      datagrid_filter_input(filter, **options)
     end
 
-    def datagrid_enum_filter(attribute_or_filter, options = {}, &block)
-      filter = datagrid_get_filter(attribute_or_filter)
+    def datagrid_enum_filter(filter, options = {}, &block)
       if filter.checkboxes?
         options = add_html_classes(options, 'checkboxes')
         elements = object.select_options(filter).map do |element|
@@ -99,16 +99,14 @@ module Datagrid
       end
     end
 
-    def datagrid_integer_filter(attribute_or_filter, options = {})
-      filter = datagrid_get_filter(attribute_or_filter)
+    def datagrid_integer_filter(filter, options = {})
       if filter.multiple? && object[filter.name].blank?
         options[:value] = ""
       end
       datagrid_range_filter(:integer, filter, options)
     end
 
-    def datagrid_dynamic_filter(attribute_or_filter, options = {})
-      filter = datagrid_get_filter(attribute_or_filter)
+    def datagrid_dynamic_filter(filter, options = {})
       input_name = "#{object_name}[#{filter.name.to_s}][]"
       field, operation, value = object.filter_value(filter)
       options = options.merge(name: input_name)
@@ -149,8 +147,7 @@ module Datagrid
       end
     end
 
-    def datagrid_range_filter(type, attribute_or_filter, options = {})
-      filter = datagrid_get_filter(attribute_or_filter)
+    def datagrid_range_filter(type, filter, options = {})
       if filter.range?
         options = options.merge(multiple: true)
         from_options = datagrid_range_filter_options(object, filter, :from, options)
@@ -181,16 +178,12 @@ module Datagrid
       options
     end
 
-    def datagrid_string_filter(attribute_or_filter, options = {})
-      datagrid_range_filter(:string, attribute_or_filter, options)
+    def datagrid_string_filter(filter, options = {})
+      datagrid_range_filter(:string, filter, options)
     end
 
-    def datagrid_float_filter(attribute_or_filter, options = {})
-      datagrid_range_filter(:float, attribute_or_filter, options)
-    end
-
-    def datagrid_get_attribute(attribute_or_filter)
-      Utils.string_like?(attribute_or_filter) ? attribute_or_filter : attribute_or_filter.name
+    def datagrid_float_filter(filter, options = {})
+      datagrid_range_filter(:float, filter, options)
     end
 
     def datagrid_get_filter(attribute_or_filter)
