@@ -74,6 +74,7 @@ module Datagrid
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
     #
+    # @return [String]
     # @example
     #   = datagrid_rows(grid) # Generic table rows Layout
     #
@@ -85,7 +86,7 @@ module Datagrid
       datagrid_renderer.rows(grid, assets, **options, &block)
     end
 
-    # Renders ordering controls for the given column name
+    # @return [String] renders ordering controls for the given column name
     #
     # Supported options:
     #
@@ -140,7 +141,6 @@ module Datagrid
     def datagrid_order_path(grid, column, descending)
       datagrid_renderer.order_path(grid, column, descending, request)
     end
-
 
     protected
 

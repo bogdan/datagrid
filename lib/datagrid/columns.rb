@@ -243,8 +243,7 @@ module Datagrid
       self.rows(*column_names).unshift(self.header(*column_names))
     end
 
-    # Return Array of Hashes where keys are column names and values are column values
-    # for each row in filtered datagrid relation.
+    # @return [Array<{Symbol => Object}>] an array of hashes representing the rows in the filtered datagrid relation
     #
     # @example
     #   class MyGrid
@@ -301,7 +300,7 @@ module Datagrid
     end
 
     # @param column_names [Array<String, Symbol>] list of column names if you want to limit data only to specified columns
-    # @return columns that can be represented in plain data(non-html) way
+    # @return [Array<Datagrid::Columns::Column>] columns that can be represented in plain data(non-html) way
     def data_columns(*column_names, **options)
       self.columns(*column_names, **options, data: true)
     end

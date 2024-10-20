@@ -21,6 +21,7 @@ module Datagrid
       # will always present in the grid table and won't be listed
       # in column names selection
       # Accepts same options as <tt>:enum</tt> filter
+      # @return [Datagrid::Filters::BaseFilter] Defined filter object
       # @example
       #   column_names_filter(header: "Choose columns")
       # @see Datagrid::Filters::ClassMethods#filter

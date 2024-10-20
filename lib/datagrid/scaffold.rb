@@ -1,5 +1,6 @@
 require "rails/generators"
 
+# @!visibility private
 class Datagrid::Scaffold < Rails::Generators::NamedBase
 
   include Rails::Generators::ResourceHelpers

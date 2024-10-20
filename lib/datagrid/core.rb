@@ -36,8 +36,7 @@ module Datagrid
         end
       end
 
-      # Defines a scope at class level
-      # @return [void]
+      # @return [void] Defines a scope at class level
       # @example
       #   scope { User }
       #   scope { Project.where(deleted: false) }
@@ -123,6 +122,9 @@ module Datagrid
 
     end
 
+    # @param [{String, Symbol => Object}, nil] attributes a hash of attributes to initialize the object
+    # @yield [block] an optional block that is passed to the scope method for further customization
+    # @return [void] Initializes a new instance with optional attributes and an optional block.
     def initialize(attributes = nil, &block)
       super()
 
@@ -175,7 +177,7 @@ module Datagrid
       scope
     end
 
-    # Returns serializable query arguments skipping all nil values
+    # @return [{Symbol => Object}] serializable query arguments skipping all nil values
     # @example
     #   grid = ProductsGrid.new(category: 'dresses', available: true)
     #   grid.as_query # => {category: 'dresses', available: true}
@@ -187,7 +189,7 @@ module Datagrid
       attributes
     end
 
-    # @return [Hash<Symbol, Hash<Symbol, Object>>] query parameters to link this grid from a page
+    # @return [{ Symbol => { Symbol => Object } }] query parameters to link this grid from a page
     # @example
     #   grid = ProductsGrid.new(category: 'dresses', available: true)
     #   Rails.application.routes.url_helpers.products_path(grid.query_params)
@@ -196,7 +198,7 @@ module Datagrid
       { param_name.to_sym => as_query.merge(attributes) }
     end
 
-    # Redefines scope at instance level
+    # @return [void] redefines scope at instance level
     # @example
     #   class MyGrid
     #     scope { Article.order('created_at desc') }
@@ -228,8 +230,7 @@ module Datagrid
       scope_value.call
     end
 
-    # Resets current instance scope to default scope defined in a class
-    # @return [void]
+    # @return [void] Resets current instance scope to default scope defined in a class
     def reset_scope
       self.scope_value = self.class.scope_value
     end
@@ -263,8 +264,7 @@ module Datagrid
         scope == other.scope
     end
 
-    # Resets loaded assets and column values cache
-    # @return [void]
+    # @return [void] Resets loaded assets and column values cache
     def reset
       assets.reset
     end

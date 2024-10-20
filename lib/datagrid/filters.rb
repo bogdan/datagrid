@@ -47,7 +47,7 @@ module Datagrid
 
     module ClassMethods
 
-      # @return [Datagrid::Filters::Filter, nil] filter definition object by name
+      # @return [Datagrid::Filters::BaseFilter, nil] filter definition object by name
       def filter_by_name(attribute)
         if attribute.is_a?(Datagrid::Filters::BaseFilter)
           unless ancestors.include?(attribute.grid_class)
@@ -68,7 +68,7 @@ module Datagrid
       # @param [Symbol] type filter type that defines type case and GUI representation of a filter
       # @param [Hash] options hash of options
       # @param [Proc] block proc to apply the filter
-      # @return [Datagrid::Filters::Filter] Filter definition object
+      # @return [Datagrid::Filters::BaseFilter] Filter definition object
       # @see https://github.com/bogdan/datagrid/wiki/Filters
       #
       # Available options:
@@ -120,7 +120,7 @@ module Datagrid
         "#{super}(#{filters_inspection})"
       end
 
-      # @return [Array<Datagrid::Filters::Filter>] all defined filters
+      # @return [Array<Datagrid::Filters::BaseFilter>] all defined filters
       def filters
         filters_array
       end
@@ -170,7 +170,7 @@ module Datagrid
       end
     end
 
-    # @return [Datagrid::Filters::Filter, nil] filter object with the given name
+    # @return [Datagrid::Filters::BaseFilter, nil] filter object with the given name
     def filter_by_name(name)
       self.class.filter_by_name(name)
     end
@@ -197,7 +197,7 @@ module Datagrid
       find_select_filter(filter).select_values(self)
     end
 
-    # @return [Array<Datagrid::Filters::Filter>] all currently enabled filters
+    # @return [Array<Datagrid::Filters::BaseFilter>] all currently enabled filters
     def filters
       self.class.filters.select do |filter|
         filter.enabled?(self)
