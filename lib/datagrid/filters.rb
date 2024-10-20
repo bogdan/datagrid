@@ -45,7 +45,7 @@ module Datagrid
 
     module ClassMethods
 
-      # Returns filter definition object by name
+      # @return [Datagrid::Filters::Filter] filter definition object by name
       def filter_by_name(attribute)
         if attribute.is_a?(Datagrid::Filters::BaseFilter)
           unless ancestors.include?(attribute.grid_class)
@@ -151,12 +151,12 @@ module Datagrid
       apply_filters(super, filters)
     end
 
-    # Returns filter value for given filter definition
+    # @return [Object] filter value for given filter definition
     def filter_value(filter)
       self[filter.name]
     end
 
-    # Returns string representation of filter value
+    # @return [String] string representation of filter value
     def filter_value_as_string(name)
       filter = filter_by_name(name)
       value = filter_value(filter)
@@ -167,13 +167,12 @@ module Datagrid
       end
     end
 
-    # Returns filter object with the given name
+    # @return [Datagrid::Filters::Filter] filter object with the given name
     def filter_by_name(name)
       self.class.filter_by_name(name)
     end
 
-    # Returns assets filtered only by specified filters
-    # Allows partial filtering
+    # @return [Array<Object>] assets filtered only by specified filters
     def filter_by(*filters)
       apply_filters(scope, filters.map{|f| filter_by_name(f)})
     end
@@ -199,7 +198,7 @@ module Datagrid
       self.class.default_filter
     end
 
-    # Returns all currently enabled filters
+    # @return [Array<Datagrid::Filters::Filter>] all currently enabled filters
     def filters
       self.class.filters.select do |filter|
         filter.enabled?(self)

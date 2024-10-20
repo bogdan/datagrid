@@ -17,7 +17,7 @@ module Datagrid
     # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
     # @param text [String, nil] label text, defaults to <tt>filter.header</tt>
     # @param options [Hash] options of rails <tt>label</tt> helper
-    # @return [String] a form label html for the corresponding filter name
+    # @return [String] a form label tag for the corresponding filter name
     def datagrid_label(filter_or_attribute, text = nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       label(filter.name, text || filter.header, **filter.label_options, **options, &block)
@@ -27,7 +27,12 @@ module Datagrid
     def datagrid_filter_input(attribute_or_filter, **options)
       filter = datagrid_get_filter(attribute_or_filter)
       value = object.filter_value_as_string(filter)
-      if options[:type]&.to_sym == :textarea
+      type = options[:type]&.to_sym
+      if type == :"datetime-local"
+        datetime_local_field filter.name, **options
+      elsif type == :"date"
+        date_field filter.name, **options
+      elsif type == :textarea
         text_area filter.name, value: value, **options, type: nil
       else
         text_field filter.name, value: value, **options

@@ -112,6 +112,32 @@ describe Datagrid::FormBuilder do
           '<textarea class="name string_filter" name="report[name]" id="report_name"/>'
         )}
       end
+
+      context "type is datetime-local" do
+        let(:_filter) { :created_at }
+        let(:_grid) {
+          test_report(created_at: Time.new(2024, 1, 1, 9, 25, 15)) do
+            scope {Entry}
+            filter(:created_at, :datetime, input_options: {type: "datetime-local"})
+          end
+        }
+        it { should equal_to_dom(
+          '<input type="datetime-local" class="created_at date_time_filter" value="2024-01-01T09:25:15" name="report[created_at]" id="report_created_at"/>'
+        )}
+      end
+
+      context "type is date" do
+        let(:_filter) { :created_at }
+        let(:_grid) {
+          test_report(created_at: Date.new(2024, 1, 1)) do
+            scope {Entry}
+            filter(:created_at, :datetime, input_options: {type: :date})
+          end
+        }
+        it { should equal_to_dom(
+          '<input type="date" class="created_at date_time_filter" value="2024-01-01" name="report[created_at]" id="report_created_at"/>'
+        )}
+      end
     end
 
     context "with integer filter type and range option" do
