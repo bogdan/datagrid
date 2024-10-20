@@ -16,6 +16,7 @@ module Datagrid
     require "datagrid/filters/float_filter"
     require "datagrid/filters/dynamic_filter"
 
+    # @!visibility private
     FILTER_TYPES = {
       date: Filters::DateFilter,
       datetime: Filters::DateTimeFilter,
@@ -29,6 +30,7 @@ module Datagrid
       dynamic: Filters::DynamicFilter
     }
 
+    # @!visibility private
     DEFAULT_FILTER_BLOCK = Object.new
 
     # @!visibility private
@@ -45,11 +47,11 @@ module Datagrid
 
     module ClassMethods
 
-      # @return [Datagrid::Filters::Filter] filter definition object by name
+      # @return [Datagrid::Filters::Filter, nil] filter definition object by name
       def filter_by_name(attribute)
         if attribute.is_a?(Datagrid::Filters::BaseFilter)
           unless ancestors.include?(attribute.grid_class)
-            raise "#{attribute.grid_class}##{attribute.name} filter doen't belong to #{self.class}"
+            raise ArgumentError, "#{attribute.grid_class}##{attribute.name} filter doen't belong to #{self.class}"
           end
           return attribute
         end
@@ -62,12 +64,12 @@ module Datagrid
       # This method automatically generates <tt>attr_accessor</tt> for filter name
       # and adds it to the list of datagrid attributes.
       #
-      # Arguments:
-      #
-      # * <tt>name</tt> - filter name
-      # * <tt>type</tt> - filter type that defines type case and GUI representation of a filter
-      # * <tt>options</tt> - hash of options
-      # * <tt>block</tt> - proc to apply the filter
+      # @param [Symbol] name filter name
+      # @param [Symbol] type filter type that defines type case and GUI representation of a filter
+      # @param [Hash] options hash of options
+      # @param [Proc] block proc to apply the filter
+      # @return [Datagrid::Filters::Filter] Filter definition object
+      # @see https://github.com/bogdan/datagrid/wiki/Filters
       #
       # Available options:
       #
@@ -94,8 +96,6 @@ module Datagrid
       # * <tt>:input_options</tt> - options passed when rendering html input tag attributes.
       #   Use <tt>input_options.type</tt> to control input type including <tt>textarea</tt>.
       # * <tt>:label_options</tt> - options passed when rendering html label tag attributes
-      #
-      # See: https://github.com/bogdan/datagrid/wiki/Filters for examples
       def filter(name, type = :default, **options, &block)
         klass = type.is_a?(Class) ? type : FILTER_TYPES[type]
         raise ConfigurationError, "filter class #{type.inspect} not found" unless klass
@@ -107,16 +107,20 @@ module Datagrid
         datagrid_attribute(name) do |value|
           filter.parse_values(value)
         end
+        filter
       end
 
+      # @!visibility private
       def default_filter
         DEFAULT_FILTER_BLOCK
       end
 
+      # @!visibility private
       def inspect
         "#{super}(#{filters_inspection})"
       end
 
+      # @return [Array<Datagrid::Filters::Filter>] all defined filters
       def filters
         filters_array
       end
@@ -135,7 +139,6 @@ module Datagrid
         end.join(", ")
       end
     end
-
 
     # @!visibility private
     def initialize(*args, &block)
@@ -167,7 +170,7 @@ module Datagrid
       end
     end
 
-    # @return [Datagrid::Filters::Filter] filter object with the given name
+    # @return [Datagrid::Filters::Filter, nil] filter object with the given name
     def filter_by_name(name)
       self.class.filter_by_name(name)
     end
@@ -177,25 +180,21 @@ module Datagrid
       apply_filters(scope, filters.map{|f| filter_by_name(f)})
     end
 
-    # Returns select options for specific filter or filter name
-    # If given filter doesn't support select options raises `ArgumentError`
+    # @return [Array] the select options for the filter
+    # @raise [ArgumentError] if the filter doesn't support select options
     def select_options(filter)
       find_select_filter(filter).select(self)
     end
 
-    # Sets all options as selected for a filter that has options
+    # @return [void] sets all options as selected for a filter that has options
     def select_all(filter)
       filter = find_select_filter(filter)
       self[filter.name] = select_values(filter)
     end
 
-    # Returns all values that can be set to a filter with select options
+    # @return [Array] all possible values for the filter
     def select_values(filter)
       find_select_filter(filter).select_values(self)
-    end
-
-    def default_filter
-      self.class.default_filter
     end
 
     # @return [Array<Datagrid::Filters::Filter>] all currently enabled filters
@@ -203,6 +202,11 @@ module Datagrid
       self.class.filters.select do |filter|
         filter.enabled?(self)
       end
+    end
+
+    # @!visibility private
+    def default_filter
+      self.class.default_filter
     end
 
     protected
