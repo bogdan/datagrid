@@ -16,7 +16,7 @@ module Datagrid
 
       def where(scope, attribute, value)
         scope.select do |object|
-          object.public_send(attribute) == value
+          get(object, attribute) == value
         end
       end
 
@@ -24,7 +24,7 @@ module Datagrid
         return scope unless order
         return scope if order.empty?
         scope.sort_by do |object|
-          object.public_send(order)
+          get(object, order)
         end
       end
 
@@ -42,13 +42,13 @@ module Datagrid
 
       def greater_equal(scope, field, value)
         scope.select do |object|
-          object.public_send(field) >= value
+          get(object, field) >= value
         end
       end
 
       def less_equal(scope, field, value)
         scope.select do |object|
-          object.public_send(field) <= value
+          get(object, field) <= value
         end
       end
 
@@ -58,12 +58,12 @@ module Datagrid
 
       def is_timestamp?(scope, column_name)
         has_column?(scope, column_name) &&
-          timestamp_class?(scope.first.public_send(column_name).class)
+          timestamp_class?(get(scope.first, column_name).class)
       end
 
       def contains(scope, field, value)
         scope.select do |object|
-          object.public_send(field).to_s.include?(value)
+          get(object, field).to_s.include?(value)
         end
       end
 
@@ -81,6 +81,12 @@ module Datagrid
 
       def can_preload?(scope, association)
         false
+      end
+
+      protected
+
+      def get(object, property)
+        object.is_a?(Hash) ? object[property] : object.public_send(property)
       end
     end
   end

@@ -29,11 +29,10 @@ describe Datagrid::Drivers::Array do
     let(:first) { ArrayGrid::User.new("Vasya", 15) }
     let(:second) { ArrayGrid::User.new("Petya", 12) }
     let(:third) { ArrayGrid::User.new("Vova", 13) }
+    let(:_attributes) { {} }
 
     subject do
-      ArrayGrid.new(
-        defined?(_attributes) ? _attributes : {}
-      ).scope do
+      ArrayGrid.new(_attributes).scope do
         [ first, second, third ]
       end
     end
@@ -92,16 +91,44 @@ describe Datagrid::Drivers::Array do
     end
 
   end
-    describe "when using enumerator scope" do
 
-      it "should work fine" do
-        grid = test_report(to_enum: true) do
-          scope {[]}
-          filter(:to_enum, :boolean) do |_, scope|
-            scope.to_enum
-          end
+  describe "when using enumerator scope" do
+
+    it "should work fine" do
+      grid = test_report(to_enum: true) do
+        scope {[]}
+        filter(:to_enum, :boolean) do |_, scope|
+          scope.to_enum
         end
-        grid.assets.should_not be_any
       end
+      grid.assets.should_not be_any
     end
+  end
+
+  describe "array of hashes" do
+    class HashGrid
+      include Datagrid
+      scope do
+        [{name: 'Bogdan', age: 30}, {name: 'Brad', age: 32}]
+      end
+
+      filter(:name)
+      filter(:age, :integer, :range => true)
+
+      column(:name)
+      column(:age)
+    end
+
+    let(:_attributes) { {} }
+
+    subject do
+      HashGrid.new(_attributes)
+    end
+
+    context "ordered" do
+      let(:_attributes) { { order: :name, descending: true }}
+
+      it { subject.assets.should == [ {name: 'Brad', age: 32}, {name: 'Bogdan', age: 30},] }
+    end
+  end
 end
