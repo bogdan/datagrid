@@ -28,6 +28,10 @@ module Datagrid
       filter = datagrid_get_filter(attribute_or_filter)
       value = object.filter_value_as_string(filter)
       type = options[:type]&.to_sym
+      if options.has_key?(:value) && options[:value].nil? && [:"datetime-local", :"date"].include?(type)
+        # https://github.com/rails/rails/pull/53387
+        options[:value] = ""
+      end
       if type == :"datetime-local"
         datetime_local_field filter.name, **options
       elsif type == :"date"

@@ -124,6 +124,15 @@ describe Datagrid::FormBuilder do
         it { should equal_to_dom(
           '<input type="datetime-local" class="created_at date_time_filter" value="2024-01-01T09:25:15" name="report[created_at]" id="report_created_at"/>'
         )}
+
+        context "nil value option" do
+          let(:_filter_options) do
+            { value: nil }
+          end
+          it { should equal_to_dom(
+            '<input type="datetime-local" value="" class="created_at date_time_filter" name="report[created_at]" id="report_created_at"/>'
+          )}
+        end
       end
 
       context "type is date" do

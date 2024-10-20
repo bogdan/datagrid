@@ -20,7 +20,7 @@ class EqualToDom
   end
 
   def normalize(text)
-    Nokogiri::HTML::DocumentFragment.parse(force_encoding(text.split("\n").map(&:strip).join(""))).to_s
+    Nokogiri::HTML::DocumentFragment.parse(text.split("\n").map(&:strip).join("")).to_s
   end
 
   def failure_message
@@ -29,12 +29,6 @@ class EqualToDom
 
   def description
     "equal to dom #{@expectation[0..20]}"
-  end
-
-  private
-
-  def force_encoding(text)
-    "1.9.3".respond_to?(:force_encoding) ? text.clone.force_encoding("UTF-8") : text
   end
 end
 
