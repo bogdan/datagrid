@@ -24,7 +24,7 @@ module Datagrid
     end
 
     # @visibility private
-    def datagrid_filter_input(attribute_or_filter, **options)
+    def datagrid_filter_input(attribute_or_filter, **options, &block)
       filter = datagrid_get_filter(attribute_or_filter)
       value = object.filter_value_as_string(filter)
       type = options[:type]&.to_sym
@@ -33,19 +33,33 @@ module Datagrid
         options[:value] = ""
       end
       if type == :"datetime-local"
-        datetime_local_field filter.name, **options
+        datetime_local_field filter.name, **options, &block
       elsif type == :"date"
-        date_field filter.name, **options
+        date_field filter.name, **options, &block
       elsif type == :textarea
-        text_area filter.name, value: value, **options, type: nil
+        text_area filter.name, value: value, **options, type: nil, &block
+      elsif type == :select
+        select(
+          filter.name,
+          object.select_options(filter) || [],
+          {
+            include_blank: filter.include_blank,
+            prompt: filter.prompt,
+            include_hidden: false
+          },
+           multiple: filter.multiple?,
+           **options,
+           type: nil,
+           &block
+        )
       else
-        text_field filter.name, value: value, **options
+        text_field filter.name, value: value, **options, &block
       end
     end
 
     protected
-    def datagrid_extended_boolean_filter(filter, options = {})
-      datagrid_enum_filter(filter, options)
+    def datagrid_extended_boolean_filter(filter, options = {}, &block)
+      datagrid_filter_input(filter, **options, type: :select, &block)
     end
 
     def datagrid_boolean_filter(filter, options = {})
@@ -82,18 +96,7 @@ module Datagrid
           }
         )
       else
-        select(
-          filter.name,
-          object.select_options(filter) || [],
-          {
-            include_blank: filter.include_blank,
-            prompt: filter.prompt,
-            include_hidden: false
-          },
-           multiple: filter.multiple?,
-           **options,
-           &block
-        )
+        datagrid_filter_input(filter, **options, type: :select, &block)
       end
     end
 
