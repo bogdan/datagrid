@@ -154,7 +154,9 @@ describe Datagrid::Columns do
     end
 
     it "should support csv export" do
-      expect(subject.to_csv).to eq("Shipping date,Group,Name,Access level,Pet\n#{date},Pop,Star,admin,ROTTWEILER\n")
+      expect(subject.to_csv).to eq(
+        "Shipping date,Group,Name,Access level,Pet\n#{date},Pop,Star,admin,ROTTWEILER\n"
+      )
     end
 
     it "should support csv export of particular columns" do
@@ -162,7 +164,9 @@ describe Datagrid::Columns do
     end
 
     it "should support csv export options" do
-      expect(subject.to_csv(col_sep: ";")).to eq("Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n")
+      expect(subject.to_csv(col_sep: ";")).to eq(
+        "Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n"
+      )
     end
   end
 

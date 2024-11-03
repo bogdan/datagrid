@@ -7,6 +7,7 @@ module Datagrid
   class OrderUnsupported < StandardError
   end
 
+  # Module adds support for ordering by defined columns for Datagrid.
   module Ordering
     # @!visibility private
     def self.included(base)

@@ -3,6 +3,7 @@
 require "action_view"
 
 module Datagrid
+  # Datagrid methods available as helpers in Rails views
   module Helper
     # @param grid [Datagrid] grid object
     # @param column [Datagrid::Columns::Column, String, Symbol] column name

@@ -10,7 +10,7 @@ module Datagrid
     #   * <tt>select</tt> for enum, xboolean filter types
     #   * <tt>check_box</tt> for boolean filter type
     #   * <tt>text_field</tt> for other filter types
-    def datagrid_filter(filter_or_attribute, partials: nil, **options, &block)
+    def datagrid_filter(filter_or_attribute, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       send(filter.form_builder_helper_name, filter, **options, &block)
     end

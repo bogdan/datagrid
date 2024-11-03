@@ -44,6 +44,7 @@ module Datagrid
       end
     end
 
+    # Grid class methods related to filters
     module ClassMethods
       # @return [Datagrid::Filters::BaseFilter, nil] filter definition object by name
       def filter_by_name(attribute)
@@ -73,8 +74,10 @@ module Datagrid
       # Available options:
       #
       # * <tt>:header</tt> - determines the header of the filter
-      # * <tt>:default</tt> - the default filter value. Able to accept a <tt>Proc</tt> in case default should be recalculated
-      # * <tt>:range</tt> - if true, filter can accept two values that are treated as a range that will be used for filtering
+      # * <tt>:default</tt> - the default filter value.
+      #   Can be a <tt>Proc</tt> in case default should be recalculated.
+      # * <tt>:range</tt> - if true, filter can accept two values that are treated
+      #   as a range that will be used for filtering.
       #   Not all of the filter types support this option. Here are the list of types that do:
       #   <tt>:integer</tt>, <tt>:float</tt>, <tt>:date</tt>, <tt>:datetime</tt>, <tt>:string</tt>
       # * <tt>:multiple</tt> -  if true multiple values can be assigned to this filter.

@@ -4,6 +4,15 @@ require "action_view"
 require "datagrid/configuration"
 require "datagrid/engine"
 
+# Main datagrid module that needs to be included in grid class
+#
+# @example
+#   class UsersGrid
+#     include Datagrid
+#     scope { User }
+#     column(:id)
+#     column(:name)
+#   end
 module Datagrid
   extend ActiveSupport::Autoload
 

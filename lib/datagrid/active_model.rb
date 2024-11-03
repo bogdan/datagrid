@@ -7,16 +7,8 @@ module Datagrid
     def self.included(base)
       base.extend ClassMethods
       base.class_eval do
-        begin
-          require "active_model/naming"
-          extend ::ActiveModel::Naming
-        rescue LoadError
-        end
-        begin
-          require "active_model/attributes_assignment"
-          extend ::ActiveModel::AttributesAssignment
-        rescue LoadError
-        end
+        require "active_model/naming"
+        extend ::ActiveModel::Naming
       end
     end
 
