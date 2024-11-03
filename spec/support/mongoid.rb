@@ -1,10 +1,8 @@
 require "rubygems"
 
-#Mongoid.logger = TEST_LOGGER #TODO: understand why still output to STDOUT
-
+# Mongoid.logger = TEST_LOGGER #TODO: understand why still output to STDOUT
 
 class MongoidEntry
-
   include Mongoid::Document
   include Mongoid::Timestamps
 
@@ -14,7 +12,6 @@ class MongoidEntry
   field :disabled, default: false, type: Boolean
   field :confirmed, default: false, type: Boolean
   field :shipping_date, type: Time
-
 end
 
 class MongoidGrid
@@ -31,6 +28,4 @@ class MongoidGrid
   column :name
   column :group_id
   column :disabled
-
 end
-

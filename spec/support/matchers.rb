@@ -1,4 +1,4 @@
-require 'rails/dom/testing'
+require "rails/dom/testing"
 
 def equal_to_dom(text)
   EqualToDom.new(text)
@@ -7,7 +7,6 @@ end
 def match_css_pattern(pattern)
   CssPattern.new(pattern)
 end
-
 
 class EqualToDom
   include Rails::Dom::Testing::Assertions::DomAssertions
@@ -34,15 +33,14 @@ class EqualToDom
   end
 end
 
-
 class CssPattern
   def initialize(pattern)
     @css_pattern = pattern
     @error_message = nil
-    unless @css_pattern.is_a?(Hash)
-      @css_pattern = Array(@css_pattern).map do |key|
-        [key, 1]
-      end
+    return if @css_pattern.is_a?(Hash)
+
+    @css_pattern = Array(@css_pattern).map do |key|
+      [key, 1]
     end
   end
 
@@ -60,7 +58,7 @@ class CssPattern
       if amount_or_pattern_or_string_or_proc.is_a?(String) or amount_or_pattern_or_string_or_proc.is_a?(Regexp)
         pattern_or_string = amount_or_pattern_or_string_or_proc
         html = path.inner_html
-        if !html.match(pattern_or_string)
+        unless html.match(pattern_or_string)
           return error!("#{css.inspect} did not match #{pattern_or_string.inspect}. It was \n:#{html.inspect}")
         end
       elsif amount_or_pattern_or_string_or_proc.is_a? Numeric
@@ -70,13 +68,12 @@ class CssPattern
           return error!("did not find #{css.inspect} #{expected_amount.inspect} times. It was #{amount.inspect}")
         end
       elsif amount_or_pattern_or_string_or_proc.is_a? Proc
-        if !amount_or_pattern_or_string_or_proc.call(path)
+        unless amount_or_pattern_or_string_or_proc.call(path)
           return error!("#{css.inspect} did not validate (proc must not return a falsy value)")
         end
       else
         raise "Instance of String, Rexexp, Proc or Fixnum required"
       end
-      true
     end
   end
 

@@ -5,7 +5,6 @@ require "datagrid/drivers/mongoid"
 require "datagrid/drivers/mongo_mapper"
 require "datagrid/drivers/sequel"
 
-
 module Datagrid
   # @!visibility private
   module Drivers

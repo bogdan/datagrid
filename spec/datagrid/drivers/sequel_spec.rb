@@ -1,18 +1,14 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Datagrid::Drivers::Sequel do
-
   describe ".match?" do
-
     subject { described_class }
 
-    it {should be_match(SequelEntry)}
-    it {should be_match(SequelEntry.where(:id => 1))}
-    it {should_not be_match(Entry.where(:id => 1))}
-
+    it { should be_match(SequelEntry) }
+    it { should be_match(SequelEntry.where(id: 1)) }
+    it { should_not be_match(Entry.where(id: 1)) }
   end
   describe "api" do
-
     subject do
       SequelGrid.new(
         defined?(_attributes) ? _attributes : {}
@@ -21,16 +17,16 @@ describe Datagrid::Drivers::Sequel do
 
     let!(:first) do
       SequelEntry.create(
-        :group_id => 2,
-        :name => "Main First",
-        :disabled => false
+        group_id: 2,
+        name: "Main First",
+        disabled: false
       )
     end
     let!(:second) do
       SequelEntry.create(
-        :group_id => 3,
-        :name => "Main Second",
-        :disabled => true
+        group_id: 3,
+        name: "Main Second",
+        disabled: true
       )
     end
 
@@ -40,73 +36,72 @@ describe Datagrid::Drivers::Sequel do
         scope { SequelEntry }
       end
       grid = PaginationTest.new do |scope|
-        scope.paginate(1,25)
+        scope.paginate(1, 25)
       end
       expect(grid.rows.to_a).to be_kind_of(Array)
       expect(grid.assets.to_a).to be_kind_of(Array)
     end
 
-    describe '#assets' do
+    describe "#assets" do
       subject { super().assets }
-      it {should include(first, second)}
+      it { should include(first, second) }
     end
 
-    describe '#assets' do
+    describe "#assets" do
       subject { super().assets }
-      describe '#size' do
+      describe "#size" do
         subject { super().count }
-        it {should == 2}
+        it { should == 2 }
       end
     end
 
-    describe '#rows' do
+    describe "#rows" do
       subject { super().rows }
-      it {should == [["Main First", 2, false], ["Main Second", 3, true]]}
+      it { should == [["Main First", 2, false], ["Main Second", 3, true]] }
     end
 
-    describe '#header' do
+    describe "#header" do
       subject { super().header }
-      it {should ==[ "Name", "Group", "Disabled"]}
+      it { should == %w[Name Group Disabled] }
     end
 
-    describe '#data' do
+    describe "#data" do
       subject { super().data }
-      it {should == [[ "Name", "Group", "Disabled"], ["Main First", 2, false], ["Main Second", 3, true]]}
+      it { should == [["Name", "Group", "Disabled"], ["Main First", 2, false], ["Main Second", 3, true]] }
     end
-
 
     describe "when some filters specified" do
-      let(:_attributes) { {group_id: 3..100} }
+      let(:_attributes) { { group_id: 3..100 } }
 
-      describe '#assets' do
+      describe "#assets" do
         subject { super().assets.map(&:id) }
-        it {should_not include(first.id)}
+        it { should_not include(first.id) }
       end
 
-      describe '#assets' do
+      describe "#assets" do
         subject { super().assets }
-        it {should include(second)}
+        it { should include(second) }
       end
     end
 
     describe "when reverse ordering is specified" do
-      let(:_attributes) { {:order => :name, :descending => true} }
+      let(:_attributes) { { order: :name, descending: true } }
 
-      describe '#rows' do
+      describe "#rows" do
         subject { super().rows }
-        it {should == [["Main Second", 3, true], ["Main First", 2, false]]}
+        it { should == [["Main Second", 3, true], ["Main First", 2, false]] }
       end
     end
 
     it "should provide default order for non declared fields" do
-      expect {
-        test_report(:order => :test) do
+      expect do
+        test_report(order: :test) do
           scope { SequelEntry }
           column(:test) do
-            'test'
+            "test"
           end
         end.assets
-      }.to raise_error(Datagrid::OrderUnsupported)
+      end.to raise_error(Datagrid::OrderUnsupported)
     end
 
     it "should support batch_size" do

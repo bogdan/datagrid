@@ -1,11 +1,9 @@
-require 'spec_helper'
+require "spec_helper"
 require "datagrid/rspec"
 
-
 describe Datagrid do
-
   describe SimpleReport do
-    it_should_behave_like 'Datagrid'
+    it_should_behave_like "Datagrid"
   end
 
   let(:group) { Group.create!(name: "Pop") }
@@ -20,22 +18,23 @@ describe Datagrid do
     )
   end
 
-  let!(:entry) {  Entry.create!(
-    group: group, name: "Star", disabled: false, confirmed: false, category: "first"
-  ) }
+  let!(:entry) do
+    Entry.create!(
+      group: group, name: "Star", disabled: false, confirmed: false, category: "first"
+    )
+  end
 
-  describe '#assets' do
+  describe "#assets" do
     subject { super().assets }
     it { should include(entry) }
   end
 
   describe ".attributes" do
     it "should return report attributes" do
-      (subject.filters.map(&:name) + [:order, :descending]).each do |attribute|
+      (subject.filters.map(&:name) + %i[order descending]).each do |attribute|
         expect(subject.attributes).to have_key(attribute)
       end
     end
-
   end
 
   describe ".scope" do
@@ -43,17 +42,15 @@ describe Datagrid do
       expect(subject.scope).to respond_to(:each)
     end
 
-
     context "when not defined on class level" do
       subject do
         test_report {}
       end
 
       it "should raise ConfigurationError" do
-        expect {
+        expect do
           subject.scope
-        }.to raise_error(Datagrid::ConfigurationError)
-
+        end.to raise_error(Datagrid::ConfigurationError)
       end
     end
   end
@@ -89,6 +86,4 @@ describe Datagrid do
       end
     end
   end
-
-
 end

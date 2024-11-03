@@ -1,5 +1,4 @@
 namespace :datagrid do
-
   desc "Copy table partials into rails application"
   task :copy_partials do
     require "fileutils"

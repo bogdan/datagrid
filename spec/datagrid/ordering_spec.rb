@@ -1,12 +1,9 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Datagrid::Ordering do
-
-
-  let!(:third) { Entry.create!(name: "cc")}
-  let!(:second) { Entry.create!(name: "bb")}
-  let!(:first) { Entry.create!(name: "aa")}
-
+  let!(:third) { Entry.create!(name: "cc") }
+  let!(:second) { Entry.create!(name: "bb") }
+  let!(:first) { Entry.create!(name: "aa") }
 
   it "should support order" do
     expect(test_report(order: "name") do
@@ -15,7 +12,6 @@ describe Datagrid::Ordering do
       end
       column :name
     end.assets).to eq([first, second, third])
-
   end
 
   it "should support desc order" do
@@ -27,17 +23,16 @@ describe Datagrid::Ordering do
     end.assets).to eq([third, second, first])
   end
 
-
   it "should raise error if ordered by not existing column" do
-    expect {
+    expect do
       test_report(order: :hello).assets
-    }.to raise_error(Datagrid::OrderUnsupported)
+    end.to raise_error(Datagrid::OrderUnsupported)
   end
 
   it "should raise error if ordered by column without order" do
     expect do
       test_report(order: :category) do
-        filter(:category, :default, order: false) do |value|
+        filter(:category, :default, order: false) do |_value|
           self
         end
       end.assets
@@ -46,7 +41,7 @@ describe Datagrid::Ordering do
 
   it "should override default order" do
     expect(test_report(order: :name) do
-      scope { Entry.order("name desc")}
+      scope { Entry.order("name desc") }
       column(:name, order: "name asc")
     end.assets).to eq([first, second, third])
   end
@@ -68,20 +63,20 @@ describe Datagrid::Ordering do
   it "should support order desc given as block" do
     expect(test_report(order: :name, descending: true) do
       scope { Entry }
-      column(:name,  order_desc: proc { order("name desc")})
+      column(:name, order_desc: proc { order("name desc") })
     end.assets).to eq([third, second, first])
   end
 
   it "should treat true order as default" do
     expect(test_report(order: :name) do
       scope { Entry }
-      column(:name,  order: true)
+      column(:name, order: true)
     end.assets).to eq([first, second, third])
   end
 
   it "should support order_by_value" do
     report = test_report(order: :the_name) do
-      scope {Entry}
+      scope { Entry }
       column(:the_name, order_by_value: true) do
         name
       end
@@ -92,12 +87,10 @@ describe Datagrid::Ordering do
   end
 
   it "should support order_by_value as block" do
-
-    order = { aa: 2, bb: 3, cc: 1}
+    order = { aa: 2, bb: 3, cc: 1 }
     report = test_report(order: :the_name) do
-
-      scope {Entry}
-      column(:the_name, order_by_value: proc{|model| order[model.name.to_sym]}) do
+      scope { Entry }
+      column(:the_name, order_by_value: proc { |model| order[model.name.to_sym] }) do
         name
       end
     end
@@ -116,27 +109,25 @@ describe Datagrid::Ordering do
       column(:name)
     end
 
-    grid = OrderInheritenceChild.new(order: 'name')
+    grid = OrderInheritenceChild.new(order: "name")
     expect(grid.assets).to eq([first, second, third])
     grid.descending = true
     expect(grid.assets).to eq([third, second, first])
   end
   it "should support ordering by dynamic columns" do
-
     report = test_report(order: "name") do
-      scope {Entry}
+      scope { Entry }
       dynamic do
         column(:name)
       end
     end
 
     expect(report.assets).to eq([first, second, third])
-
   end
 
   it "should support #ordered_by? method" do
     report = test_report(order: "name") do
-      scope  {Entry}
+      scope  { Entry }
       column(:id)
       column(:name)
     end

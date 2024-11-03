@@ -2,9 +2,9 @@ module Datagrid
   module Drivers
     # @!visibility private
     class Sequel < AbstractDriver
-
       def self.match?(scope)
         return false unless defined?(::Sequel)
+
         if scope.is_a?(Class)
           scope.ancestors.include?(::Sequel::Model)
         else
@@ -14,6 +14,7 @@ module Datagrid
 
       def to_scope(scope)
         return scope if scope.is_a?(::Sequel::Dataset)
+
         scope.where({})
       end
 
@@ -38,7 +39,7 @@ module Datagrid
       end
 
       def default_order(scope, column_name)
-        has_column?(scope, column_name) ?  ::Sequel.lit(prefix_table_name(scope, column_name)) : nil
+        has_column?(scope, column_name) ? ::Sequel.lit(prefix_table_name(scope, column_name)) : nil
       end
 
       def greater_equal(scope, field, value)
@@ -65,10 +66,11 @@ module Datagrid
       def normalized_column_type(scope, field)
         type = column_type(scope, field)
         return nil unless type
+
         {
-          [:string, :blob, :time] => :string,
-          [:integer, :primary_key] => :integer,
-          [:float, :decimal] => :float,
+          %i[string blob time] => :string,
+          %i[integer primary_key] => :integer,
+          %i[float decimal] => :float,
           [:date] => :date,
           [:datetime] => :timestamp,
           [:boolean] => :boolean
@@ -96,14 +98,13 @@ module Datagrid
       end
 
       def can_preload?(scope, association)
-        !! scope.model.association_reflection(association)
+        !!scope.model.association_reflection(association)
       end
-
 
       protected
 
       def prefix_table_name(scope, field)
-        has_column?(scope, field) ?  [to_scope(scope).row_proc.table_name, field].join(".") : field
+        has_column?(scope, field) ? [to_scope(scope).row_proc.table_name, field].join(".") : field
       end
 
       def column_type(scope, field)

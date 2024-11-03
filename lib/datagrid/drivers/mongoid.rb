@@ -2,9 +2,9 @@ module Datagrid
   module Drivers
     # @!visibility private
     class Mongoid < AbstractDriver
-
       def self.match?(scope)
         return false unless defined?(::Mongoid)
+
         if scope.is_a?(Class)
           scope.ancestors.include?(::Mongoid::Document)
         else
@@ -21,9 +21,7 @@ module Datagrid
       end
 
       def where(scope, attribute, value)
-        if value.is_a?(Range)
-          value = {"$gte" => value.first, "$lte" => value.last}
-        end
+        value = { "$gte" => value.first, "$lte" => value.last } if value.is_a?(Range)
         scope.where(attribute => value)
       end
 
@@ -40,11 +38,11 @@ module Datagrid
       end
 
       def greater_equal(scope, field, value)
-        scope.where(field => {"$gte" => value})
+        scope.where(field => { "$gte" => value })
       end
 
       def less_equal(scope, field, value)
-        scope.where(field => {"$lte" => value})
+        scope.where(field => { "$lte" => value })
       end
 
       def has_column?(scope, column_name)
@@ -62,8 +60,9 @@ module Datagrid
       def normalized_column_type(scope, field)
         type = to_scope(scope).klass.fields[field.to_s]&.type
         return nil unless type
+
         {
-          [BigDecimal , String, Symbol, Range, Array, Hash, ] => :string,
+          [BigDecimal, String, Symbol, Range, Array, Hash] => :string,
           [::Mongoid::Boolean] => :boolean,
 
           [Date] => :date,
@@ -72,11 +71,11 @@ module Datagrid
 
           [Float] => :float,
 
-          [Integer] => :integer,
+          [Integer] => :integer
         }.each do |keys, value|
           return value if keys.include?(type)
         end
-        return :string
+        :string
       end
 
       def batch_each(scope, batch_size, &block)
@@ -84,10 +83,9 @@ module Datagrid
         loop do
           batch = scope.skip(current_page * batch_size).limit(batch_size).to_a
           return if batch.empty?
-          scope.skip(current_page * batch_size).limit(batch_size).each do |item|
-            yield(item)
-          end
-          current_page+=1
+
+          scope.skip(current_page * batch_size).limit(batch_size).each(&block)
+          current_page += 1
         end
       end
 
@@ -100,10 +98,8 @@ module Datagrid
       end
 
       def can_preload?(scope, association)
-        !! scope.klass.reflect_on_association(association)
+        !!scope.klass.reflect_on_association(association)
       end
-
     end
   end
 end
-

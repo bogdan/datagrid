@@ -1,25 +1,23 @@
 require "datagrid/filters/select_options"
 
 class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
-
   include Datagrid::Filters::SelectOptions
 
   def initialize(*args)
     super(*args)
-    if checkboxes?
-      options[:multiple] = true
-    end
+    options[:multiple] = true if checkboxes?
     raise Datagrid::ConfigurationError, ":select option not specified" unless options[:select]
   end
 
   def parse(value)
-    return nil if self.strict && !select.include?(value)
+    return nil if strict && !select.include?(value)
+
     value
   end
 
   def default_html_classes
     res = super
-    res.push('checkboxes') if checkboxes?
+    res.push("checkboxes") if checkboxes?
     res
   end
 
@@ -30,5 +28,4 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
   def checkboxes?
     options[:checkboxes]
   end
-
 end

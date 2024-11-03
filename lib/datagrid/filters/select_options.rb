@@ -1,6 +1,6 @@
 module Datagrid::Filters::SelectOptions
   def select(object)
-    select = self.options[:select]
+    select = options[:select]
     if select.is_a?(Symbol)
       object.send(select)
     elsif select.respond_to?(:call)
@@ -15,7 +15,7 @@ module Datagrid::Filters::SelectOptions
     groups_used = grouped_choices?(options)
     options.map do |option|
       if groups_used
-        option[1].map {|o| option_text_and_value(o)}
+        option[1].map { |o| option_text_and_value(o) }
       else
         option_text_and_value(option)
       end
@@ -23,9 +23,12 @@ module Datagrid::Filters::SelectOptions
   end
 
   def include_blank
-    unless prompt
-      options.has_key?(:include_blank) ?
-        Datagrid::Utils.callable(options[:include_blank]) : !multiple?
+    return if prompt
+
+    if options.has_key?(:include_blank)
+      Datagrid::Utils.callable(options[:include_blank])
+    else
+      !multiple?
     end
   end
 
@@ -41,7 +44,7 @@ module Datagrid::Filters::SelectOptions
   def option_text_and_value(option)
     # Options are [text, value] pairs or strings used for both.
     if !option.is_a?(String) && option.respond_to?(:first) && option.respond_to?(:last)
-      option = option.reject { |e| Hash === e } if Array === option
+      option = option.reject { |e| e.is_a?(Hash) } if option.is_a?(Array)
       [option.first, option.last]
     else
       [option, option]
@@ -52,6 +55,6 @@ module Datagrid::Filters::SelectOptions
   # https://github.com/rails/rails/blob/f95c0b7e96eb36bc3efc0c5beffbb9e84ea664e4/actionview/lib/action_view/helpers/tags/select.rb#L36
   # Code reuse is difficult, so it is easier to duplicate it
   def grouped_choices?(choices)
-    !choices.blank? && choices.first.respond_to?(:last) && Array === choices.first.last
+    !choices.blank? && choices.first.respond_to?(:last) && choices.first.last.is_a?(Array)
   end
 end

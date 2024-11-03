@@ -10,7 +10,6 @@ if defined?(MongoMapper)
     key :confirmed, Boolean, default: false
     key :shipping_date, Time
     timestamps!
-
   end
 
   class MongoMapperGrid
@@ -27,6 +26,5 @@ if defined?(MongoMapper)
     column :name
     column :group_id
     column :disabled
-
   end
 end

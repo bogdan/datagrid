@@ -1,7 +1,7 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Datagrid::Filters::DateTimeFilter do
-  {:active_record => Entry, :mongoid => MongoidEntry}.each do |orm, klass|
+  { active_record: Entry, mongoid: MongoidEntry }.each do |orm, klass|
     describe "with orm #{orm}", orm => true do
       describe "timestamp to timestamp conversion" do
         let(:klass) { klass }
@@ -24,38 +24,37 @@ describe Datagrid::Filters::DateTimeFilter do
         context "with single datetime paramter given" do
           let(:_created_at) { Time.now.change(sec: 0) }
           it { should include(entry_dated(_created_at)) }
-          it { should_not include(entry_dated(_created_at - 1.second))}
-          it { should_not include(entry_dated(_created_at + 1.second))}
+          it { should_not include(entry_dated(_created_at - 1.second)) }
+          it { should_not include(entry_dated(_created_at + 1.second)) }
         end
 
         context "with range datetime range given" do
           let(:_created_at) { [Time.now.beginning_of_day, Time.now.end_of_day] }
-          it { should include(entry_dated(1.second.ago))}
-          it { should include(entry_dated(Date.today.to_time))}
-          it { should include(entry_dated(Time.now.end_of_day.to_time))}
-          it { should_not include(entry_dated(Date.yesterday.end_of_day))}
-          it { should_not include(entry_dated(Date.tomorrow.beginning_of_day))}
+          it { should include(entry_dated(1.second.ago)) }
+          it { should include(entry_dated(Date.today.to_time)) }
+          it { should include(entry_dated(Time.now.end_of_day.to_time)) }
+          it { should_not include(entry_dated(Date.yesterday.end_of_day)) }
+          it { should_not include(entry_dated(Date.tomorrow.beginning_of_day)) }
         end
 
         context "with right open range" do
           let(:_created_at) { Time.now.beginning_of_day..nil }
-          it { should include(entry_dated(1.second.ago))}
-          it { should include(entry_dated(Date.today.to_time))}
-          it { should include(entry_dated(Time.now.end_of_day.to_time))}
-          it { should include(entry_dated(Date.tomorrow.beginning_of_day))}
-          it { should_not include(entry_dated(Date.yesterday.end_of_day))}
+          it { should include(entry_dated(1.second.ago)) }
+          it { should include(entry_dated(Date.today.to_time)) }
+          it { should include(entry_dated(Time.now.end_of_day.to_time)) }
+          it { should include(entry_dated(Date.tomorrow.beginning_of_day)) }
+          it { should_not include(entry_dated(Date.yesterday.end_of_day)) }
         end
 
         context "with left open range" do
           let(:_created_at) { nil..Time.now.end_of_day }
-          it { should include(entry_dated(1.second.ago))}
-          it { should include(entry_dated(Date.today.to_time))}
-          it { should include(entry_dated(Time.now.end_of_day.to_time))}
-          it { should include(entry_dated(Date.yesterday.end_of_day))}
-          it { should_not include(entry_dated(Date.tomorrow.beginning_of_day))}
+          it { should include(entry_dated(1.second.ago)) }
+          it { should include(entry_dated(Date.today.to_time)) }
+          it { should include(entry_dated(Time.now.end_of_day.to_time)) }
+          it { should include(entry_dated(Date.yesterday.end_of_day)) }
+          it { should_not include(entry_dated(Date.tomorrow.beginning_of_day)) }
         end
       end
-
     end
   end
 
@@ -126,7 +125,6 @@ describe Datagrid::Filters::DateTimeFilter do
     expect(report.assets).to include(e3)
   end
 
-
   it "should support block" do
     report = test_report(created_at: Time.now) do
       scope { Entry }
@@ -135,9 +133,8 @@ describe Datagrid::Filters::DateTimeFilter do
       end
     end
     expect(report.assets).not_to include(Entry.create!(created_at: 1.day.ago))
-    expect(report.assets).to include(Entry.create!(created_at: Time.now+1.day))
+    expect(report.assets).to include(Entry.create!(created_at: Time.now + 1.day))
   end
-
 
   context "when datetime format is configured" do
     around(:each) do |example|
@@ -148,27 +145,26 @@ describe Datagrid::Filters::DateTimeFilter do
 
     it "should have configurable datetime format" do
       report = test_report(created_at: "10/01/2013 01:00") do
-        scope  {Entry}
+        scope  { Entry }
         filter(:created_at, :datetime)
       end
-      expect(report.created_at).to eq(Time.new(2013,10,01,1,0))
+      expect(report.created_at).to eq(Time.new(2013, 10, 0o1, 1, 0))
     end
 
     it "should support default explicit datetime" do
       report = test_report(created_at: Time.parse("2013-10-01 01:00")) do
-        scope  {Entry}
+        scope  { Entry }
         filter(:created_at, :datetime)
       end
-      expect(report.created_at).to eq(Time.new(2013,10,01,1,0))
+      expect(report.created_at).to eq(Time.new(2013, 10, 0o1, 1, 0))
     end
   end
 
-
   it "should automatically reverse Array if first more than last" do
     report = test_report(created_at: ["2013-01-01 01:00", "2012-01-01 01:00"]) do
-      scope  {Entry}
+      scope  { Entry }
       filter(:created_at, :datetime, range: true)
     end
-    expect(report.created_at).to eq([Time.new(2012, 01, 01, 1, 0), Time.new(2013, 01, 01, 1, 0)])
+    expect(report.created_at).to eq([Time.new(2012, 0o1, 0o1, 1, 0), Time.new(2013, 0o1, 0o1, 1, 0)])
   end
 end

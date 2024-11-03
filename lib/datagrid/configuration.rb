@@ -1,5 +1,4 @@
 module Datagrid
-
   def self.configuration
     @configuration ||= Configuration.new
   end

@@ -2,36 +2,31 @@ require "rails/generators"
 
 # @!visibility private
 class Datagrid::Scaffold < Rails::Generators::NamedBase
-
   include Rails::Generators::ResourceHelpers
 
   check_class_collision suffix: "Grid"
   source_root File.expand_path(__FILE__ + "/../../../templates")
 
   def create_scaffold
-    unless file_exists?(base_grid_file)
-      template "base.rb.erb", base_grid_file
-    end
+    template "base.rb.erb", base_grid_file unless file_exists?(base_grid_file)
     template "grid.rb.erb", "app/grids/#{grid_class_name.underscore}.rb"
     if file_exists?(grid_controller_file)
-      inject_into_file grid_controller_file, index_action, after: %r{class .*#{grid_controller_class_name}.*\n}
+      inject_into_file grid_controller_file, index_action, after: /class .*#{grid_controller_class_name}.*\n/
     else
       template "controller.rb.erb", grid_controller_file
     end
     template "index.html.erb", view_file
     route(generate_routing_namespace("resources :#{grid_controller_short_name}"))
-    unless defined?(::Kaminari) || defined?(::WillPaginate)
-      gem 'kaminari'
-    end
+    gem "kaminari" unless defined?(::Kaminari) || defined?(::WillPaginate)
     in_root do
       {
         "css" => " *= require datagrid",
         "css.sass" => " *= require datagrid",
-        "css.scss" => " *= require datagrid",
+        "css.scss" => " *= require datagrid"
       }.each do |extension, string|
         file = "app/assets/stylesheets/application.#{extension}"
         if file_exists?(file)
-          inject_into_file file, string + "\n", {before: %r{.*require_self}} # before all
+          inject_into_file file, string + "\n", { before: /.*require_self/ } # before all
         end
       end
     end
@@ -83,22 +78,23 @@ class Datagrid::Scaffold < Rails::Generators::NamedBase
   end
 
   def index_action
-    indent(<<-RUBY)
-def index
-  @grid = #{grid_class_name}.new(grid_params) do |scope|
-    scope.page(params[:page])
-  end
-end
+    indent(<<~RUBY)
+      def index
+        @grid = #{grid_class_name}.new(grid_params) do |scope|
+          scope.page(params[:page])
+        end
+      end
 
-protected
+      protected
 
-def grid_params
-  params.fetch(:#{grid_param_name}, {}).permit!
-end
-RUBY
+      def grid_params
+        params.fetch(:#{grid_param_name}, {}).permit!
+      end
+    RUBY
   end
 
   protected
+
   def generate_routing_namespace(code)
     depth = regular_class_path.length
     # Create 'namespace' ladder

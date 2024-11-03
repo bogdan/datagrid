@@ -2,26 +2,19 @@ module Datagrid
   # @!visibility private
   module Utils
     class << self
-
-
       TRUTH = [true, 1, "1", "true", "yes", "on"]
 
       def booleanize(value)
-        if value.respond_to?(:downcase)
-          value = value.downcase
-        end
+        value = value.downcase if value.respond_to?(:downcase)
         TRUTH.include?(value)
       end
 
       def translate_from_namespace(namespace, grid_class, key)
-
         lookups = []
         namespaced_key = "#{namespace}.#{key}"
 
         grid_class.ancestors.each do |ancestor|
-          if ancestor.respond_to?(:model_name)
-            lookups << :"datagrid.#{ancestor.model_name.i18n_key}.#{namespaced_key}"
-          end
+          lookups << :"datagrid.#{ancestor.model_name.i18n_key}.#{namespaced_key}" if ancestor.respond_to?(:model_name)
         end
         lookups << :"datagrid.defaults.#{namespaced_key}"
         lookups << key.to_s.humanize
@@ -32,6 +25,7 @@ module Datagrid
         @warnings ||= {}
         timestamp = @warnings[message]
         return false if timestamp && timestamp >= Time.now - delay
+
         warn message
         @warnings[message] = Time.now
         true
@@ -39,6 +33,7 @@ module Datagrid
 
       def add_html_classes(options, *classes)
         return options if classes.empty?
+
         options = options.clone
         options[:class] ||= []
         array = options[:class].is_a?(Array)
@@ -52,18 +47,18 @@ module Datagrid
       end
 
       def extract_position_from_options(array, options)
-        before, after = options[:before], options[:after]
-        if before && after
-          raise Datagrid::ConfigurationError, "Options :before and :after can not be used together"
-        end
+        before = options[:before]
+        after = options[:after]
+        raise Datagrid::ConfigurationError, "Options :before and :after can not be used together" if before && after
         # Consider as before all
         return 0 if before == true
+
         if before
           before = before.to_sym
-          array.index {|c| c.name.to_sym == before }
+          array.index { |c| c.name.to_sym == before }
         elsif after
           after = after.to_sym
-          array.index {|c| c.name.to_sym == after } + 1
+          array.index { |c| c.name.to_sym == after } + 1
         else
           -1
         end
@@ -77,16 +72,16 @@ module Datagrid
       def parse_date(value)
         return nil if value.blank?
         return value if value.is_a?(Range)
+
         if value.is_a?(String)
           Array(Datagrid.configuration.date_formats).each do |format|
-            begin
-              return Date.strptime(value, format)
-            rescue ::ArgumentError
-            end
+            return Date.strptime(value, format)
+          rescue ::ArgumentError
           end
         end
         return Date.parse(value) if value.is_a?(String)
         return value.to_date if value.respond_to?(:to_date)
+
         value
       rescue ::ArgumentError
         nil
@@ -95,16 +90,16 @@ module Datagrid
       def parse_datetime(value)
         return nil if value.blank?
         return value if value.is_a?(Range)
+
         if value.is_a?(String)
           Array(Datagrid.configuration.datetime_formats).each do |format|
-            begin
-              return Time.strptime(value, format)
-            rescue ::ArgumentError
-            end
+            return Time.strptime(value, format)
+          rescue ::ArgumentError
           end
         end
         return Time.parse(value) if value.is_a?(String)
         return value.to_time if value.respond_to?(:to_time)
+
         value
       rescue ::ArgumentError
         nil
@@ -132,6 +127,7 @@ module Datagrid
       end
 
       protected
+
       def property_availability(grid, option, default)
         case option
         when nil

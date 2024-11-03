@@ -8,10 +8,10 @@ group :development do
   gem "csv"
   gem "nokogiri"
   gem "pry-byebug"
+  gem "rails", "~> 6.1.0"
   gem "rspec"
   gem "sequel"
   gem "sqlite3", "~> 1.7.0"
-  gem "rails", "~> 6.1.0"
 
   group :mongo do
     gem "bson"

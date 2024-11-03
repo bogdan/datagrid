@@ -1,23 +1,22 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Datagrid::Filters::ExtendedBooleanFilter do
-
   it "should support select option" do
     grid = test_report do
-      scope {Entry}
+      scope { Entry }
       filter(:disabled, :xboolean)
     end
-    expect(grid.filter_by_name(:disabled).select(grid)).to eq([["Yes", "YES"], ["No", "NO"]])
+    expect(grid.filter_by_name(:disabled).select(grid)).to eq([%w[Yes YES], %w[No NO]])
   end
 
   it "should generate pass boolean value to filter block" do
     grid = test_report do
-      scope {Entry}
+      scope { Entry }
       filter(:disabled, :xboolean)
     end
 
-    disabled_entry = Entry.create!(:disabled => true)
-    enabled_entry = Entry.create!(:disabled => false)
+    disabled_entry = Entry.create!(disabled: true)
+    enabled_entry = Entry.create!(disabled: false)
 
     expect(grid.disabled).to be_nil
     expect(grid.assets).to include(disabled_entry, enabled_entry)
@@ -34,7 +33,7 @@ describe Datagrid::Filters::ExtendedBooleanFilter do
 
   it "should normalize true/false as YES/NO" do
     grid = test_report do
-      scope {Entry}
+      scope { Entry }
       filter(:disabled, :xboolean)
     end
     grid.disabled = true
@@ -46,5 +45,4 @@ describe Datagrid::Filters::ExtendedBooleanFilter do
     grid.disabled = "false"
     expect(grid.disabled).to eq("NO")
   end
-
 end

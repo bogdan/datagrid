@@ -1,10 +1,9 @@
 # @!visibility private
 class Datagrid::Filters::ExtendedBooleanFilter < Datagrid::Filters::EnumFilter
-
   YES = "YES"
   NO = "NO"
-  TRUTH_VALUES = [true, 'true', "y", "yes"]
-  FALSE_VALUES = [false, 'false', "n", "no"]
+  TRUTH_VALUES = [true, "true", "y", "yes"]
+  FALSE_VALUES = [false, "false", "n", "no"]
 
   def initialize(report, attribute, options = {}, &block)
     options[:select] = -> { boolean_select }
@@ -33,7 +32,7 @@ class Datagrid::Filters::ExtendedBooleanFilter < Datagrid::Filters::EnumFilter
   protected
 
   def boolean_select
-    [YES, NO].map do |key, value|
+    [YES, NO].map do |key, _value|
       [I18n.t("datagrid.filters.xboolean.#{key.downcase}"), key]
     end
   end

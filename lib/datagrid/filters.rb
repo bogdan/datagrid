@@ -2,7 +2,6 @@ require "active_support/core_ext/class/attribute"
 
 module Datagrid
   module Filters
-
     require "datagrid/filters/base_filter"
     require "datagrid/filters/enum_filter"
     require "datagrid/filters/extended_boolean_filter"
@@ -22,8 +21,8 @@ module Datagrid
       datetime: Filters::DateTimeFilter,
       string: Filters::StringFilter,
       default: Filters::DefaultFilter,
-      xboolean: Filters::ExtendedBooleanFilter ,
-      boolean: Filters::BooleanFilter ,
+      xboolean: Filters::ExtendedBooleanFilter,
+      boolean: Filters::BooleanFilter,
       integer: Filters::IntegerFilter,
       enum: Filters::EnumFilter,
       float: Filters::FloatFilter,
@@ -37,25 +36,23 @@ module Datagrid
     def self.included(base)
       base.extend ClassMethods
       base.class_eval do
-
         include Datagrid::Core
         include Datagrid::Filters::CompositeFilters
         class_attribute :filters_array, default: []
-
       end
     end
 
     module ClassMethods
-
       # @return [Datagrid::Filters::BaseFilter, nil] filter definition object by name
       def filter_by_name(attribute)
         if attribute.is_a?(Datagrid::Filters::BaseFilter)
           unless ancestors.include?(attribute.grid_class)
             raise ArgumentError, "#{attribute.grid_class}##{attribute.name} filter doen't belong to #{self.class}"
           end
+
           return attribute
         end
-        self.filters.find do |filter|
+        filters.find do |filter|
           filter.name == attribute.to_sym
         end
       end
@@ -129,11 +126,12 @@ module Datagrid
 
       def inherited(child_class)
         super(child_class)
-        child_class.filters_array = self.filters_array.clone
+        child_class.filters_array = filters_array.clone
       end
 
       def filters_inspection
         return "no filters" if filters.empty?
+
         filters.map do |filter|
           "#{filter.name}: #{filter.type}"
         end.join(", ")
@@ -143,7 +141,7 @@ module Datagrid
     # @!visibility private
     def initialize(*args, &block)
       self.filters_array = self.class.filters_array.clone
-      self.filters_array.each do |filter|
+      filters_array.each do |filter|
         self[filter.name] = filter.default(self)
       end
       super(*args, &block)
@@ -164,7 +162,7 @@ module Datagrid
       filter = filter_by_name(name)
       value = filter_value(filter)
       if value.is_a?(Array)
-        value.map {|v| filter.format(v) }.join(filter.separator)
+        value.map { |v| filter.format(v) }.join(filter.separator)
       else
         filter.format(value)
       end
@@ -177,7 +175,7 @@ module Datagrid
 
     # @return [Array<Object>] assets filtered only by specified filters
     def filter_by(*filters)
-      apply_filters(scope, filters.map{|f| filter_by_name(f)})
+      apply_filters(scope, filters.map { |f| filter_by_name(f) })
     end
 
     # @return [Array] the select options for the filter
@@ -215,7 +213,7 @@ module Datagrid
       filter = filter_by_name(filter)
       unless filter.class.included_modules.include?(::Datagrid::Filters::SelectOptions)
         raise ::Datagrid::ArgumentError,
-          "#{self.class.name}##{filter.name} with type #{FILTER_TYPES.invert[filter.class].inspect} can not have select options"
+              "#{self.class.name}##{filter.name} with type #{FILTER_TYPES.invert[filter.class].inspect} can not have select options"
       end
       filter
     end

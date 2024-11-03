@@ -31,7 +31,7 @@ module Datagrid
           select: :optional_columns_select,
           multiple: true,
           dummy: true,
-          **options,
+          **options
         )
       end
     end
@@ -45,7 +45,7 @@ module Datagrid
     # If no mandatory columns specified than all of them considered mandatory
     # @return [Array<Datagrid::Columns::Column>]
     def mandatory_columns
-      available_columns.select {|c| c.mandatory? }
+      available_columns.select { |c| c.mandatory? }
     end
 
     # Returns a list of enabled columns without <tt>mandatory: true</tt> option
@@ -58,7 +58,7 @@ module Datagrid
     protected
 
     def optional_columns_select
-      optional_columns.map {|c| [c.header, c.name] }
+      optional_columns.map { |c| [c.header, c.name] }
     end
 
     def selected_column_names(*args)
@@ -68,12 +68,10 @@ module Datagrid
           column.is_a?(Datagrid::Columns::Column) ? column.name : column.to_sym
         end
         args
+      elsif column_names && column_names.any?
+        column_names + mandatory_columns.map(&:name)
       else
-        if column_names && column_names.any?
-          column_names + mandatory_columns.map(&:name)
-        else
-          columns_enabled_by_default.map(&:name)
-        end
+        columns_enabled_by_default.map(&:name)
       end
     end
 
@@ -88,4 +86,3 @@ module Datagrid
     end
   end
 end
-

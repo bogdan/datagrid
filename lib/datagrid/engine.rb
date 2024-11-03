@@ -1,6 +1,6 @@
 require "rails/engine"
-require 'datagrid/helper'
-require 'datagrid/form_builder'
+require "datagrid/helper"
+require "datagrid/form_builder"
 
 module Datagrid
   # @!private
@@ -15,6 +15,5 @@ module Datagrid
         Engine.extend_modules
       end
     end
-
   end
 end

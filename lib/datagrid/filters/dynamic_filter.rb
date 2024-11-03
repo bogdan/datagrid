@@ -1,28 +1,27 @@
 require "datagrid/filters/select_options"
 
 class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
-
   include Datagrid::Filters::SelectOptions
 
-  EQUAL_OPERATION = '='
-  LIKE_OPERATION = '=~'
-  MORE_EQUAL_OPERATION = '>='
-  LESS_EQUAL_OPERATION = '<='
+  EQUAL_OPERATION = "="
+  LIKE_OPERATION = "=~"
+  MORE_EQUAL_OPERATION = ">="
+  LESS_EQUAL_OPERATION = "<="
   DEFAULT_OPERATIONS = [
     EQUAL_OPERATION,
     LIKE_OPERATION,
     MORE_EQUAL_OPERATION,
-    LESS_EQUAL_OPERATION,
+    LESS_EQUAL_OPERATION
   ]
-  AVAILABLE_OPERATIONS = %w(= =~ >= <=)
+  AVAILABLE_OPERATIONS = %w[= =~ >= <=]
 
   def initialize(*)
     super
     options[:select] ||= default_select
     options[:operations] ||= DEFAULT_OPERATIONS
-    unless options.has_key?(:include_blank)
-      options[:include_blank] = false
-    end
+    return if options.has_key?(:include_blank)
+
+    options[:include_blank] = false
   end
 
   def parse_values(filter)
@@ -41,36 +40,32 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
     date_conversion = value.is_a?(Date) && driver.is_timestamp?(scope, field)
 
     return scope if field.blank? || operation.blank?
+
     unless operations.include?(operation)
-      raise Datagrid::FilteringError, "Unknown operation: #{operation.inspect}. Available operations: #{operations.join(' ')}"
+      raise Datagrid::FilteringError,
+            "Unknown operation: #{operation.inspect}. Available operations: #{operations.join(' ')}"
     end
+
     case operation
     when EQUAL_OPERATION
-      if date_conversion
-        value = Datagrid::Utils.format_date_as_timestamp(value)
-      end
+      value = Datagrid::Utils.format_date_as_timestamp(value) if date_conversion
       driver.where(scope, field, value)
     when LIKE_OPERATION
       if column_type(field) == :string
         driver.contains(scope, field, value)
       else
-        if date_conversion
-          value = Datagrid::Utils.format_date_as_timestamp(value)
-        end
+        value = Datagrid::Utils.format_date_as_timestamp(value) if date_conversion
         driver.where(scope, field, value)
       end
     when MORE_EQUAL_OPERATION
-      if date_conversion
-        value = value.beginning_of_day
-      end
+      value = value.beginning_of_day if date_conversion
       driver.greater_equal(scope, field, value)
     when LESS_EQUAL_OPERATION
-      if date_conversion
-        value = value.end_of_day
-      end
+      value = value.end_of_day if date_conversion
       driver.less_equal(scope, field, value)
     else
-      raise Datagrid::FilteringError, "Unknown operation: #{operation.inspect}. Use filter block argument to implement operation"
+      raise Datagrid::FilteringError,
+            "Unknown operation: #{operation.inspect}. Use filter block argument to implement operation"
     end
   end
 
@@ -87,11 +82,11 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
   protected
 
   def default_select
-    proc {|grid|
+    proc { |grid|
       grid.driver.column_names(grid.scope).map do |name|
         # Mongodb/Rails problem:
         # '_id'.humanize returns ''
-        [name.gsub(/^_/, '').humanize.strip, name]
+        [name.gsub(/^_/, "").humanize.strip, name]
       end
     }
   end
@@ -99,6 +94,7 @@ class Datagrid::Filters::DynamicFilter < Datagrid::Filters::BaseFilter
   def type_cast(field, value)
     type = column_type(field)
     return nil if value.blank?
+
     case type
     when :string
       value.to_s

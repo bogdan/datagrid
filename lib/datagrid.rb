@@ -3,7 +3,6 @@ require "datagrid/configuration"
 require "datagrid/engine"
 
 module Datagrid
-
   extend ActiveSupport::Autoload
 
   autoload :Core
@@ -24,24 +23,19 @@ module Datagrid
   # @!visibility private
   def self.included(base)
     base.class_eval do
-
       include ::Datagrid::Core
       include ::Datagrid::ActiveModel
       include ::Datagrid::Filters
       include ::Datagrid::Columns
       include ::Datagrid::ColumnNamesAttribute
       include ::Datagrid::Ordering
-
     end
   end
 
   class ConfigurationError < StandardError; end
   class ArgumentError < ::ArgumentError; end
   class ColumnUnavailableError < StandardError; end
-
 end
 
 require "datagrid/scaffold"
-I18n.load_path << File.expand_path('../datagrid/locale/en.yml', __FILE__)
-
-
+I18n.load_path << File.expand_path("datagrid/locale/en.yml", __dir__)

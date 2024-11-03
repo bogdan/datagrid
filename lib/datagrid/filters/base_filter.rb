@@ -5,7 +5,6 @@ end
 
 # @!visibility private
 class Datagrid::Filters::BaseFilter
-
   class_attribute :input_helper_name, instance_writer: false
   attr_accessor :grid_class, :options, :block, :name
 
@@ -30,11 +29,11 @@ class Datagrid::Filters::BaseFilter
     result = execute(value, scope, grid_object)
 
     return scope unless result
-    if result == Datagrid::Filters::DEFAULT_FILTER_BLOCK
-      result = default_filter(value, scope, grid_object)
-    end
+
+    result = default_filter(value, scope, grid_object) if result == Datagrid::Filters::DEFAULT_FILTER_BLOCK
     unless grid_object.driver.match?(result)
-      raise Datagrid::FilteringError, "Can not apply #{name.inspect} filter: result #{result.inspect} no longer match #{grid_object.driver.class}."
+      raise Datagrid::FilteringError,
+            "Can not apply #{name.inspect} filter: result #{result.inspect} no longer match #{grid_object.driver.class}."
     end
 
     result
@@ -43,6 +42,7 @@ class Datagrid::Filters::BaseFilter
   def parse_values(value)
     if multiple?
       return nil if value.nil?
+
       normalize_multiple_value(value).map do |v|
         parse(v)
       end
@@ -66,7 +66,7 @@ class Datagrid::Filters::BaseFilter
   end
 
   def default(object)
-    default = self.options[:default]
+    default = options[:default]
     if default.is_a?(Symbol)
       object.send(default)
     elsif default.respond_to?(:call)
@@ -77,7 +77,7 @@ class Datagrid::Filters::BaseFilter
   end
 
   def multiple?
-    self.options[:multiple]
+    options[:multiple]
   end
 
   def allow_nil?
@@ -101,7 +101,7 @@ class Datagrid::Filters::BaseFilter
   end
 
   def self.form_builder_helper_name
-    :"datagrid_#{self.to_s.demodulize.underscore}"
+    :"datagrid_#{to_s.demodulize.underscore}"
   end
 
   def default_filter_block
@@ -125,9 +125,7 @@ class Datagrid::Filters::BaseFilter
 
   def type
     Datagrid::Filters::FILTER_TYPES.each do |type, klass|
-      if is_a?(klass)
-        return type
-      end
+      return type if is_a?(klass)
     end
     raise "wtf is #{inspect}"
   end
@@ -137,7 +135,7 @@ class Datagrid::Filters::BaseFilter
   end
 
   def default_html_classes
-    [ name, self.class.to_s.demodulize.underscore ]
+    [name, self.class.to_s.demodulize.underscore]
   end
 
   protected
@@ -168,15 +166,16 @@ class Datagrid::Filters::BaseFilter
   end
 
   def default_separator
-    ','
+    ","
   end
 
   def driver
     grid_class.driver
   end
 
-  def default_filter(value, scope, grid)
+  def default_filter(value, scope, _grid)
     return nil if dummy?
+
     if !driver.has_column?(scope, name) && scope.respond_to?(name, true)
       scope.public_send(name, value)
     else
@@ -184,4 +183,3 @@ class Datagrid::Filters::BaseFilter
     end
   end
 end
-

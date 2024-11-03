@@ -1,9 +1,7 @@
 class Datagrid::Columns::Column
-
   # Datagrid class holding an information of
   # how a column should be rendered in data/console/csv format and HTML format
   class ResponseFormat
-
     attr_accessor :data_block, :html_block
 
     def initialize
@@ -42,9 +40,7 @@ class Datagrid::Columns::Column
     else
       self.data_block = block
 
-      if options[:html].is_a? Proc
-        self.html_block = options[:html]
-      end
+      self.html_block = options[:html] if options[:html].is_a? Proc
     end
     self.query = query
   end
@@ -54,9 +50,8 @@ class Datagrid::Columns::Column
     grid.data_value(name, model)
   end
 
-
   def label
-    self.options[:label]
+    options[:label]
   end
 
   def header
@@ -69,7 +64,7 @@ class Datagrid::Columns::Column
 
   def order
     if options.has_key?(:order) && options[:order] != true
-      self.options[:order]
+      options[:order]
     else
       driver.default_order(grid_class.scope, name)
     end
@@ -88,12 +83,13 @@ class Datagrid::Columns::Column
   end
 
   def order_by_value?
-    !! options[:order_by_value]
+    !!options[:order_by_value]
   end
 
   def order_desc
     return nil unless order
-    self.options[:order_desc]
+
+    options[:order_desc]
   end
 
   def html?
@@ -101,11 +97,11 @@ class Datagrid::Columns::Column
   end
 
   def data?
-    self.data_block != nil
+    data_block != nil
   end
 
   def mandatory?
-    !! options[:mandatory]
+    !!options[:mandatory]
   end
 
   def mandatory_explicitly_set?
@@ -128,15 +124,16 @@ class Datagrid::Columns::Column
     grid.html_value(name, context, asset)
   end
 
-
   def generic_value(model, grid)
     grid.generic_value(self, model)
   end
 
   def append_preload(relation)
     return relation unless preload
+
     if preload.respond_to?(:call)
       return relation unless preload
+
       if preload.arity == 1
         preload.call(relation)
       else
@@ -155,7 +152,6 @@ class Datagrid::Columns::Column
     else
       preload
     end
-
   end
 
   def driver

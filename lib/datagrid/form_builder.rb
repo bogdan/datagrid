@@ -10,7 +10,7 @@ module Datagrid
     #   * <tt>text_field</tt> for other filter types
     def datagrid_filter(filter_or_attribute, partials: nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
-      self.send( filter.form_builder_helper_name, filter, **options, &block)
+      send(filter.form_builder_helper_name, filter, **options, &block)
     end
 
     # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
@@ -20,7 +20,7 @@ module Datagrid
     def datagrid_label(filter_or_attribute, text = nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       options = add_html_classes(
-        {**filter.label_options, **options},
+        { **filter.label_options, **options },
         filter.default_html_classes
       )
       label(filter.name, text || filter.header, **options, &block)
@@ -31,7 +31,7 @@ module Datagrid
       filter = datagrid_get_filter(attribute_or_filter)
       options = add_filter_options(filter, **options)
       type = options.delete(:type)&.to_sym
-      if options.has_key?(:value) && options[:value].nil? && [:"datetime-local", :date].include?(type)
+      if options.has_key?(:value) && options[:value].nil? && %i[datetime-local date].include?(type)
         # https://github.com/rails/rails/pull/53387
         options[:value] = ""
       end
@@ -40,7 +40,7 @@ module Datagrid
       elsif type == :date
         date_field filter.name, **options, &block
       elsif type == :textarea
-        text_area filter.name, value: object.filter_value_as_string(filter) , **options, &block
+        text_area filter.name, value: object.filter_value_as_string(filter), **options, &block
       elsif type == :checkbox
         # raise options.inspect
         check_box filter.name, options, options.fetch(:value, 1)
@@ -55,16 +55,17 @@ module Datagrid
             prompt: filter.prompt,
             include_hidden: false
           },
-           multiple: filter.multiple?,
-           **options,
-           &block
+          multiple: filter.multiple?,
+          **options,
+          &block
         )
       else
-        text_field filter.name, value: object.filter_value_as_string(filter) , **options, &block
+        text_field filter.name, value: object.filter_value_as_string(filter), **options, &block
       end
     end
 
     protected
+
     def datagrid_extended_boolean_filter(filter, options = {}, &block)
       datagrid_filter_input(filter, **options, type: :select, &block)
     end
@@ -93,12 +94,12 @@ module Datagrid
           [value, text, checked]
         end
         render_partial(
-          'enum_checkboxes',
+          "enum_checkboxes",
           {
             elements: elements,
             form: self,
             filter: filter,
-            options: options,
+            options: options
           }
         )
       else
@@ -118,14 +119,12 @@ module Datagrid
     end
 
     def datagrid_integer_filter(filter, options = {})
-      if filter.multiple? && object[filter.name].blank?
-        options[:value] = ""
-      end
+      options[:value] = "" if filter.multiple? && object[filter.name].blank?
       datagrid_range_filter(:integer, filter, options)
     end
 
     def datagrid_dynamic_filter(filter, options = {})
-      input_name = "#{object_name}[#{filter.name.to_s}][]"
+      input_name = "#{object_name}[#{filter.name}][]"
       field, operation, value = object.filter_value(filter)
       options = add_filter_options(filter, **options)
       options = options.merge(name: input_name)
@@ -146,7 +145,7 @@ module Datagrid
           include_blank: false,
           include_hidden: false,
           prompt: false,
-          selected: operation,
+          selected: operation
         },
         add_html_classes(options, "operation")
       )
@@ -166,12 +165,12 @@ module Datagrid
       end
     end
 
-    def datagrid_range_filter(type, filter, options = {})
+    def datagrid_range_filter(_type, filter, options = {})
       if filter.range?
         options = options.merge(multiple: true)
         from_options = datagrid_range_filter_options(object, filter, :from, options)
         to_options = datagrid_range_filter_options(object, filter, :to, options)
-        render_partial 'range_filter', {
+        render_partial "range_filter", {
           from_options: from_options, to_options: to_options, filter: filter, form: self
         }
       else
@@ -180,7 +179,7 @@ module Datagrid
     end
 
     def datagrid_range_filter_options(object, filter, type, options)
-      type_method_map = {from: :first, to: :last}
+      type_method_map = { from: :first, to: :last }
       options = add_html_classes(options, type)
       options[:value] = filter.format(object[filter.name]&.public_send(type_method_map[type]))
       # In case of datagrid ranged filter
@@ -219,14 +218,12 @@ module Datagrid
     end
 
     def partial_path(name)
-      if partials = self.options[:partials]
+      if partials = options[:partials]
         partial_name = File.join(partials, name)
         # Second argument is []: no magical namespaces to lookup added from controller
-        if @template.lookup_context.template_exists?(partial_name, [], true)
-          return partial_name
-        end
+        return partial_name if @template.lookup_context.template_exists?(partial_name, [], true)
       end
-      File.join('datagrid', name)
+      File.join("datagrid", name)
     end
 
     def render_partial(name, locals)
@@ -235,8 +232,8 @@ module Datagrid
 
     def add_filter_options(filter, **options)
       add_html_classes(
-        {**filter.input_options, **options},
-        *filter.default_html_classes,
+        { **filter.input_options, **options },
+        *filter.default_html_classes
       )
     end
 

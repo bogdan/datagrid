@@ -1,7 +1,6 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Datagrid::Columns do
-
   let(:group) { Group.create!(name: "Pop") }
 
   subject do
@@ -9,7 +8,6 @@ describe Datagrid::Columns do
   end
 
   describe "basic methods" do
-
     let!(:entry) do
       Entry.create!(
         group: group,
@@ -17,8 +15,8 @@ describe Datagrid::Columns do
         disabled: false,
         confirmed: false,
         category: "first",
-        access_level: 'admin',
-        pet: 'rottweiler',
+        access_level: "admin",
+        pet: "rottweiler",
         shipping_date: Date.new(2013, 8, 1)
       )
     end
@@ -27,19 +25,19 @@ describe Datagrid::Columns do
 
     it "should have data columns without html columns" do
       grid = test_report do
-        scope {Entry}
+        scope { Entry }
         column(:name)
         column(:action, html: true) do
-          'dummy'
+          "dummy"
         end
       end
       expect(grid.data_columns.map(&:name)).to eq([:name])
-      expect(grid.html_columns.map(&:name)).to eq([:name, :action])
+      expect(grid.html_columns.map(&:name)).to eq(%i[name action])
     end
 
     it "allows a column argument" do
       grid = test_report do
-        scope {Entry}
+        scope { Entry }
         column(:name)
       end
       expect(grid.data_columns(grid.column_by_name(:name)).map(&:name)).to eq([:name])
@@ -47,27 +45,26 @@ describe Datagrid::Columns do
 
     it "should build rows of data" do
       grid = test_report do
-        scope {Entry}
+        scope { Entry }
         column(:name)
         column(:action, html: true) do
-          'dummy'
+          "dummy"
         end
       end
       expect(grid.rows).to eq([["Star"]])
     end
-    it  "should generate header without html columns" do
+    it "should generate header without html columns" do
       grid = test_report do
-        scope {Entry}
+        scope { Entry }
         column(:name)
         column(:action, html: true) do
-          'dummy'
+          "dummy"
         end
       end
       expect(grid.header).to eq(["Name"])
     end
 
     describe "translations" do
-
       module ::Ns45
         class TranslatedReport
           include Datagrid
@@ -76,7 +73,7 @@ describe Datagrid::Columns do
         end
       end
       it "translates column-header with namespace" do
-        store_translations(:en, datagrid: {:"ns45/translated_report" => {columns: {name: "Navn"}}}) do
+        store_translations(:en, datagrid: { "ns45/translated_report": { columns: { name: "Navn" } } }) do
           expect(Ns45::TranslatedReport.new.header.first).to eq("Navn")
         end
       end
@@ -84,11 +81,11 @@ describe Datagrid::Columns do
       it "translates column-header without namespace" do
         class Report27
           include Datagrid
-          scope {Entry}
+          scope { Entry }
           column(:name)
         end
 
-        store_translations(:en, datagrid: {:"report27" => {columns: {name: "Nombre"}}}) do
+        store_translations(:en, datagrid: { "report27": { columns: { name: "Nombre" } } }) do
           expect(Report27.new.header.first).to eq("Nombre")
         end
       end
@@ -96,20 +93,19 @@ describe Datagrid::Columns do
       it "translates column-header in using defaults namespace" do
         class Report27
           include Datagrid
-          scope {Entry}
+          scope { Entry }
           column(:name)
         end
 
-        store_translations(:en, datagrid: {defaults: {columns: {name: "Nombre"}}}) do
+        store_translations(:en, datagrid: { defaults: { columns: { name: "Nombre" } } }) do
           expect(Report27.new.header.first).to eq("Nombre")
         end
       end
-
     end
 
     it "should return html_columns" do
       report = test_report do
-        scope {Entry}
+        scope { Entry }
         column(:id)
         column(:name, html: false)
       end
@@ -118,7 +114,7 @@ describe Datagrid::Columns do
 
     it "should return html_columns when column definition has 2 arguments" do
       report = test_report(name: "Hello") do
-        scope {Entry}
+        scope { Entry }
         filter(:name)
         column(:id)
         column(:name, html: false) do |model, grid|
@@ -131,14 +127,14 @@ describe Datagrid::Columns do
 
     it "should generate table data" do
       expect(subject.data).to eq([
-        subject.header,
-        subject.row_for(entry)
-      ])
+                                   subject.header,
+                                   subject.row_for(entry)
+                                 ])
     end
 
     it "supports dynamic header" do
       grid = test_report do
-        scope {Entry}
+        scope { Entry }
         column(:id, header: proc { rand(10**9) })
       end
 
@@ -147,12 +143,12 @@ describe Datagrid::Columns do
 
     it "should generate hash for given asset" do
       expect(subject.hash_for(entry)).to eq({
-        group: "Pop",
-        name: "Star",
-        access_level: 'admin',
-        pet: 'ROTTWEILER',
-        shipping_date: date
-      })
+                                              group: "Pop",
+                                              name: "Star",
+                                              access_level: "admin",
+                                              pet: "ROTTWEILER",
+                                              shipping_date: date
+                                            })
     end
 
     it "should support csv export" do
@@ -166,12 +162,11 @@ describe Datagrid::Columns do
     it "should support csv export options" do
       expect(subject.to_csv(col_sep: ";")).to eq("Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n")
     end
-
   end
 
   it "should support columns with model and report arguments" do
     report = test_report(category: "foo") do
-      scope {Entry.order(:category)}
+      scope { Entry.order(:category) }
       filter(:category) do |value|
         where("category LIKE '%#{value}%'")
       end
@@ -203,64 +198,64 @@ describe Datagrid::Columns do
   end
   it "should support defining a query for a column" do
     report = test_report do
-      scope {Entry}
+      scope { Entry }
       filter(:name)
       column(:id)
-      column(:sum_group_id, 'sum(group_id)')
+      column(:sum_group_id, "sum(group_id)")
     end
     Entry.create!(group: group)
     expect(report.assets.first.sum_group_id).to eq(group.id)
   end
 
-    it "should support post formatting for column defined with query" do
-      report = test_report do
-        scope {Group.joins(:entries).group("groups.id")}
-        filter(:name)
-        column(:entries_count, 'count(entries.id)') do |model|
-          format("(#{model.entries_count})") do |value|
-            content_tag(:span, value)
-          end
+  it "should support post formatting for column defined with query" do
+    report = test_report do
+      scope { Group.joins(:entries).group("groups.id") }
+      filter(:name)
+      column(:entries_count, "count(entries.id)") do |model|
+        format("(#{model.entries_count})") do |value|
+          content_tag(:span, value)
         end
       end
-      3.times { Entry.create!(group: group) }
-      expect(report.rows).to eq([["(3)"]])
     end
-    it "should support hidding columns through if and unless" do
-      report = test_report do
-        scope {Entry}
-        column(:id, if: :show?)
-        column(:name, unless: proc {|grid| !grid.show? })
-        column(:category)
+    3.times { Entry.create!(group: group) }
+    expect(report.rows).to eq([["(3)"]])
+  end
+  it "should support hidding columns through if and unless" do
+    report = test_report do
+      scope { Entry }
+      column(:id, if: :show?)
+      column(:name, unless: proc { |grid| !grid.show? })
+      column(:category)
 
-        def show?
-          false
-        end
+      def show?
+        false
       end
-      expect(report.columns(:id)).to eq([])
-      expect(report.columns(:name)).to eq([])
-      expect(report.available_columns.map(&:name)).to eq([:category])
     end
+    expect(report.columns(:id)).to eq([])
+    expect(report.columns(:name)).to eq([])
+    expect(report.available_columns.map(&:name)).to eq([:category])
+  end
 
-    it "raises when incorrect unless option is given" do
-      expect do
-        test_report do
-          column(:id, if: Object.new)
-        end
-      end.to raise_error(Datagrid::ConfigurationError)
-    end
+  it "raises when incorrect unless option is given" do
+    expect do
+      test_report do
+        column(:id, if: Object.new)
+      end
+    end.to raise_error(Datagrid::ConfigurationError)
+  end
 
-    it "raises when :before and :after used together" do
-      expect do
-        test_report do
-          column(:id)
-          column(:name, before: :id, after: :name)
-        end
-      end.to raise_error(Datagrid::ConfigurationError)
-    end
+  it "raises when :before and :after used together" do
+    expect do
+      test_report do
+        column(:id)
+        column(:name, before: :id, after: :name)
+      end
+    end.to raise_error(Datagrid::ConfigurationError)
+  end
 
   describe ".column_names attributes" do
     let(:grid) do
-      test_report(column_names: ["id", "name"]) do
+      test_report(column_names: %w[id name]) do
         scope { Entry }
         column(:id)
         column(:name)
@@ -268,10 +263,10 @@ describe Datagrid::Columns do
       end
     end
     let!(:entry) do
-      Entry.create!(name: 'hello')
+      Entry.create!(name: "hello")
     end
     it "should be suppored in header" do
-      expect(grid.header).to eq(["Id", "Name"])
+      expect(grid.header).to eq(%w[Id Name])
     end
     it "should be suppored in rows" do
       expect(grid.rows).to eq([[entry.id, "hello"]])
@@ -282,16 +277,14 @@ describe Datagrid::Columns do
     end
 
     it "should support explicit overwrite" do
-      expect(grid.header(:id, :name, :category)).to eq(%w(Id Name Category))
+      expect(grid.header(:id, :name, :category)).to eq(%w[Id Name Category])
     end
-
   end
-
 
   context "when grid has formatted column" do
     it "should output correct data" do
       report = test_report do
-        scope {Entry}
+        scope { Entry }
         column(:name) do |entry|
           format(entry.name) do |value|
             "<strong>#{value}</strong"
@@ -306,18 +299,18 @@ describe Datagrid::Columns do
   describe ".default_column_options" do
     it "should pass default options to each column definition" do
       report = test_report do
-        scope {Entry}
-        self.default_column_options = {order: false}
+        scope { Entry }
+        self.default_column_options = { order: false }
         column(:id)
         column(:name, order: "name")
       end
-      first = Entry.create(name: '1st')
-      second = Entry.create(name: '2nd')
+      first = Entry.create(name: "1st")
+      second = Entry.create(name: "2nd")
       expect do
-        report.attributes = {order: :id}
+        report.attributes = { order: :id }
         report.assets
       end.to raise_error(Datagrid::OrderUnsupported)
-      report.attributes = {order: :name, descending: true}
+      report.attributes = { order: :name, descending: true }
       expect(report.assets).to eq([second, first])
     end
   end
@@ -353,7 +346,7 @@ describe Datagrid::Columns do
 
     it "should support instance level batch size" do
       grid = test_report do
-        scope {Entry}
+        scope { Entry }
         column :id
         self.batch_size = 25
       end
@@ -370,7 +363,7 @@ describe Datagrid::Columns do
   describe ".data_row" do
     it "should give access to column values via an object" do
       grid = test_report do
-        scope  { Entry }
+        scope { Entry }
         column(:id)
         column(:name) do
           name.capitalize
@@ -379,13 +372,13 @@ describe Datagrid::Columns do
           "some link here"
         end
       end
-      entry = Entry.create!(name: 'hello')
+      entry = Entry.create!(name: "hello")
       row = grid.data_row(entry)
       expect(row.id).to eq(entry.id)
       expect(row.name).to eq("Hello")
-      expect {
+      expect do
         row.actions
-      }.to raise_error(RuntimeError)
+      end.to raise_error(RuntimeError)
     end
   end
 
@@ -419,7 +412,7 @@ describe Datagrid::Columns do
     end
 
     let(:basic_grid) { modified_grid.class.new }
-    let!(:entry) { Entry.create!(name: "Hello", category: 'first') }
+    let!(:entry) { Entry.create!(name: "Hello", category: "first") }
 
     it "should have correct columns" do
       expect(modified_grid.columns.size).to eq(2)
@@ -428,83 +421,83 @@ describe Datagrid::Columns do
     end
 
     it "should give correct header" do
-      expect(modified_grid.header).to eq(["Id", "Name"])
+      expect(modified_grid.header).to eq(%w[Id Name])
       expect(basic_grid.header).to eq(["Id"])
     end
 
     it "should give correct rows" do
-      expect(modified_grid.rows).to eq([[entry.id, 'Hello']])
+      expect(modified_grid.rows).to eq([[entry.id, "Hello"]])
       expect(basic_grid.rows).to eq([[entry.id]])
     end
 
     it "should support :before column name" do
       modified_grid.column(:category, before: :name)
-      expect(modified_grid.header).to eq(["Id", "Category", "Name"])
+      expect(modified_grid.header).to eq(%w[Id Category Name])
     end
 
     it "should support :before all" do
       modified_grid.column(:category, before: true)
-      expect(modified_grid.header).to eq(["Category", "Id", "Name"])
+      expect(modified_grid.header).to eq(%w[Category Id Name])
     end
 
     it "should support columns block" do
       modified_grid.column(:category) do
         category.capitalize
       end
-      expect(modified_grid.rows).to eq([[entry.id, "Hello", 'First']])
+      expect(modified_grid.rows).to eq([[entry.id, "Hello", "First"]])
     end
 
     it "should support column_names accessor" do
       modified_grid.column_names = [:name]
-      expect(modified_grid.rows).to eq([['Hello']])
+      expect(modified_grid.rows).to eq([["Hello"]])
       modified_grid.column_names = [:id]
       expect(modified_grid.rows).to eq([[entry.id]])
     end
     it "should support column_names accessor with mandatory columns" do
       modified_grid.column(:category, mandatory: true)
       modified_grid.column_names = [:name]
-      expect(modified_grid.rows).to eq([['Hello', 'first']])
+      expect(modified_grid.rows).to eq([%w[Hello first]])
       basic_grid.column_names = [:id]
       expect(basic_grid.rows).to eq([[entry.id]])
     end
 
     it "should support available columns" do
       modified_grid.column(:category, mandatory: true)
-      expect(modified_grid.available_columns.map(&:name)).to eq([:id, :name, :category])
+      expect(modified_grid.available_columns.map(&:name)).to eq(%i[id name category])
     end
 
     it "should respect column availability criteria" do
       modified_grid.column(:category, if: proc { false })
-      expect(modified_grid.columns.map(&:name)).to eq([:id, :name])
+      expect(modified_grid.columns.map(&:name)).to eq(%i[id name])
     end
   end
 
   describe ".data_value" do
     it "should return value" do
       grid = test_report do
-        scope {Entry }
+        scope { Entry }
         column(:name)
       end
-      expect(grid.data_value(:name, Entry.create!(name: 'Hello'))).to eq('Hello')
+      expect(grid.data_value(:name, Entry.create!(name: "Hello"))).to eq("Hello")
     end
     it "should raise for disabled columns" do
       grid = test_report do
-        scope {Entry }
+        scope { Entry }
         column(:name, if: proc { false })
       end
-      expect  {
-        grid.data_value(:name, Entry.create!(name: 'Hello'))
-      }.to raise_error(Datagrid::ColumnUnavailableError)
+      expect do
+        grid.data_value(:name, Entry.create!(name: "Hello"))
+      end.to raise_error(Datagrid::ColumnUnavailableError)
     end
   end
 
   describe "caching" do
     it "should work when enabled in class" do
       grid = test_report do
-        scope {Entry}
+        scope { Entry }
         self.cached = true
-        column(:random1) {rand(10**9)}
-        column(:random2) {rand(10**9)}
+        column(:random1) { rand(10**9) }
+        column(:random2) { rand(10**9) }
       end
 
       row = grid.data_row(Entry.create!)
@@ -526,16 +519,18 @@ describe Datagrid::Columns do
   describe "decoration" do
     class EntryDecorator
       attr_reader :model
+
       def initialize(model)
         @model = model
       end
+
       def capitalized_name
         model.name.capitalize
       end
     end
 
     let!(:entry) do
-      Entry.create!(name: 'hello', category: 'first')
+      Entry.create!(name: "hello", category: "first")
     end
 
     it "delegates column values to decorator" do
@@ -551,7 +546,7 @@ describe Datagrid::Columns do
         end
       end
 
-      expect(grid.rows).to eq([['Hello', 'first', 'Hello']])
+      expect(grid.rows).to eq([%w[Hello first Hello]])
     end
 
     it "allows class decorator" do
@@ -560,7 +555,7 @@ describe Datagrid::Columns do
         decorate { EntryDecorator }
         column(:capitalized_name)
       end
-      expect(grid.rows).to eq([['Hello']])
+      expect(grid.rows).to eq([["Hello"]])
     end
   end
 
@@ -601,7 +596,7 @@ describe Datagrid::Columns do
       grid = test_report do
         scope { Entry }
         column(:id1, preload: ->(a) { a.order(:id) })
-        column(:id2, preload: ->(a) { a.order(:id) }, if: ->(a) { false })
+        column(:id2, preload: ->(a) { a.order(:id) }, if: ->(_a) { false })
         column(:name)
       end
       grid.column_names = [:name]
@@ -619,10 +614,10 @@ describe Datagrid::Columns do
       end
       grid1 = DataHashGrid.new(order: :name)
       grid2 = DataHashGrid.new(order: :name, descending: true)
-      Entry.create!(name: 'one')
-      Entry.create!(name: 'two')
-      expect(grid1.data_hash).to eq([{name: 'one'}, {name: 'two'}])
-      expect(grid2.data_hash).to eq([{name: 'two'}, {name: 'one'}])
+      Entry.create!(name: "one")
+      Entry.create!(name: "two")
+      expect(grid1.data_hash).to eq([{ name: "one" }, { name: "two" }])
+      expect(grid2.data_hash).to eq([{ name: "two" }, { name: "one" }])
     end
   end
 end

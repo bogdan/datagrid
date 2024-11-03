@@ -3,15 +3,15 @@ module Datagrid
   module ActiveModel
     # @!visibility private
     def self.included(base)
-      base.extend         ClassMethods
+      base.extend ClassMethods
       base.class_eval do
         begin
-          require 'active_model/naming'
+          require "active_model/naming"
           extend ::ActiveModel::Naming
         rescue LoadError
         end
         begin
-          require 'active_model/attributes_assignment'
+          require "active_model/attributes_assignment"
           extend ::ActiveModel::AttributesAssignment
         rescue LoadError
         end
@@ -21,7 +21,7 @@ module Datagrid
     module ClassMethods
       # @return [String] URL query parameter name of the grid class
       def param_name
-        self.to_s.underscore.tr('/', '_')
+        to_s.underscore.tr("/", "_")
       end
     end
 
@@ -48,7 +48,7 @@ module Datagrid
     end
 
     def to_param
-      self.param_name
+      param_name
     end
   end
 end

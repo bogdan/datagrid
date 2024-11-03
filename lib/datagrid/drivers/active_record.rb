@@ -2,9 +2,9 @@ module Datagrid
   module Drivers
     # @!visibility private
     class ActiveRecord < AbstractDriver
-
       def self.match?(scope)
         return false unless defined?(::ActiveRecord)
+
         if scope.is_a?(Class)
           scope.ancestors.include?(::ActiveRecord::Base)
         else
@@ -14,6 +14,7 @@ module Datagrid
 
       def to_scope(scope)
         return scope if scope.is_a?(::ActiveRecord::Relation)
+
         # Model class or Active record association
         # ActiveRecord association class hides itself under an Array
         # We can only reveal it by checking if it respond to some specific
@@ -32,7 +33,7 @@ module Datagrid
           if assets.select_values.empty?
             assets = assets.select(Arel.respond_to?(:star) ? assets.klass.arel_table[Arel.star] : "#{assets.quoted_table_name}.*")
           end
-          columns = columns.map {|c| "#{c.query} AS #{c.name}"}
+          columns = columns.map { |c| "#{c.query} AS #{c.name}" }
           assets = assets.select(*columns)
         end
         assets
@@ -89,13 +90,14 @@ module Datagrid
 
       def normalized_column_type(scope, field)
         return nil unless has_column?(scope, field)
+
         builtin_type = scope.columns_hash[field.to_s].type
         {
-          [:string, :text, :time, :binary] => :string,
-          [:integer, :primary_key] => :integer,
-          [:float, :decimal] => :float,
+          %i[string text time binary] => :string,
+          %i[integer primary_key] => :integer,
+          %i[float decimal] => :float,
           [:date] => :date,
-          [:datetime, :timestamp] => :timestamp,
+          %i[datetime timestamp] => :timestamp,
           [:boolean] => :boolean
         }.each do |keys, value|
           return value if keys.include?(builtin_type)
@@ -106,6 +108,7 @@ module Datagrid
         if scope.limit_value
           raise Datagrid::ConfigurationError, "ActiveRecord can not use batches in combination with SQL limit"
         end
+
         options = batch_size ? { batch_size: batch_size } : {}
         scope.find_each(**options, &block)
       end
@@ -119,19 +122,22 @@ module Datagrid
       end
 
       def can_preload?(scope, association)
-        !! scope.klass.reflect_on_association(association)
+        !!scope.klass.reflect_on_association(association)
       end
 
       protected
 
       def prefix_table_name(scope, field)
-        has_column?(scope, field) ?  [scope.table_name, field].join(".") : field
+        has_column?(scope, field) ? [scope.table_name, field].join(".") : field
       end
 
       def contains_predicate
-        defined?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) &&
-          ::ActiveRecord::Base.connection.is_a?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) ?
-          'ilike' : 'like'
+        if defined?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) &&
+           ::ActiveRecord::Base.connection.is_a?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
+          "ilike"
+        else
+          "like"
+        end
       end
     end
   end

@@ -1,10 +1,9 @@
 module Datagrid::Filters::RangedFilter
-
   def initialize(grid, name, options, &block)
     super(grid, name, options, &block)
-    if range?
-      options[:multiple] = true
-    end
+    return unless range?
+
+    options[:multiple] = true
   end
 
   def parse_values(value)
@@ -30,7 +29,6 @@ module Datagrid::Filters::RangedFilter
     else
       raise ArgumentError, "Can not create a date range from array of more than two: #{result.inspect}"
     end
-
   end
 
   def range?
@@ -40,17 +38,11 @@ module Datagrid::Filters::RangedFilter
   def default_filter_where(scope, value)
     if range? && value.is_a?(Array)
       left, right = value
-      if left
-        scope = driver.greater_equal(scope, name, left)
-      end
-      if right
-        scope = driver.less_equal(scope, name, right)
-      end
+      scope = driver.greater_equal(scope, name, left) if left
+      scope = driver.less_equal(scope, name, right) if right
       scope
     else
       super(scope, value)
     end
   end
-
-
 end

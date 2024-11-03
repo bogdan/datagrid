@@ -1,17 +1,15 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Datagrid::Drivers::Array do
-
   describe ".match?" do
     subject { described_class }
 
-    it {should be_match(Array.new)}
-    it {should be_match(ActiveRecord::Result.new([], []))}
-    it {should_not be_match({})}
+    it { should be_match([]) }
+    it { should be_match(ActiveRecord::Result.new([], [])) }
+    it { should_not be_match({}) }
   end
 
   describe "api" do
-
     class ArrayGrid
       class User < Struct.new(:name, :age); end
       include Datagrid
@@ -20,7 +18,7 @@ describe Datagrid::Drivers::Array do
       end
 
       filter(:name)
-      filter(:age, :integer, :range => true)
+      filter(:age, :integer, range: true)
 
       column(:name)
       column(:age)
@@ -33,70 +31,66 @@ describe Datagrid::Drivers::Array do
 
     subject do
       ArrayGrid.new(_attributes).scope do
-        [ first, second, third ]
+        [first, second, third]
       end
     end
 
-
-    describe '#assets' do
+    describe "#assets" do
       subject { super().assets }
-      describe '#size' do
+      describe "#size" do
         subject { super().size }
-        it {should == 3}
+        it { should == 3 }
       end
     end
 
-    describe '#rows' do
+    describe "#rows" do
       subject { super().rows }
-      it {should == [["Vasya", 15], ["Petya", 12], ["Vova", 13]]}
+      it { should == [["Vasya", 15], ["Petya", 12], ["Vova", 13]] }
     end
 
-    describe '#header' do
+    describe "#header" do
       subject { super().header }
-      it {should ==[ "Name", "Age"]}
+      it { should == %w[Name Age] }
     end
 
-    describe '#data' do
+    describe "#data" do
       subject { super().data }
-      it {should == [[ "Name", "Age"], ["Vasya", 15], ["Petya", 12], ["Vova", 13]]}
+      it { should == [%w[Name Age], ["Vasya", 15], ["Petya", 12], ["Vova", 13]] }
     end
-
 
     describe "when some filters specified" do
-      let(:_attributes) { {:age => [12,14]} }
+      let(:_attributes) { { age: [12, 14] } }
 
-      describe '#assets' do
+      describe "#assets" do
         subject { super().assets }
-        it {should_not include(first)}
+        it { should_not include(first) }
       end
 
-      describe '#assets' do
+      describe "#assets" do
         subject { super().assets }
-        it {should include(second)}
+        it { should include(second) }
       end
 
-      describe '#assets' do
+      describe "#assets" do
         subject { super().assets }
-        it {should include(third)}
+        it { should include(third) }
       end
     end
 
     describe "when reverse ordering is specified" do
-      let(:_attributes) { {:order => :name, :descending => true} }
+      let(:_attributes) { { order: :name, descending: true } }
 
-      describe '#assets' do
+      describe "#assets" do
         subject { super().assets }
-        it {should == [third, first, second]}
+        it { should == [third, first, second] }
       end
     end
-
   end
 
   describe "when using enumerator scope" do
-
     it "should work fine" do
       grid = test_report(to_enum: true) do
-        scope {[]}
+        scope { [] }
         filter(:to_enum, :boolean) do |_, scope|
           scope.to_enum
         end
@@ -109,11 +103,11 @@ describe Datagrid::Drivers::Array do
     class HashGrid
       include Datagrid
       scope do
-        [{name: 'Bogdan', age: 30}, {name: 'Brad', age: 32}]
+        [{ name: "Bogdan", age: 30 }, { name: "Brad", age: 32 }]
       end
 
       filter(:name)
-      filter(:age, :integer, :range => true)
+      filter(:age, :integer, range: true)
 
       column(:name)
       column(:age)
@@ -126,9 +120,9 @@ describe Datagrid::Drivers::Array do
     end
 
     context "ordered" do
-      let(:_attributes) { { order: :name, descending: true }}
+      let(:_attributes) { { order: :name, descending: true } }
 
-      it { subject.assets.should == [ {name: 'Brad', age: 32}, {name: 'Bogdan', age: 30},] }
+      it { subject.assets.should == [{ name: "Brad", age: 32 }, { name: "Bogdan", age: 30 }] }
     end
   end
 end
