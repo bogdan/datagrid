@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Datagrid
   module Drivers
     # @!visibility private

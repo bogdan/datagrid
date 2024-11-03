@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe Datagrid::Filters::EnumFilter do
@@ -20,7 +22,7 @@ describe Datagrid::Filters::EnumFilter do
   it "should support select option as proc with instace input" do
     klass = test_report do
       scope { Entry }
-      filter(:group_id, :enum, select: proc { |obj| obj.object_id })
+      filter(:group_id, :enum, select: proc(&:object_id))
     end.class
     instance = klass.new
     expect(klass.filter_by_name(:group_id).select(instance)).to eq(instance.object_id)

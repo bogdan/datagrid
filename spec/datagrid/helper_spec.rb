@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "active_support/core_ext/hash"
 require "active_support/core_ext/object"
@@ -193,7 +195,7 @@ describe Datagrid::Helper do
     it "should support urls" do
       rp = test_report do
         scope { Entry }
-        column(:name, url: ->(model) { model.name })
+        column(:name, url: lambda(&:name))
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name a[href=Star]" => "Star"
@@ -560,7 +562,7 @@ describe Datagrid::Helper do
     end
     it "should provide an interator" do
       r = subject.datagrid_row(grid, entry)
-      expect(r.map { |z| z.upcase }).to eq(%w[HELLO GREETINGS])
+      expect(r.map(&:upcase)).to eq(%w[HELLO GREETINGS])
       expect(r.name).to eq("Hello")
       expect(r.category).to eq("greetings")
     end

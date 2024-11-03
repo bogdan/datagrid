@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Datagrid
   module Drivers
     # @!visibility private
     class AbstractDriver
-      TIMESTAMP_CLASSES = [DateTime, Time, ActiveSupport::TimeWithZone]
+      TIMESTAMP_CLASSES = [DateTime, Time, ActiveSupport::TimeWithZone].freeze
 
       class_attribute :subclasses, default: []
 

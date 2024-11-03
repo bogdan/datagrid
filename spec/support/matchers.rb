@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails/dom/testing"
 
 def equal_to_dom(text)
@@ -55,19 +57,20 @@ class CssPattern
     @matcher = Nokogiri::HTML::DocumentFragment.parse(text)
     @css_pattern.each do |css, amount_or_pattern_or_string_or_proc|
       path = @matcher.css(css)
-      if amount_or_pattern_or_string_or_proc.is_a?(String) or amount_or_pattern_or_string_or_proc.is_a?(Regexp)
+      case amount_or_pattern_or_string_or_proc
+      when String, Regexp
         pattern_or_string = amount_or_pattern_or_string_or_proc
         html = path.inner_html
         unless html.match(pattern_or_string)
           return error!("#{css.inspect} did not match #{pattern_or_string.inspect}. It was \n:#{html.inspect}")
         end
-      elsif amount_or_pattern_or_string_or_proc.is_a? Numeric
+      when Numeric
         expected_amount = amount_or_pattern_or_string_or_proc
         amount = path.size
         if amount != expected_amount
           return error!("did not find #{css.inspect} #{expected_amount.inspect} times. It was #{amount.inspect}")
         end
-      elsif amount_or_pattern_or_string_or_proc.is_a? Proc
+      when Proc
         unless amount_or_pattern_or_string_or_proc.call(path)
           return error!("#{css.inspect} did not validate (proc must not return a falsy value)")
         end

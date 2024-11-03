@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "datagrid"
 
 # TODO: refactor this experimental shit

@@ -1,7 +1,13 @@
-class Datagrid::Filters::StringFilter < Datagrid::Filters::BaseFilter
-  include Datagrid::Filters::RangedFilter
+# frozen_string_literal: true
 
-  def parse(value)
-    value.nil? ? nil : value.to_s
+module Datagrid
+  module Filters
+    class StringFilter < Datagrid::Filters::BaseFilter
+      include Datagrid::Filters::RangedFilter
+
+      def parse(value)
+        value&.to_s
+      end
+    end
   end
 end

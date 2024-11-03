@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "active_support/core_ext/class/attribute"
 
 module Datagrid
@@ -27,7 +29,7 @@ module Datagrid
       enum: Filters::EnumFilter,
       float: Filters::FloatFilter,
       dynamic: Filters::DynamicFilter
-    }
+    }.freeze
 
     # @!visibility private
     DEFAULT_FILTER_BLOCK = Object.new

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Datagrid
   def self.configuration
     @configuration ||= Configuration.new

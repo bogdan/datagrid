@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe Datagrid::Drivers::Array do
@@ -11,7 +13,7 @@ describe Datagrid::Drivers::Array do
 
   describe "api" do
     class ArrayGrid
-      class User < Struct.new(:name, :age); end
+      User = Struct.new(:name, :age)
       include Datagrid
       scope do
         []

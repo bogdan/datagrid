@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "datagrid/drivers"
 require "active_support/core_ext/class/attribute"
 require "active_model/attribute_assignment"
@@ -150,9 +152,6 @@ module Datagrid
     #   grid.attributes = {first_name: 'John', last_name: 'Smith'}
     #   grid.first_name # => 'John'
     #   grid.last_name # => 'Smith'
-    def attributes=(attributes)
-      super(attributes)
-    end
 
     # @return [Object] Any datagrid attribute value
     def [](attribute)

@@ -1,33 +1,39 @@
+# frozen_string_literal: true
+
 require "datagrid/filters/ranged_filter"
 
-class Datagrid::Filters::DateFilter < Datagrid::Filters::BaseFilter
-  include Datagrid::Filters::RangedFilter
+module Datagrid
+  module Filters
+    class DateFilter < Datagrid::Filters::BaseFilter
+      include Datagrid::Filters::RangedFilter
 
-  def apply(grid_object, scope, value)
-    value = value.begin&.beginning_of_day..value.end&.end_of_day if value.is_a?(Range)
-    super(grid_object, scope, value)
-  end
+      def apply(grid_object, scope, value)
+        value = value.begin&.beginning_of_day..value.end&.end_of_day if value.is_a?(Range)
+        super(grid_object, scope, value)
+      end
 
-  def parse(value)
-    Datagrid::Utils.parse_date(value)
-  end
+      def parse(value)
+        Datagrid::Utils.parse_date(value)
+      end
 
-  def format(value)
-    if formats.any? && value
-      value.strftime(formats.first)
-    else
-      super
+      def format(value)
+        if formats.any? && value
+          value.strftime(formats.first)
+        else
+          super
+        end
+      end
+
+      def default_filter_where(scope, value)
+        value = Datagrid::Utils.format_date_as_timestamp(value) if driver.is_timestamp?(scope, name)
+        super(scope, value)
+      end
+
+      protected
+
+      def formats
+        Array(Datagrid.configuration.date_formats)
+      end
     end
-  end
-
-  def default_filter_where(scope, value)
-    value = Datagrid::Utils.format_date_as_timestamp(value) if driver.is_timestamp?(scope, name)
-    super(scope, value)
-  end
-
-  protected
-
-  def formats
-    Array(Datagrid.configuration.date_formats)
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Datagrid
   module ColumnNamesAttribute
     extend ActiveSupport::Concern
@@ -45,7 +47,7 @@ module Datagrid
     # If no mandatory columns specified than all of them considered mandatory
     # @return [Array<Datagrid::Columns::Column>]
     def mandatory_columns
-      available_columns.select { |c| c.mandatory? }
+      available_columns.select(&:mandatory?)
     end
 
     # Returns a list of enabled columns without <tt>mandatory: true</tt> option
@@ -68,7 +70,7 @@ module Datagrid
           column.is_a?(Datagrid::Columns::Column) ? column.name : column.to_sym
         end
         args
-      elsif column_names && column_names.any?
+      elsif column_names&.any?
         column_names + mandatory_columns.map(&:name)
       else
         columns_enabled_by_default.map(&:name)
@@ -76,9 +78,7 @@ module Datagrid
     end
 
     def columns_visibility_enabled?
-      columns_array.any? do |column|
-        column.mandatory_explicitly_set?
-      end
+      columns_array.any?(&:mandatory_explicitly_set?)
     end
 
     def columns_enabled_by_default

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 appraise "rails-6.1" do
   group :development do
     gem "rails", "~> 6.1.0"

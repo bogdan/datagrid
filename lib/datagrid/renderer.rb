@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "action_view"
 
 module Datagrid
@@ -16,7 +18,7 @@ module Datagrid
 
       value = grid.html_value(column, @template, asset)
 
-      url = column.options[:url] && column.options[:url].call(asset)
+      url = column.options[:url]&.call(asset)
       if url
         @template.link_to(value, url)
       else
@@ -45,7 +47,7 @@ module Datagrid
     end
 
     def header(grid, options = {})
-      options[:order] = true unless options.has_key?(:order)
+      options[:order] = true unless options.key?(:order)
 
       _render_partial("head", options[:partials],
                       { grid: grid, options: options })
@@ -141,7 +143,7 @@ module Datagrid
       protected
 
       def method_missing(method, *args, &blk)
-        if column = @grid.column_by_name(method)
+        if (column = @grid.column_by_name(method))
           get(column)
         else
           super

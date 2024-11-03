@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Datagrid
   # Required to be ActiveModel compatible
   module ActiveModel

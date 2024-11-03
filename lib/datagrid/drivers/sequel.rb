@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Datagrid
   module Drivers
     # @!visibility private
@@ -18,10 +20,6 @@ module Datagrid
         scope.where({})
       end
 
-      def append_column_queries(assets, columns)
-        super
-      end
-
       def where(scope, attribute, value)
         scope.where(attribute => value)
       end
@@ -32,10 +30,6 @@ module Datagrid
 
       def desc(scope, order)
         scope.order(::Sequel.desc(::Sequel.lit(order)))
-      end
-
-      def reverse_order(scope)
-        super
       end
 
       def default_order(scope, column_name)

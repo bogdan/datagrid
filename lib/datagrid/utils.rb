@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Datagrid
   # @!visibility private
   module Utils
     class << self
-      TRUTH = [true, 1, "1", "true", "yes", "on"]
+      TRUTH = [true, 1, "1", "true", "yes", "on"].freeze
 
       def booleanize(value)
         value = value.downcase if value.respond_to?(:downcase)
@@ -65,7 +67,7 @@ module Datagrid
       end
 
       def apply_args(*args, &block)
-        size = block.arity < 0 ? args.size : block.arity
+        size = block.arity.negative? ? args.size : block.arity
         block.call(*args.slice(0, size))
       end
 

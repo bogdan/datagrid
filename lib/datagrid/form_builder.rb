@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "action_view"
 
 module Datagrid
@@ -31,22 +33,23 @@ module Datagrid
       filter = datagrid_get_filter(attribute_or_filter)
       options = add_filter_options(filter, **options)
       type = options.delete(:type)&.to_sym
-      if options.has_key?(:value) && options[:value].nil? && %i[datetime-local date].include?(type)
+      if options.key?(:value) && options[:value].nil? && %i[datetime-local date].include?(type)
         # https://github.com/rails/rails/pull/53387
         options[:value] = ""
       end
-      if type == :"datetime-local"
+      case type
+      when :"datetime-local"
         datetime_local_field filter.name, **options, &block
-      elsif type == :date
+      when :date
         date_field filter.name, **options, &block
-      elsif type == :textarea
+      when :textarea
         text_area filter.name, value: object.filter_value_as_string(filter), **options, &block
-      elsif type == :checkbox
+      when :checkbox
         # raise options.inspect
         check_box filter.name, options, options.fetch(:value, 1)
-      elsif type == :hidden
+      when :hidden
         hidden_field filter.name, **options
-      elsif type == :select
+      when :select
         select(
           filter.name,
           object.select_options(filter) || [],
@@ -218,7 +221,7 @@ module Datagrid
     end
 
     def partial_path(name)
-      if partials = options[:partials]
+      if (partials = options[:partials])
         partial_name = File.join(partials, name)
         # Second argument is []: no magical namespaces to lookup added from controller
         return partial_name if @template.lookup_context.template_exists?(partial_name, [], true)

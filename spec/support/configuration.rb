@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def with_date_format(format = "%m/%d/%Y")
   old_format = Datagrid.configuration.date_formats
   Datagrid.configure do |config|

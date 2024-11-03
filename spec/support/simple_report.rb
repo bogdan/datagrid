@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def test_report(attributes = {}, &block)
   klass = test_report_class(&block)
   klass.new(attributes)
@@ -35,9 +37,7 @@ class SimpleReport
     group.name
   end
 
-  column(:name) do |user|
-    user.name
-  end
+  column(:name, &:name)
 
   column(:actions, html: true) do |model|
     render partial: "/actions", locals: { model: model }

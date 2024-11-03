@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "datagrid/drivers/abstract_driver"
 require "datagrid/drivers/active_record"
 require "datagrid/drivers/array"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rubygems"
 
 # Mongoid.logger = TEST_LOGGER #TODO: understand why still output to STDOUT

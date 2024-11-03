@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "datagrid/utils"
 require "active_support/core_ext/class/attribute"
 
@@ -488,7 +490,7 @@ module Datagrid
     end
 
     def each_with_batches(&block)
-      if batch_size && batch_size > 0
+      if batch_size&.positive?
         driver.batch_each(assets, batch_size, &block)
       else
         assets.each(&block)
@@ -498,7 +500,7 @@ module Datagrid
     def value_from_html_block(context, asset, column)
       args = []
       remaining_arity = column.html_block.arity
-      remaining_arity = 1 if remaining_arity < 0
+      remaining_arity = 1 if remaining_arity.negative?
 
       asset = decorate(asset)
 
@@ -507,7 +509,7 @@ module Datagrid
         remaining_arity -= 1
       end
 
-      args << asset if remaining_arity > 0
+      args << asset if remaining_arity.positive?
       args << self if remaining_arity > 1
 
       context.instance_exec(*args, &column.html_block)
