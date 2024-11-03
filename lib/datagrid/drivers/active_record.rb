@@ -32,9 +32,7 @@ module Datagrid
 
       def append_column_queries(assets, columns)
         if columns.present?
-          if assets.select_values.empty?
-            assets = assets.select(Arel.respond_to?(:star) ? assets.klass.arel_table[Arel.star] : "#{assets.quoted_table_name}.*")
-          end
+          assets = assets.select(assets.klass.arel_table[Arel.star]) if assets.select_values.empty?
           columns = columns.map { |c| "#{c.query} AS #{c.name}" }
           assets = assets.select(*columns)
         end
@@ -64,7 +62,7 @@ module Datagrid
       end
 
       def default_order(scope, column_name)
-        has_column?(scope, column_name) ? prefix_table_name(scope, column_name) : nil
+        scope_has_column?(scope, column_name) ? prefix_table_name(scope, column_name) : nil
       end
 
       def greater_equal(scope, field, value)
@@ -75,7 +73,7 @@ module Datagrid
         scope.where(["#{prefix_table_name(scope, field)} <= ?", value])
       end
 
-      def has_column?(scope, column_name)
+      def scope_has_column?(scope, column_name)
         scope.column_names.include?(column_name.to_s)
       rescue ::ActiveRecord::StatementInvalid
         false
@@ -91,7 +89,7 @@ module Datagrid
       end
 
       def normalized_column_type(scope, field)
-        return nil unless has_column?(scope, field)
+        return nil unless scope_has_column?(scope, field)
 
         builtin_type = scope.columns_hash[field.to_s].type
         {
@@ -130,7 +128,7 @@ module Datagrid
       protected
 
       def prefix_table_name(scope, field)
-        has_column?(scope, field) ? [scope.table_name, field].join(".") : field
+        scope_has_column?(scope, field) ? [scope.table_name, field].join(".") : field
       end
 
       def contains_predicate

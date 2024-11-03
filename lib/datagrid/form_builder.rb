@@ -208,12 +208,10 @@ module Datagrid
     end
 
     def datagrid_get_filter(attribute_or_filter)
-      if Utils.string_like?(attribute_or_filter)
-        object.class.filter_by_name(attribute_or_filter) ||
-          raise(Error, "Datagrid filter #{attribute_or_filter} not found")
-      else
-        attribute_or_filter
-      end
+      return attribute_or_filter unless Utils.string_like?(attribute_or_filter)
+
+      object.class.filter_by_name(attribute_or_filter) ||
+        raise(Error, "Datagrid filter #{attribute_or_filter} not found")
     end
 
     def add_html_classes(options, *classes)

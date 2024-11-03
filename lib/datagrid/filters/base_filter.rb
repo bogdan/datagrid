@@ -38,8 +38,10 @@ module Datagrid
 
         result = default_filter(value, scope, grid_object) if result == Datagrid::Filters::DEFAULT_FILTER_BLOCK
         unless grid_object.driver.match?(result)
-          raise Datagrid::FilteringError,
-                "Can not apply #{name.inspect} filter: result #{result.inspect} no longer match #{grid_object.driver.class}."
+          raise(
+            Datagrid::FilteringError,
+            "Filter #{name.inspect} unapplicable: result no longer match #{grid_object.driver.class}."
+          )
         end
 
         result
@@ -183,7 +185,7 @@ module Datagrid
       def default_filter(value, scope, _grid)
         return nil if dummy?
 
-        if !driver.has_column?(scope, name) && scope.respond_to?(name, true)
+        if !driver.scope_has_column?(scope, name) && scope.respond_to?(name, true)
           scope.public_send(name, value)
         else
           default_filter_where(scope, value)

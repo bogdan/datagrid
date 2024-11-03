@@ -217,8 +217,11 @@ module Datagrid
     def find_select_filter(filter)
       filter = filter_by_name(filter)
       unless filter.class.included_modules.include?(::Datagrid::Filters::SelectOptions)
-        raise ::Datagrid::ArgumentError,
-              "#{self.class.name}##{filter.name} with type #{FILTER_TYPES.invert[filter.class].inspect} can not have select options"
+        type = FILTER_TYPES.invert[filter.class].inspect
+        raise(
+          ::Datagrid::ArgumentError,
+          "#{self.class.name}##{filter.name} with type #{type} can not have select options"
+        )
       end
       filter
     end

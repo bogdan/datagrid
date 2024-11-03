@@ -6,8 +6,6 @@ module Datagrid
     module CompositeFilters
       def self.included(base)
         base.extend ClassMethods
-        base.class_eval do
-        end
       end
 
       # @!visibility private

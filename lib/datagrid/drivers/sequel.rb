@@ -33,7 +33,7 @@ module Datagrid
       end
 
       def default_order(scope, column_name)
-        has_column?(scope, column_name) ? ::Sequel.lit(prefix_table_name(scope, column_name)) : nil
+        scope_has_column?(scope, column_name) ? ::Sequel.lit(prefix_table_name(scope, column_name)) : nil
       end
 
       def greater_equal(scope, field, value)
@@ -44,7 +44,7 @@ module Datagrid
         scope.where(::Sequel.lit("#{prefix_table_name(scope, field)} <= ?", value))
       end
 
-      def has_column?(scope, column_name)
+      def scope_has_column?(scope, column_name)
         scope.columns.include?(column_name.to_sym)
       end
 
@@ -98,11 +98,11 @@ module Datagrid
       protected
 
       def prefix_table_name(scope, field)
-        has_column?(scope, field) ? [to_scope(scope).row_proc.table_name, field].join(".") : field
+        scope_has_column?(scope, field) ? [to_scope(scope).row_proc.table_name, field].join(".") : field
       end
 
       def column_type(scope, field)
-        has_column?(scope, field) ? to_scope(scope).row_proc.db_schema[field.to_sym][:type] : nil
+        scope_has_column?(scope, field) ? to_scope(scope).row_proc.db_schema[field.to_sym][:type] : nil
       end
     end
   end
