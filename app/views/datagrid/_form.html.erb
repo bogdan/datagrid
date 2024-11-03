@@ -1,6 +1,6 @@
 <%= form_for grid, **options do |f| -%>
   <% grid.filters.each do |filter| %>
-    <div class="datagrid-filter filter">
+    <div class="datagrid-filter">
       <%= f.datagrid_label filter %>
       <%= f.datagrid_filter filter %>
     </div>

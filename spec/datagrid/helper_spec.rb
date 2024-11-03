@@ -483,8 +483,8 @@ describe Datagrid::Helper do
       expect(subject.datagrid_form_for(object, url: "/grid")).to match_css_pattern(
         "form.datagrid-form.form_for_grid[action='/grid']" => 1,
         "form input[name=utf8]" => 1,
-        "form .filter label" => "Category",
-        "form .filter input.category.default_filter[name='form_for_grid[category]'][value=hello]" => 1,
+        "form .datagrid-filter label" => "Category",
+        "form .datagrid-filter input.category.default_filter[name='form_for_grid[category]'][value=hello]" => 1,
         "form input[name=commit][value=Search]" => 1,
         "form a.datagrid-reset[href='/location']" => 1
       )
