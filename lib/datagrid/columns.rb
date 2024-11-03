@@ -300,7 +300,8 @@ module Datagrid
       end
     end
 
-    # @param column_names [Array<String, Symbol>] list of column names if you want to limit data only to specified columns
+    # @param column_names [Array<String, Symbol>] list of column names
+    #   if you want to limit data only to specified columns
     # @return [Array<Datagrid::Columns::Column>] columns that can be represented in plain data(non-html) way
     def data_columns(*column_names, **options)
       columns(*column_names, **options, data: true)
@@ -374,7 +375,8 @@ module Datagrid
       super
     end
 
-    # @return [Array<Datagrid::Columns::Column>] all columns that are possible to be displayed for the current grid object
+    # @return [Array<Datagrid::Columns::Column>] all columns
+    #   that are possible to be displayed for the current grid object
     #
     # @example
     #   class MyGrid
@@ -478,7 +480,9 @@ module Datagrid
       end
     rescue NotImplementedError
       raise Datagrid::ConfigurationError,
-            "#{self} is setup to use cache. But there was appropriate cache key found for #{asset.inspect}. Please set cached option to block with asset as argument and cache key as returning value to resolve the issue."
+            <<~MSG
+              #{self} is setup to use cache. But there was appropriate cache key found for #{asset.inspect}.
+            MSG
     end
 
     def map_with_batches(&block)
@@ -525,6 +529,10 @@ module Datagrid
 
       def method_missing(meth, *_args)
         @grid.data_value(meth, @model)
+      end
+
+      def respond_to_missing?(meth, include_private = false)
+        !!@grid.column_by_name(meth) || super
       end
     end
   end

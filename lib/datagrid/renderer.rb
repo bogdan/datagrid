@@ -149,6 +149,10 @@ module Datagrid
           super
         end
       end
+
+      def respond_to_missing?(method, include_private = false)
+        !!@grid.column_by_name(method) || super
+      end
     end
   end
 end

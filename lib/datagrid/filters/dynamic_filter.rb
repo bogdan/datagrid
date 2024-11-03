@@ -106,9 +106,7 @@ module Datagrid
           value.is_a?(Numeric) || value =~ /^\d/ ?  value.to_i : nil
         when :float
           value.is_a?(Numeric) || value =~ /^\d/ ?  value.to_f : nil
-        when :date
-          Datagrid::Utils.parse_date(value)
-        when :timestamp
+        when :date, :timestamp
           Datagrid::Utils.parse_date(value)
         when :boolean
           Datagrid::Utils.booleanize(value)
