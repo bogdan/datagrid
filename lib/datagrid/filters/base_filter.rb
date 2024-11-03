@@ -136,6 +136,10 @@ class Datagrid::Filters::BaseFilter
     ::Datagrid::Utils.process_availability(grid, options[:if], options[:unless])
   end
 
+  def default_html_classes
+    [ name, self.class.to_s.demodulize.underscore ]
+  end
+
   protected
 
   def default_filter_where(scope, value)
@@ -179,6 +183,5 @@ class Datagrid::Filters::BaseFilter
       default_filter_where(scope, value)
     end
   end
-
 end
 

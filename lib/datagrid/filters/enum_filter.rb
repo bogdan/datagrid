@@ -17,6 +17,12 @@ class Datagrid::Filters::EnumFilter < Datagrid::Filters::BaseFilter
     value
   end
 
+  def default_html_classes
+    res = super
+    res.push('checkboxes') if checkboxes?
+    res
+  end
+
   def strict
     options[:strict]
   end

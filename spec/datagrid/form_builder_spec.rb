@@ -161,27 +161,27 @@ describe Datagrid::FormBuilder do
         let(:_filter_options) { {:id => "hello"} }
         let(:_range) { [1,2]}
         it { should equal_to_dom(
-          '<input value="1" id="from_hello" class="group_id integer_filter from" multiple type="text" name="report[group_id][]"/>' +
+          '<input value="1" id="from_hello" class="from group_id integer_filter" multiple type="text" name="report[group_id][]"/>' +
           '<span class="separator integer"> - </span>' +
-          '<input value="2" id="to_hello" class="group_id integer_filter to" multiple type="text" name="report[group_id][]"/>'
+          '<input value="2" id="to_hello" class="to group_id integer_filter" multiple type="text" name="report[group_id][]"/>'
         )}
       end
       context "with only left bound" do
 
         let(:_range) { [10, nil]}
         it { should equal_to_dom(
-          '<input value="10" class="group_id integer_filter from" multiple type="text" name="report[group_id][]"/>' +
+          '<input value="10" class="from group_id integer_filter" multiple type="text" name="report[group_id][]"/>' +
           '<span class="separator integer"> - </span>' +
-          '<input class="group_id integer_filter to" multiple type="text" name="report[group_id][]"/>'
+          '<input class="to group_id integer_filter" multiple type="text" name="report[group_id][]"/>'
         )}
         it { should be_html_safe }
       end
       context "with only right bound" do
         let(:_range) { [nil, 10]}
         it { should equal_to_dom(
-          '<input class="group_id integer_filter from" multiple type="text" name="report[group_id][]"/>' +
+          '<input class="from group_id integer_filter" multiple type="text" name="report[group_id][]"/>' +
           '<span class="separator integer"> - </span>' +
-          '<input value="10" class="group_id integer_filter to" multiple type="text" name="report[group_id][]"/>'
+          '<input value="10" class="to group_id integer_filter" multiple type="text" name="report[group_id][]"/>'
         )}
         it { should be_html_safe }
       end
@@ -189,9 +189,9 @@ describe Datagrid::FormBuilder do
       context "with invalid range value" do
         let(:_range) { 2..1 }
         it { should equal_to_dom(
-          '<input value="1" class="group_id integer_filter from" multiple type="text" name="report[group_id][]"/>' +
+          '<input value="1" class="from group_id integer_filter" multiple type="text" name="report[group_id][]"/>' +
           '<span class="separator integer"> - </span>' +
-          '<input value="2" class="group_id integer_filter to" multiple type="text" name="report[group_id][]"/>'
+          '<input value="2" class="to group_id integer_filter" multiple type="text" name="report[group_id][]"/>'
         )}
       end
 
@@ -207,7 +207,7 @@ describe Datagrid::FormBuilder do
         let(:view_options) { { :partials => 'not_existed' } }
         let(:_range) { nil }
         it { should equal_to_dom(
-          '<input class="group_id integer_filter from" multiple type="text" name="report[group_id][]"><span class="separator integer"> - </span><input class="group_id integer_filter to" multiple type="text" name="report[group_id][]">'
+          '<input class="from group_id integer_filter" multiple type="text" name="report[group_id][]"><span class="separator integer"> - </span><input class="to group_id integer_filter" multiple type="text" name="report[group_id][]">'
         ) }
 
       end
@@ -223,9 +223,9 @@ describe Datagrid::FormBuilder do
       }
       let(:_range) { [1.5,2.5]}
       it { should equal_to_dom(
-        '<input value="1.5" class="rating float_filter from" multiple type="text" name="report[rating][]"/>' +
+        '<input value="1.5" class="from rating float_filter" multiple type="text" name="report[rating][]"/>' +
         '<span class="separator float"> - </span>' +
-        '<input value="2.5" class="rating float_filter to" multiple type="text" name="report[rating][]"/>'
+        '<input value="2.5" class="to rating float_filter" multiple type="text" name="report[rating][]"/>'
       )}
     end
 
@@ -241,9 +241,9 @@ describe Datagrid::FormBuilder do
 
         let(:_range) { ["2012-01-03", nil]}
         it { should equal_to_dom(
-          '<input value="2012-01-03" class="created_at date_filter from" multiple type="text" name="report[created_at][]"/>' +
+          '<input value="2012-01-03" class="from created_at date_filter" multiple type="text" name="report[created_at][]"/>' +
           '<span class="separator date"> - </span>' +
-          '<input class="created_at date_filter to" multiple type="text" name="report[created_at][]"/>'
+          '<input class="to created_at date_filter" multiple type="text" name="report[created_at][]"/>'
         )}
         it { should be_html_safe }
       end
@@ -255,18 +255,18 @@ describe Datagrid::FormBuilder do
         end
         let(:_range) { ["2013/01/01", '2013/02/02']}
         it { should equal_to_dom(
-          '<input value="01/01/2013" class="created_at date_filter from" multiple type="text" name="report[created_at][]"/>' +
+          '<input value="01/01/2013" class="from created_at date_filter" multiple type="text" name="report[created_at][]"/>' +
           '<span class="separator date"> - </span>' +
-          '<input value="02/02/2013" class="created_at date_filter to" multiple type="text" name="report[created_at][]"/>'
+          '<input value="02/02/2013" class="to created_at date_filter" multiple type="text" name="report[created_at][]"/>'
         )}
       end
       context "with only right bound" do
 
         let(:_range) { [nil, "2012-01-03"]}
         it { should equal_to_dom(
-          '<input class="created_at date_filter from" multiple type="text" name="report[created_at][]"/>' +
+          '<input class="from created_at date_filter" multiple type="text" name="report[created_at][]"/>' +
           '<span class="separator date"> - </span>' +
-          '<input value="2012-01-03" class="created_at date_filter to" multiple type="text"  name="report[created_at][]"/>'
+          '<input value="2012-01-03" class="to created_at date_filter" multiple type="text"  name="report[created_at][]"/>'
         )}
         it { should be_html_safe }
       end
@@ -274,9 +274,9 @@ describe Datagrid::FormBuilder do
       context "with invalid range value" do
         let(:_range) { Date.parse('2012-01-02')..Date.parse('2012-01-01') }
         it { should equal_to_dom(
-          '<input value="2012-01-01" class="created_at date_filter from" multiple type="text" name="report[created_at][]"/>' +
+          '<input value="2012-01-01" class="from created_at date_filter" multiple type="text" name="report[created_at][]"/>' +
           '<span class="separator date"> - </span>' +
-          '<input value="2012-01-02" class="created_at date_filter to" multiple type="text" name="report[created_at][]"/>'
+          '<input value="2012-01-02" class="to created_at date_filter" multiple type="text" name="report[created_at][]"/>'
         )}
       end
       context "with blank range value" do
@@ -287,9 +287,9 @@ describe Datagrid::FormBuilder do
         end
         let(:_range) { [nil, nil] }
         it { should equal_to_dom(
-          '<input class="created_at date_filter from" multiple type="text" name="report[created_at][]"/>' +
+          '<input class="from created_at date_filter" multiple type="text" name="report[created_at][]"/>' +
           '<span class="separator date"> - </span>' +
-          '<input class="created_at date_filter to" multiple type="text" name="report[created_at][]"/>'
+          '<input class="to created_at date_filter" multiple type="text" name="report[created_at][]"/>'
         )}
       end
     end
@@ -372,8 +372,8 @@ describe Datagrid::FormBuilder do
         let(:_category_filter_options) { {checkboxes: true} }
         it { should equal_to_dom(
           '
-<label class="category enum_filter checkboxes" for="report_category_first"><input id="report_category_first" type="checkbox" value="first" name="report[category][]" />first</label>
-<label class="category enum_filter checkboxes" for="report_category_second"><input id="report_category_second" type="checkbox" value="second" name="report[category][]" />second</label>
+<label class="category enum_filter checkboxes" for="report_category_first"><input class="category enum_filter checkboxes" type="checkbox" id="report_category_first" value="first" name="report[category][]" />first</label>
+<label class="category enum_filter checkboxes" for="report_category_second"><input class="category enum_filter checkboxes" type="checkbox" id="report_category_second" value="second" name="report[category][]" />second</label>
           '
         )}
 
@@ -522,9 +522,9 @@ describe Datagrid::FormBuilder do
       let(:_filter) { :column_names }
       let(:expected_html) do
         <<DOM
-<label class="column_names enum_filter checkboxes" for="report_column_names_id"><input id="report_column_names_id" type="checkbox" value="id" checked name="report[column_names][]">Id</label>
-<label class="column_names enum_filter checkboxes" for="report_column_names_name"><input id="report_column_names_name" type="checkbox" value="name" checked name="report[column_names][]">Name</label>
-<label class="column_names enum_filter checkboxes" for="report_column_names_category"><input id="report_column_names_category" type="checkbox" value="category" name="report[column_names][]">Category</label>
+<label class="column_names enum_filter checkboxes" for="report_column_names_id"><input class="column_names enum_filter checkboxes" id="report_column_names_id" type="checkbox" value="id" checked name="report[column_names][]">Id</label>
+<label class="column_names enum_filter checkboxes" for="report_column_names_name"><input class="column_names enum_filter checkboxes" id="report_column_names_name" type="checkbox" value="name" checked name="report[column_names][]">Name</label>
+<label class="column_names enum_filter checkboxes" for="report_column_names_category"><input class="column_names enum_filter checkboxes" id="report_column_names_category" type="checkbox" value="category" name="report[column_names][]">Category</label>
 DOM
       end
 
@@ -641,7 +641,7 @@ DOM
     end
     it "should generate label for filter" do
       expect(view.datagrid_label(:name)).to equal_to_dom(
-        '<label for="report_name">Name</label>'
+        '<label class="name string_filter", for="report_name">Name</label>'
       )
     end
     it "should pass options through to the helper" do
@@ -656,7 +656,7 @@ DOM
     end
     it "should support explicit label" do
       expect(view.datagrid_label(:name, "The Name")).to equal_to_dom(
-        '<label for="report_name">The Name</label>'
+        '<label class="name string_filter" for="report_name">The Name</label>'
       )
     end
   end

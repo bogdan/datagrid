@@ -10,7 +10,6 @@ module Datagrid
     #   * <tt>text_field</tt> for other filter types
     def datagrid_filter(filter_or_attribute, partials: nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
-      options = add_html_classes({**filter.input_options, **options}, *datagrid_filter_html_classes(filter))
       self.send( filter.form_builder_helper_name, filter, **options, &block)
     end
 
@@ -20,12 +19,13 @@ module Datagrid
     # @return [String] a form label tag for the corresponding filter name
     def datagrid_label(filter_or_attribute, text = nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
-      label(filter.name, text || filter.header, **filter.label_options, **options, &block)
+      label(filter.name, text || filter.header, class: filter.default_html_classes, **filter.label_options, **options, &block)
     end
 
     # @visibility private
     def datagrid_filter_input(attribute_or_filter, **options, &block)
       filter = datagrid_get_filter(attribute_or_filter)
+      options = add_filter_options(filter, **options)
       type = options[:type]&.to_sym
       if options.has_key?(:value) && options[:value].nil? && [:"datetime-local", :"date"].include?(type)
         # https://github.com/rails/rails/pull/53387
@@ -38,7 +38,8 @@ module Datagrid
       elsif type == :textarea
         text_area filter.name, value: object.filter_value_as_string(filter) , **options, type: nil, &block
       elsif type == :checkbox
-        check_box filter.name, **options
+        # raise options.inspect
+        check_box filter.name, options, options.fetch(:value, 1)
       elsif type == :hidden
         hidden_field filter.name, **options
       elsif type == :select
@@ -83,7 +84,6 @@ module Datagrid
 
     def datagrid_enum_filter(filter, options = {}, &block)
       if filter.checkboxes?
-        options = add_html_classes(options, 'checkboxes')
         elements = object.select_options(filter).map do |element|
           text, value = @template.send(:option_text_and_value, element)
           checked = enum_checkbox_checked?(filter, value)
@@ -124,6 +124,7 @@ module Datagrid
     def datagrid_dynamic_filter(filter, options = {})
       input_name = "#{object_name}[#{filter.name.to_s}][]"
       field, operation, value = object.filter_value(filter)
+      options = add_filter_options(filter, **options)
       options = options.merge(name: input_name)
       field_input = dynamic_filter_select(
         filter.name,
@@ -210,10 +211,6 @@ module Datagrid
       end
     end
 
-    def datagrid_filter_html_classes(filter)
-      [filter.name, filter.class.to_s.demodulize.underscore]
-    end
-
     def add_html_classes(options, *classes)
       Datagrid::Utils.add_html_classes(options, *classes)
     end
@@ -231,6 +228,13 @@ module Datagrid
 
     def render_partial(name, locals)
       @template.render partial: partial_path(name), locals: locals
+    end
+
+    def add_filter_options(filter, **options)
+      add_html_classes(
+        {**filter.input_options, **options},
+        *filter.default_html_classes,
+      )
     end
 
     class Error < StandardError
