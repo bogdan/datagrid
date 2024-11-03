@@ -46,7 +46,9 @@ describe Datagrid do
 
     context "when not defined on class level" do
       subject do
-        test_report {}
+        test_report do
+          column(:id)
+        end
       end
 
       it "should raise ConfigurationError" do
