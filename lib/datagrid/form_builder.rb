@@ -19,24 +19,28 @@ module Datagrid
     # @return [String] a form label tag for the corresponding filter name
     def datagrid_label(filter_or_attribute, text = nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
-      label(filter.name, text || filter.header, class: filter.default_html_classes, **filter.label_options, **options, &block)
+      options = add_html_classes(
+        {**filter.label_options, **options},
+        filter.default_html_classes
+      )
+      label(filter.name, text || filter.header, **options, &block)
     end
 
     # @visibility private
     def datagrid_filter_input(attribute_or_filter, **options, &block)
       filter = datagrid_get_filter(attribute_or_filter)
       options = add_filter_options(filter, **options)
-      type = options[:type]&.to_sym
-      if options.has_key?(:value) && options[:value].nil? && [:"datetime-local", :"date"].include?(type)
+      type = options.delete(:type)&.to_sym
+      if options.has_key?(:value) && options[:value].nil? && [:"datetime-local", :date].include?(type)
         # https://github.com/rails/rails/pull/53387
         options[:value] = ""
       end
       if type == :"datetime-local"
         datetime_local_field filter.name, **options, &block
-      elsif type == :"date"
+      elsif type == :date
         date_field filter.name, **options, &block
       elsif type == :textarea
-        text_area filter.name, value: object.filter_value_as_string(filter) , **options, type: nil, &block
+        text_area filter.name, value: object.filter_value_as_string(filter) , **options, &block
       elsif type == :checkbox
         # raise options.inspect
         check_box filter.name, options, options.fetch(:value, 1)
@@ -53,7 +57,6 @@ module Datagrid
           },
            multiple: filter.multiple?,
            **options,
-           type: nil,
            &block
         )
       else

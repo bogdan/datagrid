@@ -636,22 +636,22 @@ DOM
     end
     it "should generate label for filter" do
       expect(view.datagrid_label(:created_at)).to equal_to_dom(
-        '<label class="js-date-selector" for="report_created_at">Created at</label>'
+        '<label class="js-date-selector created_at date_filter" for="report_created_at">Created at</label>'
       )
     end
     it "should generate label for filter" do
       expect(view.datagrid_label(:name)).to equal_to_dom(
-        '<label class="name string_filter", for="report_name">Name</label>'
+        '<label class="name string_filter" for="report_name">Name</label>'
       )
     end
     it "should pass options through to the helper" do
-      expect(view.datagrid_label(:name, :class => 'foo')).to equal_to_dom(
-        '<label class="foo" for="report_name">Name</label>'
+      expect(view.datagrid_label(:name, class: 'foo')).to equal_to_dom(
+        '<label class="foo name string_filter" for="report_name">Name</label>'
       )
     end
     it "should support block" do
-      expect(view.datagrid_label(:name, :class => 'foo') { 'The Name' }).to equal_to_dom(
-        '<label class="foo" for="report_name">The Name</label>'
+      expect(view.datagrid_label(:name, class: 'foo') { 'The Name' }).to equal_to_dom(
+        '<label class="foo name string_filter" for="report_name">The Name</label>'
       )
     end
     it "should support explicit label" do
