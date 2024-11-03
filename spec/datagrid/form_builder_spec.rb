@@ -495,7 +495,9 @@ describe Datagrid::FormBuilder do
         let(:_filter) { :name }
 
         it {
-          should equal_to_dom('<input value="one,two" class="name string_filter" type="text" name="report[name]" id="report_name">')
+          should equal_to_dom(
+            '<input value="one,two" class="name string_filter" type="text" name="report[name]" id="report_name">'
+          )
         }
       end
     end

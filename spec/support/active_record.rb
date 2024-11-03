@@ -26,12 +26,12 @@ ActiveRecord::Schema.define(version: 1) do
     t.float :rating
     t.timestamps
   end
+end
 
-  class ::Entry < ActiveRecord::Base
-    belongs_to :group
-  end
+class ::Entry < ActiveRecord::Base
+  belongs_to :group
+end
 
-  class ::Group < ActiveRecord::Base
-    has_many :entries
-  end
+class ::Group < ActiveRecord::Base
+  has_many :entries
 end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# @!visibility private
 module Datagrid
   module Filters
     class FloatFilter < Datagrid::Filters::BaseFilter

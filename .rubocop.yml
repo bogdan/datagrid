@@ -1,3 +1,13 @@
 # inherit_from: .rubocop_todo.yml
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+Metrics/BlockLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false

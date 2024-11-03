@@ -18,16 +18,9 @@ require "active_record"
 require "action_view"
 require "rails"
 require "mongoid"
-begin
-  require "mongo_mapper"
-rescue LoadError
-end
 
 require "datagrid"
-begin
-  require "ruby-debug"
-rescue LoadError
-end
+require "debug"
 require "rspec"
 require "logger"
 
