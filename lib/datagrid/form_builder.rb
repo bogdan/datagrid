@@ -10,7 +10,7 @@ module Datagrid
     #   * <tt>text_field</tt> for other filter types
     def datagrid_filter(filter_or_attribute, partials: nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
-      options = add_html_classes({**filter.input_options, **options}, filter.name, datagrid_filter_html_class(filter))
+      options = add_html_classes({**filter.input_options, **options}, *datagrid_filter_html_classes(filter))
       self.send( filter.form_builder_helper_name, filter, **options, &block)
     end
 
@@ -26,7 +26,6 @@ module Datagrid
     # @visibility private
     def datagrid_filter_input(attribute_or_filter, **options, &block)
       filter = datagrid_get_filter(attribute_or_filter)
-      value = object.filter_value_as_string(filter)
       type = options[:type]&.to_sym
       if options.has_key?(:value) && options[:value].nil? && [:"datetime-local", :"date"].include?(type)
         # https://github.com/rails/rails/pull/53387
@@ -37,9 +36,11 @@ module Datagrid
       elsif type == :"date"
         date_field filter.name, **options, &block
       elsif type == :textarea
-        text_area filter.name, value: value, **options, type: nil, &block
+        text_area filter.name, value: object.filter_value_as_string(filter) , **options, type: nil, &block
       elsif type == :checkbox
         check_box filter.name, **options
+      elsif type == :hidden
+        hidden_field filter.name, **options
       elsif type == :select
         select(
           filter.name,
@@ -55,7 +56,7 @@ module Datagrid
            &block
         )
       else
-        text_field filter.name, value: value, **options, &block
+        text_field filter.name, value: object.filter_value_as_string(filter) , **options, &block
       end
     end
 
@@ -209,8 +210,8 @@ module Datagrid
       end
     end
 
-    def datagrid_filter_html_class(filter)
-      filter.class.to_s.demodulize.underscore
+    def datagrid_filter_html_classes(filter)
+      [filter.name, filter.class.to_s.demodulize.underscore]
     end
 
     def add_html_classes(options, *classes)
