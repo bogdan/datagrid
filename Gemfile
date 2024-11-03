@@ -10,6 +10,7 @@ group :development do
   gem "nokogiri" # used to test html output
   gem "pry-byebug"
   gem 'debug'
+  gem "rails-dom-testing", "~> 2.2"
   gem "rspec"
   gem "sequel"
   gem "sqlite3", "~> 1.7.0"

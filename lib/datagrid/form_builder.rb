@@ -38,6 +38,8 @@ module Datagrid
         date_field filter.name, **options, &block
       elsif type == :textarea
         text_area filter.name, value: value, **options, type: nil, &block
+      elsif type == :checkbox
+        check_box filter.name, **options
       elsif type == :select
         select(
           filter.name,
@@ -63,7 +65,7 @@ module Datagrid
     end
 
     def datagrid_boolean_filter(filter, options = {})
-      check_box(filter.name, options)
+      datagrid_filter_input(filter.name, **options, type: :checkbox)
     end
 
     def datagrid_date_filter(filter, options = {})
