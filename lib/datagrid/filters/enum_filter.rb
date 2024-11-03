@@ -8,7 +8,7 @@ module Datagrid
       include Datagrid::Filters::SelectOptions
 
       def initialize(*args)
-        super(*args)
+        super
         options[:multiple] = true if checkboxes?
         raise Datagrid::ConfigurationError, ":select option not specified" unless options[:select]
       end

@@ -29,7 +29,8 @@ Gem::Specification.new do |s|
     "bug_tracker_uri" => "#{s.homepage}/issues",
     "documentation_uri" => "#{s.homepage}/wiki",
     "changelog_uri" => "#{s.homepage}/blob/master/CHANGELOG.md",
-    "source_code_uri" => s.homepage
+    "source_code_uri" => s.homepage,
+    "rubygems_mfa_required" => "true"
   }
 
   s.add_dependency "railties", ">= 6.1"

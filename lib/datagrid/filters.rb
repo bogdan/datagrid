@@ -127,7 +127,7 @@ module Datagrid
       protected
 
       def inherited(child_class)
-        super(child_class)
+        super
         child_class.filters_array = filters_array.clone
       end
 
@@ -141,12 +141,12 @@ module Datagrid
     end
 
     # @!visibility private
-    def initialize(*args, &block)
+    def initialize(...)
       self.filters_array = self.class.filters_array.clone
       filters_array.each do |filter|
         self[filter.name] = filter.default(self)
       end
-      super(*args, &block)
+      super
     end
 
     # @!visibility private

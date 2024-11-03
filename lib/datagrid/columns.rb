@@ -148,13 +148,13 @@ module Datagrid
         return model unless decorator
 
         presenter = ::Datagrid::Utils.apply_args(model, &decorator)
-        presenter = presenter.is_a?(Class) ? presenter.new(model) : presenter
+        presenter = presenter.new(model) if presenter.is_a?(Class)
         block_given? ? yield(presenter) : presenter
       end
 
       # @!visibility private
       def inherited(child_class)
-        super(child_class)
+        super
         child_class.columns_array = columns_array.clone
       end
 

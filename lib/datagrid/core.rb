@@ -117,7 +117,7 @@ module Datagrid
       end
 
       def inherited(child_class)
-        super(child_class)
+        super
         child_class.datagrid_attributes = datagrid_attributes.clone
       end
     end
@@ -266,7 +266,7 @@ module Datagrid
     protected
 
     def sanitize_for_mass_assignment(attributes)
-      forbidden_attributes_protection ? super(attributes) : attributes
+      forbidden_attributes_protection ? super : attributes
     end
   end
 end

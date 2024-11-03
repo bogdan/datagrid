@@ -203,7 +203,7 @@ describe Datagrid::Core do
 
   describe "ActionController::Parameters" do
     let(:params) do
-      ::ActionController::Parameters.new(name: "one")
+      ActionController::Parameters.new(name: "one")
     end
 
     it "permites all attributes by default" do

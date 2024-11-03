@@ -9,7 +9,7 @@ module Datagrid
       class_attribute :subclasses, default: []
 
       def self.inherited(base)
-        super(base)
+        super
         subclasses << base
       end
 

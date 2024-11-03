@@ -1,4 +1,5 @@
-# inherit_from: .rubocop_todo.yml
+AllCops:
+  NewCops: enable
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 Metrics/BlockLength:

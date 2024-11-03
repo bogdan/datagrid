@@ -32,7 +32,7 @@ I18n.enforce_available_locales = true if I18n.respond_to?(:enforce_available_loc
 
 File.open("spec.log", "w").close
 TEST_LOGGER = Logger.new("spec.log")
-NO_MONGO = ENV["NO_MONGO"]
+NO_MONGO = ENV.fetch("NO_MONGO", nil)
 
 if NO_MONGO
   warn("MONGODB WARNING: Skipping Mongoid and Mongomapper tests.")
@@ -98,7 +98,7 @@ def action_view_template
                                             File.expand_path("support/test_partials", __dir__)
                                           ], {})
   Datagrid::Engine.extend_modules
-  template = ActionView::Base.with_empty_template_cache.new(context, {}, ::ActionController::Base.new)
+  template = ActionView::Base.with_empty_template_cache.new(context, {}, ActionController::Base.new)
   allow(template).to receive(:protect_against_forgery?).and_return(false)
   template
 end

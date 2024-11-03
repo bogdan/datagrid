@@ -11,12 +11,12 @@ module Datagrid
 
       def initialize(report, attribute, options = {}, &block)
         options[:select] = -> { boolean_select }
-        super(report, attribute, options, &block)
+        super
       end
 
       def execute(value, scope, grid_object)
         value = value.blank? ? nil : ::Datagrid::Utils.booleanize(value)
-        super(value, scope, grid_object)
+        super
       end
 
       def parse(value)
@@ -29,7 +29,7 @@ module Datagrid
         when value.blank?
           nil
         else
-          super(value)
+          super
         end
       end
 

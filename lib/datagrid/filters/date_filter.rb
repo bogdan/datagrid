@@ -9,7 +9,7 @@ module Datagrid
 
       def apply(grid_object, scope, value)
         value = value.begin&.beginning_of_day..value.end&.end_of_day if value.is_a?(Range)
-        super(grid_object, scope, value)
+        super
       end
 
       def parse(value)
@@ -26,7 +26,7 @@ module Datagrid
 
       def default_filter_where(scope, value)
         value = Datagrid::Utils.format_date_as_timestamp(value) if driver.is_timestamp?(scope, name)
-        super(scope, value)
+        super
       end
 
       protected

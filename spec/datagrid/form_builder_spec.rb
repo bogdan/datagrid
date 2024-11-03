@@ -427,9 +427,15 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '
-<label class="category enum_filter checkboxes" for="report_category_first"><input class="category enum_filter checkboxes" type="checkbox" id="report_category_first" value="first" name="report[category][]" />first</label>
-<label class="category enum_filter checkboxes" for="report_category_second"><input class="category enum_filter checkboxes" type="checkbox" id="report_category_second" value="second" name="report[category][]" />second</label>
-          '
+<label class="category enum_filter checkboxes" for="report_category_first">
+<input class="category enum_filter checkboxes" type="checkbox" id="report_category_first" value="first" name="report[category][]" />
+first
+</label>
+<label class="category enum_filter checkboxes" for="report_category_second">
+<input class="category enum_filter checkboxes" type="checkbox" id="report_category_second" value="second" name="report[category][]" />
+second
+</label>
+'
           )
         }
 
@@ -451,7 +457,9 @@ describe Datagrid::FormBuilder do
       it {
         should equal_to_dom(
           # hidden is important when default is set to true
-          %(<input name="report[disabled]" type="hidden" value="0" autocomplete="off"><input class="disabled boolean_filter" type="checkbox" value="1" checked name="report[disabled]" id="report_disabled">)
+          %(<input name="report[disabled]" type="hidden" value="0" autocomplete="off">
+          <input class="disabled boolean_filter" type="checkbox" value="1"
+             checked name="report[disabled]" id="report_disabled">)
         )
       }
     end

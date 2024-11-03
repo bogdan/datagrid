@@ -4,14 +4,14 @@ module Datagrid
   module Filters
     module RangedFilter
       def initialize(grid, name, options, &block)
-        super(grid, name, options, &block)
+        super
         return unless range?
 
         options[:multiple] = true
       end
 
       def parse_values(value)
-        result = super(value)
+        result = super
         return result if !range? || result.nil?
         # Simulate single point range
         return [result, result] unless result.is_a?(Array)
@@ -46,7 +46,7 @@ module Datagrid
           scope = driver.less_equal(scope, name, right) if right
           scope
         else
-          super(scope, value)
+          super
         end
       end
     end
