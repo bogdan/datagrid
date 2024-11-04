@@ -65,14 +65,14 @@ table.datagrid
   a
     float: left
 
-  input[class*='filter']
+  input
     border: 2px solid #ccc
     border-radius: 4px
     float: left
     padding: 5px 12px
     width: 207px
 
-    &.from, &.to
+    &.datagrid-range-from, &.datagrid-range-to
       width: 83px
 
   select
@@ -83,26 +83,26 @@ table.datagrid
       border: 2px solid #ccc
       border-radius: 5px
       height: 100px
-    &.dynamic_filter
-      &.field
-        width: 178px
-      &.operation
-        margin-left: 7px
-        width: 50px
-  input.dynamic_filter.value
+  .datagrid-dynamic-field
+    width: 178px
+  .datagrid-dynamic-operation
+    margin-left: 7px
+    width: 50px
+  .datagrid-dynamic-value
     margin: 10px 0 0 $dg-form-label
     clear: both
 
   .separator
     float: left
     margin: 6px 4px 0
-  .enum_filter.checkboxes 
-    float: none
-    display: block
-    width: 100%
+  &.datagrid-checkboxes 
+    label
+      float: none
+      display: block
+      width: 100%
+      margin-left: 150px
     input
       margin: 7px
-    margin-left: 150px
 
 
 .datagrid-actions
