@@ -36,7 +36,7 @@ module Datagrid
 
     def table(grid, assets, **options)
       options[:html] ||= {}
-      options[:html][:class] ||= "datagrid #{@template.dom_class(grid)}"
+      options[:html][:class] ||= "datagrid-table #{@template.dom_class(grid)}"
 
       _render_partial("table", options[:partials],
                       {

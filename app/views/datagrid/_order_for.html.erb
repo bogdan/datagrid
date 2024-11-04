@@ -1,10 +1,10 @@
-<div class="order">
+<div class="datagrid-order">
   <%= link_to(
       I18n.t("datagrid.table.order.asc").html_safe,
       datagrid_order_path(grid, column, false),
-      class: "asc") %>
+      class: "datagrid-order-control-asc") %>
   <%= link_to(
       I18n.t("datagrid.table.order.desc").html_safe,
       datagrid_order_path(grid, column, true),
-      class: "desc") %>
+      class: "datagrid-order-control-desc") %>
 </div>

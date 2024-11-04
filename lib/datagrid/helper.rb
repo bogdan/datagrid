@@ -151,7 +151,7 @@ module Datagrid
 
     def datagrid_column_classes(grid, column)
       order_class = if grid.ordered_by?(column)
-                      ["ordered", grid.descending ? "desc" : "asc"]
+                      [grid.descending ? "datagrid-order-active-desc" : "datagrid-order-active-asc"]
                     end
       [column.name, order_class, column.options[:class]].compact.join(" ")
     end
