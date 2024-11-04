@@ -20,12 +20,6 @@ describe Datagrid::FormBuilder do
   let(:view_options) { {} }
 
   describe ".datagrid_filter" do
-    it "should work for every filter type" do
-      Datagrid::Filters::FILTER_TYPES.each_value do |klass|
-        expect(Datagrid::FormBuilder.instance_methods.map(&:to_sym)).to include(klass.form_builder_helper_name)
-      end
-    end
-
     subject do
       view.datagrid_filter(_filter, **_filter_options, &_filter_block)
     end

@@ -42,7 +42,7 @@ describe Datagrid::Helper do
       datagrid_table = subject.datagrid_table(grid)
 
       expect(datagrid_table).to match_css_pattern(
-        "table.datagrid-table tr td.datagrid-noresults" => 1
+        "table.datagrid-table tr td.datagrid-no-results" => 1
       )
       expect(datagrid_table).to include(I18n.t("datagrid.no_results"))
     end
