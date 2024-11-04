@@ -16,14 +16,7 @@ module Datagrid
     def format_value(grid, column, asset)
       column = grid.column_by_name(column) if column.is_a?(String) || column.is_a?(Symbol)
 
-      value = grid.html_value(column, @template, asset)
-
-      url = column.options[:url]&.call(asset)
-      if url
-        @template.link_to(value, url)
-      else
-        value
-      end
+      grid.html_value(column, @template, asset)
     end
 
     def form_for(grid, options = {})

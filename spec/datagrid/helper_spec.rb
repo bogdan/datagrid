@@ -180,26 +180,6 @@ describe Datagrid::Helper do
   end
 
   describe ".datagrid_rows" do
-    it "should support urls" do
-      rp = test_report do
-        scope { Entry }
-        column(:name, url: lambda(&:name))
-      end
-      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name a[href=Star]" => "Star"
-      )
-    end
-
-    it "should support conditional urls" do
-      rp = test_report do
-        scope { Entry }
-        column(:name, url: ->(_model) { false })
-      end
-      expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name" => "Star"
-      )
-    end
-
     it "should add ordering classes to column" do
       rp = test_report(order: :name) do
         scope { Entry }
@@ -447,8 +427,8 @@ describe Datagrid::Helper do
       object = OrderedGrid.new(descending: true, order: :category)
       expect(subject.datagrid_order_for(object, object.column_by_name(:category))).to equal_to_dom(<<~HTML)
         <div class="datagrid-order">
-        <a class="datagrid-order-control-asc" href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category">&uarr;</a>
-        <a class="datagrid-order-control-desc" href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category">&darr;</a>
+        <a class="datagrid-order-control-asc" href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category">↑</a>
+        <a class="datagrid-order-control-desc" href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category">↓</a>
         </div>
       HTML
     end
