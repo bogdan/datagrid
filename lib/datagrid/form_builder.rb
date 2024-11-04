@@ -137,7 +137,7 @@ module Datagrid
           include_hidden: false,
           selected: field
         },
-        add_html_classes(options, "field")
+        add_html_classes(options, "datagrid-dynamic-field")
       )
       operation_input = dynamic_filter_select(
         filter.name, filter.operations_select,
@@ -147,9 +147,9 @@ module Datagrid
           prompt: false,
           selected: operation
         },
-        add_html_classes(options, "operation")
+        add_html_classes(options, "datagrid-dynamic-operation")
       )
-      value_input = text_field(filter.name, **add_html_classes(options, "value"), value: value)
+      value_input = text_field(filter.name, **add_html_classes(options, "datagrid-dynamic-value"), value: value)
       [field_input, operation_input, value_input].join("\n").html_safe
     end
 
