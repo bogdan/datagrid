@@ -49,11 +49,11 @@ module Datagrid
     end
 
     def rows(grid, assets = grid.assets, **options, &block)
-      result = assets.map do |asset|
-        row(grid, asset, **options, &block)
-      end.to_a.join
-
-      _safe(result)
+      @template.safe_join(
+        assets.map do |asset|
+          row(grid, asset, **options, &block)
+        end.to_a
+      )
     end
 
     def row(grid, asset, **options, &block)
@@ -69,24 +69,20 @@ module Datagrid
 
     def order_path(grid, column, descending, request)
       column = grid.column_by_name(column)
-      query = request ? request.query_parameters : {}
+      query = request&.query_parameters || {}
       ActionDispatch::Http::URL.path_for(
-        path: request ? request.path : "/",
+        path: request&.path || "/",
         params: query.merge(grid.query_params(order: column.name, descending: descending))
       )
     end
 
     private
 
-    def _safe(string)
-      string.respond_to?(:html_safe) ? string.html_safe : string
-    end
-
     def _render_partial(partial_name, partials_path, locals = {})
       @template.render({
-                         partial: File.join(partials_path || "datagrid", partial_name),
-                         locals: locals
-                       })
+        partial: File.join(partials_path || "datagrid", partial_name),
+        locals: locals
+      })
     end
   end
 

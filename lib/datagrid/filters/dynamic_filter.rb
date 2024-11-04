@@ -81,7 +81,7 @@ module Datagrid
 
       def operations_select
         operations.map do |operation|
-          [I18n.t(operation, scope: "datagrid.filters.dynamic.operations").html_safe, operation]
+          [I18n.t(operation, scope: "datagrid.filters.dynamic.operations"), operation]
         end
       end
 
