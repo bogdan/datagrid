@@ -144,7 +144,10 @@ module Datagrid
       end
 
       def default_html_classes
-        [name, self.class.to_s.demodulize.underscore]
+        [
+          "datagrid-filter-#{name}",
+          "datagrid-filter-type-#{type}",
+        ]
       end
 
       protected

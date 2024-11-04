@@ -21,7 +21,7 @@ module Datagrid
 
       def default_html_classes
         res = super
-        res.push("checkboxes") if checkboxes?
+        res.push("datagrid-checkboxes") if checkboxes?
         res
       end
 

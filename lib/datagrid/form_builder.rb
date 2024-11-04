@@ -21,10 +21,7 @@ module Datagrid
     # @return [String] a form label tag for the corresponding filter name
     def datagrid_label(filter_or_attribute, text = nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
-      options = add_html_classes(
-        { **filter.label_options, **options },
-        filter.default_html_classes
-      )
+      options = { **filter.label_options, **options }
       label(filter.name, text || filter.header, **options, &block)
     end
 
@@ -232,10 +229,7 @@ module Datagrid
     end
 
     def add_filter_options(filter, **options)
-      add_html_classes(
-        { **filter.input_options, **options },
-        *filter.default_html_classes
-      )
+      { **filter.input_options, **options }
     end
 
     class Error < StandardError

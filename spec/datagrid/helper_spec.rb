@@ -484,7 +484,7 @@ describe Datagrid::Helper do
         "form.datagrid-form.form_for_grid[action='/grid']" => 1,
         "form input[name=utf8]" => 1,
         "form .datagrid-filter label" => "Category",
-        "form .datagrid-filter input.category.default_filter[name='form_for_grid[category]'][value=hello]" => 1,
+        "form .datagrid-filter-category input[name='form_for_grid[category]'][value=hello]" => 1,
         "form input[name=commit][value=Search]" => 1,
         "form a.datagrid-reset[href='/location']" => 1
       )
@@ -533,12 +533,6 @@ describe Datagrid::Helper do
                                                   partials: "custom_form"
                                                 })
       expect(rendered_form).to include "form_partial_test"
-      expect(rendered_form).to match_css_pattern([
-                                                   "input.integer_filter.from",
-                                                   "input.integer_filter.to",
-                                                   ".enum_filter input[value='1']",
-                                                   ".enum_filter input[value='2']"
-                                                 ])
     end
   end
 
