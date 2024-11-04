@@ -12,7 +12,6 @@ module Datagrid
     require "datagrid/filters/date_time_filter"
     require "datagrid/filters/default_filter"
     require "datagrid/filters/integer_filter"
-    require "datagrid/filters/composite_filters"
     require "datagrid/filters/string_filter"
     require "datagrid/filters/float_filter"
     require "datagrid/filters/dynamic_filter"
@@ -39,7 +38,6 @@ module Datagrid
       base.extend ClassMethods
       base.class_eval do
         include Datagrid::Core
-        include Datagrid::Filters::CompositeFilters
         class_attribute :filters_array, default: []
       end
     end
