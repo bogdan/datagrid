@@ -51,19 +51,7 @@ describe Datagrid::Helper do
   describe ".datagrid_table" do
     it "should have grid class as html class on table" do
       expect(subject.datagrid_table(grid)).to match_css_pattern(
-        "table.datagrid-table.simple_report" => 1
-      )
-    end
-    it "should have namespaced grid class as html class on table" do
-      module ::Ns23
-        class TestGrid
-          include Datagrid
-          scope { Entry }
-          column(:id)
-        end
-      end
-      expect(subject.datagrid_table(Ns23::TestGrid.new)).to match_css_pattern(
-        "table.datagrid-table.ns23_test_grid" => 1
+        "table.datagrid-table" => 1
       )
     end
     it "should return data table html" do
@@ -481,7 +469,7 @@ describe Datagrid::Helper do
       end
       object = FormForGrid.new(category: "hello")
       expect(subject.datagrid_form_for(object, url: "/grid")).to match_css_pattern(
-        "form.datagrid-form.form_for_grid[action='/grid']" => 1,
+        "form.datagrid-form[action='/grid']" => 1,
         "form input[name=utf8]" => 1,
         "form .datagrid-filter label" => "Category",
         "form .datagrid-filter-category input[name='form_for_grid[category]'][value=hello]" => 1,
@@ -498,7 +486,7 @@ describe Datagrid::Helper do
         end
       end
       expect(subject.datagrid_form_for(Ns22::TestGrid.new, url: "grid")).to match_css_pattern(
-        "form.datagrid-form.ns22_test_grid" => 1,
+        "form.datagrid-form" => 1,
         "form.datagrid-form label[for=ns22_test_grid_id]" => 1,
         "form.datagrid-form input#ns22_test_grid_id[name='ns22_test_grid[id]']" => 1
       )

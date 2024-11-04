@@ -29,14 +29,14 @@ module Datagrid
     def form_for(grid, options = {})
       options[:method] ||= :get
       options[:html] ||= {}
-      options[:html][:class] ||= "datagrid-form #{@template.dom_class(grid)}"
+      options[:html][:class] ||= "datagrid-form"
       options[:as] ||= grid.param_name
       _render_partial("form", options[:partials], { grid: grid, options: options })
     end
 
     def table(grid, assets, **options)
       options[:html] ||= {}
-      options[:html][:class] ||= "datagrid-table #{@template.dom_class(grid)}"
+      options[:html][:class] ||= "datagrid-table"
 
       _render_partial("table", options[:partials],
                       {
