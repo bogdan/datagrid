@@ -188,7 +188,7 @@ describe Datagrid::FormBuilder do
           should equal_to_dom(
             '<input value="1" id="from_hello" class="datagrid-range-from"
                 multiple type="text" name="report[group_id][]"/>' \
-            '<span class="separator integer"> - </span>' \
+            '<span class="datagrid-range-separator"> - </span>' \
             '<input value="2" id="to_hello" class="datagrid-range-to"
                 multiple type="text" name="report[group_id][]"/>'
           )
@@ -200,7 +200,7 @@ describe Datagrid::FormBuilder do
           should equal_to_dom(
             '<input value="10" class="datagrid-range-from"
                 multiple type="text" name="report[group_id][]"/>' \
-            '<span class="separator integer"> - </span>' \
+            '<span class="datagrid-range-separator"> - </span>' \
             '<input class="datagrid-range-to"
                 multiple type="text" name="report[group_id][]"/>'
           )
@@ -212,7 +212,7 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input class="datagrid-range-from" multiple type="text" name="report[group_id][]"/>' \
-            '<span class="separator integer"> - </span>' \
+            '<span class="datagrid-range-separator"> - </span>' \
             '<input value="10" class="datagrid-range-to" multiple type="text" name="report[group_id][]"/>'
           )
         }
@@ -224,7 +224,7 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input value="1" class="datagrid-range-from" multiple type="text" name="report[group_id][]"/>' \
-            '<span class="separator integer"> - </span>' \
+            '<span class="datagrid-range-separator"> - </span>' \
             '<input value="2" class="datagrid-range-to" multiple type="text" name="report[group_id][]"/>'
           )
         }
@@ -246,7 +246,7 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input class="datagrid-range-from" multiple type="text" name="report[group_id][]">
-            <span class="separator integer"> - </span>
+            <span class="datagrid-range-separator"> - </span>
             <input class="datagrid-range-to" multiple type="text" name="report[group_id][]">'
           )
         }
@@ -266,7 +266,7 @@ describe Datagrid::FormBuilder do
         should equal_to_dom(
           '<input value="1.5" class="datagrid-range-from"
               multiple type="text" name="report[rating][]"/>' \
-          '<span class="separator float"> - </span>' \
+          '<span class="datagrid-range-separator"> - </span>' \
           '<input value="2.5" class="datagrid-range-to"
               multiple type="text" name="report[rating][]"/>'
         )
@@ -286,7 +286,7 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input value="2012-01-03" class="datagrid-range-from" multiple type="text" name="report[created_at][]"/>' \
-            '<span class="separator date"> - </span>' \
+            '<span class="datagrid-range-separator"> - </span>' \
             '<input class="datagrid-range-to" multiple type="text" name="report[created_at][]"/>'
           )
         }
@@ -303,7 +303,7 @@ describe Datagrid::FormBuilder do
           should equal_to_dom(
             '<input value="01/01/2013" class="datagrid-range-from"
                 multiple type="text" name="report[created_at][]"/>' \
-            '<span class="separator date"> - </span>' \
+            '<span class="datagrid-range-separator"> - </span>' \
             '<input value="02/02/2013" class="datagrid-range-to"
                 multiple type="text" name="report[created_at][]"/>'
           )
@@ -315,7 +315,7 @@ describe Datagrid::FormBuilder do
           should equal_to_dom(
             '<input class="datagrid-range-from"
                 multiple type="text" name="report[created_at][]"/>' \
-            '<span class="separator date"> - </span>' \
+            '<span class="datagrid-range-separator"> - </span>' \
             '<input value="2012-01-03" class="datagrid-range-to"
                 multiple type="text"  name="report[created_at][]"/>'
           )
@@ -329,7 +329,7 @@ describe Datagrid::FormBuilder do
           should equal_to_dom(
             '<input value="2012-01-01" class="datagrid-range-from"
                 multiple type="text" name="report[created_at][]"/>' \
-            '<span class="separator date"> - </span>' \
+            '<span class="datagrid-range-separator"> - </span>' \
             '<input value="2012-01-02" class="datagrid-range-to"
                 multiple type="text" name="report[created_at][]"/>'
           )
@@ -345,7 +345,7 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input class="datagrid-range-from" multiple type="text" name="report[created_at][]"/>' \
-            '<span class="separator date"> - </span>' \
+            '<span class="datagrid-range-separator"> - </span>' \
             '<input class="datagrid-range-to" multiple type="text" name="report[created_at][]"/>'
           )
         }
