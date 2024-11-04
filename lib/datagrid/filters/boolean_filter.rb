@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require "datagrid/utils"
-# @!visibility private
+
 module Datagrid
   module Filters
     class BooleanFilter < Datagrid::Filters::BaseFilter
+      self.default_input_options = {type: 'checkbox' }
+
       def parse(value)
         Datagrid::Utils.booleanize(value)
       end

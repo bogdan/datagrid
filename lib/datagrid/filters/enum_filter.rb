@@ -7,6 +7,8 @@ module Datagrid
     class EnumFilter < Datagrid::Filters::BaseFilter
       include Datagrid::Filters::SelectOptions
 
+      self.default_input_options = {type: 'select' }
+
       def initialize(*args)
         super
         options[:multiple] = true if checkboxes?

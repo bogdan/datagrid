@@ -30,9 +30,15 @@ module Datagrid
       filter = datagrid_get_filter(attribute_or_filter)
       options = add_filter_options(filter, **options)
       type = options.delete(:type)&.to_sym
-      if options.key?(:value) && options[:value].nil? && %i[datetime-local date].include?(type)
-        # https://github.com/rails/rails/pull/53387
-        options[:value] = ""
+      if %i[datetime-local date].include?(type)
+        if options.key?(:value) && options[:value].nil? &&
+            # https://github.com/rails/rails/pull/53387
+            options[:value] = ""
+        end
+      else
+        if options[:value]
+          options[:value] = filter.format(options[:value])
+        end
       end
       case type
       when :"datetime-local"
@@ -42,10 +48,11 @@ module Datagrid
       when :textarea
         text_area filter.name, value: object.filter_value_as_string(filter), **options, &block
       when :checkbox
-        # raise options.inspect
         check_box filter.name, options, options.fetch(:value, 1)
       when :hidden
         hidden_field filter.name, **options
+      when :number
+        number_field filter.name, **options
       when :select
         select(
           filter.name,
@@ -149,7 +156,7 @@ module Datagrid
         },
         add_html_classes(options, "datagrid-dynamic-operation")
       )
-      value_input = text_field(filter.name, **add_html_classes(options, "datagrid-dynamic-value"), value: value)
+      value_input = datagrid_filter_input(filter.name, **add_html_classes(options, "datagrid-dynamic-value"), value: value)
       [field_input, operation_input, value_input].join("\n").html_safe
     end
 
@@ -181,7 +188,7 @@ module Datagrid
     def datagrid_range_filter_options(object, filter, type, options)
       type_method_map = { from: :first, to: :last }
       options = add_html_classes(options, "datagrid-range-#{type}")
-      options[:value] = filter.format(object[filter.name]&.public_send(type_method_map[type]))
+      options[:value] = object[filter.name]&.public_send(type_method_map[type])
       # In case of datagrid ranged filter
       # from and to input will have same id
       if !options.key?(:id)
@@ -229,7 +236,7 @@ module Datagrid
     end
 
     def add_filter_options(filter, **options)
-      { **filter.input_options, **options }
+      { **filter.default_input_options, **filter.input_options, **options }
     end
 
     class Error < StandardError

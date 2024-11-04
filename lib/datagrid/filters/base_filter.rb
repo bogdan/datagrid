@@ -11,7 +11,8 @@ end
 module Datagrid
   module Filters
     class BaseFilter
-      class_attribute :input_helper_name, instance_writer: false
+      class_attribute :default_input_options, instance_writer: false, default: {type: 'text'}
+
       attr_accessor :grid_class, :options, :block, :name
 
       def initialize(grid_class, name, options = {}, &block)

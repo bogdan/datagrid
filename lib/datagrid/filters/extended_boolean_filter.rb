@@ -9,6 +9,8 @@ module Datagrid
       TRUTH_VALUES = [true, "true", "y", "yes"].freeze
       FALSE_VALUES = [false, "false", "n", "no"].freeze
 
+      self.default_input_options = {type: 'select' }
+
       def initialize(report, attribute, options = {}, &block)
         options[:select] = -> { boolean_select }
         super

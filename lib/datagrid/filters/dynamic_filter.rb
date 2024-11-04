@@ -19,6 +19,8 @@ module Datagrid
       ].freeze
       AVAILABLE_OPERATIONS = %w[= =~ >= <=].freeze
 
+      self.default_input_options = {}
+
       def initialize(*)
         super
         options[:select] ||= default_select

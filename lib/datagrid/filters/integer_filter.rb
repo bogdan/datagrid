@@ -7,6 +7,8 @@ module Datagrid
     class IntegerFilter < Datagrid::Filters::BaseFilter
       include Datagrid::Filters::RangedFilter
 
+      self.default_input_options = {type: 'number', step: '1' }
+
       def parse(value)
         return nil if value.blank?
         if defined?(ActiveRecord) && value.is_a?(ActiveRecord::Base) &&

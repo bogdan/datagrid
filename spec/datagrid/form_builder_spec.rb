@@ -56,7 +56,7 @@ describe Datagrid::FormBuilder do
       end
       it {
         should equal_to_dom(
-          '<input type="text" name="report[group_id]" id="report_group_id"/>'
+          '<input type="number" step="1" name="report[group_id]" id="report_group_id"/>'
         )
       }
 
@@ -64,7 +64,7 @@ describe Datagrid::FormBuilder do
         let(:view_options) { { partials: "anything" } }
         it {
           should equal_to_dom(
-            '<input type="text" name="report[group_id]" id="report_group_id"/>'
+            '<input type="number" step="1" name="report[group_id]" id="report_group_id"/>'
           )
         }
       end
@@ -80,7 +80,7 @@ describe Datagrid::FormBuilder do
       end
       it {
         should equal_to_dom(
-          '<input type="text" name="report[created_at]" id="report_created_at"/>'
+          '<input type="date" name="report[created_at]" id="report_created_at"/>'
         )
       }
       context "when special date format specified" do
@@ -92,28 +92,28 @@ describe Datagrid::FormBuilder do
         end
         it {
           should equal_to_dom(
-            '<input value="01/02/2012" type="text"
+            '<input value="2012-01-02" type="date"
                 name="report[created_at]" id="report_created_at"/>'
           )
         }
       end
     end
     context "with input_options" do
-      context "type is date" do
+      context "date filter type is text" do
         let(:_filter) { :created_at }
         let(:_grid) do
           test_report do
             scope { Entry }
-            filter(:created_at, :date, input_options: { type: :date })
+            filter(:created_at, :date, input_options: { type: 'text' })
           end
         end
         it {
           should equal_to_dom(
-            '<input type="date" name="report[created_at]" id="report_created_at"/>'
+            '<input type="text" name="report[created_at]" id="report_created_at"/>'
           )
         }
       end
-      context "type is textarea" do
+      context "string filter type is textarea" do
         let(:_filter) { :name }
         let(:_grid) do
           test_report do
@@ -128,18 +128,18 @@ describe Datagrid::FormBuilder do
         }
       end
 
-      context "type is datetime-local" do
+      context "datetime filter type is text" do
         let(:_filter) { :created_at }
         let(:_grid) do
           test_report(created_at: Time.new(2024, 1, 1, 9, 25, 15)) do
             scope { Entry }
-            filter(:created_at, :datetime, input_options: { type: "datetime-local" })
+            filter(:created_at, :datetime, input_options: { type: "text" })
           end
         end
         it {
           should equal_to_dom(
-            '<input type="datetime-local"
-                value="2024-01-01T09:25:15" name="report[created_at]" id="report_created_at"/>'
+            '<input type="text" value="2024-01-01 09:25:15 +0100"
+              name="report[created_at]" id="report_created_at"/>'
           )
         }
 
@@ -149,14 +149,13 @@ describe Datagrid::FormBuilder do
           end
           it {
             should equal_to_dom(
-              '<input type="datetime-local" value=""
-                  name="report[created_at]" id="report_created_at"/>'
+              '<input type="text" name="report[created_at]" id="report_created_at"/>'
             )
           }
         end
       end
 
-      context "type is date" do
+      context "datetime filter type is date" do
         let(:_filter) { :created_at }
         let(:_grid) do
           test_report(created_at: Date.new(2024, 1, 1)) do
@@ -187,10 +186,10 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input value="1" id="from_hello" class="datagrid-range-from"
-                multiple type="text" name="report[group_id][]"/>' \
+                multiple type="number" step="1" name="report[group_id][]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
             '<input value="2" id="to_hello" class="datagrid-range-to"
-                multiple type="text" name="report[group_id][]"/>'
+                multiple type="number" step="1" name="report[group_id][]"/>'
           )
         }
       end
@@ -199,10 +198,10 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input value="10" class="datagrid-range-from"
-                multiple type="text" name="report[group_id][]"/>' \
+                multiple type="number" step="1" name="report[group_id][]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
             '<input class="datagrid-range-to"
-                multiple type="text" name="report[group_id][]"/>'
+                multiple type="number" step="1" name="report[group_id][]"/>'
           )
         }
         it { should be_html_safe }
@@ -211,9 +210,9 @@ describe Datagrid::FormBuilder do
         let(:_range) { [nil, 10] }
         it {
           should equal_to_dom(
-            '<input class="datagrid-range-from" multiple type="text" name="report[group_id][]"/>' \
+            '<input class="datagrid-range-from" multiple type="number" step="1" name="report[group_id][]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
-            '<input value="10" class="datagrid-range-to" multiple type="text" name="report[group_id][]"/>'
+            '<input value="10" class="datagrid-range-to" multiple type="number" step="1" name="report[group_id][]"/>'
           )
         }
         it { should be_html_safe }
@@ -223,9 +222,9 @@ describe Datagrid::FormBuilder do
         let(:_range) { 2..1 }
         it {
           should equal_to_dom(
-            '<input value="1" class="datagrid-range-from" multiple type="text" name="report[group_id][]"/>' \
+            '<input value="1" class="datagrid-range-from" multiple type="number" step="1" name="report[group_id][]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
-            '<input value="2" class="datagrid-range-to" multiple type="text" name="report[group_id][]"/>'
+            '<input value="2" class="datagrid-range-to" multiple type="number" step="1" name="report[group_id][]"/>'
           )
         }
       end
@@ -245,9 +244,9 @@ describe Datagrid::FormBuilder do
         let(:_range) { nil }
         it {
           should equal_to_dom(
-            '<input class="datagrid-range-from" multiple type="text" name="report[group_id][]">
+            '<input class="datagrid-range-from" multiple type="number" step="1" name="report[group_id][]">
             <span class="datagrid-range-separator"> - </span>
-            <input class="datagrid-range-to" multiple type="text" name="report[group_id][]">'
+            <input class="datagrid-range-to" multiple type="number" step="1" name="report[group_id][]">'
           )
         }
       end
@@ -265,10 +264,10 @@ describe Datagrid::FormBuilder do
       it {
         should equal_to_dom(
           '<input value="1.5" class="datagrid-range-from"
-              multiple type="text" name="report[rating][]"/>' \
+              multiple type="number" step="any" name="report[rating][]"/>' \
           '<span class="datagrid-range-separator"> - </span>' \
           '<input value="2.5" class="datagrid-range-to"
-              multiple type="text" name="report[rating][]"/>'
+              multiple type="number" step="any" name="report[rating][]"/>'
         )
       }
     end
@@ -285,9 +284,9 @@ describe Datagrid::FormBuilder do
         let(:_range) { ["2012-01-03", nil] }
         it {
           should equal_to_dom(
-            '<input value="2012-01-03" class="datagrid-range-from" multiple type="text" name="report[created_at][]"/>' \
+            '<input value="2012-01-03" class="datagrid-range-from" multiple type="date" name="report[created_at][]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
-            '<input class="datagrid-range-to" multiple type="text" name="report[created_at][]"/>'
+            '<input class="datagrid-range-to" multiple type="date" name="report[created_at][]" value=""/>'
           )
         }
         it { should be_html_safe }
@@ -301,11 +300,11 @@ describe Datagrid::FormBuilder do
         let(:_range) { ["2013/01/01", "2013/02/02"] }
         it {
           should equal_to_dom(
-            '<input value="01/01/2013" class="datagrid-range-from"
-                multiple type="text" name="report[created_at][]"/>' \
+            '<input value="2013-01-01" class="datagrid-range-from"
+                multiple type="date" name="report[created_at][]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
-            '<input value="02/02/2013" class="datagrid-range-to"
-                multiple type="text" name="report[created_at][]"/>'
+            '<input value="2013-02-02" class="datagrid-range-to"
+                multiple type="date" name="report[created_at][]"/>'
           )
         }
       end
@@ -314,10 +313,10 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input class="datagrid-range-from"
-                multiple type="text" name="report[created_at][]"/>' \
+                multiple type="date" value="" name="report[created_at][]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
             '<input value="2012-01-03" class="datagrid-range-to"
-                multiple type="text"  name="report[created_at][]"/>'
+                multiple type="date"  name="report[created_at][]"/>'
           )
         }
         it { should be_html_safe }
@@ -328,10 +327,10 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input value="2012-01-01" class="datagrid-range-from"
-                multiple type="text" name="report[created_at][]"/>' \
+                multiple type="date" name="report[created_at][]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
             '<input value="2012-01-02" class="datagrid-range-to"
-                multiple type="text" name="report[created_at][]"/>'
+                multiple type="date" name="report[created_at][]"/>'
           )
         }
       end
@@ -344,9 +343,9 @@ describe Datagrid::FormBuilder do
         let(:_range) { [nil, nil] }
         it {
           should equal_to_dom(
-            '<input class="datagrid-range-from" multiple type="text" name="report[created_at][]"/>' \
+            '<input class="datagrid-range-from" multiple type="date" value="" name="report[created_at][]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
-            '<input class="datagrid-range-to" multiple type="text" name="report[created_at][]"/>'
+            '<input class="datagrid-range-to" multiple type="date" value="" name="report[created_at][]"/>'
           )
         }
       end
@@ -557,7 +556,7 @@ second
       let(:_filter) { :group_id }
       it {
         should equal_to_dom(
-          '<input type="text" name="report[group_id]" id="report_group_id"/>'
+          '<input type="number" step="any" name="report[group_id]" id="report_group_id"/>'
         )
       }
     end
