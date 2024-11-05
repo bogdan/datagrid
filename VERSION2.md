@@ -1,9 +1,9 @@
 # Datagrid Version 2
 
 Datagrid v1 was released Sep 19 2013 - more than 10 years ago.
-A lot of new things had happened during this period and it is time.
+A lot of new things had happened during this period.
 It caused the library to be designed without support of those technologies
-and implementing some of them would cause a breaking change.
+or their implementation to be suboptimal because of backward compatibility.
 And now it is time to indroduce them with Version 2.
 
 List of things introduces:
@@ -12,8 +12,30 @@ List of things introduces:
 1. Modern modular CSS classes.
 1. HTML5 input types: number, date, datetime-local.
 1. HTML5 input [names collision restriction](https://html.spec.whatwg.org/multipage/input.html#input-type-attr-summary)
+1. Rails Engines: While supported, the library was not initially designed for it.
 
-## Ruby Infinite Ranges
+## Infinite Ranges for range filters
+
+Ruby supports infinite ranges now,
+so there is no need to present infinite ranges as Hash or Array.
+But it introduces a breaking changes to range filters in Datagrid:
+
+``` ruby
+class UsersGrid
+  include Datagrid
+
+  filter(:id, :integer, range: true) do |value, scope|
+    # V1 value: [1, nil]
+    # V2 value: 1..nil
+    scope.where(id: value)
+  end
+end
+
+grid = UsersGrid.new
+grid.id = [1, nil]
+grid.id # V1: [1, nil]
+        # V2: (1..nil)
+```
 
 ## Modern CSS classes
 
@@ -35,7 +57,7 @@ and avoid collisions with other libraries:
 | field        | datagrid-dynamic-field              |
 | operation    | datagrid-dynamic-operation          |
 | value        | datagrid-dynamic-value              |
-| separator    | datgrid-range-separator             |
+| separator    | datagrid-range-separator            |
 | checkboxes   | datagrid-enum-checkboxes            |
 
 A few automatically generated classes were moved from `<input/>` to `<div class="datagrid-filter">`
@@ -108,7 +130,9 @@ The default behavior can be changed back by using `input_options`:
 
 ``` ruby
 filter(:created_at, :date, range: true, input_options: {type: 'text'})
-filter(:created_at, :datetime, range: true, input_options: {type: 'text'})
+filter(:salary, :integer, range: true, input_options: {type: 'text'})
+
+# Rendered as <textarea/> tag:
 filter(:text, :string, input_options: {type: 'textarea'})
 ```
 
