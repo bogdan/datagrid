@@ -31,6 +31,16 @@ module Datagrid
 
   autoload :Engine
 
+  # extend ActiveSupport::Concern
+
+  # included do
+    # include ::Datagrid::Core
+    # include ::Datagrid::ActiveModel
+    # include ::Datagrid::Filters
+    # include ::Datagrid::Columns
+    # include ::Datagrid::ColumnNamesAttribute
+    # include ::Datagrid::Ordering
+  # end
   # @!visibility private
   def self.included(base)
     base.class_eval do

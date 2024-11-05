@@ -3,13 +3,11 @@
 module Datagrid
   # Required to be ActiveModel compatible
   module ActiveModel
-    # @!visibility private
-    def self.included(base)
-      base.extend ClassMethods
-      base.class_eval do
-        require "active_model/naming"
-        extend ::ActiveModel::Naming
-      end
+    extend ActiveSupport::Concern
+
+    included do
+      require "active_model/naming"
+      extend ::ActiveModel::Naming
     end
 
     module ClassMethods

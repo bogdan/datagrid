@@ -24,16 +24,13 @@ module Datagrid
       def datagrid_attribute(name, &block)
         return if datagrid_attributes.include?(name)
 
-        block ||= lambda do |value|
-          value
-        end
         datagrid_attributes << name
         define_method name do
           instance_variable_get("@#{name}")
         end
 
         define_method :"#{name}=" do |value|
-          instance_variable_set("@#{name}", instance_exec(value, &block))
+          instance_variable_set("@#{name}", block ? instance_exec(value, &block) : value)
         end
       end
 

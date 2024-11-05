@@ -33,13 +33,12 @@ module Datagrid
     # @!visibility private
     DEFAULT_FILTER_BLOCK = Object.new
 
+    extend ActiveSupport::Concern
+
     # @!visibility private
-    def self.included(base)
-      base.extend ClassMethods
-      base.class_eval do
-        include Datagrid::Core
-        class_attribute :filters_array, default: []
-      end
+    included do
+      include Datagrid::Core
+      class_attribute :filters_array, default: []
     end
 
     # Grid class methods related to filters
