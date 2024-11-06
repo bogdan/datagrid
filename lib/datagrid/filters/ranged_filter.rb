@@ -69,7 +69,7 @@ module Datagrid
         when 1,2
           to_range(first, last)
         else
-          raise ArgumentError, "Can not create a date range from array of more than two: #{result.inspect}"
+          raise ArgumentError, "Can not create a range from array of more than two elements"
         end
       end
     end

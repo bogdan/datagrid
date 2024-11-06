@@ -190,6 +190,7 @@ module Datagrid
       options = add_html_classes(options, "datagrid-range-#{type}")
       options[:multiple] = true
       options[:value] = object[filter.name]&.public_send(type_method_map[type])
+      options[:name] = @template.field_name(object_name, filter.name, type)
       # In case of datagrid ranged filter
       # from and to input will have same id
       if !options.key?(:id)

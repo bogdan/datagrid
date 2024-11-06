@@ -180,10 +180,10 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input value="1" id="from_hello" class="datagrid-range-from"
-                multiple type="number" step="1" name="report[group_id][]"/>' \
+                multiple type="number" step="1" name="report[group_id][from]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
             '<input value="2" id="to_hello" class="datagrid-range-to"
-                multiple type="number" step="1" name="report[group_id][]"/>'
+                multiple type="number" step="1" name="report[group_id][to]"/>'
           )
         }
       end
@@ -192,10 +192,10 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input value="10" class="datagrid-range-from"
-                multiple type="number" step="1" name="report[group_id][]"/>' \
+                multiple type="number" step="1" name="report[group_id][from]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
             '<input class="datagrid-range-to"
-                multiple type="number" step="1" name="report[group_id][]"/>'
+                multiple type="number" step="1" name="report[group_id][to]"/>'
           )
         }
         it { should be_html_safe }
@@ -204,9 +204,9 @@ describe Datagrid::FormBuilder do
         let(:_range) { [nil, 10] }
         it {
           should equal_to_dom(
-            '<input class="datagrid-range-from" multiple type="number" step="1" name="report[group_id][]"/>' \
+            '<input class="datagrid-range-from" multiple type="number" step="1" name="report[group_id][from]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
-            '<input value="10" class="datagrid-range-to" multiple type="number" step="1" name="report[group_id][]"/>'
+            '<input value="10" class="datagrid-range-to" multiple type="number" step="1" name="report[group_id][to]"/>'
           )
         }
         it { should be_html_safe }
@@ -216,9 +216,9 @@ describe Datagrid::FormBuilder do
         let(:_range) { 2..1 }
         it {
           should equal_to_dom(
-            '<input value="1" class="datagrid-range-from" multiple type="number" step="1" name="report[group_id][]"/>' \
+            '<input value="1" class="datagrid-range-from" multiple type="number" step="1" name="report[group_id][from]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
-            '<input value="2" class="datagrid-range-to" multiple type="number" step="1" name="report[group_id][]"/>'
+            '<input value="2" class="datagrid-range-to" multiple type="number" step="1" name="report[group_id][to]"/>'
           )
         }
       end
@@ -238,9 +238,9 @@ describe Datagrid::FormBuilder do
         let(:_range) { nil }
         it {
           should equal_to_dom(
-            '<input class="datagrid-range-from" multiple type="number" step="1" name="report[group_id][]">
+            '<input class="datagrid-range-from" multiple type="number" step="1" name="report[group_id][from]">
             <span class="datagrid-range-separator"> - </span>
-            <input class="datagrid-range-to" multiple type="number" step="1" name="report[group_id][]">'
+            <input class="datagrid-range-to" multiple type="number" step="1" name="report[group_id][to]">'
           )
         }
       end
@@ -258,10 +258,10 @@ describe Datagrid::FormBuilder do
       it {
         should equal_to_dom(
           '<input value="1.5" class="datagrid-range-from"
-              multiple type="number" step="any" name="report[rating][]"/>' \
+              multiple type="number" step="any" name="report[rating][from]"/>' \
           '<span class="datagrid-range-separator"> - </span>' \
           '<input value="2.5" class="datagrid-range-to"
-              multiple type="number" step="any" name="report[rating][]"/>'
+              multiple type="number" step="any" name="report[rating][to]"/>'
         )
       }
     end
@@ -278,9 +278,9 @@ describe Datagrid::FormBuilder do
         let(:_range) { ["2012-01-03", nil] }
         it {
           should equal_to_dom(
-            '<input value="2012-01-03" class="datagrid-range-from" multiple type="date" name="report[created_at][]"/>' \
+            '<input value="2012-01-03" class="datagrid-range-from" multiple type="date" name="report[created_at][from]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
-            '<input class="datagrid-range-to" multiple type="date" name="report[created_at][]" value=""/>'
+            '<input class="datagrid-range-to" multiple type="date" name="report[created_at][to]" value=""/>'
           )
         }
         it { should be_html_safe }
@@ -295,10 +295,10 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input value="2013-01-01" class="datagrid-range-from"
-                multiple type="date" name="report[created_at][]"/>' \
+                multiple type="date" name="report[created_at][from]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
             '<input value="2013-02-02" class="datagrid-range-to"
-                multiple type="date" name="report[created_at][]"/>'
+                multiple type="date" name="report[created_at][to]"/>'
           )
         }
       end
@@ -307,10 +307,10 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input class="datagrid-range-from"
-                multiple type="date" value="" name="report[created_at][]"/>' \
+                multiple type="date" value="" name="report[created_at][from]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
             '<input value="2012-01-03" class="datagrid-range-to"
-                multiple type="date"  name="report[created_at][]"/>'
+                multiple type="date"  name="report[created_at][to]"/>'
           )
         }
         it { should be_html_safe }
@@ -321,10 +321,10 @@ describe Datagrid::FormBuilder do
         it {
           should equal_to_dom(
             '<input value="2012-01-01" class="datagrid-range-from"
-                multiple type="date" name="report[created_at][]"/>' \
+                multiple type="date" name="report[created_at][from]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
             '<input value="2012-01-02" class="datagrid-range-to"
-                multiple type="date" name="report[created_at][]"/>'
+                multiple type="date" name="report[created_at][to]"/>'
           )
         }
       end
@@ -337,9 +337,9 @@ describe Datagrid::FormBuilder do
         let(:_range) { [nil, nil] }
         it {
           should equal_to_dom(
-            '<input class="datagrid-range-from" multiple type="date" value="" name="report[created_at][]"/>' \
+            '<input class="datagrid-range-from" multiple type="date" value="" name="report[created_at][from]"/>' \
             '<span class="datagrid-range-separator"> - </span>' \
-            '<input class="datagrid-range-to" multiple type="date" value="" name="report[created_at][]"/>'
+            '<input class="datagrid-range-to" multiple type="date" value="" name="report[created_at][to]"/>'
           )
         }
       end

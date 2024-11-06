@@ -133,7 +133,11 @@ The default behavior can be changed back by using `input_options`:
 ``` ruby
 filter(:created_at, :date, range: true, input_options: {type: 'text'})
 filter(:salary, :integer, range: true, input_options: {type: 'text'})
+```
 
+Additionally, textarea inputs are now supported this way:
+
+``` ruby
 # Rendered as <textarea/> tag:
 filter(:text, :string, input_options: {type: 'textarea'})
 ```
@@ -212,13 +216,13 @@ Version 2:
 If you still want to have an HTML class attached to a column use `class` column option:
 
 ``` ruby
-column(:name, class: 'column-name')
+column(:name, class: 'short-column')
 ```
 
 ``` html
-<th class="column-name" data-datagrid-column="name">Name</th>
+<th class="short-column" data-datagrid-column="name">Name</th>
 ...
-<td class="column-name" data-datagrid-column="name">John</td>
+<td class="short-column" data-datagrid-column="name">John</td>
 ```
 
 If you want to change this behavior completely,
