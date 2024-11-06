@@ -1,21 +1,24 @@
 # Datagrid Version 2
 
 Datagrid v1 was released Sep 19 2013 - more than 10 years ago.
-A lot of new things had happened during this period.
+A lot of changes in best practices and available technology
+had happened during this period.
 It caused the library to be designed without support of those technologies
 or their implementation to be suboptimal because of backward compatibility.
-And now it is time to indroduce them with Version 2.
+Version 2 addresses all that evolution.
 
 List of things introduces:
 
 1. Ruby infinite ranges for range filters.
 1. Modern modular CSS classes.
 1. HTML5 input types: number, date, datetime-local.
-1. HTML5 input [names collision restriction](https://html.spec.whatwg.org/multipage/input.html#input-type-attr-summary)
-1. Rails Engines: While supported, the library was not initially designed for it.
+1. HTML5 [input names collision restriction](https://html.spec.whatwg.org/multipage/input.html#input-type-attr-summary)
+1. Native Rails Engines:
+   while supported, the library was not initially designed for it.
 1. HTML5 data attributes
 1. Inherit `Datagrid::Base` instead of `include Datagrid`
 1. `ApplicationGrid` is now recommended name instead of `BaseGrid`
+1. Remove SASS dependency
 
 ## Infinite Ranges for range filters
 
@@ -61,8 +64,6 @@ and avoid collisions with other libraries:
 | separator    | datagrid-range-separator            |
 | checkboxes   | datagrid-enum-checkboxes            |
 
-A few automatically generated classes were moved from `<input/>` to `<div class="datagrid-filter">`
-to make sure they are editable through datagrid partials.
 
 ### Example
 
@@ -147,6 +148,30 @@ It is more semantic and collision proof to use `data-*` attributes
 instead of classes for meta information from backend.
 Therefor built-in partials now generate data attributes by default
 instead of classes for column names:
+
+### Filters
+
+``` html
+<div class="datagrid-filter filter">
+  <label for="form_for_grid_category">Category</label>
+  <input class="category default_filter" type="text" name="form_for_grid[category]" id="form_for_grid_category" />
+</div>
+```
+
+Version 2:
+
+``` html
+<div class="datagrid-filter"
+         data-datagrid-filter="category"
+         data-datagrid-filter-type="string"
+         data-datagrid-filter-checkboxes="false"
+>
+  <label for="form_for_grid_category">Category</label>
+  <input type="text" name="form_for_grid[category]" id="form_for_grid_category" />
+</div>
+```
+
+### Columns
 
 Version 1:
 

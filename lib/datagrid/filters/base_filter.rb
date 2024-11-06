@@ -144,11 +144,8 @@ module Datagrid
         ::Datagrid::Utils.process_availability(grid, options[:if], options[:unless])
       end
 
-      def default_html_classes
-        [
-          "datagrid-filter-#{name}",
-          "datagrid-filter-type-#{type}",
-        ]
+      def enum_checkboxes?
+        false
       end
 
       protected

@@ -443,16 +443,16 @@ describe Datagrid::Helper do
     it "should render form and filter inputs" do
       class FormForGrid < Datagrid::Base
         scope { Entry }
-        filter(:category)
+        filter(:category, :string)
       end
       object = FormForGrid.new(category: "hello")
       expect(subject.datagrid_form_for(object, url: "/grid")).to match_css_pattern(
         "form.datagrid-form[action='/grid']" => 1,
         "form input[name=utf8]" => 1,
-        "form .datagrid-filter label" => "Category",
-        "form .datagrid-filter-category input[name='form_for_grid[category]'][value=hello]" => 1,
-        "form input[name=commit][value=Search]" => 1,
-        "form a.datagrid-reset[href='/location']" => 1
+        "form .datagrid-filter[data-datagrid-filter=category][data-datagrid-filter-type=string] label" => "Category",
+        "form .datagrid-filter input[name='form_for_grid[category]'][value=hello]" => 1,
+        "form .datagrid-actions input[name=commit][value=Search]" => 1,
+        "form .datagrid-actions a.datagrid-reset[href='/location']" => 1
       )
     end
     it "should support html classes for grid class with namespace" do

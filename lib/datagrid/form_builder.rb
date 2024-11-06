@@ -94,7 +94,7 @@ module Datagrid
     end
 
     def datagrid_enum_filter(filter, options = {}, &block)
-      if filter.checkboxes?
+      if filter.enum_checkboxes?
         elements = object.select_options(filter).map do |element|
           text, value = @template.send(:option_text_and_value, element)
           checked = enum_checkbox_checked?(filter, value)

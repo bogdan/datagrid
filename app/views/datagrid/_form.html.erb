@@ -1,6 +1,10 @@
 <%= form_for grid, html: {class: 'datagrid-form'}, **options do |f| -%>
   <% grid.filters.each do |filter| %>
-    <div class="datagrid-filter <%= filter.default_html_classes.join(' ') %>">
+    <div class="datagrid-filter" 
+         data-datagrid-filter="<%= filter.name %>" 
+         data-datagrid-filter-type="<%= filter.type %>"
+         data-datagrid-filter-checkboxes="<%= filter.enum_checkboxes? %>"
+    >
       <%= f.datagrid_label filter %>
       <%= f.datagrid_filter filter %>
     </div>

@@ -11,7 +11,7 @@ module Datagrid
 
       def initialize(*args)
         super
-        options[:multiple] = true if checkboxes?
+        options[:multiple] = true if enum_checkboxes?
         raise Datagrid::ConfigurationError, ":select option not specified" unless options[:select]
       end
 
@@ -21,17 +21,11 @@ module Datagrid
         value
       end
 
-      def default_html_classes
-        res = super
-        res.push("datagrid-enum-checkboxes") if checkboxes?
-        res
-      end
-
       def strict
         options[:strict]
       end
 
-      def checkboxes?
+      def enum_checkboxes?
         options[:checkboxes]
       end
     end
