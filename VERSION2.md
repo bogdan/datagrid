@@ -195,4 +195,130 @@ column(:name, class: 'column-name')
 ```
 
 If you want to change this behavior completely,
-modify [built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials).
+modify [built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials)
+
+## All changes in built-in partials
+
+Version 2 built-in partials are trying to expose
+as much UI as possible for user modification.
+
+Here is a complete diff for built-in partials between V1 and V2:
+
+TODO update
+
+``` diff
+diff --git a/app/views/datagrid/_enum_checkboxes.html.erb b/app/views/datagrid/_enum_checkboxes.html.erb
+index 9f48319..f114c17 100644
+--- a/app/views/datagrid/_enum_checkboxes.html.erb
++++ b/app/views/datagrid/_enum_checkboxes.html.erb
+@@ -4,8 +4,8 @@ You can add indent if whitespace doesn't matter for you
+ %>
+ <%- elements.each do |value, text, checked| -%>
+ <%- id = [form.object_name, filter.name, value].join('_').underscore -%>
+-<%= form.label filter.name, options.merge(for: id) do -%>
+-<%= form.check_box(filter.name, {multiple: true, id: id, checked: checked, include_hidden: false}, value.to_s, nil) -%>
++<%= form.datagrid_label(filter.name, **options, for: id) do -%>
++<%= form.datagrid_filter_input(filter.name, type: :checkbox, multiple: true, id: id, checked: checked, include_hidden: false, value: value.to_s) -%>
+ <%= text -%>
+ <%- end -%>
+ <%- end -%>
+diff --git a/app/views/datagrid/_form.html.erb b/app/views/datagrid/_form.html.erb
+index 7e175c1..84cf58e 100644
+--- a/app/views/datagrid/_form.html.erb
++++ b/app/views/datagrid/_form.html.erb
+@@ -1,12 +1,12 @@
+-<%= form_for grid, options do |f| -%>
++<%= form_for grid, html: {class: 'datagrid-form'}, **options do |f| -%>
+   <% grid.filters.each do |filter| %>
+-    <div class="datagrid-filter filter">
++    <div class="datagrid-filter <%= filter.default_html_classes.join(' ') %>">
+       <%= f.datagrid_label filter %>
+       <%= f.datagrid_filter filter %>
+     </div>
+   <% end %>
+   <div class="datagrid-actions">
+-    <%= f.submit I18n.t("datagrid.form.search").html_safe, class: "datagrid-submit" %>
+-    <%= link_to I18n.t('datagrid.form.reset').html_safe, url_for(grid.to_param => {}), class: "datagrid-reset" %>
++    <%= f.submit I18n.t("datagrid.form.search"), class: "datagrid-submit" %>
++    <%= link_to I18n.t('datagrid.form.reset'), url_for(grid.to_param => {}), class: "datagrid-reset" %>
+   </div>
+ <% end -%>
+diff --git a/app/views/datagrid/_head.html.erb b/app/views/datagrid/_head.html.erb
+index e939128..affccf4 100644
+--- a/app/views/datagrid/_head.html.erb
++++ b/app/views/datagrid/_head.html.erb
+@@ -1,6 +1,6 @@
+ <tr>
+   <% grid.html_columns(*options[:columns]).each do |column| %>
+-    <th class="<%= datagrid_column_classes(grid, column) %>">
++    <th class="<%= datagrid_column_classes(grid, column) %>" data-datagrid-column="<%= column.name %>">
+       <%= column.header %>
+       <%= datagrid_order_for(grid, column, options) if column.supports_order? && options[:order]%>
+     </th>
+diff --git a/app/views/datagrid/_order_for.html.erb b/app/views/datagrid/_order_for.html.erb
+index 1545a8e..1c33c37 100644
+--- a/app/views/datagrid/_order_for.html.erb
++++ b/app/views/datagrid/_order_for.html.erb
+@@ -1,10 +1,10 @@
+-<div class="order">
++<div class="datagrid-order">
+   <%= link_to(
+-      I18n.t("datagrid.table.order.asc").html_safe,
++      I18n.t("datagrid.table.order.asc"),
+       datagrid_order_path(grid, column, false),
+-      class: "asc") %>
++      class: "datagrid-order-control-asc") %>
+   <%= link_to(
+-      I18n.t("datagrid.table.order.desc").html_safe,
++      I18n.t("datagrid.table.order.desc"),
+       datagrid_order_path(grid, column, true),
+-      class: "desc") %>
++      class: "datagrid-order-control-desc") %>
+ </div>
+diff --git a/app/views/datagrid/_range_filter.html.erb b/app/views/datagrid/_range_filter.html.erb
+index 7a8a123..1b90dc8 100644
+--- a/app/views/datagrid/_range_filter.html.erb
++++ b/app/views/datagrid/_range_filter.html.erb
+@@ -1,3 +1,3 @@
+ <%= form.datagrid_filter_input(filter, **from_options) %>
+-<span class="separator <%= filter.type %>"><%= I18n.t('datagrid.filters.range.separator') %></span>
++<span class="datagrid-range-separator"><%= I18n.t('datagrid.filters.range.separator') %></span>
+ <%= form.datagrid_filter_input(filter, **to_options) %>
+diff --git a/app/views/datagrid/_row.html.erb b/app/views/datagrid/_row.html.erb
+index f54d21c..b431ab7 100644
+--- a/app/views/datagrid/_row.html.erb
++++ b/app/views/datagrid/_row.html.erb
+@@ -1,5 +1,5 @@
+ <tr>
+   <% grid.html_columns(*options[:columns]).each do |column| %>
+-    <td class="<%= datagrid_column_classes(grid, column) %>"><%= datagrid_value(grid, column, asset) %></td>
++    <td class="<%= datagrid_column_classes(grid, column) %>" data-datagrid-column="<%= column.name %>"><%= datagrid_value(grid, column, asset) %></td>
+   <% end %>
+ </tr>
+diff --git a/app/views/datagrid/_table.html.erb b/app/views/datagrid/_table.html.erb
+index 8708c05..0b5ff24 100644
+--- a/app/views/datagrid/_table.html.erb
++++ b/app/views/datagrid/_table.html.erb
+@@ -5,7 +5,7 @@ Local variables:
+ * options - passed options Hash
+ %>
+ <% if grid.html_columns(*options[:columns]).any? %>
+-  <%= content_tag :table, options[:html] do %>
++  <%= content_tag :table, class: 'datagrid-table', **options.fetch(:html, {}) do %>
+     <thead>
+       <%= datagrid_header(grid, options) %>
+     </thead>
+@@ -13,10 +13,10 @@ Local variables:
+       <% if assets.any? %>
+         <%= datagrid_rows(grid, assets, **options) %>
+       <% else %>
+-        <tr><td class="noresults" colspan="100%"><%= I18n.t('datagrid.no_results').html_safe %></td></tr>
++        <tr><td class="datagrid-no-results" colspan="100%"><%= I18n.t('datagrid.no_results') %></td></tr>
+       <% end %>
+     </tbody>
+   <% end %>
+ <% else -%>
+-  <%= I18n.t("datagrid.table.no_columns").html_safe %>
++  <%= I18n.t("datagrid.table.no_columns") %>
+ <% end %>
+```
