@@ -29,8 +29,7 @@ describe Datagrid::Filters::EnumFilter do
   end
 
   it "should initialize select option only on instanciation" do
-    class ReportWithLazySelect
-      include Datagrid
+    class ReportWithLazySelect < Datagrid::Base
       scope { Entry }
       filter(:group_id, :enum, select: proc { raise "hello" })
     end

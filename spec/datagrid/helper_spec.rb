@@ -419,8 +419,7 @@ describe Datagrid::Helper do
 
   describe ".datagrid_order_for" do
     it "should render ordering layout" do
-      class OrderedGrid
-        include Datagrid
+      class OrderedGrid < Datagrid::Base
         scope { Entry }
         column(:category)
       end
@@ -442,8 +441,7 @@ describe Datagrid::Helper do
       expect(rendered_form).to include "Namespaced form partial."
     end
     it "should render form and filter inputs" do
-      class FormForGrid
-        include Datagrid
+      class FormForGrid < Datagrid::Base
         scope { Entry }
         filter(:category)
       end
@@ -459,8 +457,7 @@ describe Datagrid::Helper do
     end
     it "should support html classes for grid class with namespace" do
       module ::Ns22
-        class TestGrid
-          include Datagrid
+        class TestGrid < Datagrid::Base
           scope { Entry }
           filter(:id)
         end
@@ -473,8 +470,7 @@ describe Datagrid::Helper do
     end
 
     it "should have overridable param_name method" do
-      class ParamNameGrid81
-        include Datagrid
+      class ParamNameGrid81 < Datagrid::Base
         scope { Entry }
         filter(:id)
         def param_name
@@ -487,8 +483,7 @@ describe Datagrid::Helper do
     end
 
     it "takes default partials if custom doesn't exist" do
-      class PartialDefaultGrid
-        include Datagrid
+      class PartialDefaultGrid < Datagrid::Base
         scope { Entry }
         filter(:id, :integer, range: true)
         filter(:group_id, :enum, multiple: true, checkboxes: true, select: [1, 2])

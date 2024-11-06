@@ -33,8 +33,7 @@ describe Datagrid::Drivers::Sequel do
     end
 
     it "supports pagination" do
-      class PaginationTest
-        include Datagrid
+      class PaginationTest < Datagrid::Base
         scope { SequelEntry }
       end
       grid = PaginationTest.new do |scope|

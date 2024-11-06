@@ -16,8 +16,7 @@ class MongoidEntry
   field :shipping_date, type: Time
 end
 
-class MongoidGrid
-  include ::Datagrid
+class MongoidGrid < Datagrid::Base
 
   scope do
     MongoidEntry

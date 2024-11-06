@@ -14,6 +14,7 @@ List of things introduces:
 1. HTML5 input [names collision restriction](https://html.spec.whatwg.org/multipage/input.html#input-type-attr-summary)
 1. Rails Engines: While supported, the library was not initially designed for it.
 1. HTML5 data attributes
+1. Inherit `Datagrid::Base` instead of `include Datagrid`
 
 ## Infinite Ranges for range filters
 
@@ -22,9 +23,7 @@ so there is no need to present infinite ranges as Hash or Array.
 But it introduces a breaking changes to range filters in Datagrid:
 
 ``` ruby
-class UsersGrid
-  include Datagrid
-
+class UsersGrid < Datagrid::Base
   filter(:id, :integer, range: true) do |value, scope|
     # V1 value: [1, nil]
     # V2 value: 1..nil
@@ -321,4 +320,15 @@ index 8708c05..0b5ff24 100644
 -  <%= I18n.t("datagrid.table.no_columns").html_safe %>
 +  <%= I18n.t("datagrid.table.no_columns") %>
  <% end %>
+```
+
+## Inherit Datagrid::Base
+
+`include Datagrid` causes method name space to be clamsy.
+Version 2 introduces a difference between the class
+that needs to be inherited and high level namespace (just like most gems do):
+
+``` ruby
+class ApplicationGrid < Datagrid::Base
+end
 ```

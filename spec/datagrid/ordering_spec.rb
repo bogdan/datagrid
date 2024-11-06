@@ -102,8 +102,7 @@ describe Datagrid::Ordering do
   end
 
   it "should work correctly with inherited classes" do
-    class OrderInheritenceBase
-      include Datagrid
+    class OrderInheritenceBase < Datagrid::Base
       scope { Entry }
     end
 

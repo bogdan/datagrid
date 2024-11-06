@@ -45,8 +45,7 @@ describe Datagrid::Filters do
   it "should initialize when report Scope table not exists" do
     class ModelWithoutTable < ActiveRecord::Base; end
     expect(ModelWithoutTable).not_to be_table_exists
-    class TheReport
-      include Datagrid
+    class TheReport < Datagrid::Base
 
       scope { ModelWithoutTable }
 
@@ -57,8 +56,7 @@ describe Datagrid::Filters do
   end
 
   it "should support inheritence" do
-    parent = Class.new do
-      include Datagrid
+    parent = Class.new(Datagrid::Base) do
       scope { Entry }
       filter(:name)
     end
@@ -195,8 +193,7 @@ describe Datagrid::Filters do
 
   describe "tranlations" do
     module ::Ns46
-      class TranslatedReport
-        include Datagrid
+      class TranslatedReport < Datagrid::Base
         scope { Entry }
         filter(:name)
       end
@@ -262,8 +259,7 @@ describe Datagrid::Filters do
   describe "#inspect" do
     it "should list all fitlers with types" do
       module ::NsInspect
-        class TestGrid
-          include Datagrid
+        class TestGrid < Datagrid::Base
           scope { Entry }
           filter(:id, :integer)
           filter(:name, :string)
@@ -277,8 +273,7 @@ describe Datagrid::Filters do
     end
 
     it "dislays no filters" do
-      class TestGrid8728
-        include Datagrid
+      class TestGrid8728 < Datagrid::Base
         scope { Entry }
       end
 

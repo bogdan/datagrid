@@ -90,4 +90,16 @@ describe Datagrid do
       end
     end
   end
+
+  it "deprecates inclucsion of Datagrid module" do
+    silence_warnings do
+      class DeprecatedInclusion
+        include Datagrid
+        scope { Entry }
+        column(:name)
+      end
+    end
+    grid = DeprecatedInclusion.new
+    expect(grid.data).to eq([["Name"], ["Star"]])
+  end
 end

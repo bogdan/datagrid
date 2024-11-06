@@ -1,7 +1,4 @@
-class BaseGrid
-
-  include Datagrid
-
+class BaseGrid < Datagrid::Base
   self.default_column_options = {
     # Uncomment to disable the default order
     # order: false,
@@ -41,5 +38,4 @@ class BaseGrid
       value ? "Yes" : "No"
     end
   end
-
 end

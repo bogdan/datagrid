@@ -12,9 +12,8 @@ describe Datagrid::Drivers::Array do
   end
 
   describe "api" do
-    class ArrayGrid
+    class ArrayGrid < Datagrid::Base
       User = Struct.new(:name, :age)
-      include Datagrid
       scope do
         []
       end
@@ -102,8 +101,7 @@ describe Datagrid::Drivers::Array do
   end
 
   describe "array of hashes" do
-    class HashGrid
-      include Datagrid
+    class HashGrid < Datagrid::Base
       scope do
         [{ name: "Bogdan", age: 30 }, { name: "Brad", age: 32 }]
       end

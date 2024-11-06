@@ -26,8 +26,7 @@ describe Datagrid::Core do
     before { 2.times { Entry.create } }
 
     let(:report_class) do
-      class ScopeTestReport
-        include Datagrid
+      class ScopeTestReport < Datagrid::Base
         scope { Entry.order("id desc") }
       end
       ScopeTestReport
@@ -99,8 +98,7 @@ describe Datagrid::Core do
 
   describe "#inspect" do
     it "should show all attribute values" do
-      class InspectTest
-        include Datagrid
+      class InspectTest < Datagrid::Base
         scope { Entry }
         filter(:created_at, :date, range: true)
         column(:name)
@@ -114,8 +112,7 @@ describe Datagrid::Core do
   end
 
   describe "#==" do
-    class EqualTest
-      include Datagrid
+    class EqualTest < Datagrid::Base
       scope { Entry }
       filter(:created_at, :date)
       column(:name)

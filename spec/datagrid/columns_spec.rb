@@ -68,8 +68,7 @@ describe Datagrid::Columns do
 
     describe "translations" do
       module ::Ns45
-        class TranslatedReport
-          include Datagrid
+        class TranslatedReport < Datagrid::Base
           scope { Entry }
           column(:name)
         end
@@ -81,8 +80,7 @@ describe Datagrid::Columns do
       end
 
       it "translates column-header without namespace" do
-        class Report27
-          include Datagrid
+        class Report27 < Datagrid::Base
           scope { Entry }
           column(:name)
         end
@@ -93,8 +91,7 @@ describe Datagrid::Columns do
       end
 
       it "translates column-header in using defaults namespace" do
-        class Report27
-          include Datagrid
+        class Report27 < Datagrid::Base
           scope { Entry }
           column(:name)
         end
@@ -188,8 +185,7 @@ describe Datagrid::Columns do
   end
 
   it "should inherit columns correctly" do
-    parent = Class.new do
-      include Datagrid
+    parent = Class.new(Datagrid::Base) do
       scope { Entry }
       column(:name)
     end
@@ -613,8 +609,7 @@ describe Datagrid::Columns do
   describe "#data_hash" do
     it "works" do
       pending
-      class DataHashGrid
-        include Datagrid
+      class DataHashGrid < Datagrid::Base
         scope { Entry }
         column(:name, order: true)
       end

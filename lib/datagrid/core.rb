@@ -34,7 +34,8 @@ module Datagrid
         end
       end
 
-      # @return [void] Defines a scope at class level
+      # Defines a relation scope of database models to be filtered
+      # @return [void]
       # @example
       #   scope { User }
       #   scope { Project.where(deleted: false) }
@@ -106,13 +107,15 @@ module Datagrid
           end
       end
 
-      protected
-
+      # @!visibility private
       def check_scope_defined!(message = nil)
         message ||= "#{self}.scope is not defined"
         raise(Datagrid::ConfigurationError, message) unless scope_value
       end
 
+      protected
+
+      # @!visibility private
       def inherited(child_class)
         super
         child_class.datagrid_attributes = datagrid_attributes.clone
@@ -133,7 +136,7 @@ module Datagrid
       scope(&block)
     end
 
-    # @return [Hash<Symbol, Object>] grid attributes including filter values and ordering values
+    # @return [{Symbol => Object}] grid attributes including filter values and ordering values
     def attributes
       result = {}
       datagrid_attributes.each do |name|
@@ -143,7 +146,7 @@ module Datagrid
     end
 
     # Updates datagrid attributes with a passed hash argument
-    # @param attributes [Hash<Symbol, Object>]
+    # @param attributes [{Symbol => Object}]
     # @example
     #   grid = MyGrid.new
     #   grid.attributes = {first_name: 'John', last_name: 'Smith'}
@@ -217,7 +220,7 @@ module Datagrid
 
     # @!visibility private
     def original_scope
-      check_scope_defined!
+      self.class.check_scope_defined!
       scope_value.call
     end
 
@@ -234,11 +237,6 @@ module Datagrid
     # @!visibility private
     def driver
       self.class.driver
-    end
-
-    # @!visibility private
-    def check_scope_defined!(message = nil)
-      self.class.send :check_scope_defined!, message
     end
 
     # @return [String] a datagrid attributes and their values in inspection form

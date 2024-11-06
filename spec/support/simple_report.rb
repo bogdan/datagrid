@@ -6,9 +6,8 @@ def test_report(attributes = {}, &block)
 end
 
 def test_report_class(&block)
-  Class.new.tap do |klass|
+  Class.new(Datagrid::Base).tap do |klass|
     klass.class_eval do
-      include Datagrid
       def self.name
         "TestGrid"
       end
@@ -17,9 +16,7 @@ def test_report_class(&block)
   end
 end
 
-class SimpleReport
-  include Datagrid
-
+class SimpleReport < Datagrid::Base
   scope do
     ::Entry.includes(:group).order("entries.created_at")
   end

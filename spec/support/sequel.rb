@@ -20,9 +20,7 @@ end
 class SequelEntry < Sequel::Model
 end
 
-class SequelGrid
-  include ::Datagrid
-
+class SequelGrid < Datagrid::Base
   scope do
     SequelEntry
   end

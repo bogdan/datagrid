@@ -47,9 +47,7 @@ including admin panels, analytics and data representation:
 In order to create a grid:
 
 ``` ruby
-class UsersGrid
-
-  include Datagrid
+class UsersGrid < Datagrid::Base
 
   scope do
     User.includes(:group)

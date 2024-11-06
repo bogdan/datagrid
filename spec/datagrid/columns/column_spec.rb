@@ -5,8 +5,7 @@ require "spec_helper"
 describe Datagrid::Columns::Column do
   describe ".inspect" do
     subject do
-      class ColumnInspectTest
-        include Datagrid
+      class ColumnInspectTest < Datagrid::Base
         scope { Entry }
         column(:id, header: "ID")
       end

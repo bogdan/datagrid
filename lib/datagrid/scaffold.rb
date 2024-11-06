@@ -74,7 +74,7 @@ module Datagrid
     end
 
     def base_grid_file
-      "app/grids/base_grid.rb"
+      "app/grids/application_grid.rb"
     end
 
     def grid_route_name
