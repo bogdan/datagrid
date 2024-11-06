@@ -121,17 +121,17 @@ describe Datagrid::Filters::DateTimeFilter do
       scope { Entry }
       filter(:created_at, :datetime, range: true)
     end
-    expect(report.created_at).to eq([range.last, range.first])
+    expect(report.created_at).to eq(range.last..range.first)
     expect(report.assets).to include(e1)
     expect(report.assets).to include(e2)
     expect(report.assets).to include(e3)
   end
 
   it "should support block" do
-    report = test_report(created_at: Time.now) do
+    report = test_report(created_at: Time.now..) do
       scope { Entry }
       filter(:created_at, :datetime, range: true) do |value|
-        where("created_at >= ?", value)
+        where(created_at: value)
       end
     end
     expect(report.assets).not_to include(Entry.create!(created_at: 1.day.ago))
@@ -167,6 +167,6 @@ describe Datagrid::Filters::DateTimeFilter do
       scope  { Entry }
       filter(:created_at, :datetime, range: true)
     end
-    expect(report.created_at).to eq([Time.new(2012, 0o1, 0o1, 1, 0), Time.new(2013, 0o1, 0o1, 1, 0)])
+    expect(report.created_at).to eq(Time.new(2012, 0o1, 0o1, 1, 0)..Time.new(2013, 0o1, 0o1, 1, 0))
   end
 end

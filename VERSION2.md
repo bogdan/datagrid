@@ -12,12 +12,13 @@ List of things introduces:
 1. Ruby infinite ranges for range filters.
 1. Modern modular CSS classes.
 1. HTML5 input types: number, date, datetime-local.
-1. HTML5 [input names collision restriction](https://html.spec.whatwg.org/multipage/input.html#input-type-attr-summary)
+1. Use Hash instead of Array for multiparameters attirubtes
+   to avoid [input names collision restriction](https://html.spec.whatwg.org/multipage/input.html#input-type-attr-summary)
 1. Native Rails Engines:
    while supported, the library was not initially designed for it.
 1. HTML5 data attributes
 1. Inherit `Datagrid::Base` instead of `include Datagrid`
-1. `ApplicationGrid` is now recommended name instead of `BaseGrid`
+1. `ApplicationGrid` is recommended base class instead of `BaseGrid`
 1. Remove SASS dependency
 
 ## Infinite Ranges for range filters
@@ -63,7 +64,6 @@ and avoid collisions with other libraries:
 | value        | datagrid-dynamic-value              |
 | separator    | datagrid-range-separator            |
 | checkboxes   | datagrid-enum-checkboxes            |
-
 
 ### Example
 
@@ -154,7 +154,8 @@ instead of classes for column names:
 ``` html
 <div class="datagrid-filter filter">
   <label for="form_for_grid_category">Category</label>
-  <input class="category default_filter" type="text" name="form_for_grid[category]" id="form_for_grid_category" />
+  <input class="category default_filter" type="text"
+     name="form_for_grid[category]" id="form_for_grid_category" />
 </div>
 ```
 
@@ -167,7 +168,8 @@ Version 2:
          data-datagrid-filter-checkboxes="false"
 >
   <label for="form_for_grid_category">Category</label>
-  <input type="text" name="form_for_grid[category]" id="form_for_grid_category" />
+  <input type="text"
+      name="form_for_grid[category]" id="form_for_grid_category" />
 </div>
 ```
 

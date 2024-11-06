@@ -41,7 +41,7 @@ describe Datagrid::Filters::DateFilter do
       scope { Entry }
       filter(:created_at, :date, range: true)
     end
-    expect(report.created_at).to eq([from.to_date, to.to_date])
+    expect(report.created_at).to eq(from.to_date..to.to_date)
     expect(report.assets).not_to include(e1)
     expect(report.assets).to include(e2)
     expect(report.assets).not_to include(e3)
@@ -50,11 +50,11 @@ describe Datagrid::Filters::DateFilter do
     report.created_at = {from: nil, to: nil}
     expect(report.created_at).to eq(nil)
     report.created_at = {from: Date.today, to: nil}
-    expect(report.created_at).to eq([Date.today, nil])
+    expect(report.created_at).to eq(Date.today..nil)
     report.created_at = {from: nil, to: Date.today}
-    expect(report.created_at).to eq([nil, Date.today])
+    expect(report.created_at).to eq(nil..Date.today)
     report.created_at = {from: Time.now, to: Time.now}
-    expect(report.created_at).to eq([Date.today, Date.today])
+    expect(report.created_at).to eq(Date.today..Date.today)
   end
 
   { active_record: Entry, mongoid: MongoidEntry, sequel: SequelEntry }.each do |orm, klass|
@@ -154,7 +154,7 @@ describe Datagrid::Filters::DateFilter do
       scope { Entry }
       filter(:created_at, :date, range: true)
     end
-    expect(report.created_at).to eq([range.last.to_date, range.first.to_date])
+    expect(report.created_at).to eq(range.last.to_date..range.first.to_date)
     expect(report.assets).to include(e1)
     expect(report.assets).to include(e2)
     expect(report.assets).to include(e3)
@@ -166,7 +166,7 @@ describe Datagrid::Filters::DateFilter do
     report = test_report(created_at: date) do
       scope { Entry }
       filter(:created_at, :date, range: true) do |value|
-        where("created_at >= ?", value)
+        where(created_at: value)
       end
     end
     expect(report.assets).not_to include(Entry.create!(created_at: time - 1.day))
@@ -202,14 +202,14 @@ describe Datagrid::Filters::DateFilter do
       scope  { Entry }
       filter(:created_at, :date, range: true)
     end
-    expect(report.created_at).to eq([Date.new(2012, 0o1, 0o1), Date.new(2013, 0o1, 0o1)])
+    expect(report.created_at).to eq(Date.new(2012, 0o1, 0o1)..Date.new(2013, 0o1, 0o1))
   end
   it "should automatically reverse Array if first more than last" do
     report = test_report(created_at: %w[2013-01-01 2012-01-01]) do
       scope  { Entry }
       filter(:created_at, :date, range: true)
     end
-    expect(report.created_at).to eq([Date.new(2012, 0o1, 0o1), Date.new(2013, 0o1, 0o1)])
+    expect(report.created_at).to eq(Date.new(2012, 0o1, 0o1)..Date.new(2013, 0o1, 0o1))
   end
 
   it "should nullify blank range" do

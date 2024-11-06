@@ -7,19 +7,24 @@ module Datagrid
         super
         return unless range?
 
-        options[:multiple] = true
+        options[:multiple] = false
       end
 
       def parse_values(value)
-        if value.is_a?(Hash)
-          value = parse_hash(value)
+        unless range?
+          return super
         end
-        result = super
-        return result if !range? || result.nil?
-        # Simulate single point range
-        return [result, result] unless result.is_a?(Array)
-
-        parse_array(result)
+        case value
+        when Hash
+          parse_hash(value)
+        when Array
+          parse_array(value)
+        when Range
+          to_range(value.begin, value.end)
+        else
+          result = super
+          to_range(result, result)
+        end
       end
 
       def range?
@@ -27,10 +32,9 @@ module Datagrid
       end
 
       def default_filter_where(scope, value)
-        if range? && value.is_a?(Array)
-          left, right = value
-          scope = driver.greater_equal(scope, name, left) if left
-          scope = driver.less_equal(scope, name, right) if right
+        if range? && value.is_a?(Range)
+          scope = driver.greater_equal(scope, name, value.begin) if value.begin
+          scope = driver.less_equal(scope, name, value.end) if value.end
           scope
         else
           super
@@ -40,28 +44,30 @@ module Datagrid
       protected
 
       def parse_hash(result)
-        if result[:from] || result[:to]
-          [result[:from], result[:to]]
-        else
-          nil
+        to_range(result[:from], result[:to])
+      end
+
+      def to_range(from, to)
+        from = parse(from)
+        to = parse(to)
+        return nil unless to || from
+
+        # If wrong range is given - reverse it to be always valid
+        if from && to && from > to
+          from, to = to, from
         end
+        from..to
       end
 
       def parse_array(result)
+        first = result.first
+        last = result.last
+
         case result.size
         when 0
           nil
-        when 1
-          result.first
-        when 2
-          if result.first && result.last && result.first > result.last
-            # If wrong range is given - reverse it to be always valid
-            result.reverse
-          elsif !result.first && !result.last
-            nil
-          else
-            result
-          end
+        when 1,2
+          to_range(first, last)
         else
           raise ArgumentError, "Can not create a date range from array of more than two: #{result.inspect}"
         end

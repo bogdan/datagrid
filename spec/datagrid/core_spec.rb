@@ -106,7 +106,7 @@ describe Datagrid::Core do
 
       grid = InspectTest.new(created_at: %w[2014-01-01 2014-08-05], descending: true, order: "name")
       expect(grid.inspect).to eq(
-        "#<InspectTest order: :name, descending: true, created_at: [Wed, 01 Jan 2014, Tue, 05 Aug 2014]>"
+        "#<InspectTest order: :name, descending: true, created_at: Wed, 01 Jan 2014..Tue, 05 Aug 2014>"
       )
     end
   end

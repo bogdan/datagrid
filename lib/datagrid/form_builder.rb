@@ -186,8 +186,9 @@ module Datagrid
     end
 
     def datagrid_range_filter_options(object, filter, type, options)
-      type_method_map = { from: :first, to: :last }
+      type_method_map = { from: :begin, to: :end }
       options = add_html_classes(options, "datagrid-range-#{type}")
+      options[:multiple] = true
       options[:value] = object[filter.name]&.public_send(type_method_map[type])
       # In case of datagrid ranged filter
       # from and to input will have same id

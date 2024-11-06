@@ -73,7 +73,7 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry }
       filter(:group_id, :integer, range: true)
     end
-    expect(report.group_id).to eq([1, 7])
+    expect(report.group_id).to eq(1..7)
     expect(report.assets).to include(entry7)
     expect(report.assets).to include(entry4)
     expect(report.assets).to include(entry1)
@@ -95,7 +95,7 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry.joins(:group) }
       filter(:rating, :integer, range: true)
     end
-    expect(report.rating).to eq([4, nil])
+    expect(report.rating).to eq(4..nil)
     expect(report.assets).not_to include(Entry.create!(group: Group.create!(rating: 3)))
     expect(report.assets).to include(Entry.create!(group: Group.create!(rating: 5)))
   end
@@ -105,7 +105,7 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry }
       filter(:group_id, :integer, multiple: true)
     end
-    expect(report.group_id).to eq([1, 2])
+    expect(report.group_id).to eq([1,2])
     expect(report.assets).to include(entry1)
     expect(report.assets).to include(entry2)
     expect(report.assets).not_to include(entry3)
