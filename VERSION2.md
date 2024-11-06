@@ -144,7 +144,56 @@ filter(:text, :string, input_options: {type: 'textarea'})
 
 ## Names collision restriction
 
-TODO
+HTML5 prohibits multiple inputs to have the same name.
+This is contradicts to Rails parameters convention that serializes multiple inputs with same name into array:
+
+``` html
+Date From:
+<input type="number" name="grid[members_count][]" value="1"/>
+Date To:
+<input type="number" name="grid[members_count][]" value="5"/>
+```
+
+Serialized to:
+
+``` ruby
+{grid: {members_count: ['1', '5']}}
+```
+
+V1 had used this convention for `range: true` and `dynamic` filter type.
+Now, they are using the following convention instead:
+
+``` html
+Date From:
+<input type="number" name="grid[members_count][from]" value="1"/>
+Date To:
+<input type="number" name="grid[members_count][to]" value="5"/>
+```
+
+`Grid#members_count` will automatically typecast a hash
+into appropriate `Range` on assignment:
+
+``` ruby
+grid.members_count = {from: 1, to: 5}
+grid.members_count # => 1..5
+```
+
+The old convention would still work
+to ensure smooth transition to new version:
+
+``` ruby
+grid.members_count = [3, 7]
+grid.members_count # => 3..7
+```
+
+However, the `f.datagrid_filter :members_count`
+will always generate from/to inputs instead:
+
+``` html
+<input value="3" type="number" step="1" name="grid[members_count][from]"/>
+<span class="datagrid-range-separator"> - </span>
+<input value="7" type="number" step="1" name="grid[members_count][to]"/>
+```
 
 ## HTML5 data attributes
 

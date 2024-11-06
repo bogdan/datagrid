@@ -671,13 +671,19 @@ second
         end
         let(:expected_html) do
           <<-HTML
-            <select class="datagrid-dynamic-field" name="report[condition][]" id="report_condition"><option selected value="id">id</option>
-       <option value="name">name</option></select><select class="datagrid-dynamic-operation" name="report[condition][]" id="report_condition"><option value="=">=</option>
-       <option value="=~">&asymp;</option>
-       <option selected value="&gt;=">&ge;</option>
-       <option value="&lt;=">&le;</option></select><input class="datagrid-dynamic-value" name="report[condition][]" value="1" type="text"  id="report_condition">
+         <select class="datagrid-dynamic-field" name="report[condition][]" id="report_condition">
+           <option selected value="id">id</option>
+           <option value="name">name</option>
+         </select>
+         <select class="datagrid-dynamic-operation" name="report[condition][]" id="report_condition">
+           <option value="=">=</option>
+           <option value="=~">≈</option>
+           <option selected value="&gt;=">≥</option>
+           <option value="&lt;=">≤</option></select>
+         <input value="1" name="report[condition][]" class="datagrid-dynamic-value" type="text" id="report_condition"/>
           HTML
         end
+
         it { should equal_to_dom(expected_html) }
       end
 

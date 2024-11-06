@@ -31,18 +31,22 @@ module Datagrid
       end
 
       def parse_values(filter)
-        field, operation, value = filter
 
-        [field, operation, type_cast(field, value)]
+        if filter.is_a?(Array)
+          field, operation, value = filter
+          filter = { field:, operation:, value: type_cast(field, value)}
+        end
+        filter ? FilterValue.new(filter) : nil
       end
 
       def unapplicable_value?(filter)
-        _, _, value = filter
-        super(value)
+        super(filter&.value)
       end
 
       def default_filter_where(scope, filter)
-        field, operation, value = filter
+        field = filter.field
+        operation = filter.operation
+        value = filter.value
         date_conversion = value.is_a?(Date) && driver.is_timestamp?(scope, field)
 
         return scope if field.blank? || operation.blank?
@@ -121,6 +125,33 @@ module Datagrid
 
       def column_type(field)
         grid_class.driver.normalized_column_type(grid_class.scope, field)
+      end
+
+      class FilterValue < Hash
+        def initialize(object = nil)
+          super()
+          update(object) if object
+        end
+
+        def field
+          self[:field]
+        end
+
+        def operation
+          self[:operation]
+        end
+
+        def value
+          self[:value]
+        end
+
+        def to_ary
+          to_a
+        end
+
+        def to_a
+          [field, operation, value]
+        end
       end
     end
   end
