@@ -15,6 +15,7 @@ List of things introduces:
 1. Rails Engines: While supported, the library was not initially designed for it.
 1. HTML5 data attributes
 1. Inherit `Datagrid::Base` instead of `include Datagrid`
+1. `ApplicationGrid` is now recommended name instead of `BaseGrid`
 
 ## Infinite Ranges for range filters
 
@@ -330,5 +331,31 @@ that needs to be inherited and high level namespace (just like most gems do):
 
 ``` ruby
 class ApplicationGrid < Datagrid::Base
+end
+```
+
+## ApplicationGrid base class
+
+Previously recommended base class `BaseGrid` is incosistent
+with Rails naming conventionsa.
+It was renamed to `ApplicationGrid` instead:
+
+``` ruby
+# app/grids/application_grid.rb
+class ApplicationGrid < Datagrid::Base
+  def self.timestamp_column(name, *args, &block)
+    column(name, *args) do |model|
+      value = block ? block.call(model) : model.public_send(name)
+      value&.strftime("%Y-%m-%d")
+    end
+  end
+end
+
+# app/grids/users_grid.rb
+class UsersGrid < ApplicationGrid
+  scope { User }
+
+  column(:name)
+  timestamp_column(:created_at)
 end
 ```

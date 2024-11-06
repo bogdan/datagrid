@@ -44,6 +44,10 @@ module Datagrid
       "#{file_name.camelize.pluralize}Grid"
     end
 
+    def grid_base_class
+      file_exists?('app/grids/base_grid.rb') ? 'BaseGrid' : 'ApplicationGrid'
+    end
+
     def grid_controller_class_name
       "#{controller_class_name.camelize}Controller"
     end
