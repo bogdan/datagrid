@@ -108,6 +108,10 @@ module Datagrid
         !!options[:mandatory]
       end
 
+      def html_class
+        options[:class]
+      end
+
       def mandatory_explicitly_set?
         options.key?(:mandatory)
       end

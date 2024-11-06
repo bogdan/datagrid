@@ -1,5 +1,5 @@
 <tr>
   <% grid.html_columns(*options[:columns]).each do |column| %>
-    <td class="<%= datagrid_column_classes(grid, column) %>"><%= datagrid_value(grid, column, asset) %></td>
+    <td class="<%= datagrid_column_classes(grid, column) %>" data-datagrid-column="<%= column.name %>"><%= datagrid_value(grid, column, asset) %></td>
   <% end %>
 </tr>

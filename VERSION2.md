@@ -13,6 +13,7 @@ List of things introduces:
 1. HTML5 input types: number, date, datetime-local.
 1. HTML5 input [names collision restriction](https://html.spec.whatwg.org/multipage/input.html#input-type-attr-summary)
 1. Rails Engines: While supported, the library was not initially designed for it.
+1. HTML5 data attributes
 
 ## Infinite Ranges for range filters
 
@@ -37,7 +38,7 @@ grid.id # V1: [1, nil]
         # V2: (1..nil)
 ```
 
-## Modern CSS classes
+## Modern CSS classes naming conventions
 
 Built-in generated CSS classes renamed to match modern CSS naming conventions
 and avoid collisions with other libraries:
@@ -137,3 +138,61 @@ filter(:text, :string, input_options: {type: 'textarea'})
 ```
 
 ## Names collision restriction
+
+TODO
+
+## HTML5 data attributes
+
+It is more semantic and collision proof to use `data-*` attributes
+instead of classes for meta information from backend.
+Therefor built-in partials now generate data attributes by default
+instead of classes for column names:
+
+Version 1:
+
+``` html
+<tr>
+    <th class="name">Name</th>
+    <th class="category">Category</th>
+</tr>
+<tr>
+    <td class="name">John</th>
+    <td class="category">Worker</th>
+</tr>
+<tr>
+    <td class="name">Mike</th>
+    <td class="category">Manager</th>
+</tr>
+```
+
+Version 2:
+
+``` html
+<tr>
+    <th data-datagrid-column="name">Name</th>
+    <th data-datagrid-column="category">Category</th>
+</tr>
+<tr>
+    <td data-datagrid-column="name">John</th>
+    <td data-datagrid-column="category">Worker</th>
+</tr>
+<tr>
+    <td data-datagrid-column="name">Mike</th>
+    <td data-datagrid-column="category">Manager</th>
+</tr>
+```
+
+If you still want to have an HTML class attached to a column use `class` column option:
+
+``` ruby
+column(:name, class: 'column-name')
+```
+
+``` html
+<th class="column-name" data-datagrid-column="name">Name</th>
+...
+<td class="column-name" data-datagrid-column="name">John</td>
+```
+
+If you want to change this behavior completely,
+modify [built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials).
