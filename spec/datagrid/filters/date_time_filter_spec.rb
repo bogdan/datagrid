@@ -169,4 +169,31 @@ describe Datagrid::Filters::DateTimeFilter do
     end
     expect(report.created_at).to eq(Time.new(2012, 0o1, 0o1, 1, 0)..Time.new(2013, 0o1, 0o1, 1, 0))
   end
+
+  it "supports serialized range value" do
+    from = Time.parse("2013-01-01 01:00")
+    to = Time.parse("2013-01-02 02:00")
+    report  = test_report do
+      scope { Entry }
+      filter(:created_at, :datetime, range: true)
+    end
+
+    report.created_at = (from..to).as_json
+    expect(report.created_at).to eq(from..to)
+
+    report.created_at = (from..).as_json
+    expect(report.created_at).to eq(from..)
+
+    report.created_at = (..to).as_json
+    expect(report.created_at).to eq(..to)
+
+    report.created_at = (from...to).as_json
+    expect(report.created_at).to eq(from...to)
+
+    report.created_at = (nil..nil).as_json
+    expect(report.created_at).to eq(nil)
+
+    report.created_at = (nil...nil).as_json
+    expect(report.created_at).to eq(nil)
+  end
 end

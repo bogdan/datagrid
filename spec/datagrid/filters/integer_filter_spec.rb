@@ -33,9 +33,7 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry }
       filter(:group_id, :integer, range: true)
     end
-    expect(report.assets).not_to include(entry7)
-    expect(report.assets).to include(entry4)
-    expect(report.assets).not_to include(entry1)
+    expect(report.group_id).to eq(3..5)
   end
 
   it "should support minimum integer argument" do
@@ -43,9 +41,7 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry }
       filter(:group_id, :integer, range: true)
     end
-    expect(report.assets).not_to include(entry1)
-    expect(report.assets).not_to include(entry4)
-    expect(report.assets).to include(entry7)
+    expect(report.group_id).to eq(5..)
   end
 
   it "should support maximum integer argument" do
@@ -53,9 +49,7 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry }
       filter(:group_id, :integer, range: true)
     end
-    expect(report.assets).to include(entry1)
-    expect(report.assets).to include(entry4)
-    expect(report.assets).not_to include(entry7)
+    expect(report.group_id).to eq(..5)
   end
 
   it "should find something in one integer interval" do
@@ -68,15 +62,20 @@ describe Datagrid::Filters::IntegerFilter do
     expect(report.assets).not_to include(entry1)
   end
 
-  it "should support invalid range" do
+  it "supports range inversion" do
     report = test_report(group_id: (7..1)) do
       scope { Entry }
       filter(:group_id, :integer, range: true)
     end
     expect(report.group_id).to eq(1..7)
-    expect(report.assets).to include(entry7)
-    expect(report.assets).to include(entry4)
-    expect(report.assets).to include(entry1)
+  end
+
+  it "converts infinite range to nil" do
+    report = test_report(group_id: (nil..nil)) do
+      scope { Entry }
+      filter(:group_id, :integer, range: true)
+    end
+    expect(report.group_id).to eq(nil)
   end
 
   it "should support block" do
@@ -145,5 +144,30 @@ describe Datagrid::Filters::IntegerFilter do
     end
 
     expect(report.group_id).to eq(group.id)
+  end
+
+  it "supports serialized range value" do
+    report  = test_report do
+      scope { Entry }
+      filter(:group_id, :integer, range: true)
+    end
+
+    report.group_id = (1..5).as_json
+    expect(report.group_id).to eq(1..5)
+
+    report.group_id = (1..).as_json
+    expect(report.group_id).to eq(1..)
+
+    report.group_id = (..5).as_json
+    expect(report.group_id).to eq(..5)
+
+    report.group_id = (1...5).as_json
+    expect(report.group_id).to eq(1...5)
+
+    report.group_id = (nil..nil).as_json
+    expect(report.group_id).to eq(nil)
+
+    report.group_id = (nil...nil).as_json
+    expect(report.group_id).to eq(nil)
   end
 end

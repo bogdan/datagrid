@@ -3,18 +3,21 @@
 module Datagrid
   module Filters
     module RangedFilter
-      def initialize(grid, name, options, &block)
-        super
-        return unless range?
-
-        options[:multiple] = false
-      end
+      SERIALIZED_RANGE =  /\A(.*)\.{2,3}(.*)\z/
 
       def parse_values(value)
         unless range?
           return super
         end
         case value
+        when String
+          if value == '..' || value == '...'
+            nil
+          elsif match = value.match(SERIALIZED_RANGE)
+            to_range(match.captures[0], match.captures[1], value.include?('...'))
+          else
+            super
+          end
         when Hash
           parse_hash(value)
         when Array
@@ -47,7 +50,7 @@ module Datagrid
         to_range(result[:from], result[:to])
       end
 
-      def to_range(from, to)
+      def to_range(from, to, exclusive = false)
         from = parse(from)
         to = parse(to)
         return nil unless to || from
@@ -56,7 +59,7 @@ module Datagrid
         if from && to && from > to
           from, to = to, from
         end
-        from..to
+        exclusive ? from...to : from..to
       end
 
       def parse_array(result)
