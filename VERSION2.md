@@ -42,6 +42,31 @@ grid.id # V1: [1, nil]
         # V2: (1..nil)
 ```
 
+Version 2 makes an effort to make the transition as smooth as possible to you:
+
+* Old Array format will be converted to new Range format
+* Serialization/Deserialization of Range is help correctly
+
+``` ruby
+grid.id = 1..5
+grid.id # => 1..5
+
+grid.id = "1..5"
+grid.id # => 1..5
+
+grid.id = [nil, 5]
+grid.id # => ..5
+
+grid.id = nil..nil
+grid id # => nil
+
+grid.id = 3..7
+# Simulate serialization/deserialization when interacting with
+# jobs queue or database storage
+grid = UsersGrid.new(ActiveSupport::JSON.load(grid.attributes.to_json))
+grid.id # => 3..7
+```
+
 ## Modern CSS classes naming conventions
 
 Built-in generated CSS classes renamed to match modern CSS naming conventions
@@ -67,7 +92,7 @@ and avoid collisions with other libraries:
 
 ### Example
 
-The difference in layout generation from  v1 to v2
+The difference in layout generation from v1 to v2.
 
 ``` ruby
 datagrid_form_for(@grid)
