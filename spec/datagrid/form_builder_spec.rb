@@ -647,7 +647,7 @@ second
       context "with no options" do
         let(:expected_html) do
           <<-HTML
-         <select class="datagrid-dynamic-field" name="report[condition][]" id="report_condition"><option value="id">Id</option>
+         <select class="datagrid-dynamic-field" name="report[condition][field]" id="report_condition"><option value="id">Id</option>
          <option value="group_id">Group</option>
          <option value="name">Name</option>
          <option value="category">Category</option>
@@ -657,10 +657,10 @@ second
          <option value="confirmed">Confirmed</option>
          <option value="shipping_date">Shipping date</option>
          <option value="created_at">Created at</option>
-         <option value="updated_at">Updated at</option></select><select class="datagrid-dynamic-operation" name="report[condition][]" id="report_condition"><option value="=">=</option>
+         <option value="updated_at">Updated at</option></select><select class="datagrid-dynamic-operation" name="report[condition][operation]" id="report_condition"><option value="=">=</option>
          <option value="=~">&asymp;</option>
          <option value="&gt;=">&ge;</option>
-         <option value="&lt;=">&le;</option></select><input class="datagrid-dynamic-value"  name="report[condition][]" type="text" id="report_condition">
+         <option value="&lt;=">&le;</option></select><input class="datagrid-dynamic-value"  name="report[condition][value]" type="text" id="report_condition">
           HTML
         end
         it { should equal_to_dom(expected_html) }
@@ -671,16 +671,16 @@ second
         end
         let(:expected_html) do
           <<-HTML
-         <select class="datagrid-dynamic-field" name="report[condition][]" id="report_condition">
+         <select class="datagrid-dynamic-field" name="report[condition][field]" id="report_condition">
            <option selected value="id">id</option>
            <option value="name">name</option>
          </select>
-         <select class="datagrid-dynamic-operation" name="report[condition][]" id="report_condition">
+         <select class="datagrid-dynamic-operation" name="report[condition][operation]" id="report_condition">
            <option value="=">=</option>
            <option value="=~">≈</option>
            <option selected value="&gt;=">≥</option>
            <option value="&lt;=">≤</option></select>
-         <input value="1" name="report[condition][]" class="datagrid-dynamic-value" type="text" id="report_condition"/>
+         <input value="1" name="report[condition][value]" class="datagrid-dynamic-value" type="text" id="report_condition"/>
           HTML
         end
 
@@ -693,8 +693,8 @@ second
         end
         let(:expected_html) do
           <<-HTML
-          <select class="datagrid-dynamic-field" name="report[condition][]" id="report_condition"><option value="id">id</option><option value="name">name</option></select><select class="datagrid-dynamic-operation" name="report[condition][]" id="report_condition"><option value="&gt;=">≥</option>
-       <option value="&lt;=">≤</option></select><input class="datagrid-dynamic-value" name="report[condition][]" type="text" id="report_condition">
+          <select class="datagrid-dynamic-field" name="report[condition][field]" id="report_condition"><option value="id">id</option><option value="name">name</option></select><select class="datagrid-dynamic-operation" name="report[condition][operation]" id="report_condition"><option value="&gt;=">≥</option>
+       <option value="&lt;=">≤</option></select><input class="datagrid-dynamic-value" name="report[condition][value]" type="text" id="report_condition">
           HTML
         end
         it { should equal_to_dom(expected_html) }
@@ -706,8 +706,8 @@ second
         end
         let(:expected_html) do
           <<-HTML
-          <input class="datagrid-dynamic-field" name="report[condition][]" value="id" autocomplete="off" type="hidden" id="report_condition"><select class="datagrid-dynamic-operation" name="report[condition][]" id="report_condition"><option value="&gt;=">≥</option>
-       <option value="&lt;=">≤</option></select><input class="datagrid-dynamic-value" name="report[condition][]" type="text" id="report_condition">
+          <input class="datagrid-dynamic-field" name="report[condition][field]" value="id" autocomplete="off" type="hidden" id="report_condition"><select class="datagrid-dynamic-operation" name="report[condition][operation]" id="report_condition"><option value="&gt;=">≥</option>
+       <option value="&lt;=">≤</option></select><input class="datagrid-dynamic-value" name="report[condition][value]" type="text" id="report_condition">
           HTML
         end
         it { should equal_to_dom(expected_html) }
@@ -718,7 +718,7 @@ second
         end
         let(:expected_html) do
           <<-HTML
-          <select class="datagrid-dynamic-field" name="report[condition][]" id="report_condition"><option value="id">id</option><option value="name">name</option></select><input class="datagrid-dynamic-operation" name="report[condition][]" value="=" autocomplete="off" type="hidden" id="report_condition"><input class="datagrid-dynamic-value" name="report[condition][]" type="text" id="report_condition">
+          <select class="datagrid-dynamic-field" name="report[condition][field]" id="report_condition"><option value="id">id</option><option value="name">name</option></select><input class="datagrid-dynamic-operation" name="report[condition][operation]" value="=" autocomplete="off" type="hidden" id="report_condition"><input class="datagrid-dynamic-value" name="report[condition][value]" type="text" id="report_condition">
           HTML
         end
         it { should equal_to_dom(expected_html) }

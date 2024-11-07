@@ -131,10 +131,8 @@ module Datagrid
     end
 
     def datagrid_dynamic_filter(filter, options = {})
-      input_name = "#{object_name}[#{filter.name}][]"
       field, operation, value = object.filter_value(filter)
       options = add_filter_options(filter, **options)
-      options = options.merge(name: input_name)
       field_input = dynamic_filter_select(
         filter.name,
         object.select_options(filter) || [],
@@ -144,7 +142,8 @@ module Datagrid
           include_hidden: false,
           selected: field
         },
-        add_html_classes(options, "datagrid-dynamic-field")
+        **add_html_classes(options, "datagrid-dynamic-field"),
+        name: @template.field_name(object_name, filter.name, 'field')
       )
       operation_input = dynamic_filter_select(
         filter.name, filter.operations_select,
@@ -154,9 +153,15 @@ module Datagrid
           prompt: false,
           selected: operation
         },
-        add_html_classes(options, "datagrid-dynamic-operation")
+        **add_html_classes(options, "datagrid-dynamic-operation"),
+        name: @template.field_name(object_name, filter.name, 'operation')
       )
-      value_input = datagrid_filter_input(filter.name, **add_html_classes(options, "datagrid-dynamic-value"), value: value)
+      value_input = datagrid_filter_input(
+        filter.name,
+        **add_html_classes(options, "datagrid-dynamic-value"),
+        value: value,
+        name: @template.field_name(object_name, filter.name, 'value')
+      )
       [field_input, operation_input, value_input].join("\n").html_safe
     end
 
