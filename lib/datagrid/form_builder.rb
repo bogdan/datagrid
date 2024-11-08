@@ -179,8 +179,8 @@ module Datagrid
 
     def datagrid_range_filter(_type, filter, options = {})
       if filter.range?
-        from_options = datagrid_range_filter_options(object, filter, :from, options)
-        to_options = datagrid_range_filter_options(object, filter, :to, options)
+        from_options = datagrid_range_filter_options(object, filter, :from, **options)
+        to_options = datagrid_range_filter_options(object, filter, :to, **options)
         render_partial "range_filter", {
           from_options: from_options, to_options: to_options, filter: filter, form: self
         }
@@ -189,9 +189,9 @@ module Datagrid
       end
     end
 
-    def datagrid_range_filter_options(object, filter, type, options)
+    def datagrid_range_filter_options(object, filter, type, **options)
       type_method_map = { from: :begin, to: :end }
-      options = add_html_classes(options, "datagrid-range-#{type}")
+      # options = add_html_classes(options, "datagrid-range-#{type}")
       options[:value] = object[filter.name]&.public_send(type_method_map[type])
       options[:name] = @template.field_name(object_name, filter.name, type)
       # In case of datagrid ranged filter
