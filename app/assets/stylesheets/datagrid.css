@@ -1,3 +1,5 @@
+/* Table */
+
 table.datagrid-table {
   background-color: transparent;
   border-collapse: collapse;
@@ -36,6 +38,8 @@ table.datagrid-table th {
 .datagrid-no-results {
   text-align: center;
 }
+
+/* Form */
 
 .datagrid-form {
   background-color: #f0f0f0;
@@ -104,13 +108,6 @@ select.datagrid-dynamic-operation {
   float: left;
 }
 
-.datagrid-enum-checkboxes label {
-  display: block;
-  float: none;
-  width: 100%;
-}
-
-
 select.datagrid-dynamic-field {
   width: 242px
 }
@@ -121,11 +118,17 @@ select.datagrid-dynamic-field {
   width: auto;
 }
 
+.datagrid-enum-checkboxes label {
+  display: block;
+  float: none;
+  width: 100%;
+}
+
 .datagrid-actions {
   padding-left: calc(150px + 10px);
 }
 
-.datagrid-actions input[type='submit'] {
+.datagrid-submit {
   background-color: #555;
   border: none;
   border-radius: 5px;
@@ -141,16 +144,16 @@ select.datagrid-dynamic-field {
   *display: inline;
 }
 
-.datagrid-actions input[type='submit']:hover,
-.datagrid-actions input[type='submit']:focus {
+.datagrid-submit:hover,
+.datagrid-submit:focus {
   background-color: #333;
 }
 
-.datagrid-actions input[type='submit']:active {
+.datagrid-submit:active {
   background-color: #000;
 }
 
-.datagrid-actions > a {
+.datagrid-reset {
   font-size: 14px;
   padding: 7px 15px;
   vertical-align: middle;
