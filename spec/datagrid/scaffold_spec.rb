@@ -24,9 +24,10 @@ describe Datagrid::Scaffold do
     end
   end
 
-  describe ".index_action" do
+  describe ".controller_code" do
     it "works" do
-      expect(subject.index_action).to eq(<<-RUBY)
+      expect(subject.controller_code).to eq(<<-RUBY)
+class UsersController < ApplicationController
   def index
     @grid = UsersGrid.new(grid_params) do |scope|
       scope.page(params[:page])
@@ -38,7 +39,8 @@ describe Datagrid::Scaffold do
   def grid_params
     params.fetch(:users_grid, {}).permit!
   end
-      RUBY
+end
+RUBY
     end
   end
 end

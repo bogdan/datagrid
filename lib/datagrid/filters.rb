@@ -144,7 +144,9 @@ module Datagrid
     def initialize(...)
       self.filters_array = self.class.filters_array.clone
       filters_array.each do |filter|
-        self[filter.name] = filter.default(self)
+        if value = filter.default(self)
+          self[filter.name] = value
+        end
       end
       super
     end

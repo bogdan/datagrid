@@ -38,4 +38,10 @@ class ApplicationGrid < Datagrid::Base
       value ? "Yes" : "No"
     end
   end
+
+  # Uncomment to shorten URL query string for all grids.
+  # May cause collisions if multiple grids are used on the same page.
+  # def param_name
+  #   'grid'
+  # end
 end
