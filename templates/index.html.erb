@@ -1,5 +1,5 @@
-<%%= datagrid_form_for @grid, method: :get, url: <%= grid_route_name %> %>
+<%%= datagrid_form_for @grid, url: <%= grid_route_name %> %>
 
 <%%= <%=pagination_helper_code%> %>
-<%%= datagrid_table @grid %>
+<%%= <%=table_helper_code%> %>
 <%%= <%=pagination_helper_code%> %>

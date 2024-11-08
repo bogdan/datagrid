@@ -21,7 +21,7 @@ module Datagrid
       end
       template "index.html.erb", view_file
       route(generate_routing_namespace("resources :#{grid_controller_short_name}"))
-      gem "kaminari" unless defined?(::Kaminari) || defined?(::WillPaginate)
+      gem "kaminari" unless defined?(::Kaminari) || defined?(::WillPaginate) || defined?(::Pagy)
       in_root do
         {
           "css" => " *= require datagrid",
@@ -71,9 +71,19 @@ module Datagrid
     def pagination_helper_code
       if defined?(::WillPaginate)
         "will_paginate(@grid.assets)"
+      elsif defined?(::Pagy)
+         "pagy_nav(@pagy)"
       else
         # Kaminari is default
         "paginate(@grid.assets)"
+      end
+    end
+
+    def table_helper_code
+      if defined?(::Pagy)
+        "datagrid_table @grid, @records"
+      else
+        "datagrid_table @grid"
       end
     end
 
@@ -88,9 +98,7 @@ module Datagrid
     def index_action
       indent(<<~RUBY)
         def index
-          @grid = #{grid_class_name}.new(grid_params) do |scope|
-            scope.page(params[:page])
-          end
+#{index_body}
         end
 
         protected
@@ -99,6 +107,27 @@ module Datagrid
           params.fetch(:#{grid_param_name}, {}).permit!
         end
       RUBY
+    end
+
+    def index_body
+
+      if defined?(::Pagy)
+        <<~RUBY
+        def index
+          @grid = #{grid_class_name}.new(grid_params)
+          @pagy, @assets = pagy(@grid.assets)
+        end
+        RUBY
+      else
+        <<~RUBY
+        def index
+          @grid = #{grid_class_name}.new(grid_params) do |scope|
+            scope.page(params[:page])
+          end
+        end
+        RUBY
+      end
+
     end
 
     protected
