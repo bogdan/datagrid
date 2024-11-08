@@ -31,12 +31,7 @@ module Datagrid
       end
 
       def parse_values(filter)
-
-        if filter.is_a?(Array)
-          field, operation, value = filter
-          filter = { field:, operation:, value: type_cast(field, value)}
-        end
-        filter ? FilterValue.new(filter) : nil
+        filter ? FilterValue.new(grid_class, filter) : nil
       end
 
       def unapplicable_value?(filter)
@@ -101,48 +96,39 @@ module Datagrid
         }
       end
 
-      def type_cast(field, value)
-        type = column_type(field)
-        return nil if value.blank?
-
-        case type
-        when :string
-          value.to_s
-        when :integer
-          value.is_a?(Numeric) || value =~ /^\d/ ?  value.to_i : nil
-        when :float
-          value.is_a?(Numeric) || value =~ /^\d/ ?  value.to_f : nil
-        when :date, :timestamp
-          Datagrid::Utils.parse_date(value)
-        when :boolean
-          Datagrid::Utils.booleanize(value)
-        when nil
-          value
-        else
-          raise NotImplementedError, "unknown column type: #{type.inspect}"
-        end
-      end
-
       def column_type(field)
         grid_class.driver.normalized_column_type(grid_class.scope, field)
       end
 
-      class FilterValue < Hash
-        def initialize(object = nil)
+      class FilterValue
+        attr_accessor :field, :operation, :value
+
+        def initialize(grid_class, object = nil)
           super()
-          update(object) if object
+
+          case object
+          when Hash
+            object = object.symbolize_keys
+            self.field = object[:field]
+            self.operation = object[:operation]
+            self.value = object[:value]
+          when Array
+            self.field = object[0]
+            self.operation = object[1]
+            self.value = object[2]
+          else
+            raise ArgumentError, object.inspect
+          end
+          if grid_class
+            type = grid_class.driver.normalized_column_type(
+              grid_class.scope, field
+            )
+            self.value = type_cast(type, value)
+          end
         end
 
-        def field
-          self[:field]
-        end
-
-        def operation
-          self[:operation]
-        end
-
-        def value
-          self[:value]
+        def inspect
+          {field: field, operation: operation, value: value}
         end
 
         def to_ary
@@ -151,6 +137,33 @@ module Datagrid
 
         def to_a
           [field, operation, value]
+        end
+
+        def to_h
+          {field: field, operation: operation, value: value}
+        end
+
+        protected
+
+        def type_cast(type, value)
+          return nil if value.blank?
+
+          case type
+          when :string
+            value.to_s
+          when :integer
+            value.is_a?(Numeric) || value =~ /^\d/ ?  value.to_i : nil
+          when :float
+            value.is_a?(Numeric) || value =~ /^\d/ ?  value.to_f : nil
+          when :date, :timestamp
+            Datagrid::Utils.parse_date(value)
+          when :boolean
+            Datagrid::Utils.booleanize(value)
+          when nil
+            value
+          else
+            raise NotImplementedError, "unknown column type: #{type.inspect}"
+          end
         end
       end
     end
