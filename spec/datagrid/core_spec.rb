@@ -206,13 +206,14 @@ describe Datagrid::Core do
     end
 
     it "permites all attributes by default" do
-      expect do
-        test_report(params) do
-          scope { Entry }
-          filter(:name)
-        end
-      end.to_not raise_error
+      grid = test_report(params) do
+        scope { Entry }
+        filter(:name)
+      end
+
+      expect(grid.name).to eq('one')
     end
+
     it "doesn't permit attributes when forbidden_attributes_protection is set" do
       expect do
         test_report(params) do
@@ -222,6 +223,7 @@ describe Datagrid::Core do
         end
       end.to raise_error(ActiveModel::ForbiddenAttributesError)
     end
+
     it "permits attributes when forbidden_attributes_protection is set and attributes are permitted" do
       expect do
         test_report(params.permit!) do
@@ -230,6 +232,16 @@ describe Datagrid::Core do
           filter(:name)
         end
       end.to_not raise_error
+    end
+
+    it "supports hash attribute assignment" do
+      grid = test_report(
+        ActionController::Parameters.new(group_id: {from: 1, to:2})
+      ) do
+        scope { Entry }
+        filter(:group_id, :integer, range: true)
+      end
+      expect(grid.group_id).to eq(1..2)
     end
   end
 

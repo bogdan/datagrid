@@ -1,6 +1,6 @@
 <tr>
   <% grid.html_columns(*options[:columns]).each do |column| %>
-    <th class="<%= datagrid_column_classes(grid, column) %>" data-datagrid-column="<%= column.name %>">
+    <th class="<%= datagrid_column_classes(grid, column) %>" data-column="<%= column.name %>">
       <%= column.header %>
       <%= datagrid_order_for(grid, column, options) if column.supports_order? && options[:order]%>
     </th>

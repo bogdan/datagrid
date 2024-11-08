@@ -241,9 +241,8 @@ Version 2:
 
 ``` html
 <div class="datagrid-filter"
-         data-datagrid-filter="category"
-         data-datagrid-filter-type="string"
-         data-datagrid-filter-checkboxes="false"
+         data-filter="category"
+         data-type="string"
 >
   <label for="form_for_grid_category">Category</label>
   <input type="text"
@@ -274,16 +273,16 @@ Version 2:
 
 ``` html
 <tr>
-    <th data-datagrid-column="name">Name</th>
-    <th data-datagrid-column="category">Category</th>
+    <th data-column="name">Name</th>
+    <th data-column="category">Category</th>
 </tr>
 <tr>
-    <td data-datagrid-column="name">John</th>
-    <td data-datagrid-column="category">Worker</th>
+    <td data-column="name">John</th>
+    <td data-column="category">Worker</th>
 </tr>
 <tr>
-    <td data-datagrid-column="name">Mike</th>
-    <td data-datagrid-column="category">Manager</th>
+    <td data-column="name">Mike</th>
+    <td data-column="category">Manager</th>
 </tr>
 ```
 
@@ -294,13 +293,50 @@ column(:name, class: 'short-column')
 ```
 
 ``` html
-<th class="short-column" data-datagrid-column="name">Name</th>
+<th class="short-column" data-column="name">Name</th>
 ...
-<td class="short-column" data-datagrid-column="name">John</td>
+<td class="short-column" data-column="name">John</td>
 ```
 
 If you want to change this behavior completely,
 modify [built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials)
+
+## Inherit Datagrid::Base
+
+`include Datagrid` causes method name space to be clamsy.
+Version 2 introduces a difference between the class
+that needs to be inherited and high level namespace (just like most gems do):
+
+``` ruby
+class ApplicationGrid < Datagrid::Base
+end
+```
+
+## ApplicationGrid base class
+
+Previously recommended base class `BaseGrid` is incosistent
+with Rails naming conventionsa.
+It was renamed to `ApplicationGrid` instead:
+
+``` ruby
+# app/grids/application_grid.rb
+class ApplicationGrid < Datagrid::Base
+  def self.timestamp_column(name, *args, &block)
+    column(name, *args) do |model|
+      value = block ? block.call(model) : model.public_send(name)
+      value&.strftime("%Y-%m-%d")
+    end
+  end
+end
+
+# app/grids/users_grid.rb
+class UsersGrid < ApplicationGrid
+  scope { User }
+
+  column(:name)
+  timestamp_column(:created_at)
+end
+```
 
 ## All changes in built-in partials
 
@@ -328,15 +364,19 @@ index 9f48319..f114c17 100644
  <%- end -%>
  <%- end -%>
 diff --git a/app/views/datagrid/_form.html.erb b/app/views/datagrid/_form.html.erb
-index 7e175c1..84cf58e 100644
+index 7e175c1..88a39f9 100644
 --- a/app/views/datagrid/_form.html.erb
 +++ b/app/views/datagrid/_form.html.erb
-@@ -1,12 +1,12 @@
+@@ -1,12 +1,16 @@
 -<%= form_for grid, options do |f| -%>
 +<%= form_for grid, html: {class: 'datagrid-form'}, **options do |f| -%>
    <% grid.filters.each do |filter| %>
 -    <div class="datagrid-filter filter">
-+    <div class="datagrid-filter <%= filter.default_html_classes.join(' ') %>">
++    <div class="datagrid-filter"
++         data-datagrid-filter="<%= filter.name %>"
++         data-type="<%= filter.type %>"
++         data-datagrid-filter-checkboxes="<%= filter.enum_checkboxes? %>"
++    >
        <%= f.datagrid_label filter %>
        <%= f.datagrid_filter filter %>
      </div>
@@ -426,41 +466,4 @@ index 8708c05..0b5ff24 100644
 -  <%= I18n.t("datagrid.table.no_columns").html_safe %>
 +  <%= I18n.t("datagrid.table.no_columns") %>
  <% end %>
-```
-
-## Inherit Datagrid::Base
-
-`include Datagrid` causes method name space to be clamsy.
-Version 2 introduces a difference between the class
-that needs to be inherited and high level namespace (just like most gems do):
-
-``` ruby
-class ApplicationGrid < Datagrid::Base
-end
-```
-
-## ApplicationGrid base class
-
-Previously recommended base class `BaseGrid` is incosistent
-with Rails naming conventionsa.
-It was renamed to `ApplicationGrid` instead:
-
-``` ruby
-# app/grids/application_grid.rb
-class ApplicationGrid < Datagrid::Base
-  def self.timestamp_column(name, *args, &block)
-    column(name, *args) do |model|
-      value = block ? block.call(model) : model.public_send(name)
-      value&.strftime("%Y-%m-%d")
-    end
-  end
-end
-
-# app/grids/users_grid.rb
-class UsersGrid < ApplicationGrid
-  scope { User }
-
-  column(:name)
-  timestamp_column(:created_at)
-end
 ```

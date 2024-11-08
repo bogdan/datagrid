@@ -439,18 +439,20 @@ describe Datagrid::FormBuilder do
         let(:_category_filter_options) { { checkboxes: true } }
         it {
           should equal_to_dom(
-            '
-<label for="report_category_first">
+            <<-HTML
+<div class="datagrid-enum-checkboxes">
+<label for="report_category_first" class="datagrid-enum-checkbox-label">
 <input type="checkbox" id="report_category_first"
     value="first" name="report[category][]" />
 first
 </label>
-<label for="report_category_second">
+<label for="report_category_second" class="datagrid-enum-checkbox-label">
 <input type="checkbox" id="report_category_second"
     value="second" name="report[category][]" />
 second
 </label>
-'
+</div>
+            HTML
           )
         }
 
@@ -611,18 +613,20 @@ second
       let(:_filter) { :column_names }
       let(:expected_html) do
         <<~DOM
-          <label for="report_column_names_id">
+        <div class="datagrid-enum-checkboxes">
+          <label for="report_column_names_id" class="datagrid-enum-checkbox-label">
             <input id="report_column_names_id" type="checkbox" value="id" checked name="report[column_names][]">
             Id
           </label>
-          <label for="report_column_names_name">
+          <label for="report_column_names_name" class="datagrid-enum-checkbox-label">
             <input id="report_column_names_name" type="checkbox" value="name" checked name="report[column_names][]"/>
             Name
           </label>
-          <label for="report_column_names_category">
+          <label for="report_column_names_category" class="datagrid-enum-checkbox-label">
             <input id="report_column_names_category" type="checkbox" value="category" name="report[column_names][]">
             Category
           </label>
+        </div>
         DOM
       end
 

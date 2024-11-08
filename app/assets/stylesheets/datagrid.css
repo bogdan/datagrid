@@ -1,0 +1,171 @@
+table.datagrid-table {
+  background-color: transparent;
+  border-collapse: collapse;
+  max-width: 100%;
+}
+
+table.datagrid-table th {
+  background-color: #eee;
+  text-align: left;
+}
+
+table.datagrid-table td,
+table.datagrid-table th {
+  border: 1px solid #d6d6d6;
+  padding: 5px 10px;
+}
+
+.datagrid-order-control-asc,
+.datagrid-order-control-desc {
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.datagrid-order-active-asc,
+.datagrid-order-active-desc {
+  background-color: #fff7d5;
+}
+
+.datagrid-order-active-asc a.datagrid-order-control-asc,
+.datagrid-order-active-desc a.datagrid-order-control-desc {
+  font-weight: bold;
+  color: #d00;
+}
+
+.datagrid-no-results {
+  text-align: center;
+}
+
+.datagrid-form {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.datagrid-filter {
+  margin: 10px;
+}
+
+.datagrid-filter::before,
+.datagrid-filter::after {
+  content: '';
+  display: table;
+}
+
+.datagrid-filter::after {
+  clear: both;
+}
+
+.datagrid-filter label {
+  width: 150px;
+  float: left;
+}
+
+.datagrid-filter a {
+  float: left;
+}
+
+.datagrid-filter input {
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  float: left;
+  padding: 5px 12px;
+  width: 300px;
+}
+
+.datagrid-filter input.datagrid-range-from,
+.datagrid-filter input.datagrid-range-to {
+  width: 83px;
+}
+
+.datagrid-filter select {
+  float: left;
+  width: 300px
+}
+
+.datagrid-filter select[multiple] {
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  height: 100px;
+}
+
+.datagrid-filter .datagrid-dynamic-field {
+  width: 178px;
+}
+
+.datagrid-filter .datagrid-dynamic-operation {
+  margin-left: 7px;
+  width: 50px;
+}
+
+.datagrid-filter .datagrid-dynamic-value {
+  margin: 10px 0 0 150px;
+  clear: both;
+}
+
+.datagrid-filter .datagrid-range-separator {
+  float: left;
+  margin: 6px 4px 0;
+}
+
+.datagrid-enum-checkboxes {
+  float: left;
+}
+
+.datagrid-enum-checkboxes label {
+  display: block;
+  float: none;
+  width: 100%;
+}
+
+input.datagrid-range-from, input.datagrid-range-to {
+  width: 144px !important
+}
+
+select.datagrid-dynamic-field {
+  width: 242px
+}
+
+.datagrid-enum-checkboxes input {
+  margin: 7px;
+  float: none;
+  width: auto;
+}
+
+.datagrid-actions {
+  padding-left: calc(150px + 10px);
+}
+
+.datagrid-actions input[type='submit'] {
+  background-color: #555;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: normal;
+  padding: 7px 15px;
+  vertical-align: middle;
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+}
+
+.datagrid-actions input[type='submit']:hover,
+.datagrid-actions input[type='submit']:focus {
+  background-color: #333;
+}
+
+.datagrid-actions input[type='submit']:active {
+  background-color: #000;
+}
+
+.datagrid-actions > a {
+  font-size: 14px;
+  padding: 7px 15px;
+  vertical-align: middle;
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+}

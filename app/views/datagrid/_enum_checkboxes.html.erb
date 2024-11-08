@@ -2,10 +2,12 @@
 Indent in this file may cause extra space to appear.
 You can add indent if whitespace doesn't matter for you
 %>
+<div class="datagrid-enum-checkboxes">
 <%- elements.each do |value, text, checked| -%>
 <%- id = [form.object_name, filter.name, value].join('_').underscore -%>
-<%= form.datagrid_label(filter.name, **options, for: id) do -%>
+<%= form.datagrid_label(filter.name, **options, for: id, class: 'datagrid-enum-checkbox-label') do -%>
 <%= form.datagrid_filter_input(filter.name, type: :checkbox, multiple: true, id: id, checked: checked, include_hidden: false, value: value.to_s) -%>
 <%= text -%>
 <%- end -%>
 <%- end -%>
+</div>

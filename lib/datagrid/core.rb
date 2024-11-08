@@ -261,7 +261,13 @@ module Datagrid
     protected
 
     def sanitize_for_mass_assignment(attributes)
-      forbidden_attributes_protection ? super : attributes
+      if forbidden_attributes_protection
+        super
+      elsif defined?(ActionController::Parameters) && attributes.is_a?(ActionController::Parameters)
+        attributes.permit!.to_h
+      else
+        attributes
+      end
     end
   end
 end
