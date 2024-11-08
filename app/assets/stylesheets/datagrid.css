@@ -7,6 +7,7 @@ table.datagrid-table {
 table.datagrid-table th {
   background-color: #eee;
   text-align: left;
+  vertical-align: top;
 }
 
 table.datagrid-table td,
@@ -61,10 +62,6 @@ table.datagrid-table th {
   float: left;
 }
 
-.datagrid-filter a {
-  float: left;
-}
-
 .datagrid-filter input {
   border: 2px solid #ccc;
   border-radius: 4px;
@@ -73,9 +70,8 @@ table.datagrid-table th {
   width: 300px;
 }
 
-.datagrid-filter input.datagrid-range-from,
-.datagrid-filter input.datagrid-range-to {
-  width: 83px;
+input.datagrid-range-from, input.datagrid-range-to {
+  width: 144px;
 }
 
 .datagrid-filter select {
@@ -89,21 +85,17 @@ table.datagrid-table th {
   height: 100px;
 }
 
-.datagrid-filter .datagrid-dynamic-field {
-  width: 178px;
-}
-
-.datagrid-filter .datagrid-dynamic-operation {
+select.datagrid-dynamic-operation {
   margin-left: 7px;
   width: 50px;
 }
 
-.datagrid-filter .datagrid-dynamic-value {
+.datagrid-dynamic-value {
   margin: 10px 0 0 150px;
   clear: both;
 }
 
-.datagrid-filter .datagrid-range-separator {
+.datagrid-range-separator {
   float: left;
   margin: 6px 4px 0;
 }
@@ -118,9 +110,6 @@ table.datagrid-table th {
   width: 100%;
 }
 
-input.datagrid-range-from, input.datagrid-range-to {
-  width: 144px !important
-}
 
 select.datagrid-dynamic-field {
   width: 242px
