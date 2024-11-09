@@ -52,9 +52,11 @@ module Datagrid
     end
 
     # @param column [String, Datagrid::Columns::Column]
+    # @param desc [nil, Boolean] confirm order direction as well if specified
     # @return [Boolean] true if given grid is ordered by given column.
-    def ordered_by?(column)
-      order_column == column_by_name(column)
+    def ordered_by?(column, desc = nil)
+      order_column == column_by_name(column) &&
+        (desc.nil? || (desc ? descending? : !descending?))
     end
 
     private
