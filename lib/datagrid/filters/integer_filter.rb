@@ -7,7 +7,9 @@ module Datagrid
     class IntegerFilter < Datagrid::Filters::BaseFilter
       include Datagrid::Filters::RangedFilter
 
-      self.default_input_options = { type: "number", step: "1" }
+      def default_input_options
+        { **super, type: "number", step: "1" }
+      end
 
       def parse(value)
         return nil if value.blank?

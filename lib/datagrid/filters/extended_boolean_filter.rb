@@ -9,8 +9,6 @@ module Datagrid
       TRUTH_VALUES = [true, "true", "y", "yes"].freeze
       FALSE_VALUES = [false, "false", "n", "no"].freeze
 
-      self.default_input_options = { type: "select" }
-
       def initialize(report, attribute, options = {}, &block)
         options[:select] = -> { boolean_select }
         super
@@ -19,6 +17,10 @@ module Datagrid
       def execute(value, scope, grid_object)
         value = value.blank? ? nil : ::Datagrid::Utils.booleanize(value)
         super
+      end
+
+      def default_input_options
+        { **super, type: "select" }
       end
 
       def parse(value)

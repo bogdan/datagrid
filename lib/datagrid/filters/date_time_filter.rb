@@ -7,7 +7,9 @@ module Datagrid
     class DateTimeFilter < Datagrid::Filters::BaseFilter
       include Datagrid::Filters::RangedFilter
 
-      self.default_input_options = { type: "datetime-local" }
+      def default_input_options
+        { **super, type: "datetime-local" }
+      end
 
       def parse(value)
         Datagrid::Utils.parse_datetime(value)

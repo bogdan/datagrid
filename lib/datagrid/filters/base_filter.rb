@@ -11,8 +11,6 @@ end
 module Datagrid
   module Filters
     class BaseFilter
-      class_attribute :default_input_options, instance_writer: false, default: { type: "text" }
-
       attr_accessor :grid_class, :options, :block, :name
 
       def initialize(grid_class, name, options = {}, &block)
@@ -24,6 +22,10 @@ module Datagrid
 
       def parse(value)
         raise NotImplementedError, "#parse(value) suppose to be overwritten"
+      end
+
+      def default_input_options
+        { type: "text" }
       end
 
       def unapplicable_value?(value)
