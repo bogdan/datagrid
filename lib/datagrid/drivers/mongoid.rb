@@ -36,7 +36,7 @@ module Datagrid
       end
 
       def default_order(scope, column_name)
-        has_column?(scope, column_name) ? column_name : nil
+        scope_has_column?(scope, column_name) ? column_name : nil
       end
 
       def greater_equal(scope, field, value)
@@ -47,7 +47,7 @@ module Datagrid
         scope.where(field => { "$lte" => value })
       end
 
-      def has_column?(scope, column_name)
+      def scope_has_column?(scope, column_name)
         column_names(scope).include?(column_name.to_s)
       end
 

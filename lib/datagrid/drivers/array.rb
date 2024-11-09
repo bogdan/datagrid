@@ -54,12 +54,12 @@ module Datagrid
         end
       end
 
-      def has_column?(scope, column_name)
+      def scope_has_column?(scope, column_name)
         scope.any? && scope.first.respond_to?(column_name)
       end
 
       def is_timestamp?(scope, column_name)
-        has_column?(scope, column_name) &&
+        scope_has_column?(scope, column_name) &&
           timestamp_class?(get(scope.first, column_name).class)
       end
 
