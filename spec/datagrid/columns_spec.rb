@@ -19,7 +19,7 @@ describe Datagrid::Columns do
         category: "first",
         access_level: "admin",
         pet: "rottweiler",
-        shipping_date: Date.new(2013, 8, 1)
+        shipping_date: Date.new(2013, 8, 1),
       )
     end
 
@@ -126,9 +126,9 @@ describe Datagrid::Columns do
 
     it "should generate table data" do
       expect(subject.data).to eq([
-                                   subject.header,
-                                   subject.row_for(entry)
-                                 ])
+        subject.header,
+        subject.row_for(entry),
+      ])
     end
 
     it "supports dynamic header" do
@@ -142,17 +142,17 @@ describe Datagrid::Columns do
 
     it "should generate hash for given asset" do
       expect(subject.hash_for(entry)).to eq({
-                                              group: "Pop",
-                                              name: "Star",
-                                              access_level: "admin",
-                                              pet: "ROTTWEILER",
-                                              shipping_date: date
-                                            })
+        group: "Pop",
+        name: "Star",
+        access_level: "admin",
+        pet: "ROTTWEILER",
+        shipping_date: date,
+      })
     end
 
     it "should support csv export" do
       expect(subject.to_csv).to eq(
-        "Shipping date,Group,Name,Access level,Pet\n#{date},Pop,Star,admin,ROTTWEILER\n"
+        "Shipping date,Group,Name,Access level,Pet\n#{date},Pop,Star,admin,ROTTWEILER\n",
       )
     end
 
@@ -162,7 +162,7 @@ describe Datagrid::Columns do
 
     it "should support csv export options" do
       expect(subject.to_csv(col_sep: ";")).to eq(
-        "Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n"
+        "Shipping date;Group;Name;Access level;Pet\n#{date};Pop;Star;admin;ROTTWEILER\n",
       )
     end
   end

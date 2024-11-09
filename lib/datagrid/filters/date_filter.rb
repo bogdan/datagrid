@@ -7,7 +7,7 @@ module Datagrid
     class DateFilter < Datagrid::Filters::BaseFilter
       include Datagrid::Filters::RangedFilter
 
-      self.default_input_options = { type: 'date' }
+      self.default_input_options = { type: "date" }
 
       def apply(grid_object, scope, value)
         value = value.begin&.beginning_of_day..value.end&.end_of_day if value.is_a?(Range)

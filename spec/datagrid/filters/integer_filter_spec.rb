@@ -104,7 +104,7 @@ describe Datagrid::Filters::IntegerFilter do
       scope { Entry }
       filter(:group_id, :integer, multiple: true)
     end
-    expect(report.group_id).to eq([1,2])
+    expect(report.group_id).to eq([1, 2])
     expect(report.assets).to include(entry1)
     expect(report.assets).to include(entry2)
     expect(report.assets).not_to include(entry3)

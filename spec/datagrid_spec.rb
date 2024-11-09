@@ -16,13 +16,13 @@ describe Datagrid do
       name: "Star",
       category: "first",
       disabled: false,
-      confirmed: false
+      confirmed: false,
     )
   end
 
   let!(:entry) do
     Entry.create!(
-      group: group, name: "Star", disabled: false, confirmed: false, category: "first"
+      group: group, name: "Star", disabled: false, confirmed: false, category: "first",
     )
   end
 

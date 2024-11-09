@@ -17,7 +17,6 @@ class MongoidEntry
 end
 
 class MongoidGrid < Datagrid::Base
-
   scope do
     MongoidEntry
   end

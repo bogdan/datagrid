@@ -19,8 +19,8 @@ describe Datagrid::Drivers::ActiveRecord do
 
   it "should support append_column_queries" do
     scope = subject.append_column_queries(Entry.where({}),
-                                          [Datagrid::Columns::Column.new(test_report_class, :sum_group_id,
-                                                                         "sum(entries.group_id)")])
+      [Datagrid::Columns::Column.new(test_report_class, :sum_group_id,
+        "sum(entries.group_id)",)],)
     expect(scope.to_sql.strip).to eq('SELECT "entries".*, sum(entries.group_id) AS sum_group_id FROM "entries"')
   end
 
@@ -49,18 +49,18 @@ describe Datagrid::Drivers::ActiveRecord do
     end
     it "includes object created in proper range" do
       expect(subject).to include(
-        Entry.create!(group: Group.create!(created_at: 7.days.ago))
+        Entry.create!(group: Group.create!(created_at: 7.days.ago)),
       )
     end
 
     it "excludes object created before the range" do
       expect(subject).to_not include(
-        Entry.create!(created_at: 7.days.ago, group: Group.create!(created_at: 11.days.ago))
+        Entry.create!(created_at: 7.days.ago, group: Group.create!(created_at: 11.days.ago)),
       )
     end
     it "excludes object created after the range" do
       expect(subject).to_not include(
-        Entry.create!(created_at: 7.days.ago, group: Group.create!(created_at: 4.days.ago))
+        Entry.create!(created_at: 7.days.ago, group: Group.create!(created_at: 4.days.ago)),
       )
     end
   end

@@ -15,7 +15,7 @@ describe Datagrid::Drivers::MongoMapper, :mongomapper do
     describe "api" do
       subject do
         MongoMapperGrid.new(
-          defined?(_attributes) ? _attributes : {}
+          defined?(_attributes) ? _attributes : {},
         )
       end
 
@@ -23,14 +23,14 @@ describe Datagrid::Drivers::MongoMapper, :mongomapper do
         MongoMapperEntry.create!(
           group_id: 2,
           name: "Main First",
-          disabled: false
+          disabled: false,
         )
       end
       let!(:second) do
         MongoMapperEntry.create!(
           group_id: 3,
           name: "Main Second",
-          disabled: true
+          disabled: true,
         )
       end
 

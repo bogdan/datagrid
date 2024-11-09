@@ -26,21 +26,21 @@ describe Datagrid::Scaffold do
 
   describe ".controller_code" do
     it "works" do
-      expect(subject.controller_code).to eq(<<-RUBY)
-class UsersController < ApplicationController
-  def index
-    @grid = UsersGrid.new(grid_params) do |scope|
-      scope.page(params[:page])
-    end
-  end
+      expect(subject.controller_code).to eq(<<~RUBY)
+        class UsersController < ApplicationController
+          def index
+            @grid = UsersGrid.new(grid_params) do |scope|
+              scope.page(params[:page])
+            end
+          end
 
-  protected
+          protected
 
-  def grid_params
-    params.fetch(:users_grid, {}).permit!
-  end
-end
-RUBY
+          def grid_params
+            params.fetch(:users_grid, {}).permit!
+          end
+        end
+      RUBY
     end
   end
 end

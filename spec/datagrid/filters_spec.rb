@@ -46,7 +46,6 @@ describe Datagrid::Filters do
     class ModelWithoutTable < ActiveRecord::Base; end
     expect(ModelWithoutTable).not_to be_table_exists
     class TheReport < Datagrid::Base
-
       scope { ModelWithoutTable }
 
       filter(:name)
@@ -229,7 +228,7 @@ describe Datagrid::Filters do
       filters = {
         id: [1, 2],
         name: [["a", 1], ["b", 2]],
-        category: { a: 1, b: 2 }
+        category: { a: 1, b: 2 },
       }
       grid = test_report do
         scope { Entry }
@@ -268,7 +267,7 @@ describe Datagrid::Filters do
       end
 
       expect(NsInspect::TestGrid.inspect).to eq(
-        "NsInspect::TestGrid(id: integer, name: string, current_user: default)"
+        "NsInspect::TestGrid(id: integer, name: string, current_user: default)",
       )
     end
 

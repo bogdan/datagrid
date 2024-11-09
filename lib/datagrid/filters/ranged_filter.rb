@@ -3,18 +3,17 @@
 module Datagrid
   module Filters
     module RangedFilter
-      SERIALIZED_RANGE =  /\A(.*)\.{2,3}(.*)\z/
+      SERIALIZED_RANGE = %r{\A(.*)\.{2,3}(.*)\z}.freeze
 
       def parse_values(value)
-        unless range?
-          return super
-        end
+        return super unless range?
+
         case value
         when String
-          if value == '..' || value == '...'
+          if ["..", "..."].include?(value)
             nil
-          elsif match = value.match(SERIALIZED_RANGE)
-            to_range(match.captures[0], match.captures[1], value.include?('...'))
+          elsif (match = value.match(SERIALIZED_RANGE))
+            to_range(match.captures[0], match.captures[1], value.include?("..."))
           else
             super
           end
@@ -56,9 +55,7 @@ module Datagrid
         return nil unless to || from
 
         # If wrong range is given - reverse it to be always valid
-        if from && to && from > to
-          from, to = to, from
-        end
+        from, to = to, from if from && to && from > to
         exclusive ? from...to : from..to
       end
 
@@ -69,7 +66,7 @@ module Datagrid
         case result.size
         when 0
           nil
-        when 1,2
+        when 1, 2
           to_range(first, last)
         else
           raise ArgumentError, "Can not create a range from array of more than two elements"

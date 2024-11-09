@@ -27,7 +27,7 @@ module Datagrid
       integer: Filters::IntegerFilter,
       enum: Filters::EnumFilter,
       float: Filters::FloatFilter,
-      dynamic: Filters::DynamicFilter
+      dynamic: Filters::DynamicFilter,
     }.freeze
 
     # @!visibility private
@@ -144,7 +144,7 @@ module Datagrid
     def initialize(...)
       self.filters_array = self.class.filters_array.clone
       filters_array.each do |filter|
-        if value = filter.default(self)
+        if (value = filter.default(self))
           self[filter.name] = value
         end
       end
@@ -219,7 +219,7 @@ module Datagrid
         type = FILTER_TYPES.invert[filter.class].inspect
         raise(
           ::Datagrid::ArgumentError,
-          "#{self.class.name}##{filter.name} with type #{type} can not have select options"
+          "#{self.class.name}##{filter.name} with type #{type} can not have select options",
         )
       end
       filter

@@ -110,7 +110,7 @@ module Datagrid
       driver.reverse_order(assets)
     rescue NotImplementedError
       self.class.order_unsupported(order_column.name,
-                                   "Your ORM do not support reverse order: please specify :order_desc option manually")
+        "Your ORM do not support reverse order: please specify :order_desc option manually",)
     end
 
     def apply_block_order(assets, order)

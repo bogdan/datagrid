@@ -33,7 +33,7 @@ module Datagrid
           select: :optional_columns_select,
           multiple: true,
           dummy: true,
-          **options
+          **options,
         )
       end
     end

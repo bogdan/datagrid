@@ -106,7 +106,7 @@ describe Datagrid::Core do
 
       grid = InspectTest.new(created_at: %w[2014-01-01 2014-08-05], descending: true, order: "name")
       expect(grid.inspect).to eq(
-        "#<InspectTest order: :name, descending: true, created_at: Wed, 01 Jan 2014..Tue, 05 Aug 2014>"
+        "#<InspectTest order: :name, descending: true, created_at: Wed, 01 Jan 2014..Tue, 05 Aug 2014>",
       )
     end
   end
@@ -211,7 +211,7 @@ describe Datagrid::Core do
         filter(:name)
       end
 
-      expect(grid.name).to eq('one')
+      expect(grid.name).to eq("one")
     end
 
     it "doesn't permit attributes when forbidden_attributes_protection is set" do
@@ -236,7 +236,7 @@ describe Datagrid::Core do
 
     it "supports hash attribute assignment" do
       grid = test_report(
-        ActionController::Parameters.new(group_id: {from: 1, to:2})
+        ActionController::Parameters.new(group_id: { from: 1, to: 2 }),
       ) do
         scope { Entry }
         filter(:group_id, :integer, range: true)

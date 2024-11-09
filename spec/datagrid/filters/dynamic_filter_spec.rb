@@ -63,25 +63,25 @@ describe Datagrid::Filters::DynamicFilter do
   it "should nullify incorrect value for integer" do
     report.condition = [:group_id, "<=", "aa"]
     expect(report.condition.to_h).to eq(
-      {field: :group_id, operation: "<=", value: nil}
+      { field: :group_id, operation: "<=", value: nil },
     )
   end
 
   it "should nullify incorrect value for date" do
     report.condition = [:shipping_date, "<=", "aa"]
     expect(report.condition.to_h).to eq({
-      field: :shipping_date, operation: "<=", value: nil
+      field: :shipping_date, operation: "<=", value: nil,
     })
   end
 
   it "should nullify incorrect value for datetime" do
     report.condition = [:created_at, "<=", "aa"]
-    expect(report.condition.to_h).to eq({field: :created_at, operation: "<=", value: nil})
+    expect(report.condition.to_h).to eq({ field: :created_at, operation: "<=", value: nil })
   end
 
   it "should support date comparation operation by timestamp column" do
     report.condition = [:created_at, "<=", "1986-08-05"]
-    expect(report.condition.to_h).to eq({field: :created_at, operation: "<=", value: Date.parse("1986-08-05")})
+    expect(report.condition.to_h).to eq({ field: :created_at, operation: "<=", value: Date.parse("1986-08-05") })
     expect(report.assets).to include(Entry.create!(created_at: Time.parse("1986-08-04 01:01:01")))
     expect(report.assets).to include(Entry.create!(created_at: Time.parse("1986-08-05 23:59:59")))
     expect(report.assets).to include(Entry.create!(created_at: Time.parse("1986-08-05 00:00:00")))
@@ -91,7 +91,7 @@ describe Datagrid::Filters::DynamicFilter do
 
   it "should support date = operation by timestamp column" do
     report.condition = [:created_at, "=", "1986-08-05"]
-    expect(report.condition.to_h).to eq({field: :created_at, operation: "=", value: Date.parse("1986-08-05")})
+    expect(report.condition.to_h).to eq({ field: :created_at, operation: "=", value: Date.parse("1986-08-05") })
     expect(report.assets).not_to include(Entry.create!(created_at: Time.parse("1986-08-04 23:59:59")))
     expect(report.assets).to include(Entry.create!(created_at: Time.parse("1986-08-05 23:59:59")))
     expect(report.assets).to include(Entry.create!(created_at: Time.parse("1986-08-05 00:00:01")))
@@ -102,7 +102,7 @@ describe Datagrid::Filters::DynamicFilter do
 
   it "should support date =~ operation by timestamp column" do
     report.condition = [:created_at, "=~", "1986-08-05"]
-    expect(report.condition.to_h).to eq({field: :created_at, operation: "=~", value: Date.parse("1986-08-05")})
+    expect(report.condition.to_h).to eq({ field: :created_at, operation: "=~", value: Date.parse("1986-08-05") })
     expect(report.assets).not_to include(Entry.create!(created_at: Time.parse("1986-08-04 23:59:59")))
     expect(report.assets).to include(Entry.create!(created_at: Time.parse("1986-08-05 23:59:59")))
     expect(report.assets).to include(Entry.create!(created_at: Time.parse("1986-08-05 00:00:01")))
@@ -129,7 +129,7 @@ describe Datagrid::Filters::DynamicFilter do
       scope { Entry }
       filter(
         :condition, :dynamic, allow_nil: true, allow_blank: true,
-        operations: [">=", "<="]
+        operations: [">=", "<="],
       ) do |(field, operation, value), scope|
         if value.blank?
           scope.where(disabled: false)
@@ -153,7 +153,7 @@ describe Datagrid::Filters::DynamicFilter do
     grid = test_report do
       scope { Entry }
       filter(
-        :condition, :dynamic, operations: ["=", "!="]
+        :condition, :dynamic, operations: ["=", "!="],
       ) do |filter, scope|
         if filter.operation == "!="
           scope.where("#{filter.field} != ?", filter.value)
@@ -181,14 +181,14 @@ describe Datagrid::Filters::DynamicFilter do
   end
 
   it "supports assignment of string keys hash" do
-    report.condition =  {
+    report.condition = {
       field: "shipping_date",
       operation: "<>",
       value: "1996-08-05",
     }.stringify_keys
 
     expect(report.condition.to_h).to eq({
-      field: 'shipping_date', operation: '<>', value: Date.parse('1996-08-05')
+      field: "shipping_date", operation: "<>", value: Date.parse("1996-08-05"),
     })
   end
 end

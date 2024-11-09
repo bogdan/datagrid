@@ -6,7 +6,6 @@ require "datagrid/engine"
 
 # @main README.md
 module Datagrid
-
   # @!visibility private
   def self.included(base)
     Utils.warn_once("Including Datagrid is deprecated. Inherit Datagrid::Base instead.")
@@ -25,6 +24,6 @@ module Datagrid
   class ColumnUnavailableError < StandardError; end
 end
 
-require 'datagrid/base'
+require "datagrid/base"
 require "datagrid/scaffold"
 I18n.load_path << File.expand_path("datagrid/locale/en.yml", __dir__)

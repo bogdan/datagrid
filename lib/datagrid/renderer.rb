@@ -27,25 +27,25 @@ module Datagrid
 
     def table(grid, assets, **options)
       _render_partial("table", options[:partials],
-                      {
-                        grid: grid,
-                        options: options,
-                        assets: assets
-                      })
+        {
+          grid: grid,
+          options: options,
+          assets: assets,
+        },)
     end
 
     def header(grid, options = {})
       options[:order] = true unless options.key?(:order)
 
       _render_partial("head", options[:partials],
-                      { grid: grid, options: options })
+        { grid: grid, options: options },)
     end
 
     def rows(grid, assets = grid.assets, **options, &block)
       @template.safe_join(
         assets.map do |asset|
           row(grid, asset, **options, &block)
-        end.to_a
+        end.to_a,
       )
     end
 
@@ -57,7 +57,7 @@ module Datagrid
 
     def order_for(grid, column, options = {})
       _render_partial("order_for", options[:partials],
-                      { grid: grid, column: column })
+        { grid: grid, column: column },)
     end
 
     def order_path(grid, column, descending, request)
@@ -65,7 +65,7 @@ module Datagrid
       query = request&.query_parameters || {}
       ActionDispatch::Http::URL.path_for(
         path: request&.path || "/",
-        params: query.merge(grid.query_params(order: column.name, descending: descending))
+        params: query.merge(grid.query_params(order: column.name, descending: descending)),
       )
     end
 
@@ -74,7 +74,7 @@ module Datagrid
     def _render_partial(partial_name, partials_path, locals = {})
       @template.render({
         partial: File.join(partials_path || "datagrid", partial_name),
-        locals: locals
+        locals: locals,
       })
     end
   end
@@ -118,10 +118,10 @@ module Datagrid
 
       def to_s
         @renderer.send(:_render_partial, "row", options[:partials], {
-                         grid: grid,
-                         options: options,
-                         asset: asset
-                       })
+          grid: grid,
+          options: options,
+          asset: asset,
+        },)
       end
 
       protected

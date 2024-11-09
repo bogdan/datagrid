@@ -32,13 +32,11 @@ module Datagrid
       type = options.delete(:type)&.to_sym
       if %i[datetime-local date].include?(type)
         if options.key?(:value) && options[:value].nil? &&
-            # https://github.com/rails/rails/pull/53387
-            options[:value] = ""
+           # https://github.com/rails/rails/pull/53387
+           (options[:value] = "")
         end
-      else
-        if options[:value]
-          options[:value] = filter.format(options[:value])
-        end
+      elsif options[:value]
+        options[:value] = filter.format(options[:value])
       end
       case type
       when :"datetime-local"
@@ -60,7 +58,7 @@ module Datagrid
           {
             include_blank: filter.include_blank,
             prompt: filter.prompt,
-            include_hidden: false
+            include_hidden: false,
           },
           multiple: filter.multiple?,
           **options,
@@ -106,8 +104,8 @@ module Datagrid
             elements: elements,
             form: self,
             filter: filter,
-            options: options
-          }
+            options: options,
+          },
         )
       else
         datagrid_filter_input(filter, **options, type: :select, &block)
@@ -140,10 +138,10 @@ module Datagrid
           include_blank: filter.include_blank,
           prompt: filter.prompt,
           include_hidden: false,
-          selected: field
+          selected: field,
         },
         **add_html_classes(options, "datagrid-dynamic-field"),
-        name: @template.field_name(object_name, filter.name, 'field')
+        name: @template.field_name(object_name, filter.name, "field"),
       )
       operation_input = dynamic_filter_select(
         filter.name, filter.operations_select,
@@ -151,16 +149,16 @@ module Datagrid
           include_blank: false,
           include_hidden: false,
           prompt: false,
-          selected: operation
+          selected: operation,
         },
         **add_html_classes(options, "datagrid-dynamic-operation"),
-        name: @template.field_name(object_name, filter.name, 'operation')
+        name: @template.field_name(object_name, filter.name, "operation"),
       )
       value_input = datagrid_filter_input(
         filter.name,
         **add_html_classes(options, "datagrid-dynamic-value"),
         value: value,
-        name: @template.field_name(object_name, filter.name, 'value')
+        name: @template.field_name(object_name, filter.name, "value"),
       )
       [field_input, operation_input, value_input].join("\n").html_safe
     end
@@ -182,7 +180,7 @@ module Datagrid
         from_options = datagrid_range_filter_options(object, filter, :from, **options)
         to_options = datagrid_range_filter_options(object, filter, :to, **options)
         render_partial "range_filter", {
-          from_options: from_options, to_options: to_options, filter: filter, form: self
+          from_options: from_options, to_options: to_options, filter: filter, form: self,
         }
       else
         datagrid_filter_input(filter, **options)

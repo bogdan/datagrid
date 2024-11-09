@@ -201,8 +201,8 @@ module Datagrid
     def assets
       append_column_preload(
         driver.append_column_queries(
-          super, columns.select(&:query)
-        )
+          super, columns.select(&:query),
+        ),
       )
     end
 
@@ -277,7 +277,7 @@ module Datagrid
       CSV.generate(
         headers: header(*column_names),
         write_headers: true,
-        **options
+        **options,
       ) do |csv|
         each_with_batches do |asset|
           csv << row_for(asset, *column_names)
@@ -294,7 +294,7 @@ module Datagrid
     #   grid.columns(:id, :category) # => id and category column
     def columns(*column_names, data: false, html: false)
       self.class.filter_columns(
-        columns_array, *column_names, data: data, html: html
+        columns_array, *column_names, data: data, html: html,
       ).select do |column|
         column.enabled?(self)
       end
@@ -480,9 +480,9 @@ module Datagrid
       end
     rescue NotImplementedError
       raise Datagrid::ConfigurationError,
-            <<~MSG
-              #{self} is setup to use cache. But there was appropriate cache key found for #{asset.inspect}.
-            MSG
+        <<~MSG
+          #{self} is setup to use cache. But there was appropriate cache key found for #{asset.inspect}.
+        MSG
     end
 
     def map_with_batches(&block)

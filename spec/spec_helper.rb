@@ -39,23 +39,23 @@ if NO_MONGO
 else
   begin
     Mongoid.load_configuration({
-                                 "clients" =>
-                                 {
-                                   "default" =>
-                                   {
-                                     "hosts" => ["localhost:27017"],
-                                     "database" => "datagrid_mongoid",
-                                     options: {
-                                       max_read_retries: 0,
-                                       retry_reads: false,
-                                       connect_timeout: 2,
-                                       wait_queue_timeout: 2,
-                                       server_selection_timeout: 2,
-                                       socket_timeout: 1
-                                     }
-                                   }
-                                 }
-                               })
+      "clients" =>
+      {
+        "default" =>
+        {
+          "hosts" => ["localhost:27017"],
+          "database" => "datagrid_mongoid",
+          options: {
+            max_read_retries: 0,
+            retry_reads: false,
+            connect_timeout: 2,
+            wait_queue_timeout: 2,
+            server_selection_timeout: 2,
+            socket_timeout: 1,
+          },
+        },
+      },
+    })
 
     Mongoid.client(:default).collections # check mongo connection
 
@@ -94,9 +94,9 @@ end
 
 def action_view_template
   context = ActionView::LookupContext.new([
-                                            File.expand_path("../app/views", __dir__),
-                                            File.expand_path("support/test_partials", __dir__)
-                                          ], {})
+    File.expand_path("../app/views", __dir__),
+    File.expand_path("support/test_partials", __dir__),
+  ], {},)
   Datagrid::Engine.extend_modules
   template = ActionView::Base.with_empty_template_cache.new(context, {}, ActionController::Base.new)
   allow(template).to receive(:protect_against_forgery?).and_return(false)

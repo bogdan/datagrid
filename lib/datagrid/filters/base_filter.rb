@@ -11,7 +11,7 @@ end
 module Datagrid
   module Filters
     class BaseFilter
-      class_attribute :default_input_options, instance_writer: false, default: {type: 'text'}
+      class_attribute :default_input_options, instance_writer: false, default: { type: "text" }
 
       attr_accessor :grid_class, :options, :block, :name
 
@@ -41,7 +41,7 @@ module Datagrid
         unless grid_object.driver.match?(result)
           raise(
             Datagrid::FilteringError,
-            "Filter #{name.inspect} unapplicable: result no longer match #{grid_object.driver.class}."
+            "Filter #{name.inspect} unapplicable: result no longer match #{grid_object.driver.class}.",
           )
         end
 
@@ -57,7 +57,7 @@ module Datagrid
           end
         elsif value.is_a?(Array)
           raise Datagrid::ArgumentError,
-                "#{grid_class}##{name} filter can not accept Array argument. Use :multiple option."
+            "#{grid_class}##{name} filter can not accept Array argument. Use :multiple option."
         else
           parse(value)
         end

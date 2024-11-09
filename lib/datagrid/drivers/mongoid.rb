@@ -73,7 +73,7 @@ module Datagrid
 
           [Float] => :float,
 
-          [Integer] => :integer
+          [Integer] => :integer,
         }.each do |keys, value|
           return value if keys.include?(type)
         end

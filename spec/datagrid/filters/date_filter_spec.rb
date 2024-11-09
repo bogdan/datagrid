@@ -37,7 +37,7 @@ describe Datagrid::Filters::DateFilter do
     e3 = Entry.create!(created_at: 1.day.ago)
     from = 5.days.ago
     to = 3.days.ago
-    report = test_report(created_at: {from: , to:}) do
+    report = test_report(created_at: { from: from, to: to }) do
       scope { Entry }
       filter(:created_at, :date, range: true)
     end
@@ -47,13 +47,13 @@ describe Datagrid::Filters::DateFilter do
     expect(report.assets).not_to include(e3)
     report.created_at = {}
     expect(report.created_at).to eq(nil)
-    report.created_at = {from: nil, to: nil}
+    report.created_at = { from: nil, to: nil }
     expect(report.created_at).to eq(nil)
-    report.created_at = {from: Date.today, to: nil}
+    report.created_at = { from: Date.today, to: nil }
     expect(report.created_at).to eq(Date.today..nil)
-    report.created_at = {from: nil, to: Date.today}
+    report.created_at = { from: nil, to: Date.today }
     expect(report.created_at).to eq(nil..Date.today)
-    report.created_at = {from: Time.now, to: Time.now}
+    report.created_at = { from: Time.now, to: Time.now }
     expect(report.created_at).to eq(Date.today..Date.today)
   end
 

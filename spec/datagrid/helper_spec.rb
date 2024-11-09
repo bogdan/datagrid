@@ -25,7 +25,7 @@ describe Datagrid::Helper do
   let(:group) { Group.create!(name: "Pop") }
   let!(:entry) do
     Entry.create!(
-      group: group, name: "Star", disabled: false, confirmed: false, category: "first"
+      group: group, name: "Star", disabled: false, confirmed: false, category: "first",
     )
   end
   let(:grid) { SimpleReport.new }
@@ -42,7 +42,7 @@ describe Datagrid::Helper do
       datagrid_table = subject.datagrid_table(grid)
 
       expect(datagrid_table).to match_css_pattern(
-        "table.datagrid-table tr td.datagrid-no-results" => 1
+        "table.datagrid-table tr td.datagrid-no-results" => 1,
       )
       expect(datagrid_table).to include(I18n.t("datagrid.no_results"))
     end
@@ -51,20 +51,20 @@ describe Datagrid::Helper do
   describe ".datagrid_table" do
     it "should have grid class as html class on table" do
       expect(subject.datagrid_table(grid)).to match_css_pattern(
-        "table.datagrid-table" => 1
+        "table.datagrid-table" => 1,
       )
     end
     it "should return data table html" do
       datagrid_table = subject.datagrid_table(grid)
 
       expect(datagrid_table).to match_css_pattern({
-                                                    "table.datagrid-table tr th[data-column=group] div.datagrid-order" => 1,
-                                                    "table.datagrid-table tr th[data-column=group]" => /Group.*/,
-                                                    "table.datagrid-table tr th[data-column=name] div.datagrid-order" => 1,
-                                                    "table.datagrid-table tr th[data-column=name]" => /Name.*/,
-                                                    "table.datagrid-table tr td[data-column=group]" => "Pop",
-                                                    "table.datagrid-table tr td[data-column=name]" => "Star"
-                                                  })
+        "table.datagrid-table tr th[data-column=group] div.datagrid-order" => 1,
+        "table.datagrid-table tr th[data-column=group]" => %r{Group.*},
+        "table.datagrid-table tr th[data-column=name] div.datagrid-order" => 1,
+        "table.datagrid-table tr th[data-column=name]" => %r{Name.*},
+        "table.datagrid-table tr td[data-column=group]" => "Pop",
+        "table.datagrid-table tr td[data-column=name]" => "Star",
+      })
     end
 
     it "should support giving assets explicitly" do
@@ -72,17 +72,18 @@ describe Datagrid::Helper do
       datagrid_table = subject.datagrid_table(grid, [entry])
 
       expect(datagrid_table).to match_css_pattern({
-                                                    "table.datagrid-table tr th[data-column=group] div.datagrid-order" => 1,
-                                                    "table.datagrid-table tr th[data-column=group]" => /Group.*/,
-                                                    "table.datagrid-table tr th[data-column=name] div.datagrid-order" => 1,
-                                                    "table.datagrid-table tr th[data-column=name]" => /Name.*/,
-                                                    "table.datagrid-table tr td[data-column=group]" => "Pop",
-                                                    "table.datagrid-table tr td[data-column=name]" => "Star"
-                                                  })
+        "table.datagrid-table tr th[data-column=group] div.datagrid-order" => 1,
+        "table.datagrid-table tr th[data-column=group]" => %r{Group.*},
+        "table.datagrid-table tr th[data-column=name] div.datagrid-order" => 1,
+        "table.datagrid-table tr th[data-column=name]" => %r{Name.*},
+        "table.datagrid-table tr td[data-column=group]" => "Pop",
+        "table.datagrid-table tr td[data-column=name]" => "Star",
+      })
     end
 
     it "should support no order given" do
-      expect(subject.datagrid_table(grid, [entry], order: false)).to match_css_pattern("table.datagrid-table th .datagrid-order" => 0)
+      expect(subject.datagrid_table(grid, [entry],
+        order: false,)).to match_css_pattern("table.datagrid-table th .datagrid-order" => 0)
     end
 
     it "should support columns option" do
@@ -90,7 +91,7 @@ describe Datagrid::Helper do
         "table.datagrid-table th[data-column=name]" => 1,
         "table.datagrid-table td[data-column=name]" => 1,
         "table.datagrid-table th[data-column=group]" => 0,
-        "table.datagrid-table td[data-column=group]" => 0
+        "table.datagrid-table td[data-column=group]" => 0,
       )
     end
 
@@ -108,7 +109,7 @@ describe Datagrid::Helper do
           "table.datagrid-table th[data-column=name]" => 1,
           "table.datagrid-table td[data-column=name]" => 1,
           "table.datagrid-table th[data-column=category]" => 0,
-          "table.datagrid-table td[data-column=category]" => 0
+          "table.datagrid-table td[data-column=category]" => 0,
         )
       end
     end
@@ -136,7 +137,7 @@ describe Datagrid::Helper do
 
       it "renders namespaced table partial" do
         rendered_partial = subject.datagrid_table(
-          grid, [entry], partials: "client/datagrid"
+          grid, [entry], partials: "client/datagrid",
         )
         expect(rendered_partial).to include "Namespaced table partial."
         expect(rendered_partial).to include "Namespaced row partial."
@@ -157,7 +158,7 @@ describe Datagrid::Helper do
       it "should render table" do
         expect(subject.datagrid_table(grid)).to match_css_pattern(
           "table.datagrid-table th[data-column=name]" => 1,
-          "table.datagrid-table td[data-column=name]" => 2
+          "table.datagrid-table td[data-column=name]" => 2,
         )
       end
     end
@@ -173,7 +174,7 @@ describe Datagrid::Helper do
       it "should render table" do
         expect(subject.datagrid_table(grid)).to match_css_pattern(
           "table.datagrid-table th[data-column=name]" => 1,
-          "table.datagrid-table td[data-column=name]" => 2
+          "table.datagrid-table td[data-column=name]" => 2,
         )
       end
     end
@@ -186,7 +187,7 @@ describe Datagrid::Helper do
         column(:name)
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name].datagrid-order-active-asc" => "Star"
+        "tr td[data-column=name].datagrid-order-active-asc" => "Star",
       )
     end
     it "should add ordering classes to column" do
@@ -197,9 +198,9 @@ describe Datagrid::Helper do
       expect(
         subject.datagrid_rows(rp) do |row|
           subject.content_tag(:strong, row.name)
-        end
+        end,
       ).to match_css_pattern(
-        "strong" => "Star"
+        "strong" => "Star",
       )
     end
 
@@ -209,7 +210,7 @@ describe Datagrid::Helper do
         column(:name)
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name].datagrid-order-active-desc" => "Star"
+        "tr td[data-column=name].datagrid-order-active-desc" => "Star",
       )
     end
 
@@ -220,7 +221,7 @@ describe Datagrid::Helper do
       end
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name]" => "Star"
+        "tr td[data-column=name]" => "Star",
       )
     end
 
@@ -232,7 +233,7 @@ describe Datagrid::Helper do
         end
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name] span" => "Star"
+        "tr td[data-column=name] span" => "Star",
       )
     end
 
@@ -243,7 +244,7 @@ describe Datagrid::Helper do
       end
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name]" => "Star"
+        "tr td[data-column=name]" => "Star",
       )
     end
 
@@ -256,7 +257,7 @@ describe Datagrid::Helper do
       end
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name]" => "Star"
+        "tr td[data-column=name]" => "Star",
       )
     end
 
@@ -267,7 +268,7 @@ describe Datagrid::Helper do
       end
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name]" => "Star"
+        "tr td[data-column=name]" => "Star",
       )
     end
 
@@ -277,7 +278,7 @@ describe Datagrid::Helper do
         column(:name, html: ->(data) { content_tag :h1, data })
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name] h1" => "Star"
+        "tr td[data-column=name] h1" => "Star",
       )
     end
 
@@ -289,7 +290,7 @@ describe Datagrid::Helper do
         end
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name] em" => "STAR"
+        "tr td[data-column=name] em" => "STAR",
       )
     end
 
@@ -301,7 +302,7 @@ describe Datagrid::Helper do
         end
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name] span" => "Star-Entry"
+        "tr td[data-column=name] span" => "Star-Entry",
       )
     end
 
@@ -310,10 +311,10 @@ describe Datagrid::Helper do
         scope { Entry }
         column(:name, html: lambda { |data, model|
           content_tag :h1, "#{data}-#{model.name.downcase}"
-        })
+        },)
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name] h1" => "Star-star"
+        "tr td[data-column=name] h1" => "Star-star",
       )
     end
 
@@ -322,10 +323,10 @@ describe Datagrid::Helper do
         scope { Entry }
         column(:name, html: lambda { |data, model, grid|
           content_tag :h1, "#{data}-#{model.name.downcase}-#{grid.assets.klass}"
-        })
+        },)
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name] h1" => "Star-star-Entry"
+        "tr td[data-column=name] h1" => "Star-star-Entry",
       )
     end
 
@@ -334,12 +335,12 @@ describe Datagrid::Helper do
         scope { Entry }
         column(:name, html: lambda { |data, model|
           content_tag :h1, "#{data}-#{model.name}"
-        }) do
+        },) do
           name.upcase
         end
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name] h1" => "STAR-Star"
+        "tr td[data-column=name] h1" => "STAR-Star",
       )
     end
 
@@ -348,12 +349,12 @@ describe Datagrid::Helper do
         scope { Entry }
         column(:name, html: lambda { |data, model, grid|
           content_tag :h1, "#{data}-#{model.name}-#{grid.assets.klass}"
-        }) do
+        },) do
           name.upcase
         end
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name] h1" => "STAR-Star-Entry"
+        "tr td[data-column=name] h1" => "STAR-Star-Entry",
       )
     end
 
@@ -364,10 +365,10 @@ describe Datagrid::Helper do
         column(:category)
       end
       expect(subject.datagrid_rows(rp, [entry], columns: [:name])).to match_css_pattern(
-        "tr td[data-column=name]" => "Star"
+        "tr td[data-column=name]" => "Star",
       )
       expect(subject.datagrid_rows(rp, [entry], columns: [:name])).to match_css_pattern(
-        "tr td[data-column=category]" => 0
+        "tr td[data-column=category]" => 0,
       )
     end
 
@@ -378,7 +379,7 @@ describe Datagrid::Helper do
       end
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name].my_class" => "Star"
+        "tr td[data-column=name].my_class" => "Star",
       )
     end
 
@@ -394,7 +395,7 @@ describe Datagrid::Helper do
       end
       it "should ignore them" do
         expect(subject.datagrid_rows(grid, [entry])).to match_css_pattern(
-          "td[data-column=name]" => 1
+          "td[data-column=name]" => 1,
         )
       end
     end
@@ -435,9 +436,9 @@ describe Datagrid::Helper do
   describe ".datagrid_form_for" do
     it "returns namespaced partial if partials options is passed" do
       rendered_form = subject.datagrid_form_for(grid, {
-                                                  url: "",
-                                                  partials: "client/datagrid"
-                                                })
+        url: "",
+        partials: "client/datagrid",
+      },)
       expect(rendered_form).to include "Namespaced form partial."
     end
     it "should render form and filter inputs" do
@@ -452,7 +453,7 @@ describe Datagrid::Helper do
         "form .datagrid-filter[data-filter=category][data-type=string] label" => "Category",
         "form .datagrid-filter input[name='form_for_grid[category]'][value=hello]" => 1,
         "form .datagrid-actions input[name=commit][value=Search]" => 1,
-        "form .datagrid-actions a.datagrid-reset[href='/location']" => 1
+        "form .datagrid-actions a.datagrid-reset[href='/location']" => 1,
       )
     end
     it "should support html classes for grid class with namespace" do
@@ -465,7 +466,7 @@ describe Datagrid::Helper do
       expect(subject.datagrid_form_for(Ns22::TestGrid.new, url: "grid")).to match_css_pattern(
         "form.datagrid-form" => 1,
         "form.datagrid-form label[for=ns22_test_grid_id]" => 1,
-        "form.datagrid-form input#ns22_test_grid_id[name='ns22_test_grid[id]']" => 1
+        "form.datagrid-form input#ns22_test_grid_id[name='ns22_test_grid[id]']" => 1,
       )
     end
 
@@ -478,7 +479,7 @@ describe Datagrid::Helper do
         end
       end
       expect(subject.datagrid_form_for(ParamNameGrid81.new, url: "/grid")).to match_css_pattern(
-        "form.datagrid-form input[name='g[id]']" => 1
+        "form.datagrid-form input[name='g[id]']" => 1,
       )
     end
 
@@ -492,9 +493,9 @@ describe Datagrid::Helper do
         end
       end
       rendered_form = subject.datagrid_form_for(PartialDefaultGrid.new, {
-                                                  url: "",
-                                                  partials: "custom_form"
-                                                })
+        url: "",
+        partials: "custom_form",
+      },)
       expect(rendered_form).to include "form_partial_test"
     end
   end

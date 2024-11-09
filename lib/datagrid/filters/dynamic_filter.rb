@@ -15,7 +15,7 @@ module Datagrid
         EQUAL_OPERATION,
         LIKE_OPERATION,
         MORE_EQUAL_OPERATION,
-        LESS_EQUAL_OPERATION
+        LESS_EQUAL_OPERATION,
       ].freeze
       AVAILABLE_OPERATIONS = %w[= =~ >= <=].freeze
 
@@ -48,7 +48,7 @@ module Datagrid
 
         unless operations.include?(operation)
           raise Datagrid::FilteringError,
-                "Unknown operation: #{operation.inspect}. Available operations: #{operations.join(' ')}"
+            "Unknown operation: #{operation.inspect}. Available operations: #{operations.join(' ')}"
         end
 
         case operation
@@ -70,7 +70,7 @@ module Datagrid
           driver.less_equal(scope, field, value)
         else
           raise Datagrid::FilteringError,
-                "Unknown operation: #{operation.inspect}. Use filter block argument to implement operation"
+            "Unknown operation: #{operation.inspect}. Use filter block argument to implement operation"
         end
       end
 
@@ -91,7 +91,7 @@ module Datagrid
           grid.driver.column_names(grid.scope).map do |name|
             # Mongodb/Rails problem:
             # '_id'.humanize returns ''
-            [name.gsub(/^_/, "").humanize.strip, name]
+            [name.gsub(%r{^_}, "").humanize.strip, name]
           end
         }
       end
@@ -119,16 +119,16 @@ module Datagrid
           else
             raise ArgumentError, object.inspect
           end
-          if grid_class
-            type = grid_class.driver.normalized_column_type(
-              grid_class.scope, field
-            )
-            self.value = type_cast(type, value)
-          end
+          return unless grid_class
+
+          type = grid_class.driver.normalized_column_type(
+            grid_class.scope, field,
+          )
+          self.value = type_cast(type, value)
         end
 
         def inspect
-          {field: field, operation: operation, value: value}
+          { field: field, operation: operation, value: value }
         end
 
         def to_ary
@@ -140,7 +140,7 @@ module Datagrid
         end
 
         def to_h
-          {field: field, operation: operation, value: value}
+          { field: field, operation: operation, value: value }
         end
 
         protected
@@ -152,9 +152,9 @@ module Datagrid
           when :string
             value.to_s
           when :integer
-            value.is_a?(Numeric) || value =~ /^\d/ ?  value.to_i : nil
+            value.is_a?(Numeric) || value =~ %r{^\d} ?  value.to_i : nil
           when :float
-            value.is_a?(Numeric) || value =~ /^\d/ ?  value.to_f : nil
+            value.is_a?(Numeric) || value =~ %r{^\d} ?  value.to_f : nil
           when :date, :timestamp
             Datagrid::Utils.parse_date(value)
           when :boolean

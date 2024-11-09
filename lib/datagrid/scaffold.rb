@@ -15,7 +15,7 @@ module Datagrid
       template "base.rb.erb", base_grid_file unless file_exists?(base_grid_file)
       template "grid.rb.erb", "app/grids/#{grid_class_name.underscore}.rb"
       if file_exists?(grid_controller_file)
-        inject_into_file grid_controller_file, index_action, after: /class .*#{grid_controller_class_name}.*\n/
+        inject_into_file grid_controller_file, index_action, after: %r{class .*#{grid_controller_class_name}.*\n}
       else
         create_file grid_controller_file, controller_code
       end
@@ -26,11 +26,11 @@ module Datagrid
         {
           "css" => " *= require datagrid",
           "css.sass" => " *= require datagrid",
-          "css.scss" => " *= require datagrid"
+          "css.scss" => " *= require datagrid",
         }.each do |extension, string|
           file = "app/assets/stylesheets/application.#{extension}"
           if file_exists?(file)
-            inject_into_file file, "#{string}\n", { before: /.*require_self/ } # before all
+            inject_into_file file, "#{string}\n", { before: %r{.*require_self} } # before all
           end
         end
       end
@@ -45,7 +45,7 @@ module Datagrid
     end
 
     def grid_base_class
-      file_exists?('app/grids/base_grid.rb') ? 'BaseGrid' : 'ApplicationGrid'
+      file_exists?("app/grids/base_grid.rb") ? "BaseGrid" : "ApplicationGrid"
     end
 
     def grid_controller_class_name
@@ -72,7 +72,7 @@ module Datagrid
       if defined?(::WillPaginate)
         "will_paginate(@grid.assets)"
       elsif defined?(::Pagy)
-         "pagy_nav(@pagy)"
+        "pagy_nav(@pagy)"
       else
         # Kaminari is default
         "paginate(@grid.assets)"
@@ -112,28 +112,28 @@ module Datagrid
 
     def controller_code
       <<~RUBY
-class #{grid_controller_class_name} < ApplicationController
-  def index
-#{index_code.rstrip}
-  end
+        class #{grid_controller_class_name} < ApplicationController
+          def index
+        #{index_code.rstrip}
+          end
 
-  protected
+          protected
 
-  def grid_params
-    params.fetch(:#{grid_param_name}, {}).permit!
-  end
-end
-RUBY
+          def grid_params
+            params.fetch(:#{grid_param_name}, {}).permit!
+          end
+        end
+      RUBY
     end
 
     def view_code
       indent(<<~ERB)
-<%= datagrid_form_for @grid, url: #{grid_route_name} %>
+        <%= datagrid_form_for @grid, url: #{grid_route_name} %>
 
-<%= #{pagination_helper_code} %>
-<%= #{table_helper_code} %>
-<%= #{pagination_helper_code} %>
-ERB
+        <%= #{pagination_helper_code} %>
+        <%= #{table_helper_code} %>
+        <%= #{pagination_helper_code} %>
+      ERB
     end
 
     protected
