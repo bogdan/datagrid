@@ -1,4 +1,6 @@
-def store_translations(locale, translations, &block)
+# frozen_string_literal: true
+
+def store_translations(locale, translations)
   I18n.backend.store_translations locale, translations
   yield
 ensure

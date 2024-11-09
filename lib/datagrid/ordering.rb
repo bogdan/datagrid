@@ -1,41 +1,36 @@
+# frozen_string_literal: true
+
 require "datagrid/columns"
 
 module Datagrid
   # Raised when grid order value is incorrect
   class OrderUnsupported < StandardError
   end
-  module Ordering
 
+  module Ordering
     # @!visibility private
     def self.included(base)
-      base.extend         ClassMethods
+      base.extend ClassMethods
       base.class_eval do
         include Datagrid::Columns
 
         datagrid_attribute :order do |value|
-          if value.present?
-            value.to_sym
-          else
-            nil
-          end
-
+          value.to_sym if value.present?
         end
 
         datagrid_attribute :descending do |value|
           Datagrid::Utils.booleanize(value)
         end
-        alias descending? descending
-
+        alias_method :descending?, :descending
       end
     end
 
     # @!visibility private
     module ClassMethods
       def order_unsupported(name, reason)
-        raise Datagrid::OrderUnsupported, "Can not sort #{self.inspect} by ##{name}: #{reason}"
+        raise Datagrid::OrderUnsupported, "Can not sort #{inspect} by ##{name}: #{reason}"
       end
     end
-
 
     # @!visibility private
     def assets
@@ -65,33 +60,31 @@ module Datagrid
 
     def apply_order(assets)
       return assets unless order
+
       if order_column.order_by_value?
         assets = assets.sort_by do |asset|
           order_column.order_by_value(asset, self)
         end
         descending? ? assets.reverse : assets
-      else
-        if descending?
-          if order_column.order_desc
-            apply_asc_order(assets, order_column.order_desc)
-          else
-            apply_desc_order(assets, order_column.order)
-          end
+      elsif descending?
+        if order_column.order_desc
+          apply_asc_order(assets, order_column.order_desc)
         else
-          apply_asc_order(assets, order_column.order)
+          apply_desc_order(assets, order_column.order)
         end
+      else
+        apply_asc_order(assets, order_column.order)
       end
     end
 
     def check_order_valid!
       return unless order
+
       column = column_by_name(order)
-      unless column
-        self.class.order_unsupported(order, "no column #{order} in #{self.class}")
-      end
-      unless column.supports_order?
-        self.class.order_unsupported(column.name, "column don't support order" )
-      end
+      self.class.order_unsupported(order, "no column #{order} in #{self.class}") unless column
+      return if column.supports_order?
+
+      self.class.order_unsupported(column.name, "column don't support order")
     end
 
     def apply_asc_order(assets, order)
@@ -113,7 +106,8 @@ module Datagrid
     def reverse_order(assets)
       driver.reverse_order(assets)
     rescue NotImplementedError
-      self.class.order_unsupported(order_column.name, "Your ORM do not support reverse order: please specify :order_desc option manually")
+      self.class.order_unsupported(order_column.name,
+        "Your ORM do not support reverse order: please specify :order_desc option manually",)
     end
 
     def apply_block_order(assets, order)

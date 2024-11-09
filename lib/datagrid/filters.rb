@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require "active_support/core_ext/class/attribute"
 
 module Datagrid
   module Filters
-
     require "datagrid/filters/base_filter"
     require "datagrid/filters/enum_filter"
     require "datagrid/filters/extended_boolean_filter"
@@ -22,13 +23,13 @@ module Datagrid
       datetime: Filters::DateTimeFilter,
       string: Filters::StringFilter,
       default: Filters::DefaultFilter,
-      xboolean: Filters::ExtendedBooleanFilter ,
-      boolean: Filters::BooleanFilter ,
+      xboolean: Filters::ExtendedBooleanFilter,
+      boolean: Filters::BooleanFilter,
       integer: Filters::IntegerFilter,
       enum: Filters::EnumFilter,
       float: Filters::FloatFilter,
-      dynamic: Filters::DynamicFilter
-    }
+      dynamic: Filters::DynamicFilter,
+    }.freeze
 
     # @!visibility private
     DEFAULT_FILTER_BLOCK = Object.new
@@ -37,25 +38,23 @@ module Datagrid
     def self.included(base)
       base.extend ClassMethods
       base.class_eval do
-
         include Datagrid::Core
         include Datagrid::Filters::CompositeFilters
         class_attribute :filters_array, default: []
-
       end
     end
 
     module ClassMethods
-
       # @return [Datagrid::Filters::BaseFilter, nil] filter definition object by name
       def filter_by_name(attribute)
         if attribute.is_a?(Datagrid::Filters::BaseFilter)
           unless ancestors.include?(attribute.grid_class)
             raise ArgumentError, "#{attribute.grid_class}##{attribute.name} filter doen't belong to #{self.class}"
           end
+
           return attribute
         end
-        self.filters.find do |filter|
+        filters.find do |filter|
           filter.name == attribute.to_sym
         end
       end
@@ -74,8 +73,10 @@ module Datagrid
       # Available options:
       #
       # * <tt>:header</tt> - determines the header of the filter
-      # * <tt>:default</tt> - the default filter value. Able to accept a <tt>Proc</tt> in case default should be recalculated
-      # * <tt>:range</tt> - if true, filter can accept two values that are treated as a range that will be used for filtering
+      # * <tt>:default</tt> - the default filter value.
+      #   Able to accept a <tt>Proc</tt> in case default should be recalculated
+      # * <tt>:range</tt> - if true, filter can accept two values
+      #   that are treated as a range that will be used for filtering
       #   Not all of the filter types support this option. Here are the list of types that do:
       #   <tt>:integer</tt>, <tt>:float</tt>, <tt>:date</tt>, <tt>:datetime</tt>, <tt>:string</tt>
       # * <tt>:multiple</tt> -  if true multiple values can be assigned to this filter.
@@ -128,12 +129,13 @@ module Datagrid
       protected
 
       def inherited(child_class)
-        super(child_class)
-        child_class.filters_array = self.filters_array.clone
+        super
+        child_class.filters_array = filters_array.clone
       end
 
       def filters_inspection
         return "no filters" if filters.empty?
+
         filters.map do |filter|
           "#{filter.name}: #{filter.type}"
         end.join(", ")
@@ -141,12 +143,12 @@ module Datagrid
     end
 
     # @!visibility private
-    def initialize(*args, &block)
+    def initialize(...)
       self.filters_array = self.class.filters_array.clone
-      self.filters_array.each do |filter|
+      filters_array.each do |filter|
         self[filter.name] = filter.default(self)
       end
-      super(*args, &block)
+      super
     end
 
     # @!visibility private
@@ -164,7 +166,7 @@ module Datagrid
       filter = filter_by_name(name)
       value = filter_value(filter)
       if value.is_a?(Array)
-        value.map {|v| filter.format(v) }.join(filter.separator)
+        value.map { |v| filter.format(v) }.join(filter.separator)
       else
         filter.format(value)
       end
@@ -177,7 +179,7 @@ module Datagrid
 
     # @return [Array<Object>] assets filtered only by specified filters
     def filter_by(*filters)
-      apply_filters(scope, filters.map{|f| filter_by_name(f)})
+      apply_filters(scope, filters.map { |f| filter_by_name(f) })
     end
 
     # @return [Array] the select options for the filter

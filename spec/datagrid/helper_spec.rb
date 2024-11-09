@@ -1,9 +1,11 @@
-require 'spec_helper'
+# frozen_string_literal: true
+
+require "spec_helper"
 require "active_support/core_ext/hash"
 require "active_support/core_ext/object"
 require "action_controller"
 
-require 'datagrid/renderer'
+require "datagrid/renderer"
 
 describe Datagrid::Helper do
   subject do
@@ -16,15 +18,16 @@ describe Datagrid::Helper do
       Struct.new(:path, :query_parameters).new("/location", {})
     end
     allow(subject).to receive(:url_for) do |options|
-      options.is_a?(String) ? options : ["/location", options.to_param.presence].compact.join('?')
+      options.is_a?(String) ? options : ["/location", options.to_param.presence].compact.join("?")
     end
-
   end
 
-  let(:group) { Group.create!(:name => "Pop") }
-  let!(:entry) {  Entry.create!(
-    group: group, name: "Star", disabled: false, confirmed: false, category: "first"
-  ) }
+  let(:group) { Group.create!(name: "Pop") }
+  let!(:entry) do
+    Entry.create!(
+      group: group, name: "Star", disabled: false, confirmed: false, category: "first",
+    )
+  end
   let(:grid) { SimpleReport.new }
 
   context "when grid has no records" do
@@ -39,7 +42,7 @@ describe Datagrid::Helper do
       datagrid_table = subject.datagrid_table(grid)
 
       expect(datagrid_table).to match_css_pattern(
-        "table.datagrid tr td.noresults" => 1
+        "table.datagrid tr td.noresults" => 1,
       )
       expect(datagrid_table).to include(I18n.t("datagrid.no_results"))
     end
@@ -48,7 +51,7 @@ describe Datagrid::Helper do
   describe ".datagrid_table" do
     it "should have grid class as html class on table" do
       expect(subject.datagrid_table(grid)).to match_css_pattern(
-        "table.datagrid.simple_report" => 1
+        "table.datagrid.simple_report" => 1,
       )
     end
     it "should have namespaced grid class as html class on table" do
@@ -59,8 +62,8 @@ describe Datagrid::Helper do
           column(:id)
         end
       end
-      expect(subject.datagrid_table(::Ns23::TestGrid.new)).to match_css_pattern(
-        "table.datagrid.ns23_test_grid" => 1
+      expect(subject.datagrid_table(Ns23::TestGrid.new)).to match_css_pattern(
+        "table.datagrid.ns23_test_grid" => 1,
       )
     end
     it "should return data table html" do
@@ -68,11 +71,11 @@ describe Datagrid::Helper do
 
       expect(datagrid_table).to match_css_pattern({
         "table.datagrid tr th.group div.order" => 1,
-        "table.datagrid tr th.group" => /Group.*/,
+        "table.datagrid tr th.group" => %r{Group.*},
         "table.datagrid tr th.name div.order" => 1,
-        "table.datagrid tr th.name" => /Name.*/,
+        "table.datagrid tr th.name" => %r{Name.*},
         "table.datagrid tr td.group" => "Pop",
-        "table.datagrid tr td.name" => "Star"
+        "table.datagrid tr td.name" => "Star",
       })
     end
 
@@ -82,11 +85,11 @@ describe Datagrid::Helper do
 
       expect(datagrid_table).to match_css_pattern({
         "table.datagrid tr th.group div.order" => 1,
-        "table.datagrid tr th.group" => /Group.*/,
+        "table.datagrid tr th.group" => %r{Group.*},
         "table.datagrid tr th.name div.order" => 1,
-        "table.datagrid tr th.name" => /Name.*/,
+        "table.datagrid tr th.name" => %r{Name.*},
         "table.datagrid tr td.group" => "Pop",
-        "table.datagrid tr td.name" => "Star"
+        "table.datagrid tr td.name" => "Star",
       })
     end
 
@@ -95,11 +98,11 @@ describe Datagrid::Helper do
     end
 
     it "should support columns option" do
-      expect(subject.datagrid_table(grid, [entry], :columns => [:name])).to match_css_pattern(
+      expect(subject.datagrid_table(grid, [entry], columns: [:name])).to match_css_pattern(
         "table.datagrid th.name" => 1,
         "table.datagrid td.name" => 1,
         "table.datagrid th.group" => 0,
-        "table.datagrid td.group" => 0
+        "table.datagrid td.group" => 0,
       )
     end
 
@@ -117,7 +120,7 @@ describe Datagrid::Helper do
           "table.datagrid th.name" => 1,
           "table.datagrid td.name" => 1,
           "table.datagrid th.category" => 0,
-          "table.datagrid td.category" => 0
+          "table.datagrid td.category" => 0,
         )
       end
     end
@@ -125,7 +128,7 @@ describe Datagrid::Helper do
     context "when grid has no columns" do
       let(:grid) do
         test_report do
-          scope {Entry}
+          scope { Entry }
         end
       end
 
@@ -134,7 +137,7 @@ describe Datagrid::Helper do
       end
     end
 
-    context 'with partials attribute' do
+    context "with partials attribute" do
       let(:grid) do
         test_report do
           scope { Entry }
@@ -143,21 +146,21 @@ describe Datagrid::Helper do
         end
       end
 
-      it 'renders namespaced table partial' do
+      it "renders namespaced table partial" do
         rendered_partial = subject.datagrid_table(
-          grid, [entry], partials: 'client/datagrid'
+          grid, [entry], partials: "client/datagrid",
         )
-        expect(rendered_partial).to include 'Namespaced table partial.'
-        expect(rendered_partial).to include 'Namespaced row partial.'
-        expect(rendered_partial).to include 'Namespaced head partial.'
-        expect(rendered_partial).to include 'Namespaced order_for partial.'
+        expect(rendered_partial).to include "Namespaced table partial."
+        expect(rendered_partial).to include "Namespaced row partial."
+        expect(rendered_partial).to include "Namespaced head partial."
+        expect(rendered_partial).to include "Namespaced order_for partial."
       end
     end
 
     context "when scope is enumerator" do
       let(:grid) do
         test_report do
-          scope { ['a', 'b'].to_enum }
+          scope { %w[a b].to_enum }
           column(:name) do |value|
             value
           end
@@ -173,7 +176,7 @@ describe Datagrid::Helper do
     context "when scope is lazy enumerator" do
       let(:grid) do
         test_report do
-          scope { ['a', 'b'].lazy }
+          scope { %w[a b].lazy }
           column(:name) do |value|
             value
           end
@@ -192,20 +195,20 @@ describe Datagrid::Helper do
     it "should support urls" do
       rp = test_report do
         scope { Entry }
-        column(:name, url: lambda {|model| model.name})
+        column(:name, url: ->(model) { "/entries/#{model.name.downcase}" })
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name a[href=Star]" => "Star"
+        "tr td.name a[href='/entries/star']" => "Star",
       )
     end
 
     it "should support conditional urls" do
       rp = test_report do
         scope { Entry }
-        column(:name, url: lambda {|model| false})
+        column(:name, url: ->(_model) { false })
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name" => "Star"
+        "tr td.name" => "Star",
       )
     end
 
@@ -215,7 +218,7 @@ describe Datagrid::Helper do
         column(:name)
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name.ordered.asc" => "Star"
+        "tr td.name.ordered.asc" => "Star",
       )
     end
     it "should add ordering classes to column" do
@@ -226,9 +229,9 @@ describe Datagrid::Helper do
       expect(
         subject.datagrid_rows(rp) do |row|
           subject.content_tag(:strong, row.name)
-        end
+        end,
       ).to match_css_pattern(
-        "strong" => "Star"
+        "strong" => "Star",
       )
     end
 
@@ -238,7 +241,7 @@ describe Datagrid::Helper do
         column(:name)
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name.ordered.desc" => "Star"
+        "tr td.name.ordered.desc" => "Star",
       )
     end
 
@@ -249,7 +252,7 @@ describe Datagrid::Helper do
       end
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name" => "Star"
+        "tr td.name" => "Star",
       )
     end
 
@@ -261,7 +264,7 @@ describe Datagrid::Helper do
         end
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name span" => "Star"
+        "tr td.name span" => "Star",
       )
     end
 
@@ -272,7 +275,7 @@ describe Datagrid::Helper do
       end
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name" => "Star"
+        "tr td.name" => "Star",
       )
     end
 
@@ -285,40 +288,40 @@ describe Datagrid::Helper do
       end
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name" => "Star"
+        "tr td.name" => "Star",
       )
     end
 
     it "should render :html columns with &:symbol block with a data attribute" do
       rp = test_report do
         scope { Entry }
-        column(:name, html: true, data: 'DATA', &:name)
+        column(:name, html: true, data: "DATA", &:name)
       end
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name" => "Star"
+        "tr td.name" => "Star",
       )
     end
 
     it "should render argument-based html columns" do
       rp = test_report do
         scope { Entry }
-        column(:name, html: lambda {|data| content_tag :h1, data})
+        column(:name, html: ->(data) { content_tag :h1, data })
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name h1" => "Star"
+        "tr td.name h1" => "Star",
       )
     end
 
     it "should render argument-based html columns with custom data" do
       rp = test_report do
         scope { Entry }
-        column(:name, html: lambda {|data| content_tag :em, data}) do
-          self.name.upcase
+        column(:name, html: ->(data) { content_tag :em, data }) do
+          name.upcase
         end
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name em" => "STAR"
+        "tr td.name em" => "STAR",
       )
     end
 
@@ -326,11 +329,11 @@ describe Datagrid::Helper do
       rp = test_report do
         scope { Entry }
         column(:name, html: true) do |model, grid|
-          content_tag(:span, "#{model.name}-#{grid.assets.klass}" )
+          content_tag(:span, "#{model.name}-#{grid.assets.klass}")
         end
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name span" => "Star-Entry"
+        "tr td.name span" => "Star-Entry",
       )
     end
 
@@ -339,10 +342,10 @@ describe Datagrid::Helper do
         scope { Entry }
         column(:name, html: lambda { |data, model|
           content_tag :h1, "#{data}-#{model.name.downcase}"
-        })
+        },)
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name h1" => "Star-star"
+        "tr td.name h1" => "Star-star",
       )
     end
 
@@ -351,10 +354,10 @@ describe Datagrid::Helper do
         scope { Entry }
         column(:name, html: lambda { |data, model, grid|
           content_tag :h1, "#{data}-#{model.name.downcase}-#{grid.assets.klass}"
-        })
+        },)
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name h1" => "Star-star-Entry"
+        "tr td.name h1" => "Star-star-Entry",
       )
     end
 
@@ -363,12 +366,12 @@ describe Datagrid::Helper do
         scope { Entry }
         column(:name, html: lambda { |data, model|
           content_tag :h1, "#{data}-#{model.name}"
-        }) do
-          self.name.upcase
+        },) do
+          name.upcase
         end
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name h1" => "STAR-Star"
+        "tr td.name h1" => "STAR-Star",
       )
     end
 
@@ -377,12 +380,12 @@ describe Datagrid::Helper do
         scope { Entry }
         column(:name, html: lambda { |data, model, grid|
           content_tag :h1, "#{data}-#{model.name}-#{grid.assets.klass}"
-        }) do
-          self.name.upcase
+        },) do
+          name.upcase
         end
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name h1" => "STAR-Star-Entry"
+        "tr td.name h1" => "STAR-Star-Entry",
       )
     end
 
@@ -392,29 +395,29 @@ describe Datagrid::Helper do
         column(:name)
         column(:category)
       end
-      expect(subject.datagrid_rows(rp, [entry], :columns => [:name])).to match_css_pattern(
-        "tr td.name" => "Star"
+      expect(subject.datagrid_rows(rp, [entry], columns: [:name])).to match_css_pattern(
+        "tr td.name" => "Star",
       )
-      expect(subject.datagrid_rows(rp, [entry], :columns => [:name])).to match_css_pattern(
-        "tr td.category" => 0
+      expect(subject.datagrid_rows(rp, [entry], columns: [:name])).to match_css_pattern(
+        "tr td.category" => 0,
       )
     end
 
     it "should allow CSS classes to be specified for a column" do
       rp = test_report do
         scope { Entry }
-        column(:name, :class => 'my_class')
+        column(:name, class: "my_class")
       end
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td.name.my_class" => "Star"
+        "tr td.name.my_class" => "Star",
       )
     end
 
     context "when grid has complicated columns" do
       let(:grid) do
-        test_report(:name => 'Hello') do
-          scope {Entry}
+        test_report(name: "Hello") do
+          scope { Entry }
           filter(:name)
           column(:name) do |model, grid|
             "'#{model.name}' filtered by '#{grid.name}'"
@@ -423,29 +426,27 @@ describe Datagrid::Helper do
       end
       it "should ignore them" do
         expect(subject.datagrid_rows(grid, [entry])).to match_css_pattern(
-          "td.name" => 1
+          "td.name" => 1,
         )
       end
     end
 
     it "should escape html" do
-      entry.update!(:name => "<div>hello</div>")
-      expect(subject.datagrid_rows(grid, [entry], :columns => [:name])).to equal_to_dom(<<-HTML)
+      entry.update!(name: "<div>hello</div>")
+      expect(subject.datagrid_rows(grid, [entry], columns: [:name])).to equal_to_dom(<<-HTML)
        <tr><td class="name">&lt;div&gt;hello&lt;/div&gt;</td></tr>
-        HTML
+      HTML
     end
 
     it "should not escape safe html" do
-      entry.update!(:name => "<div>hello</div>")
+      entry.update!(name: "<div>hello</div>")
       grid.column(:safe_name) do |model|
         model.name.html_safe
       end
-      expect(subject.datagrid_rows(grid, [entry], :columns => [:safe_name])).to equal_to_dom(<<-HTML)
+      expect(subject.datagrid_rows(grid, [entry], columns: [:safe_name])).to equal_to_dom(<<-HTML)
        <tr><td class="safe_name"><div>hello</div></td></tr>
-        HTML
-
+      HTML
     end
-
   end
 
   describe ".datagrid_order_for" do
@@ -456,22 +457,21 @@ describe Datagrid::Helper do
         column(:category)
       end
       object = OrderedGrid.new(descending: true, order: :category)
-      expect(subject.datagrid_order_for(object, object.column_by_name(:category))).to equal_to_dom(<<-HTML)
-<div class="order">
-<a class="asc" href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category">&uarr;</a>
-<a class="desc" href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category">&darr;</a>
-</div>
+      expect(subject.datagrid_order_for(object, object.column_by_name(:category))).to equal_to_dom(<<~HTML)
+        <div class="order">
+        <a class="asc" href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category">&uarr;</a>
+        <a class="desc" href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category">&darr;</a>
+        </div>
       HTML
     end
-
   end
   describe ".datagrid_form_for" do
-    it 'returns namespaced partial if partials options is passed' do
+    it "returns namespaced partial if partials options is passed" do
       rendered_form = subject.datagrid_form_for(grid, {
-        url: '',
-        :partials => 'client/datagrid'
-      })
-      expect(rendered_form).to include 'Namespaced form partial.'
+        url: "",
+        partials: "client/datagrid",
+      },)
+      expect(rendered_form).to include "Namespaced form partial."
     end
     it "should render form and filter inputs" do
       class FormForGrid
@@ -479,14 +479,14 @@ describe Datagrid::Helper do
         scope { Entry }
         filter(:category)
       end
-      object = FormForGrid.new(:category => "hello")
+      object = FormForGrid.new(category: "hello")
       expect(subject.datagrid_form_for(object, url: "/grid")).to match_css_pattern(
         "form.datagrid-form.form_for_grid[action='/grid']" => 1,
         "form input[name=utf8]" => 1,
         "form .filter label" => "Category",
         "form .filter input.category.default_filter[name='form_for_grid[category]'][value=hello]" => 1,
         "form input[name=commit][value=Search]" => 1,
-        "form a.datagrid-reset[href='/location']" => 1
+        "form a.datagrid-reset[href='/location']" => 1,
       )
     end
     it "should support html classes for grid class with namespace" do
@@ -497,7 +497,7 @@ describe Datagrid::Helper do
           filter(:id)
         end
       end
-      expect(subject.datagrid_form_for(::Ns22::TestGrid.new, url: "grid")).to match_css_pattern(
+      expect(subject.datagrid_form_for(Ns22::TestGrid.new, url: "grid")).to match_css_pattern(
         "form.datagrid-form.ns22_test_grid" => 1,
         "form.datagrid-form label[for=ns22_test_grid_id]" => 1,
         "form.datagrid-form input#ns22_test_grid_id[name='ns22_test_grid[id]']" => 1,
@@ -510,10 +510,10 @@ describe Datagrid::Helper do
         scope { Entry }
         filter(:id)
         def param_name
-          'g'
+          "g"
         end
       end
-      expect(subject.datagrid_form_for(::ParamNameGrid81.new, url: "/grid")).to match_css_pattern(
+      expect(subject.datagrid_form_for(ParamNameGrid81.new, url: "/grid")).to match_css_pattern(
         "form.datagrid-form input[name='g[id]']" => 1,
       )
     end
@@ -521,27 +521,26 @@ describe Datagrid::Helper do
     it "takes default partials if custom doesn't exist" do
       class PartialDefaultGrid
         include Datagrid
-        scope {Entry}
-        filter(:id, :integer, :range => true)
-        filter(:group_id, :enum, :multiple => true, :checkboxes => true, :select => [1,2])
+        scope { Entry }
+        filter(:id, :integer, range: true)
+        filter(:group_id, :enum, multiple: true, checkboxes: true, select: [1, 2])
         def param_name
-          'g'
+          "g"
         end
       end
       rendered_form = subject.datagrid_form_for(PartialDefaultGrid.new, {
-        url: '',
-        :partials => 'custom_form'
-      })
-      expect(rendered_form).to include 'form_partial_test'
+        url: "",
+        partials: "custom_form",
+      },)
+      expect(rendered_form).to include "form_partial_test"
       expect(rendered_form).to match_css_pattern([
-        'input.integer_filter.from',
-        'input.integer_filter.to',
+        "input.integer_filter.from",
+        "input.integer_filter.to",
         ".enum_filter input[value='1']",
         ".enum_filter input[value='2']",
       ])
     end
   end
-
 
   describe ".datagrid_row" do
     let(:grid) do
@@ -553,7 +552,7 @@ describe Datagrid::Helper do
     end
 
     let(:entry) do
-      Entry.create!(:name => "Hello", :category => "greetings")
+      Entry.create!(name: "Hello", category: "greetings")
     end
 
     it "should provide access to row data" do
@@ -563,7 +562,7 @@ describe Datagrid::Helper do
     end
     it "should provide an interator" do
       r = subject.datagrid_row(grid, entry)
-      expect(r.map {|z| z.upcase}).to eq(["HELLO", "GREETINGS"])
+      expect(r.map(&:upcase)).to eq(%w[HELLO GREETINGS])
       expect(r.name).to eq("Hello")
       expect(r.category).to eq("greetings")
     end
@@ -592,10 +591,10 @@ describe Datagrid::Helper do
 
     it "should use cache" do
       grid = test_report do
-        scope {Entry}
+        scope { Entry }
         self.cached = true
-        column(:random1, html: true) {rand(10**9)}
-        column(:random2) {|model| format(rand(10**9)) {|value| value}}
+        column(:random1, html: true) { rand(10**9) }
+        column(:random2) { |_model| format(rand(10**9)) { |value| value } }
       end
 
       entry = Entry.create!
@@ -615,15 +614,15 @@ describe Datagrid::Helper do
 
     it "converts to string using columns option" do
       r = subject.datagrid_row(grid, entry, columns: [:name]).to_s
-      expect(r).to match_css_pattern('tr td.name')
-      expect(r).to_not match_css_pattern('tr td.category')
+      expect(r).to match_css_pattern("tr td.name")
+      expect(r).to_not match_css_pattern("tr td.category")
     end
   end
 
   describe ".datagrid_value" do
     it "should format value by column name" do
       report = test_report do
-        scope {Entry}
+        scope { Entry }
         column(:name) do |e|
           "<b>#{e.name}</b>"
         end
@@ -633,10 +632,10 @@ describe Datagrid::Helper do
     end
     it "should support format in column" do
       report = test_report do
-        scope {Entry}
+        scope { Entry }
         column(:name) do |e|
           format(e.name) do |value|
-             link_to value, "/profile"
+            link_to value, "/profile"
           end
         end
       end
@@ -646,8 +645,8 @@ describe Datagrid::Helper do
 
     it "applies decorator" do
       report = test_report do
-        scope {Entry}
-        decorate do |model|
+        scope { Entry }
+        decorate do |_model|
           Class.new(Struct.new(:model)) do
             def name
               model.name.upcase
@@ -656,7 +655,7 @@ describe Datagrid::Helper do
         end
         column(:name, html: true)
       end
-      entry = Entry.create!(name: 'hello')
+      entry = Entry.create!(name: "hello")
       expect(subject.datagrid_value(report, :name, entry)).to eq("HELLO")
     end
   end
@@ -668,17 +667,15 @@ describe Datagrid::Helper do
         column(:category, order: false, order_by_value: true)
 
         def param_name
-          'grid'
+          "grid"
         end
       end
-      expect(subject.datagrid_header(grid)).to equal_to_dom(<<HTML)
-<tr><th class="category ordered asc">Category<div class="order">
-<a class="asc" href="/location?grid%5Bdescending%5D=false&amp;grid%5Border%5D=category">&uarr;</a><a class="desc" href="/location?grid%5Bdescending%5D=true&amp;grid%5Border%5D=category">&darr;</a>
-</div>
-</th></tr>
-HTML
+      expect(subject.datagrid_header(grid)).to equal_to_dom(<<~HTML)
+        <tr><th class="category ordered asc">Category<div class="order">
+        <a class="asc" href="/location?grid%5Bdescending%5D=false&amp;grid%5Border%5D=category">&uarr;</a><a class="desc" href="/location?grid%5Bdescending%5D=true&amp;grid%5Border%5D=category">&darr;</a>
+        </div>
+        </th></tr>
+      HTML
     end
   end
-
 end
-

@@ -1,25 +1,29 @@
+# frozen_string_literal: true
+
 require "datagrid/filters/ranged_filter"
 
-class Datagrid::Filters::DateTimeFilter < Datagrid::Filters::BaseFilter
+module Datagrid
+  module Filters
+    class DateTimeFilter < Datagrid::Filters::BaseFilter
+      include Datagrid::Filters::RangedFilter
 
-  include Datagrid::Filters::RangedFilter
+      def parse(value)
+        Datagrid::Utils.parse_datetime(value)
+      end
 
-  def parse(value)
-    Datagrid::Utils.parse_datetime(value)
-  end
+      def format(value)
+        if formats.any? && value
+          value.strftime(formats.first)
+        else
+          super
+        end
+      end
 
-  def format(value)
-    if formats.any? && value
-      value.strftime(formats.first)
-    else
-      super
+      protected
+
+      def formats
+        Array(Datagrid.configuration.datetime_formats)
+      end
     end
   end
-
-  protected
-
-  def formats
-    Array(Datagrid.configuration.datetime_formats)
-  end
 end
-

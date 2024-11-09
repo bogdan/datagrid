@@ -1,164 +1,166 @@
-class Datagrid::Columns::Column
+# frozen_string_literal: true
 
-  # Datagrid class holding an information of
-  # how a column should be rendered in data/console/csv format and HTML format
-  class ResponseFormat
+module Datagrid
+  module Columns
+    class Column
+      # Datagrid class holding an information of
+      # how a column should be rendered in data/console/csv format and HTML format
+      class ResponseFormat
+        attr_accessor :data_block, :html_block
 
-    attr_accessor :data_block, :html_block
+        def initialize
+          yield(self)
+        end
 
-    def initialize
-      yield(self)
-    end
+        def data(&block)
+          self.data_block = block
+        end
 
-    def data(&block)
-      self.data_block = block
-    end
+        def html(&block)
+          self.html_block = block
+        end
 
-    def html(&block)
-      self.html_block = block
-    end
+        def call_data
+          data_block.call
+        end
 
-    def call_data
-      data_block.call
-    end
+        def to_s
+          call_data.to_s
+        end
 
-    def to_s
-      call_data.to_s
-    end
+        def call_html(context)
+          context.instance_eval(&html_block)
+        end
+      end
 
-    def call_html(context)
-      context.instance_eval(&html_block)
-    end
-  end
+      attr_accessor :grid_class, :options, :data_block, :name, :html_block, :query
 
-  attr_accessor :grid_class, :options, :data_block, :name, :html_block, :query
+      def initialize(grid_class, name, query, options = {}, &block)
+        self.grid_class = grid_class
+        self.name = name.to_sym
+        self.options = options
+        if options[:html] == true
+          self.html_block = block
+        else
+          self.data_block = block
 
-  def initialize(grid_class, name, query, options = {}, &block)
-    self.grid_class = grid_class
-    self.name = name.to_sym
-    self.options = options
-    if options[:html] == true
-      self.html_block = block
-    else
-      self.data_block = block
+          self.html_block = options[:html] if options[:html].is_a? Proc
+        end
+        self.query = query
+      end
 
-      if options[:html].is_a? Proc
-        self.html_block = options[:html]
+      def data_value(model, grid)
+        # backward compatibility method
+        grid.data_value(name, model)
+      end
+
+      def label
+        options[:label]
+      end
+
+      def header
+        if (header = options[:header])
+          Datagrid::Utils.callable(header)
+        else
+          Datagrid::Utils.translate_from_namespace(:columns, grid_class, name)
+        end
+      end
+
+      def order
+        if options.key?(:order) && options[:order] != true
+          options[:order]
+        else
+          driver.default_order(grid_class.scope, name)
+        end
+      end
+
+      def supports_order?
+        order || order_by_value?
+      end
+
+      def order_by_value(model, grid)
+        if options[:order_by_value] == true
+          grid.data_value(self, model)
+        else
+          Datagrid::Utils.apply_args(model, grid, &options[:order_by_value])
+        end
+      end
+
+      def order_by_value?
+        !!options[:order_by_value]
+      end
+
+      def order_desc
+        return nil unless order
+
+        options[:order_desc]
+      end
+
+      def html?
+        options[:html] != false
+      end
+
+      def data?
+        data_block != nil
+      end
+
+      def mandatory?
+        !!options[:mandatory]
+      end
+
+      def mandatory_explicitly_set?
+        options.key?(:mandatory)
+      end
+
+      def enabled?(grid)
+        ::Datagrid::Utils.process_availability(grid, options[:if], options[:unless])
+      end
+
+      def inspect
+        "#<#{self.class} #{grid_class}##{name} #{options.inspect}>"
+      end
+
+      def to_s
+        header
+      end
+
+      def html_value(context, asset, grid)
+        grid.html_value(name, context, asset)
+      end
+
+      def generic_value(model, grid)
+        grid.generic_value(self, model)
+      end
+
+      def append_preload(relation)
+        return relation unless preload
+
+        if preload.respond_to?(:call)
+          return relation unless preload
+
+          if preload.arity == 1
+            preload.call(relation)
+          else
+            relation.instance_exec(&preload)
+          end
+        else
+          driver.default_preload(relation, preload)
+        end
+      end
+
+      def preload
+        preload = options[:preload]
+
+        if preload == true && driver.can_preload?(grid_class.scope, name)
+          name
+        else
+          preload
+        end
+      end
+
+      def driver
+        grid_class.driver
       end
     end
-    self.query = query
-  end
-
-  def data_value(model, grid)
-    # backward compatibility method
-    grid.data_value(name, model)
-  end
-
-
-  def label
-    self.options[:label]
-  end
-
-  def header
-    if header = options[:header]
-      Datagrid::Utils.callable(header)
-    else
-      Datagrid::Utils.translate_from_namespace(:columns, grid_class, name)
-    end
-  end
-
-  def order
-    if options.has_key?(:order) && options[:order] != true
-      self.options[:order]
-    else
-      driver.default_order(grid_class.scope, name)
-    end
-  end
-
-  def supports_order?
-    order || order_by_value?
-  end
-
-  def order_by_value(model, grid)
-    if options[:order_by_value] == true
-      grid.data_value(self, model)
-    else
-      Datagrid::Utils.apply_args(model, grid, &options[:order_by_value])
-    end
-  end
-
-  def order_by_value?
-    !! options[:order_by_value]
-  end
-
-  def order_desc
-    return nil unless order
-    self.options[:order_desc]
-  end
-
-  def html?
-    options[:html] != false
-  end
-
-  def data?
-    self.data_block != nil
-  end
-
-  def mandatory?
-    !! options[:mandatory]
-  end
-
-  def mandatory_explicitly_set?
-    options.key?(:mandatory)
-  end
-
-  def enabled?(grid)
-    ::Datagrid::Utils.process_availability(grid, options[:if], options[:unless])
-  end
-
-  def inspect
-    "#<#{self.class} #{grid_class}##{name} #{options.inspect}>"
-  end
-
-  def to_s
-    header
-  end
-
-  def html_value(context, asset, grid)
-    grid.html_value(name, context, asset)
-  end
-
-
-  def generic_value(model, grid)
-    grid.generic_value(self, model)
-  end
-
-  def append_preload(relation)
-    return relation unless preload
-    if preload.respond_to?(:call)
-      return relation unless preload
-      if preload.arity == 1
-        preload.call(relation)
-      else
-        relation.instance_exec(&preload)
-      end
-    else
-      driver.default_preload(relation, preload)
-    end
-  end
-
-  def preload
-    preload = options[:preload]
-
-    if preload == true && driver.can_preload?(grid_class.scope, name)
-      name
-    else
-      preload
-    end
-
-  end
-
-  def driver
-    grid_class.driver
   end
 end

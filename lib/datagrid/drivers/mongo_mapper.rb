@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Datagrid
   module Drivers
     # @!visibility private
     class MongoMapper < AbstractDriver
-
       def self.match?(scope)
         return false unless defined?(::MongoMapper)
+
         if scope.is_a?(Class)
           scope.ancestors.include?(::MongoMapper::Document)
         else
@@ -33,27 +35,27 @@ module Datagrid
       end
 
       def greater_equal(scope, field, value)
-        scope.where(field => {"$gte" => value})
+        scope.where(field => { "$gte" => value })
       end
 
       def less_equal(scope, field, value)
-        scope.where(field => {"$lte" => value})
+        scope.where(field => { "$lte" => value })
       end
 
       def has_column?(scope, column_name)
         scope.key?(column_name)
       end
 
-      def is_timestamp?(scope, column_name)
-        #TODO implement the support
+      def is_timestamp?(_scope, _column_name)
+        # TODO: implement the support
         false
       end
 
-      def contains(scope, field, value)
+      def contains(_scope, field, value)
         scope(field => Regexp.compile(Regexp.escape(value)))
       end
 
-      def column_names(scope)
+      def column_names(_scope)
         [] # TODO: implement support
       end
 
@@ -62,10 +64,9 @@ module Datagrid
         loop do
           batch = scope.skip(current_page * batch_size).limit(batch_size).to_a
           return if batch.empty?
-          scope.skip(current_page * batch_size).limit(batch_size).each do |item|
-            yield(item)
-          end
-          current_page+=1
+
+          scope.skip(current_page * batch_size).limit(batch_size).each(&block)
+          current_page += 1
         end
       end
 
@@ -77,7 +78,7 @@ module Datagrid
         raise NotImplementedError
       end
 
-      def can_preload?(scope, association)
+      def can_preload?(_scope, _association)
         false
       end
     end

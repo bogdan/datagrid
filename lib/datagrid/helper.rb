@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require "action_view"
 
 module Datagrid
   module Helper
-
     # @param grid [Datagrid] grid object
     # @param column [Datagrid::Columns::Column, String, Symbol] column name
     # @param model [Object] an object from grid scope
@@ -61,7 +62,6 @@ module Datagrid
     def datagrid_header(grid, options = {})
       datagrid_renderer.header(grid, options)
     end
-
 
     # Renders HTML table rows using given grid definition using columns defined in it.
     # Allows to provide a custom layout for each for in place with a block
@@ -149,9 +149,10 @@ module Datagrid
     end
 
     def datagrid_column_classes(grid, column)
-      order_class = grid.ordered_by?(column) ? ["ordered", grid.descending ? "desc" : "asc"] : nil
+      order_class = if grid.ordered_by?(column)
+                      ["ordered", grid.descending ? "desc" : "asc"]
+                    end
       [column.name, order_class, column.options[:class]].compact.join(" ")
     end
   end
 end
-

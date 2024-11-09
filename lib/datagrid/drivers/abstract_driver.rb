@@ -1,19 +1,20 @@
+# frozen_string_literal: true
+
 module Datagrid
   module Drivers
     # @!visibility private
     class AbstractDriver
-
-      TIMESTAMP_CLASSES = [DateTime, Time, ActiveSupport::TimeWithZone]
+      TIMESTAMP_CLASSES = [DateTime, Time, ActiveSupport::TimeWithZone].freeze
 
       class_attribute :subclasses, default: []
 
       def self.inherited(base)
-        super(base)
-        self.subclasses << base
+        super
+        subclasses << base
       end
 
       def self.guess_driver(scope)
-        self.subclasses.find do |driver_class|
+        subclasses.find do |driver_class|
           driver_class.match?(scope)
         end || raise(Datagrid::ConfigurationError, "ORM Driver not found for scope: #{scope.inspect}.")
       end
@@ -83,11 +84,9 @@ module Datagrid
       end
 
       def append_column_queries(assets, columns)
-        if columns.present?
-          raise NotImplementedError
-        else
-          assets
-        end
+        raise NotImplementedError if columns.present?
+
+        assets
       end
 
       def default_cache_key(asset)
@@ -96,12 +95,8 @@ module Datagrid
 
       def where_by_timestamp_gotcha(scope, name, value)
         value = Datagrid::Utils.format_date_as_timestamp(value)
-        if value.first
-          scope = greater_equal(scope, name, value.first)
-        end
-        if value.last
-          scope = less_equal(scope, name, value.last)
-        end
+        scope = greater_equal(scope, name, value.first) if value.first
+        scope = less_equal(scope, name, value.last) if value.last
         scope
       end
 
@@ -114,6 +109,7 @@ module Datagrid
       end
 
       protected
+
       def timestamp_class?(klass)
         TIMESTAMP_CLASSES.include?(klass)
       end

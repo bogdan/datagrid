@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require "datagrid/utils"
 require "active_support/core_ext/class/attribute"
 
 module Datagrid
-
   module Columns
     require "datagrid/columns/column"
 
@@ -34,7 +35,7 @@ module Datagrid
 
     # @visibility private
     def self.included(base)
-      base.extend         ClassMethods
+      base.extend ClassMethods
       base.class_eval do
         include Datagrid::Core
 
@@ -47,7 +48,6 @@ module Datagrid
     end
 
     module ClassMethods
-
       # @param data [Boolean] if true returns only columns with data representation. Default: false.
       # @param html [Boolean] if true returns only columns with html columns. Default: false.
       # @param column_names [Array<String>] list of column names if you want to limit data only to specified columns
@@ -146,23 +146,25 @@ module Datagrid
         end
         return self.decorator = block unless model
         return model unless decorator
+
         presenter = ::Datagrid::Utils.apply_args(model, &decorator)
-        presenter = presenter.is_a?(Class) ?  presenter.new(model) : presenter
+        presenter = presenter.new(model) if presenter.is_a?(Class)
         block_given? ? yield(presenter) : presenter
       end
 
       # @!visibility private
       def inherited(child_class)
-        super(child_class)
-        child_class.columns_array = self.columns_array.clone
+        super
+        child_class.columns_array = columns_array.clone
       end
 
       # @!visibility private
       def filter_columns(columns_array, *names, data: false, html: false)
         names.compact!
-        if names.size >= 1 && names.all? {|n| n.is_a?(Datagrid::Columns::Column) && n.grid_class == self.class}
+        if names.size >= 1 && names.all? { |n| n.is_a?(Datagrid::Columns::Column) && n.grid_class == self.class }
           return names
         end
+
         names.map!(&:to_sym)
         columns_array.select do |column|
           (!data || column.data?) &&
@@ -186,21 +188,21 @@ module Datagrid
       end
 
       # @!visibility private
-      def find_column_by_name(columns,name)
+      def find_column_by_name(columns, name)
         return name if name.is_a?(Datagrid::Columns::Column)
+
         columns.find do |col|
           col.name.to_sym == name.to_sym
         end
       end
-
     end
 
     # @!visibility private
     def assets
       append_column_preload(
         driver.append_column_queries(
-          super, columns.select(&:query)
-        )
+          super, columns.select(&:query),
+        ),
       )
     end
 
@@ -223,7 +225,7 @@ module Datagrid
     # @return [Hash] A mapping where keys are column names and values are column values for the given asset
     def hash_for(asset)
       result = {}
-      self.data_columns.each do |column|
+      data_columns.each do |column|
         result[column.name] = data_value(column, asset)
       end
       result
@@ -233,14 +235,14 @@ module Datagrid
     # @return [Array<Array<Object>>] with data for each row in datagrid assets without header
     def rows(*column_names)
       map_with_batches do |asset|
-        self.row_for(asset, *column_names)
+        row_for(asset, *column_names)
       end
     end
 
     # @param column_names [Array<String>] list of column names if you want to limit data only to specified columns
     # @return [Array<Array<Object>>] data for each row in datagrid assets with header.
     def data(*column_names)
-      self.rows(*column_names).unshift(self.header(*column_names))
+      rows(*column_names).unshift(header(*column_names))
     end
 
     # @return [Array<{Symbol => Object}>] an array of hashes representing the rows in the filtered datagrid relation
@@ -273,16 +275,15 @@ module Datagrid
     def to_csv(*column_names, **options)
       require "csv"
       CSV.generate(
-        headers: self.header(*column_names),
+        headers: header(*column_names),
         write_headers: true,
-        **options
+        **options,
       ) do |csv|
         each_with_batches do |asset|
           csv << row_for(asset, *column_names)
         end
       end
     end
-
 
     # @param column_names [Array<Symbol, String>]
     # @return [Array<Datagrid::Columns::Column>] all columns selected in grid instance
@@ -293,7 +294,7 @@ module Datagrid
     #   grid.columns(:id, :category) # => id and category column
     def columns(*column_names, data: false, html: false)
       self.class.filter_columns(
-        columns_array, *column_names, data: data, html: html
+        columns_array, *column_names, data: data, html: html,
       ).select do |column|
         column.enabled?(self)
       end
@@ -302,13 +303,13 @@ module Datagrid
     # @param column_names [Array<String, Symbol>] list of column names if you want to limit data only to specified columns
     # @return [Array<Datagrid::Columns::Column>] columns that can be represented in plain data(non-html) way
     def data_columns(*column_names, **options)
-      self.columns(*column_names, **options, data: true)
+      columns(*column_names, **options, data: true)
     end
 
     # @param column_names [Array<String>] list of column names if you want to limit data only to specified columns
     # @return all columns that can be represented in HTML table
     def html_columns(*column_names, **options)
-      self.columns(*column_names, **options, html: true)
+      columns(*column_names, **options, html: true)
     end
 
     # Finds a column definition by name
@@ -401,6 +402,7 @@ module Datagrid
       column = column_by_name(column_name)
       cache(column, asset, :data_value) do
         raise "no data value for #{column.name} column" unless column.data?
+
         result = generic_value(column, asset)
         result.is_a?(Datagrid::Columns::Column::ResponseFormat) ? result.call_data : result
       end
@@ -408,7 +410,7 @@ module Datagrid
 
     # @return [Object] a cell HTML value for given column name and asset and view context
     def html_value(column_name, context, asset)
-      column  = column_by_name(column_name)
+      column = column_by_name(column_name)
       cache(column, asset, :html_value) do
         if column.html? && column.html_block
           value_from_html_block(context, asset, column)
@@ -461,9 +463,8 @@ module Datagrid
         return yield
       end
       key = cache_key(asset)
-      unless key
-        raise(Datagrid::CacheKeyError, "Datagrid Cache key is #{key.inspect} for #{asset.inspect}.")
-      end
+      raise(Datagrid::CacheKeyError, "Datagrid Cache key is #{key.inspect} for #{asset.inspect}.") unless key
+
       @cache[column.name] ||= {}
       @cache[column.name][key] ||= {}
       @cache[column.name][key][type] ||= yield
@@ -476,9 +477,9 @@ module Datagrid
         driver.default_cache_key(asset)
       end
     rescue NotImplementedError
-      raise Datagrid::ConfigurationError, "#{self} is setup to use cache. But there was appropriate cache key found for #{asset.inspect}. Please set cached option to block with asset as argument and cache key as returning value to resolve the issue."
+      raise Datagrid::ConfigurationError,
+        "#{self} is setup to use cache. But there was appropriate cache key found for #{asset.inspect}. Please set cached option to block with asset as argument and cache key as returning value to resolve the issue."
     end
-
 
     def map_with_batches(&block)
       result = []
@@ -489,7 +490,7 @@ module Datagrid
     end
 
     def each_with_batches(&block)
-      if batch_size && batch_size > 0
+      if batch_size&.positive?
         driver.batch_each(assets, batch_size, &block)
       else
         assets.each(&block)
@@ -499,7 +500,7 @@ module Datagrid
     def value_from_html_block(context, asset, column)
       args = []
       remaining_arity = column.html_block.arity
-      remaining_arity = 1 if remaining_arity < 0
+      remaining_arity = 1 if remaining_arity.negative?
 
       asset = decorate(asset)
 
@@ -508,7 +509,7 @@ module Datagrid
         remaining_arity -= 1
       end
 
-      args << asset if remaining_arity > 0
+      args << asset if remaining_arity.positive?
       args << self if remaining_arity > 1
 
       context.instance_exec(*args, &column.html_block)
@@ -522,7 +523,7 @@ module Datagrid
         @model = model
       end
 
-      def method_missing(meth, *args, &blk)
+      def method_missing(meth, *_args)
         @grid.data_value(meth, @model)
       end
     end

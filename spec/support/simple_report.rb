@@ -1,4 +1,4 @@
-
+# frozen_string_literal: true
 
 def test_report(attributes = {}, &block)
   klass = test_report_class(&block)
@@ -13,14 +13,11 @@ def test_report_class(&block)
         "TestGrid"
       end
     end
-    if block
-      klass.class_eval(&block)
-    end
+    klass.class_eval(&block) if block
   end
 end
 
 class SimpleReport
-
   include Datagrid
 
   scope do
@@ -28,37 +25,33 @@ class SimpleReport
   end
 
   filter(:group_id, :integer, multiple: true)
-  filter(:category, :enum, select: ["first", "second"])
+  filter(:category, :enum, select: %w[first second])
   filter(:disabled, :xboolean)
   filter(:confirmed, :boolean)
 
   filter(:name) do |value|
-    self.where(name: value)
+    where(name: value)
   end
 
   column(:group, order: "groups.name") do
-    self.group.name
+    group.name
   end
 
-  column(:name) do |user|
-    user.name
-  end
+  column(:name, &:name)
 
   column(:actions, html: true) do |model|
-    render partial: "/actions", locals: {model: model}
+    render partial: "/actions", locals: { model: model }
   end
 
-  column(:pet, html: lambda {|data| content_tag :em, data}) do
-    self.pet&.upcase
+  column(:pet, html: ->(data) { content_tag :em, data }) do
+    pet&.upcase
   end
 
   column(:shipping_date, before: :group)
 
-  column(:access_level, html: lambda {|data| content_tag :h1, data}, after: :actions)
+  column(:access_level, html: ->(data) { content_tag :h1, data }, after: :actions)
 
   def param_name
     :report
   end
-
 end
-

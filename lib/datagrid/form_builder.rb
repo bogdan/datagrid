@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "action_view"
 
 module Datagrid
@@ -10,8 +12,8 @@ module Datagrid
     #   * <tt>text_field</tt> for other filter types
     def datagrid_filter(filter_or_attribute, partials: nil, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
-      options = add_html_classes({**filter.input_options, **options}, filter.name, datagrid_filter_html_class(filter))
-      self.send( filter.form_builder_helper_name, filter, **options, &block)
+      options = add_html_classes({ **filter.input_options, **options }, filter.name, datagrid_filter_html_class(filter))
+      send(filter.form_builder_helper_name, filter, **options, &block)
     end
 
     # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
@@ -28,15 +30,16 @@ module Datagrid
       filter = datagrid_get_filter(attribute_or_filter)
       value = object.filter_value_as_string(filter)
       type = options[:type]&.to_sym
-      if options.has_key?(:value) && options[:value].nil? && [:"datetime-local", :"date"].include?(type)
+      if options.key?(:value) && options[:value].nil? && %i[datetime-local date].include?(type)
         # https://github.com/rails/rails/pull/53387
         options[:value] = ""
       end
-      if type == :"datetime-local"
+      case type
+      when :"datetime-local"
         datetime_local_field filter.name, **options
-      elsif type == :"date"
+      when :date
         date_field filter.name, **options
-      elsif type == :textarea
+      when :textarea
         text_area filter.name, value: value, **options, type: nil
       else
         text_field filter.name, value: value, **options
@@ -44,6 +47,7 @@ module Datagrid
     end
 
     protected
+
     def datagrid_extended_boolean_filter(filter, options = {})
       datagrid_enum_filter(filter, options)
     end
@@ -66,20 +70,20 @@ module Datagrid
 
     def datagrid_enum_filter(filter, options = {}, &block)
       if filter.checkboxes?
-        options = add_html_classes(options, 'checkboxes')
+        options = add_html_classes(options, "checkboxes")
         elements = object.select_options(filter).map do |element|
           text, value = @template.send(:option_text_and_value, element)
           checked = enum_checkbox_checked?(filter, value)
           [value, text, checked]
         end
         render_partial(
-          'enum_checkboxes',
+          "enum_checkboxes",
           {
             elements: elements,
             form: self,
             filter: filter,
             options: options,
-          }
+          },
         )
       else
         select(
@@ -88,11 +92,11 @@ module Datagrid
           {
             include_blank: filter.include_blank,
             prompt: filter.prompt,
-            include_hidden: false
+            include_hidden: false,
           },
-           multiple: filter.multiple?,
-           **options,
-           &block
+          multiple: filter.multiple?,
+          **options,
+          &block
         )
       end
     end
@@ -109,14 +113,12 @@ module Datagrid
     end
 
     def datagrid_integer_filter(filter, options = {})
-      if filter.multiple? && object[filter.name].blank?
-        options[:value] = ""
-      end
+      options[:value] = "" if filter.multiple? && object[filter.name].blank?
       datagrid_range_filter(:integer, filter, options)
     end
 
     def datagrid_dynamic_filter(filter, options = {})
-      input_name = "#{object_name}[#{filter.name.to_s}][]"
+      input_name = "#{object_name}[#{filter.name}][]"
       field, operation, value = object.filter_value(filter)
       options = options.merge(name: input_name)
       field_input = dynamic_filter_select(
@@ -126,9 +128,9 @@ module Datagrid
           include_blank: filter.include_blank,
           prompt: filter.prompt,
           include_hidden: false,
-          selected: field
+          selected: field,
         },
-        add_html_classes(options, "field")
+        add_html_classes(options, "field"),
       )
       operation_input = dynamic_filter_select(
         filter.name, filter.operations_select,
@@ -138,7 +140,7 @@ module Datagrid
           prompt: false,
           selected: operation,
         },
-        add_html_classes(options, "operation")
+        add_html_classes(options, "operation"),
       )
       value_input = text_field(filter.name, **add_html_classes(options, "value"), value: value)
       [field_input, operation_input, value_input].join("\n").html_safe
@@ -156,13 +158,13 @@ module Datagrid
       end
     end
 
-    def datagrid_range_filter(type, filter, options = {})
+    def datagrid_range_filter(_type, filter, options = {})
       if filter.range?
         options = options.merge(multiple: true)
         from_options = datagrid_range_filter_options(object, filter, :from, options)
         to_options = datagrid_range_filter_options(object, filter, :to, options)
-        render_partial 'range_filter', {
-          from_options: from_options, to_options: to_options, filter: filter, form: self
+        render_partial "range_filter", {
+          from_options: from_options, to_options: to_options, filter: filter, form: self,
         }
       else
         datagrid_filter_input(filter, **options)
@@ -170,7 +172,7 @@ module Datagrid
     end
 
     def datagrid_range_filter_options(object, filter, type, options)
-      type_method_map = {from: :first, to: :last}
+      type_method_map = { from: :first, to: :last }
       options = add_html_classes(options, type)
       options[:value] = filter.format(object[filter.name]&.public_send(type_method_map[type]))
       # In case of datagrid ranged filter
@@ -213,14 +215,12 @@ module Datagrid
     end
 
     def partial_path(name)
-      if partials = self.options[:partials]
+      if (partials = options[:partials])
         partial_name = File.join(partials, name)
         # Second argument is []: no magical namespaces to lookup added from controller
-        if @template.lookup_context.template_exists?(partial_name, [], true)
-          return partial_name
-        end
+        return partial_name if @template.lookup_context.template_exists?(partial_name, [], true)
       end
-      File.join('datagrid', name)
+      File.join("datagrid", name)
     end
 
     def render_partial(name, locals)

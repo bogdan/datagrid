@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "Readme.markdown"
+    "Readme.markdown",
   ]
   s.files = [
     "LICENSE.txt",
@@ -30,8 +30,8 @@ Gem::Specification.new do |s|
     "documentation_uri" => "#{s.homepage}/wiki",
     "changelog_uri" => "#{s.homepage}/blob/master/CHANGELOG.md",
     "source_code_uri" => s.homepage,
+    "rubygems_mfa_required" => "true",
   }
 
   s.add_dependency "railties", ">= 6.1"
 end
-

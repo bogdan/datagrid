@@ -1,5 +1,6 @@
-require "sequel"
+# frozen_string_literal: true
 
+require "sequel"
 
 DB = Sequel.sqlite # memory database
 DB.extension(:pagination)
@@ -17,9 +18,7 @@ DB.create_table :sequel_entries do
 end
 
 class SequelEntry < Sequel::Model
-
 end
-
 
 class SequelGrid
   include ::Datagrid
@@ -35,6 +34,4 @@ class SequelGrid
   column :name
   column :group_id
   column :disabled
-
 end
-

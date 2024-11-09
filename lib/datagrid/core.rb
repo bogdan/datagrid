@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "datagrid/drivers"
 require "active_support/core_ext/class/attribute"
 require "active_model/attribute_assignment"
@@ -18,21 +20,20 @@ module Datagrid
     end
 
     module ClassMethods
-
       # @!visibility private
       def datagrid_attribute(name, &block)
-        unless datagrid_attributes.include?(name)
-          block ||= lambda do |value|
-            value
-          end
-          datagrid_attributes << name
-          define_method name do
-            instance_variable_get("@#{name}")
-          end
+        return if datagrid_attributes.include?(name)
 
-          define_method :"#{name}=" do |value|
-            instance_variable_set("@#{name}", instance_exec(value, &block))
-          end
+        block ||= lambda do |value|
+          value
+        end
+        datagrid_attributes << name
+        define_method name do
+          instance_variable_get("@#{name}")
+        end
+
+        define_method :"#{name}=" do |value|
+          instance_variable_set("@#{name}", instance_exec(value, &block))
         end
       end
 
@@ -116,10 +117,9 @@ module Datagrid
       end
 
       def inherited(child_class)
-        super(child_class)
-        child_class.datagrid_attributes = self.datagrid_attributes.clone
+        super
+        child_class.datagrid_attributes = datagrid_attributes.clone
       end
-
     end
 
     # @param [{String, Symbol => Object}, nil] attributes a hash of attributes to initialize the object
@@ -128,21 +128,18 @@ module Datagrid
     def initialize(attributes = nil, &block)
       super()
 
-      if attributes
-        self.attributes = attributes
-      end
+      self.attributes = attributes if attributes
 
       instance_eval(&dynamic_block) if dynamic_block
-      if block_given?
-        self.scope(&block)
-      end
-    end
+      return unless block_given?
 
+      scope(&block)
+    end
 
     # @return [Hash<Symbol, Object>] grid attributes including filter values and ordering values
     def attributes
       result = {}
-      self.datagrid_attributes.each do |name|
+      datagrid_attributes.each do |name|
         result[name] = self[name]
       end
       result
@@ -155,13 +152,10 @@ module Datagrid
     #   grid.attributes = {first_name: 'John', last_name: 'Smith'}
     #   grid.first_name # => 'John'
     #   grid.last_name # => 'Smith'
-    def attributes=(attributes)
-      super(attributes)
-    end
 
     # @return [Object] Any datagrid attribute value
     def [](attribute)
-      self.public_send(attribute)
+      public_send(attribute)
     end
 
     # Assigns any datagrid attribute
@@ -169,7 +163,7 @@ module Datagrid
     # @param value [Object] Datagrid attribute value
     # @return [void]
     def []=(attribute, value)
-      self.public_send(:"#{attribute}=", value)
+      public_send(:"#{attribute}=", value)
     end
 
     # @return [Object] a scope relation (e.g ActiveRecord::Relation) with all applied filters
@@ -270,8 +264,9 @@ module Datagrid
     end
 
     protected
+
     def sanitize_for_mass_assignment(attributes)
-      forbidden_attributes_protection ? super(attributes) : attributes
+      forbidden_attributes_protection ? super : attributes
     end
   end
 end

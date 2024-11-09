@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 module Datagrid
   module Drivers
     # @!visibility private
     class Array < AbstractDriver
-
       def self.match?(scope)
         !Datagrid::Drivers::ActiveRecord.match?(scope) && (
           scope.is_a?(::Array) || scope.is_a?(Enumerator) ||
@@ -23,6 +24,7 @@ module Datagrid
       def asc(scope, order)
         return scope unless order
         return scope if order.empty?
+
         scope.sort_by do |object|
           get(object, order)
         end
@@ -32,7 +34,7 @@ module Datagrid
         asc(scope, order).reverse
       end
 
-      def default_order(scope, column_name)
+      def default_order(_scope, column_name)
         column_name
       end
 
@@ -67,11 +69,11 @@ module Datagrid
         end
       end
 
-      def column_names(scope)
+      def column_names(_scope)
         []
       end
 
-      def batch_each(scope, batch_size, &block)
+      def batch_each(scope, _batch_size, &block)
         scope.each(&block)
       end
 
@@ -79,7 +81,7 @@ module Datagrid
         asset
       end
 
-      def can_preload?(scope, association)
+      def can_preload?(_scope, _association)
         false
       end
 

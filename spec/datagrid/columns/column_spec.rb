@@ -1,12 +1,13 @@
-require 'spec_helper'
+# frozen_string_literal: true
+
+require "spec_helper"
 
 describe Datagrid::Columns::Column do
-  
   describe ".inspect" do
     subject do
       class ColumnInspectTest
         include Datagrid
-        scope {Entry}
+        scope { Entry }
         column(:id, header: "ID")
       end
       ColumnInspectTest.column_by_name(:id)

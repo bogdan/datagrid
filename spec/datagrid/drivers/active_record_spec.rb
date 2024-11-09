@@ -1,13 +1,14 @@
-require 'spec_helper'
+# frozen_string_literal: true
+
+require "spec_helper"
 
 describe Datagrid::Drivers::ActiveRecord do
-
   describe ".match?" do
     subject { described_class }
 
-    it {should be_match(Entry)}
-    it {should be_match(Entry.where(:id => 1))}
-    it {should_not be_match(MongoidEntry)}
+    it { should be_match(Entry) }
+    it { should be_match(Entry.where(id: 1)) }
+    it { should_not be_match(MongoidEntry) }
   end
 
   it "should convert any scope to AR::Relation" do
@@ -17,13 +18,14 @@ describe Datagrid::Drivers::ActiveRecord do
   end
 
   it "should support append_column_queries" do
-    scope = subject.append_column_queries(Entry.where({}), [Datagrid::Columns::Column.new(test_report_class, :sum_group_id, 'sum(entries.group_id)')])
+    scope = subject.append_column_queries(Entry.where({}),
+      [Datagrid::Columns::Column.new(test_report_class, :sum_group_id, "sum(entries.group_id)")],)
     expect(scope.to_sql.strip).to eq('SELECT "entries".*, sum(entries.group_id) AS sum_group_id FROM "entries"')
   end
 
   describe "Arel" do
     subject do
-      test_report(:order => :test, :descending => true) do
+      test_report(order: :test, descending: true) do
         scope { Entry }
         column(:test, order: Entry.arel_table[:group_id].count)
       end.assets
@@ -35,12 +37,11 @@ describe Datagrid::Drivers::ActiveRecord do
   end
 
   describe "gotcha #datagrid_where_by_timestamp" do
-
     subject do
       test_report(created_at: 10.days.ago..5.days.ago) do
-        scope {Entry}
+        scope { Entry }
 
-        filter(:created_at, :date, range: true) do |value, scope, grid|
+        filter(:created_at, :date, range: true) do |value, scope, _grid|
           scope.joins(:group).datagrid_where_by_timestamp("groups.created_at", value)
         end
       end.assets
@@ -64,16 +65,13 @@ describe Datagrid::Drivers::ActiveRecord do
   end
 
   describe "batches usage" do
-
     it "should be incompatible with scope with limit" do
       report = test_report do
-        scope {Entry.limit(5)}
+        scope { Entry.limit(5) }
         self.batch_size = 20
         column(:id)
       end
       expect { report.data }.to raise_error(Datagrid::ConfigurationError)
     end
   end
-
-
 end

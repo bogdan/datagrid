@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require "action_view"
 
 module Datagrid
   # @!visibility private
   class Renderer
-
     def self.for(template)
       new(template)
     end
@@ -13,13 +14,11 @@ module Datagrid
     end
 
     def format_value(grid, column, asset)
-      if column.is_a?(String) || column.is_a?(Symbol)
-        column = grid.column_by_name(column)
-      end
+      column = grid.column_by_name(column) if column.is_a?(String) || column.is_a?(Symbol)
 
       value = grid.html_value(column, @template, asset)
 
-      url = column.options[:url] && column.options[:url].call(asset)
+      url = column.options[:url]&.call(asset)
       if url
         @template.link_to(value, url)
       else
@@ -32,26 +31,26 @@ module Datagrid
       options[:html] ||= {}
       options[:html][:class] ||= "datagrid-form #{@template.dom_class(grid)}"
       options[:as] ||= grid.param_name
-      _render_partial('form', options[:partials], {:grid => grid, :options => options})
+      _render_partial("form", options[:partials], { grid: grid, options: options })
     end
 
     def table(grid, assets, **options)
       options[:html] ||= {}
       options[:html][:class] ||= "datagrid #{@template.dom_class(grid)}"
 
-      _render_partial('table', options[:partials],
-                      {
-                        grid: grid,
-                        options: options,
-                        assets: assets
-                      })
+      _render_partial("table", options[:partials],
+        {
+          grid: grid,
+          options: options,
+          assets: assets,
+        },)
     end
 
     def header(grid, options = {})
-      options[:order] = true unless options.has_key?(:order)
+      options[:order] = true unless options.key?(:order)
 
-      _render_partial('head', options[:partials],
-                      { :grid => grid, :options => options })
+      _render_partial("head", options[:partials],
+        { grid: grid, options: options },)
     end
 
     def rows(grid, assets = grid.assets, **options, &block)
@@ -64,23 +63,21 @@ module Datagrid
 
     def row(grid, asset, **options, &block)
       Datagrid::Helper::HtmlRow.new(self, grid, asset, options).tap do |row|
-        if block_given?
-          return @template.capture(row, &block)
-        end
+        return @template.capture(row, &block) if block_given?
       end
     end
 
     def order_for(grid, column, options = {})
-      _render_partial('order_for', options[:partials],
-                      { :grid => grid, :column => column })
+      _render_partial("order_for", options[:partials],
+        { grid: grid, column: column },)
     end
 
     def order_path(grid, column, descending, request)
       column = grid.column_by_name(column)
       query = request ? request.query_parameters : {}
       ActionDispatch::Http::URL.path_for(
-        path: request ? request.path : '/',
-        params: query.merge(grid.query_params(order: column.name, descending: descending))
+        path: request ? request.path : "/",
+        params: query.merge(grid.query_params(order: column.name, descending: descending)),
       )
     end
 
@@ -92,8 +89,8 @@ module Datagrid
 
     def _render_partial(partial_name, partials_path, locals = {})
       @template.render({
-        :partial => File.join(partials_path || 'datagrid', partial_name),
-        :locals => locals
+        partial: File.join(partials_path || "datagrid", partial_name),
+        locals: locals,
       })
     end
   end
@@ -110,7 +107,6 @@ module Datagrid
     #     puts value
     #   end
     class HtmlRow
-
       include Enumerable
 
       attr_reader :grid, :asset, :options
@@ -137,16 +133,17 @@ module Datagrid
       end
 
       def to_s
-        @renderer.send(:_render_partial, 'row', options[:partials], {
-          :grid => grid,
-          :options => options,
-          :asset => asset
-        })
+        @renderer.send(:_render_partial, "row", options[:partials], {
+          grid: grid,
+          options: options,
+          asset: asset,
+        },)
       end
 
       protected
+
       def method_missing(method, *args, &blk)
-        if column = @grid.column_by_name(method)
+        if (column = @grid.column_by_name(method))
           get(column)
         else
           super
