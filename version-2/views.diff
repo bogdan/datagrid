@@ -18,12 +18,12 @@ index 9f48319..f225cc6 100644
  <%- end -%>
 +</div>
 diff --git a/app/views/datagrid/_form.html.erb b/app/views/datagrid/_form.html.erb
-index 7e175c1..9b41ff2 100644
+index 7e175c1..fc4f4ae 100644
 --- a/app/views/datagrid/_form.html.erb
 +++ b/app/views/datagrid/_form.html.erb
 @@ -1,12 +1,12 @@
 -<%= form_for grid, options do |f| -%>
-+<%= form_for grid, html: {class: 'datagrid-form'}, **options do |f| -%>
++<%= form_with model: grid, html: {class: 'datagrid-form'}, scope: grid.param_name, method: :get, **options do |f| %>
    <% grid.filters.each do |filter| %>
 -    <div class="datagrid-filter filter">
 +    <div class="datagrid-filter" data-filter="<%= filter.name %>" data-type="<%= filter.type %>">
