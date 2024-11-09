@@ -1,4 +1,4 @@
-<%= form_for grid, options do |f| -%>
+<%= form_with model: grid, method: :get, **options do |f| -%>
   <p>Namespaced form partial.</p>
   <% grid.filters.each do |filter| %>
     <div class="datagrid-filter filter">

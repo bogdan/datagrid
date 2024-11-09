@@ -20,6 +20,8 @@ describe Datagrid::Helper do
     allow(subject).to receive(:url_for) do |options|
       options.is_a?(String) ? options : ["/location", options.to_param.presence].compact.join("?")
     end
+    # Rails default since 5.x
+    ActionView::Helpers::FormHelper.form_with_generates_ids = true
   end
 
   let(:group) { Group.create!(name: "Pop") }
@@ -433,7 +435,14 @@ describe Datagrid::Helper do
       HTML
     end
   end
+
   describe ".datagrid_form_for" do
+    around(:each) do |e|
+      silence_warnings do
+        e.run
+      end
+    end
+
     it "returns namespaced partial if partials options is passed" do
       rendered_form = subject.datagrid_form_for(grid, {
         url: "",
@@ -448,7 +457,7 @@ describe Datagrid::Helper do
       end
       object = FormForGrid.new(category: "hello")
       expect(subject.datagrid_form_for(object, url: "/grid")).to equal_to_dom(<<~HTML)
- <form class="datagrid-form" id="new_form_for_grid" action="/grid" accept-charset="UTF-8" method="get">
+ <form class="datagrid-form" action="/grid" accept-charset="UTF-8" data-remote="true" method="get">
    <input name="utf8" type="hidden" value="&#x2713;" autocomplete="off" />
       <div class="datagrid-filter" data-filter="category" data-type="string">
         <label for="form_for_grid_category">Category</label>
@@ -504,6 +513,82 @@ describe Datagrid::Helper do
       expect(rendered_form).to include "form_partial_test"
     end
   end
+
+
+  describe ".datagrid_form_with" do
+    it "returns namespaced partial if partials options is passed" do
+      rendered_form = subject.datagrid_form_with(
+        model: grid,
+        url: "",
+        partials: "client/datagrid",
+      )
+      expect(rendered_form).to include "Namespaced form partial."
+    end
+    it "should render form and filter inputs" do
+      class FormWithGrid < Datagrid::Base
+        scope { Entry }
+        filter(:category, :string)
+      end
+      object = FormWithGrid.new(category: "hello")
+      expect(subject.datagrid_form_with(model: object, url: "/grid")).to equal_to_dom(<<~HTML)
+ <form class="datagrid-form" action="/grid" accept-charset="UTF-8" data-remote="true" method="get">
+   <input name="utf8" type="hidden" value="&#x2713;" autocomplete="off" />
+      <div class="datagrid-filter" data-filter="category" data-type="string">
+        <label for="form_with_grid_category">Category</label>
+        <input value="hello" type="text" name="form_with_grid[category]" id="form_with_grid_category" />
+      </div>
+  <div class="datagrid-actions">
+    <input type="submit" name="commit" value="Search" class="datagrid-submit" data-disable-with="Search" />
+    <a class="datagrid-reset" href="/location">Reset</a>
+  </div>
+</form>
+      HTML
+    end
+    it "should support html classes for grid class with namespace" do
+      module ::Ns23
+        class TestGrid < Datagrid::Base
+          scope { Entry }
+          filter(:id)
+        end
+      end
+      expect(subject.datagrid_form_with(model: Ns23::TestGrid.new, url: "grid")).to match_css_pattern(
+        "form.datagrid-form" => 1,
+        "form.datagrid-form label[for=ns23_test_grid_id]" => 1,
+        "form.datagrid-form input#ns23_test_grid_id[name='ns23_test_grid[id]']" => 1,
+      )
+    end
+
+    it "should have overridable param_name method" do
+      class ParamNameGrid82 < Datagrid::Base
+        scope { Entry }
+        filter(:id)
+        def param_name
+          "g"
+        end
+      end
+      expect(subject.datagrid_form_with(model: ParamNameGrid82.new, url: "/grid")).to match_css_pattern(
+        "form.datagrid-form input[name='g[id]']" => 1,
+      )
+    end
+
+    it "takes default partials if custom doesn't exist" do
+      class PartialDefaultGrid < Datagrid::Base
+        scope { Entry }
+        filter(:id, :integer, range: true)
+        filter(:group_id, :enum, multiple: true, checkboxes: true, select: [1, 2])
+        def param_name
+          "g"
+        end
+      end
+      rendered_form = subject.datagrid_form_with(
+        model: PartialDefaultGrid.new,
+        url: "",
+        partials: "custom_form",
+      )
+      expect(rendered_form).to include "form_partial_test"
+    end
+  end
+
 
   describe ".datagrid_row" do
     let(:grid) do

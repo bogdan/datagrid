@@ -97,16 +97,36 @@ module Datagrid
       datagrid_renderer.order_for(grid, column, options)
     end
 
-    # Renders HTML for for grid with all filters inputs and lables defined in it
+    # Renders HTML for grid with all filters inputs and labels defined in it
+    #
+    # Supported options:
+    #
+    # * <tt>:partials</tt> - Path for form partial lookup.
+    #   Default: 'datagrid' results in using `app/views/datagrid/` partials.
+    #   Example: 'datagrid_admin' results in using `app/views/datagrid_admin` partials.
+    # * <tt>:model</tt> - Datagrid object to be rendedred.
+    # * All options supported by Rails <tt>form_with</tt> helper
+    # @param grid [Datagrid] grid object
+    # @return [String] form HTML tag markup
+    def datagrid_form_with(**options)
+      if block_given?
+        raise ArgumentError, 'datagrid_form_with block argument is invalid. Use form_with instead.'
+      end
+      datagrid_renderer.form_with(**options)
+    end
+
+    # Renders HTML for grid with all filters inputs and labels defined in it
     #
     # Supported options:
     #
     # * <tt>:partials</tt> - Path for form partial lookup.
     #   Default: 'datagrid'.
     # * All options supported by Rails <tt>form_for</tt> helper
+    # @deprecated Use {#datagrid_form_with} instead.
     # @param grid [Datagrid] grid object
     # @return [String] form HTML tag markup
     def datagrid_form_for(grid, options = {})
+      Datagrid::Utils.warn_once("datagrid_form_for is deprecated if favor of datagrid_form_with.")
       datagrid_renderer.form_for(grid, options)
     end
 

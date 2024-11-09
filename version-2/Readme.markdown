@@ -9,17 +9,33 @@ Version 2 addresses all that evolution.
 
 List of things introduces:
 
+1. Use `form_with` instead of `form_for`.
 1. Ruby infinite ranges for range filters.
 1. Modern modular CSS classes.
 1. HTML5 input types: number, date, datetime-local.
-1. Use Hash instead of Array for multiparameters attirubtes
-   to avoid [input names collision restriction](https://html.spec.whatwg.org/multipage/input.html#input-type-attr-summary)
-1. Native Rails Engines:
-   while supported, the library was not initially designed for it.
+1. Use Hash instead of Array for multiparameter attirubtes.
+1. Native Rails Engines.
+   * while supported, the library was not initially designed for it.
 1. HTML5 data attributes
 1. Inherit `Datagrid::Base` instead of `include Datagrid`
 1. `ApplicationGrid` is recommended base class instead of `BaseGrid`
 1. Remove SASS dependency
+
+## Use form\_with
+
+Rails [deprecates form\_for in favor of form\_with](https://guides.rubyonrails.org/form_helpers.html#using-form-tag-and-form-for).
+
+`datagrid_form_for` is now depreacted if favor of `datagrid_form_with`.
+However, `datagrid_form_for` would also use Rails `form_with` because they share the same view partial.
+
+TODO: update the wiki
+
+``` ruby
+# V1
+datagrid_form_for(@users_grid, url: users_path)
+# V2
+datagrid_form_with(model: @users_grid, url: users_path)
+```
 
 ## Infinite Ranges for range filters
 
@@ -345,3 +361,9 @@ as much UI as possible for user modification.
 
 Here is a complete [diff for built-in partials between V1 and V2](./views.diff)
 
+## Remove SASS dependency
+
+SASS is no longer a default choice when starting a rails project.
+Version 2 makes it more flexible by avoiding the dependency on any particular CSS framework.
+
+Inspect [a new built-in CSS file](../app/assets/datagrid.css).

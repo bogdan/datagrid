@@ -25,13 +25,23 @@ module Datagrid
       _render_partial("form", options[:partials], { grid: grid, options: options })
     end
 
+    def form_with(**options)
+      grid = options[:model]
+      if grid&.filters&.empty?
+        raise ArgumentError, "Grid has no available filters"
+      end
+      _render_partial("form", options[:partials], { grid: options[:model], options: options })
+    end
+
     def table(grid, assets, **options)
-      _render_partial("table", options[:partials],
+      _render_partial(
+        "table", options[:partials],
         {
           grid: grid,
           options: options,
           assets: assets,
-        },)
+        },
+      )
     end
 
     def header(grid, options = {})

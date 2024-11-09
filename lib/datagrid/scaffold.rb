@@ -128,7 +128,7 @@ module Datagrid
 
     def view_code
       indent(<<~ERB)
-        <%= datagrid_form_for @grid, url: #{grid_route_name} %>
+        <%= datagrid_form_with model: @grid, url: #{grid_route_name} %>
 
         <%= #{pagination_helper_code} %>
         <%= #{table_helper_code} %>

@@ -83,9 +83,9 @@ module Datagrid
       # * <tt>:allow_nil</tt> - determines if the value can be nil
       # * <tt>:allow_blank</tt> - determines if the value can be blank
       # * <tt>:before</tt> - determines the position of this filter,
-      #   by adding it before the filter passed here (when using datagrid_form_for helper)
+      #   by adding it before the filter passed here (when using datagrid_form_with helper)
       # * <tt>:after</tt> - determines the position of this filter,
-      #   by adding it after the filter passed here (when using datagrid_form_for helper)
+      #   by adding it after the filter passed here (when using datagrid_form_with helper)
       # * <tt>:dummy</tt> - if true, this filter will not be applied automatically
       #   and will be just displayed in form. In case you may want to apply it manually.
       # * <tt>:if</tt> - specify the condition when the filter can be dislayed and used.

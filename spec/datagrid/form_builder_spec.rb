@@ -16,7 +16,14 @@ describe Datagrid::FormBuilder do
     action_view_template
   end
 
-  let(:view) { ActionView::Helpers::FormBuilder.new(:report, _grid, template, view_options) }
+  let(:view) do
+    ActionView::Helpers::FormBuilder.new(
+      :report, _grid, template,
+      skip_default_ids: false,
+      **view_options,
+    )
+  end
+
   let(:view_options) { {} }
 
   describe ".datagrid_filter" do
