@@ -1,0 +1,27 @@
+<form class="datagrid-form" id="new_g" action="/users" accept-charset="UTF-8" method="get">
+  <input name="utf8" type="hidden" value="✓" autocomplete="off" />
+
+  <div class="datagrid-filter" data-filter="id" data-type="integer">
+    <label for="g_id">Id</label>
+    <input step="1" class="datagrid-range-from" name="g[id][from]" type="number" />
+    <span class="datagrid-range-separator"> - </span>
+    <input step="1" class="datagrid-range-to" name="g[id][to]" type="number" />
+  </div>
+
+  <div class="datagrid-filter" data-filter="group_id" data-type="enum">
+    <label for="g_group_id">Group</label>
+    <div class="datagrid-enum-checkboxes">
+      <label class="datagrid-enum-checkbox-label" for="g_group_id_1">
+        <input id="g_group_id_1" value="1" type="checkbox" name="g[group_id][]" />1
+      </label>
+      <label class="datagrid-enum-checkbox-label" for="g_group_id_2">
+        <input id="g_group_id_2" type="checkbox" value="2" name="g[group_id][]" />2
+      </label>
+    </div>
+  </div>
+  <div class="datagrid-actions">
+    <input type="submit" name="commit" value="Search" 
+        class="datagrid-submit" data-disable-with="Search" />
+    <a class="datagrid-reset" href="/location">Reset</a>
+  </div>
+</form>
