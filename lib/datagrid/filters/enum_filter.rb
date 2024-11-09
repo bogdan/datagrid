@@ -20,7 +20,12 @@ module Datagrid
       end
 
       def default_input_options
-        { **super, type: "select" }
+        {
+          **super,
+          type: enum_checkboxes? ? "checkbox" : "select",
+          multiple: multiple?,
+          include_hidden: enum_checkboxes? ? false : nil,
+        }
       end
 
       def strict

@@ -46,7 +46,11 @@ module Datagrid
       when :textarea
         text_area filter.name, value: object.filter_value_as_string(filter), **options, &block
       when :checkbox
-        check_box filter.name, options, options.fetch(:value, 1)
+        value = options.fetch(:value, 1).to_s
+        if filter.enum_checkboxes? && enum_checkbox_checked?(filter, value)
+          options = {checked: true, **options}
+        end
+        check_box filter.name, options, value
       when :hidden
         hidden_field filter.name, **options
       when :number
@@ -113,7 +117,7 @@ module Datagrid
     end
 
     def enum_checkbox_checked?(filter, option_value)
-      current_value = object.public_send(filter.name)
+      current_value = object.filter_value(filter)
       if current_value.respond_to?(:include?)
         # Typecast everything to string
         # to remove difference between String and Symbol
