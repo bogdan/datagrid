@@ -20,9 +20,16 @@ module Datagrid
     end
 
     def form_for(grid, options = {})
-      options[:method] ||= :get
-      options[:as] ||= grid.param_name
-      _render_partial("form", options[:partials], { grid: grid, options: options })
+      _render_partial(
+        "form", options[:partials],
+        grid: grid,
+        options: {
+          method: :get,
+          as: grid.param_name,
+          local: true,
+          **options
+        },
+      )
     end
 
     def form_with(**options)

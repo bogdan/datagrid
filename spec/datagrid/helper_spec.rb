@@ -458,7 +458,7 @@ describe Datagrid::Helper do
       end
       object = FormForGrid.new(category: "hello")
       expect(subject.datagrid_form_for(object, url: "/grid")).to equal_to_dom(<<~HTML)
- <form class="datagrid-form" action="/grid" accept-charset="UTF-8" data-remote="true" method="get">
+ <form class="datagrid-form" action="/grid" accept-charset="UTF-8" method="get">
    <input name="utf8" type="hidden" value="&#x2713;" autocomplete="off" />
       <div class="datagrid-filter" data-filter="category" data-type="string">
         <label for="form_for_grid_category">Category</label>

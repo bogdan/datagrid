@@ -1,6 +1,6 @@
 # Datagrid Version 2
 
-Datagrid v1 was released Sep 19 2013 - more than 10 years ago.
+Datagrid v1 was released on Sep 19 2013 - more than 10 years ago.
 A lot of changes in best practices and available technology
 had happened during this period.
 It caused the library to be designed without support of those technologies
@@ -37,6 +37,8 @@ datagrid_form_for(@users_grid, url: users_path)
 # V2
 datagrid_form_with(model: @users_grid, url: users_path)
 ```
+
+Built-in partial uses `form_with` no matter
 
 ## Deprecated datagrid\_order\_for
 
