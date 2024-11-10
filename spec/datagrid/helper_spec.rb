@@ -480,14 +480,18 @@ describe Datagrid::Helper do
         filter(:category)
       end
       object = FormForGrid.new(category: "hello")
-      expect(subject.datagrid_form_for(object, url: "/grid")).to match_css_pattern(
-        "form.datagrid-form.form_for_grid[action='/grid']" => 1,
-        "form input[name=utf8]" => 1,
-        "form .filter label" => "Category",
-        "form .filter input.category.default_filter[name='form_for_grid[category]'][value=hello]" => 1,
-        "form input[name=commit][value=Search]" => 1,
-        "form a.datagrid-reset[href='/location']" => 1,
-      )
+      expect(subject.datagrid_form_for(object, url: "/grid")).to equal_to_dom(<<~HTML)
+ <form class="datagrid-form form_for_grid" id="new_form_for_grid" action="/grid" accept-charset="UTF-8" method="get">
+ <input name="utf8" type="hidden" value="&#x2713;" autocomplete="off" />    <div class="datagrid-filter filter">
+      <label for="form_for_grid_category">Category</label>
+      <input value="hello" class="category default_filter" type="text" name="form_for_grid[category]" id="form_for_grid_category" />
+    </div>
+  <div class="datagrid-actions">
+    <input type="submit" name="commit" value="Search" class="datagrid-submit" data-disable-with="Search" />
+    <a class="datagrid-reset" href="/location">Reset</a>
+  </div>
+</form>
+      HTML
     end
     it "should support html classes for grid class with namespace" do
       module ::Ns22
