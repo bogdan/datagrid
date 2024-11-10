@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.files += `git ls-files | grep -E '^(app|lib|templates)'`.split("\n")
   s.homepage = "https://github.com/bogdan/datagrid"
   s.licenses = ["MIT"]
-  s.required_ruby_version = Gem::Requirement.new(">= 2.7")
+  s.required_ruby_version = Gem::Requirement.new(">= 3.0")
   s.metadata = {
     "homepage_uri" => s.homepage,
     "bug_tracker_uri" => "#{s.homepage}/issues",
