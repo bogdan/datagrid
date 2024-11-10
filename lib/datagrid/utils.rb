@@ -93,6 +93,9 @@ module Datagrid
       def parse_datetime(value)
         return nil if value.blank?
         return value if value.is_a?(Range)
+        if defined?(ActiveSupport::TimeWithZone) && value.is_a?(ActiveSupport::TimeWithZone)
+          return value
+        end
 
         if value.is_a?(String)
           Array(Datagrid.configuration.datetime_formats).each do |format|

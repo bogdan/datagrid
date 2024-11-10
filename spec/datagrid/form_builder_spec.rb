@@ -132,14 +132,17 @@ describe Datagrid::FormBuilder do
       context "datetime filter type is text" do
         let(:_filter) { :created_at }
         let(:_grid) do
-          test_report(created_at: Time.new(2024, 1, 1, 9, 25, 15)) do
+          created_at = ActiveSupport::TimeZone['UTC'].local(
+            2024, 1, 1, 9, 25, 15
+          )
+          test_report(created_at: ) do
             scope { Entry }
             filter(:created_at, :datetime, input_options: { type: "text" })
           end
         end
         it {
           should equal_to_dom(
-            '<input type="text" value="2024-01-01 09:25:15 +0100"
+            '<input type="text" value="2024-01-01 09:25:15 UTC"
               name="report[created_at]" id="report_created_at"/>',
           )
         }
