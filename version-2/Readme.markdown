@@ -11,7 +11,7 @@ List of things introduces:
 
 1. Use `form_with` instead of `form_for`.
 1. Deprecated `datagrid_order_for`
-1. Ruby infinite ranges for range filters.
+1. Ruby endless ranges for range filters.
 1. Modern modular CSS classes.
 1. HTML5 input types: number, date, datetime-local.
 1. Use Hash instead of Array for multiparameter attirubtes.
@@ -44,17 +44,17 @@ datagrid_form_with(model: @users_grid, url: users_path)
 The recommended way is to include your ordering code directly into `datagrid/head` partial.
 See default [head partial](../app/views/datagrid/_head.html.erb) for example.
 
-## Infinite Ranges for range filters
+## Endless ranges for range filters
 
-Ruby supports infinite ranges now,
-so there is no need to present infinite ranges as Hash or Array.
+Ruby supports endless ranges now,
+so there is no need to present endless ranges as Hash or Array.
 But it introduces a breaking changes to range filters in Datagrid:
 
 ``` ruby
 class UsersGrid < Datagrid::Base
   filter(:id, :integer, range: true) do |value, scope|
-    # V1 value: [1, nil]
-    # V2 value: 1..nil
+    # V1 value is  [1, nil]
+    # V2 value is 1..nil
     scope.where(id: value)
   end
 end
@@ -103,8 +103,8 @@ and avoid collisions with other libraries:
 | noresults    | datagrid-no-results                 |
 | datagrid     | datagrid-table                      |
 | order        | datagrid-order                      |
-| a.asc        | datagrid-order-control-asc          |
-| a.desc       | datagrid-order-control-desc         |
+| asc          | datagrid-order-control-asc          |
+| desc         | datagrid-order-control-desc         |
 | ordered.asc  | datagrid-order-active-asc           |
 | ordered.desc | datagrid-order-active-desc          |
 | field        | datagrid-dynamic-field              |
@@ -112,6 +112,9 @@ and avoid collisions with other libraries:
 | value        | datagrid-dynamic-value              |
 | separator    | datagrid-range-separator            |
 | checkboxes   | datagrid-enum-checkboxes            |
+
+Diff for [built-in partials between V1 and V2](./views.diff)
+See [a new built-in CSS file](../app/assets/datagrid.css).
 
 ### Example
 
@@ -180,7 +183,7 @@ The default behavior can be changed back by using `input_options`:
 
 ``` ruby
 filter(:created_at, :date, range: true, input_options: {type: 'text'})
-filter(:salary, :integer, range: true, input_options: {type: 'text'})
+filter(:salary, :integer, range: true, input_options: {type: 'text', step: nil})
 ```
 
 Additionally, textarea inputs are now supported this way:
@@ -190,10 +193,9 @@ Additionally, textarea inputs are now supported this way:
 filter(:text, :string, input_options: {type: 'textarea'})
 ```
 
-## Names collision restriction
+## Prefer Hash instead of Array for multiparameter filter types
 
-HTML5 prohibits multiple inputs to have the same name.
-This is contradicts to Rails parameters convention that serializes multiple inputs with same name into array:
+Rails multiple input had been a problem [#325](https://github.com/bogdan/datagrid/issues/325).
 
 ``` html
 Date From:
@@ -250,6 +252,8 @@ instead of classes for meta information from backend.
 Therefor built-in partials now generate data attributes by default
 instead of classes for column names:
 
+Diff for [built-in partials between V1 and V2](./views.diff)
+
 ### Filters
 
 ``` html
@@ -263,10 +267,7 @@ instead of classes for column names:
 Version 2:
 
 ``` html
-<div class="datagrid-filter"
-         data-filter="category"
-         data-type="string"
->
+<div class="datagrid-filter" data-filter="category" data-type="string">
   <label for="form_for_grid_category">Category</label>
   <input type="text"
       name="form_for_grid[category]" id="form_for_grid_category" />
@@ -338,7 +339,7 @@ end
 ## ApplicationGrid base class
 
 Previously recommended base class `BaseGrid` is incosistent
-with Rails naming conventionsa.
+with Rails naming conventions.
 It was renamed to `ApplicationGrid` instead:
 
 ``` ruby
@@ -361,16 +362,9 @@ class UsersGrid < ApplicationGrid
 end
 ```
 
-## All changes in built-in partials
-
-Version 2 built-in partials are trying to expose
-as much UI as possible for user modification.
-
-Here is a complete [diff for built-in partials between V1 and V2](./views.diff)
-
 ## Remove SASS dependency
 
 SASS is no longer a default choice when starting a rails project.
 Version 2 makes it more flexible by avoiding the dependency on any particular CSS framework.
 
-Inspect [a new built-in CSS file](../app/assets/datagrid.css).
+See [a new built-in CSS file](../app/assets/datagrid.css).
