@@ -93,13 +93,13 @@ module Datagrid
     #
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
-    def datagrid_order_for(grid, column, order: true, **options)
+    def datagrid_order_for(grid, column, options = {})
       Datagrid::Utils.warn_once(<<~MSG)
         datagrid_order_for is deprecated.
         Put necessary code inline inside datagrid/head partial.
         See built-in partial for example.
       MSG
-      datagrid_renderer.order_for(grid, column, **options)
+      datagrid_renderer.order_for(grid, column, options)
     end
 
     # Renders HTML for grid with all filters inputs and labels defined in it
