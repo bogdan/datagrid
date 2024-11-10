@@ -20,7 +20,6 @@ require "rails"
 require "mongoid"
 
 require "datagrid"
-require "debug"
 require "rspec"
 require "logger"
 
