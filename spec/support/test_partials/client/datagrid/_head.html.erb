@@ -3,7 +3,6 @@
   <% grid.html_columns(*options[:columns]).each do |column| %>
     <th>
       <%= column.header %>
-      <%= datagrid_order_for(grid, column, **options) if column.order && options[:order]%>
     </th>
   <% end %>
 </tr>

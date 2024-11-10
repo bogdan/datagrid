@@ -2,7 +2,6 @@
   <% grid.html_columns(*options[:columns]).each do |column| %>
     <%= content_tag(
       :th,
-      safe_join([column.header, datagrid_order_for(grid, column, **options)]),
       class: {
         # Adding html clases based on condition
         # Consider maintaining consistency with datagrid/rows partial
@@ -11,6 +10,22 @@
         column.html_class => column.html_class.present?,
       },
       "data-column": column.name
-    ) %>
+    ) do %>
+      <%= column.header %>
+      <% if column.supports_order? && options[:order] -%>
+        <div class="datagrid-order">
+          <%= link_to(
+            I18n.t("datagrid.table.order.asc"),
+            datagrid_order_path(grid, column, false),
+            class: "datagrid-order-control-asc"
+          ) %>
+          <%= link_to(
+            I18n.t("datagrid.table.order.desc"),
+            datagrid_order_path(grid, column, true),
+            class: "datagrid-order-control-desc"
+          ) %>
+        </div>
+      <% end -%>
+    <% end -%>
   <% end %>
 </tr>

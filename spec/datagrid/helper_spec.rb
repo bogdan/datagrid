@@ -144,7 +144,6 @@ describe Datagrid::Helper do
         expect(rendered_partial).to include "Namespaced table partial."
         expect(rendered_partial).to include "Namespaced row partial."
         expect(rendered_partial).to include "Namespaced head partial."
-        expect(rendered_partial).to include "Namespaced order_for partial."
       end
     end
 
@@ -427,12 +426,14 @@ describe Datagrid::Helper do
         column(:category)
       end
       object = OrderedGrid.new(descending: true, order: :category)
-      expect(subject.datagrid_order_for(object, object.column_by_name(:category))).to equal_to_dom(<<~HTML)
-        <div class="datagrid-order">
-        <a class="datagrid-order-control-asc" href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category">↑</a>
-        <a class="datagrid-order-control-desc" href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category">↓</a>
+      silence_warnings do
+        expect(subject.datagrid_order_for(object, object.column_by_name(:category))).to equal_to_dom(<<~HTML)
+        <div class="order">
+        <a class="asc" href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category">&uarr;</a>
+        <a class="desc" href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category">&darr;</a>
         </div>
-      HTML
+        HTML
+      end
     end
   end
 

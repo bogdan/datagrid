@@ -8,6 +8,8 @@ namespace :datagrid do
     destination_dir = (Rails.root + views_path).to_s
     pattern = "#{File.expand_path(File.dirname(__FILE__) + "/../../#{views_path}")}/*"
     Dir[pattern].each do |template|
+      # Deprecated partial
+      next if template.include?("/_order_for.")
       puts "* copy #{template} => #{destination_dir}"
       FileUtils.mkdir_p destination_dir
       FileUtils.cp template, destination_dir

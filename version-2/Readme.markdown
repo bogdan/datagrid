@@ -10,6 +10,7 @@ Version 2 addresses all that evolution.
 List of things introduces:
 
 1. Use `form_with` instead of `form_for`.
+1. Deprecated `datagrid_order_for`
 1. Ruby infinite ranges for range filters.
 1. Modern modular CSS classes.
 1. HTML5 input types: number, date, datetime-local.
@@ -36,6 +37,12 @@ datagrid_form_for(@users_grid, url: users_path)
 # V2
 datagrid_form_with(model: @users_grid, url: users_path)
 ```
+
+## Deprecated datagrid\_order\_for
+
+`datagrid_order_for` helper serves no purpose and should not be used directly.
+The recommended way is to include your ordering code directly into `datagrid/head` partial.
+See default [head partial](../app/views/datagrid/_head.html.erb) for example.
 
 ## Infinite Ranges for range filters
 
