@@ -139,8 +139,8 @@ describe Datagrid::Filters::DynamicFilter do
       end
     end
 
-    # expect(grid.assets).to_not include(Entry.create!(disabled: true))
-    # expect(grid.assets).to include(Entry.create!(disabled: false))
+    expect(grid.assets).to_not include(Entry.create!(disabled: true))
+    expect(grid.assets).to include(Entry.create!(disabled: false))
 
     grid.condition = [:group_id, ">=", 3]
     expect(grid.assets).to include(Entry.create!(disabled: true, group_id: 4))

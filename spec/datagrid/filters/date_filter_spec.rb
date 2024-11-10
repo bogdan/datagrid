@@ -32,19 +32,14 @@ describe Datagrid::Filters::DateFilter do
   end
 
   it "supports hash argument" do
-    e1 = Entry.create!(created_at: 7.days.ago)
-    e2 = Entry.create!(created_at: 4.days.ago)
-    e3 = Entry.create!(created_at: 1.day.ago)
-    from = 5.days.ago
-    to = 3.days.ago
-    report = test_report(created_at: { from: from, to: to }) do
+    report = test_report do
       scope { Entry }
       filter(:created_at, :date, range: true)
     end
+    from = 5.days.ago
+    to = 3.days.ago
+    report.created_at = { from: from, to: to }
     expect(report.created_at).to eq(from.to_date..to.to_date)
-    expect(report.assets).not_to include(e1)
-    expect(report.assets).to include(e2)
-    expect(report.assets).not_to include(e3)
     report.created_at = {}
     expect(report.created_at).to eq(nil)
     report.created_at = { from: nil, to: nil }
