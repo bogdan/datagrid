@@ -115,6 +115,10 @@ and avoid collisions with other libraries:
 | separator    | datagrid-range-separator            |
 | checkboxes   | datagrid-enum-checkboxes            |
 
+All classes are now explicitly assinged inside datagrid partials.
+[Modify built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials)
+if you want to change them.
+
 Diff for [built-in partials between V1 and V2](./views.diff)
 See [a new built-in CSS file](../app/assets/datagrid.css).
 
@@ -254,9 +258,10 @@ instead of classes for meta information from backend.
 Therefor built-in partials now generate data attributes by default
 instead of classes for column names:
 
-Diff for [built-in partials between V1 and V2](./views.diff)
 
 ### Filters
+
+Version 1:
 
 ``` html
 <div class="datagrid-filter filter">
@@ -275,6 +280,8 @@ Version 2:
       name="form_for_grid[category]" id="form_for_grid_category" />
 </div>
 ```
+
+Diff for [built-in partials between V1 and V2](./views.diff)
 
 ### Columns
 
@@ -318,14 +325,16 @@ If you still want to have an HTML class attached to a column use `class` column 
 column(:name, class: 'short-column')
 ```
 
+Renders:
+
 ``` html
 <th class="short-column" data-column="name">Name</th>
 ...
 <td class="short-column" data-column="name">John</td>
 ```
 
-If you want to change this behavior completely,
-modify [built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials)
+[Modify built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials)
+if you want to change this behavior completely.
 
 ## Inherit Datagrid::Base
 
