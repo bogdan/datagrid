@@ -726,4 +726,22 @@ describe Datagrid::Helper do
       HTML
     end
   end
+
+  describe ".datagrid_column_classes" do
+    it "is deprecated" do
+      grid = test_report(order: :name, descending: true) do
+        scope { Entry }
+        column(:name)
+        column(:group_id, class: 'short-column')
+      end
+      silence_warnings do
+        expect(subject.send(:datagrid_column_classes, grid, :name)).to eq(
+          "name ordered desc"
+        )
+        expect(subject.send(:datagrid_column_classes, grid, :group_id)).to eq(
+          "group_id short-column"
+        )
+      end
+    end
+  end
 end

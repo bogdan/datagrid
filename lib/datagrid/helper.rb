@@ -93,8 +93,9 @@ module Datagrid
     #
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
-    def datagrid_order_for(grid, column, options = {})
-      datagrid_renderer.order_for(grid, column, options)
+    def datagrid_order_for(grid, column, order: true, **options)
+      return "" unless column.supports_order? && order
+      datagrid_renderer.order_for(grid, column, **options)
     end
 
     # Renders HTML for grid with all filters inputs and labels defined in it
@@ -170,10 +171,15 @@ module Datagrid
     end
 
     def datagrid_column_classes(grid, column)
+      Datagrid::Utils.warn_once(<<~MSG)
+      datagrid_column_classes is deprecated. Assign necessary classes manually.
+      Correspond to default datagrid/rows partial for example.)
+      MSG
+      column = grid.column_by_name(column)
       order_class = if grid.ordered_by?(column)
-                      grid.descending ? "datagrid-order-active-desc" : "datagrid-order-active-asc"
+                      ["ordered", grid.descending ? "desc" : "asc"]
                     end
-      [order_class, column.html_class].compact.join(" ")
+      [column.name, order_class, column.options[:class]].compact.join(" ")
     end
   end
 end
