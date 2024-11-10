@@ -16,6 +16,7 @@ group :development do
   gem "rspec"
   gem "sequel"
   gem "sqlite3", "~> 1.7.0"
+  gem "rubocop", "~> 1.68"
 
   group :mongo do
     gem "bson"
@@ -23,4 +24,3 @@ group :development do
   end
 end
 
-gem "rubocop", "~> 1.68", group: :development

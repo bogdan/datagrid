@@ -33,5 +33,5 @@ Gem::Specification.new do |s|
     "rubygems_mfa_required" => "true",
   }
 
-  s.add_dependency "railties", ">= 6.1"
+  s.add_dependency "railties", ">= 7.0"
 end
