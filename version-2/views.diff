@@ -39,37 +39,44 @@ index 7e175c1..fc4f4ae 100644
    </div>
  <% end -%>
 diff --git a/app/views/datagrid/_head.html.erb b/app/views/datagrid/_head.html.erb
-index e939128..c3264bb 100644
+index e939128..b355528 100644
 --- a/app/views/datagrid/_head.html.erb
 +++ b/app/views/datagrid/_head.html.erb
-@@ -1,6 +1,6 @@
+@@ -1,8 +1,31 @@
  <tr>
    <% grid.html_columns(*options[:columns]).each do |column| %>
 -    <th class="<%= datagrid_column_classes(grid, column) %>">
-+    <th class="<%= datagrid_column_classes(grid, column) %>" data-column="<%= column.name %>">
++    <%= content_tag(
++      :th,
++      class: {
++        # Adding html clases based on condition
++        # Consider maintaining consistency with datagrid/rows partial
++        "datagrid-order-active-asc": grid.ordered_by?(column, false),
++        "datagrid-order-active-desc": grid.ordered_by?(column ,true),
++        column.html_class => column.html_class.present?,
++      },
++      "data-column": column.name
++    ) do %>
        <%= column.header %>
-       <%= datagrid_order_for(grid, column, options) if column.supports_order? && options[:order]%>
-     </th>
-diff --git a/app/views/datagrid/_order_for.html.erb b/app/views/datagrid/_order_for.html.erb
-index 1545a8e..1c33c37 100644
---- a/app/views/datagrid/_order_for.html.erb
-+++ b/app/views/datagrid/_order_for.html.erb
-@@ -1,10 +1,10 @@
--<div class="order">
-+<div class="datagrid-order">
-   <%= link_to(
--      I18n.t("datagrid.table.order.asc").html_safe,
-+      I18n.t("datagrid.table.order.asc"),
-       datagrid_order_path(grid, column, false),
--      class: "asc") %>
-+      class: "datagrid-order-control-asc") %>
-   <%= link_to(
--      I18n.t("datagrid.table.order.desc").html_safe,
-+      I18n.t("datagrid.table.order.desc"),
-       datagrid_order_path(grid, column, true),
--      class: "desc") %>
-+      class: "datagrid-order-control-desc") %>
- </div>
+-      <%= datagrid_order_for(grid, column, options) if column.supports_order? && options[:order]%>
+-    </th>
++      <% if column.supports_order? && options[:order] -%>
++        <div class="datagrid-order">
++          <%= link_to(
++            I18n.t("datagrid.table.order.asc"),
++            datagrid_order_path(grid, column, false),
++            class: "datagrid-order-control-asc"
++          ) %>
++          <%= link_to(
++            I18n.t("datagrid.table.order.desc"),
++            datagrid_order_path(grid, column, true),
++            class: "datagrid-order-control-desc"
++          ) %>
++        </div>
++      <% end -%>
++    <% end -%>
+   <% end %>
+ </tr>
 diff --git a/app/views/datagrid/_range_filter.html.erb b/app/views/datagrid/_range_filter.html.erb
 index 7a8a123..3b8ca85 100644
 --- a/app/views/datagrid/_range_filter.html.erb
@@ -82,14 +89,25 @@ index 7a8a123..3b8ca85 100644
 +<span class="datagrid-range-separator"><%= I18n.t('datagrid.filters.range.separator') %></span>
 +<%= form.datagrid_filter_input(filter, class: 'datagrid-range-to', **to_options) %>
 diff --git a/app/views/datagrid/_row.html.erb b/app/views/datagrid/_row.html.erb
-index f54d21c..20f3ffb 100644
+index f54d21c..340aea6 100644
 --- a/app/views/datagrid/_row.html.erb
 +++ b/app/views/datagrid/_row.html.erb
-@@ -1,5 +1,5 @@
+@@ -1,5 +1,16 @@
  <tr>
    <% grid.html_columns(*options[:columns]).each do |column| %>
 -    <td class="<%= datagrid_column_classes(grid, column) %>"><%= datagrid_value(grid, column, asset) %></td>
-+    <td class="<%= datagrid_column_classes(grid, column) %>" data-column="<%= column.name %>"><%= datagrid_value(grid, column, asset) %></td>
++    <%= content_tag(
++      :td,
++      datagrid_value(grid, column, asset),
++      class: {
++        # Adding html clases based on condition
++        # Consider maintaining consistency with datagrid/head partial
++        "datagrid-order-active-asc": grid.ordered_by?(column, false),
++        "datagrid-order-active-desc": grid.ordered_by?(column ,true),
++        column.html_class => column.html_class.present?,
++      },
++      "data-column": column.name
++    ) %>
    <% end %>
  </tr>
 diff --git a/app/views/datagrid/_table.html.erb b/app/views/datagrid/_table.html.erb
