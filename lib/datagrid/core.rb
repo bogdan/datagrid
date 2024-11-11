@@ -137,6 +137,15 @@ module Datagrid
     end
 
     # @return [{Symbol => Object}] grid attributes including filter values and ordering values
+    # @example
+    #   class UsersGrid < ApplicationGrid
+    #     scope { User }
+    #     filter(:first_name, :string)
+    #     filter(:last_name, :string)
+    #   end
+    #
+    #   grid = UsersGrid.new(first_name: 'John', last_name: 'Smith')
+    #   grid.attributes # => {first_name: 'John', last_name: 'Smith', order: nil, descending: nil}
     def attributes
       result = {}
       datagrid_attributes.each do |name|
@@ -148,10 +157,13 @@ module Datagrid
     # Updates datagrid attributes with a passed hash argument
     # @param attributes [{Symbol => Object}]
     # @example
-    #   grid = MyGrid.new
+    #   grid = UsersGrid.new
     #   grid.attributes = {first_name: 'John', last_name: 'Smith'}
     #   grid.first_name # => 'John'
     #   grid.last_name # => 'Smith'
+    def attributes=(value)
+      super
+    end
 
     # @return [Object] Any datagrid attribute value
     def [](attribute)

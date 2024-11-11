@@ -193,7 +193,7 @@ TODO
 
 ## HTML5 input types
 
-Version 1 generated `<input type="text"/>` for every filter type.
+Version 1 generated `<input type="text"/>` for most filter types.
 Version 2 uses the appropriate input type for each filter type:
 
 | Type       | HTML Input Element                         |
@@ -212,6 +212,20 @@ The default behavior can be changed back by using `input_options`:
 ``` ruby
 filter(:created_at, :date, range: true, input_options: {type: 'text'})
 filter(:salary, :integer, range: true, input_options: {type: 'text', step: nil})
+```
+
+You can disable HTML5 inputs with:
+
+``` ruby
+class ApplicationGrid < Datagrid::Base
+  def self.filter(name, type = :default, input_options: {}, **options)
+    if [:date, :datetime, :float, :integer].include?(type)
+      input_options[:type] ||= 'text'
+    end
+
+    super(name, type, input_options:, **options)
+  end
+end
 ```
 
 Additionally, textarea inputs are now supported this way:
@@ -389,4 +403,4 @@ end
 SASS is no longer a default choice when starting a rails project.
 Version 2 makes it more flexible by avoiding the dependency on any particular CSS framework.
 
-See [a new built-in CSS file](../app/assets/datagrid.css).
+See [a new built-in CSS file](../app/assets/stylesheets/datagrid.css).
