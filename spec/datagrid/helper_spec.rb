@@ -20,8 +20,10 @@ describe Datagrid::Helper do
     allow(subject).to receive(:url_for) do |options|
       options.is_a?(String) ? options : ["/location", options.to_param.presence].compact.join("?")
     end
-    # Rails default since 5.x
+
+    # Rails defaults since 6.x
     ActionView::Helpers::FormHelper.form_with_generates_ids = true
+    ActionView::Helpers::FormTagHelper.default_enforce_utf8 = false
   end
 
   let(:group) { Group.create!(name: "Pop") }
@@ -459,11 +461,10 @@ describe Datagrid::Helper do
       object = FormForGrid.new(category: "hello")
       expect(subject.datagrid_form_for(object, url: "/grid")).to equal_to_dom(<<~HTML)
  <form class="datagrid-form" action="/grid" accept-charset="UTF-8" method="get">
-   <input name="utf8" type="hidden" value="&#x2713;" autocomplete="off" />
-      <div class="datagrid-filter" data-filter="category" data-type="string">
-        <label for="form_for_grid_category">Category</label>
-        <input value="hello" type="text" name="form_for_grid[category]" id="form_for_grid_category" />
-      </div>
+  <div class="datagrid-filter" data-filter="category" data-type="string">
+    <label for="form_for_grid_category">Category</label>
+    <input value="hello" type="text" name="form_for_grid[category]" id="form_for_grid_category" />
+  </div>
   <div class="datagrid-actions">
     <input type="submit" name="commit" value="Search" class="datagrid-submit" data-disable-with="Search" />
     <a class="datagrid-reset" href="/location">Reset</a>
@@ -533,11 +534,10 @@ describe Datagrid::Helper do
       object = FormWithGrid.new(category: "hello")
       expect(subject.datagrid_form_with(model: object, url: "/grid")).to equal_to_dom(<<~HTML)
  <form class="datagrid-form" action="/grid" accept-charset="UTF-8" data-remote="true" method="get">
-   <input name="utf8" type="hidden" value="&#x2713;" autocomplete="off" />
-      <div class="datagrid-filter" data-filter="category" data-type="string">
-        <label for="form_with_grid_category">Category</label>
-        <input value="hello" type="text" name="form_with_grid[category]" id="form_with_grid_category" />
-      </div>
+  <div class="datagrid-filter" data-filter="category" data-type="string">
+    <label for="form_with_grid_category">Category</label>
+    <input value="hello" type="text" name="form_with_grid[category]" id="form_with_grid_category" />
+  </div>
   <div class="datagrid-actions">
     <input type="submit" name="commit" value="Search" class="datagrid-submit" data-disable-with="Search" />
     <a class="datagrid-reset" href="/location">Reset</a>
