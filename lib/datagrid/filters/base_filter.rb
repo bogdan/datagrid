@@ -17,7 +17,7 @@ module Datagrid
         self.grid_class = grid_class
         self.name = name.to_sym
         self.options = options
-        self.block = block || default_filter_block
+        self.block = block
       end
 
       def parse(value)
@@ -39,7 +39,7 @@ module Datagrid
 
         return scope unless result
 
-        result = default_filter(value, scope, grid_object) if result == Datagrid::Filters::DEFAULT_FILTER_BLOCK
+        result = default_filter(value, scope) if result == Datagrid::Filters::DEFAULT_FILTER_BLOCK
         unless grid_object.driver.match?(result)
           raise(
             Datagrid::FilteringError,
@@ -116,13 +116,6 @@ module Datagrid
         :"datagrid_#{to_s.demodulize.underscore}"
       end
 
-      def default_filter_block
-        filter = self
-        lambda do |value, scope, grid|
-          filter.default_filter(value, scope, grid)
-        end
-      end
-
       def supports_range?
         self.class.ancestors.include?(::Datagrid::Filters::RangedFilter)
       end
@@ -150,6 +143,10 @@ module Datagrid
         false
       end
 
+      def default_scope?
+        !block
+      end
+
       protected
 
       def default_filter_where(scope, value)
@@ -157,10 +154,12 @@ module Datagrid
       end
 
       def execute(value, scope, grid_object)
-        if block.arity == 1
+        if block&.arity == 1
           scope.instance_exec(value, &block)
-        else
+        elsif block
           Datagrid::Utils.apply_args(value, scope, grid_object, &block)
+        else
+          default_filter(value, scope)
         end
       end
 
@@ -185,7 +184,7 @@ module Datagrid
         grid_class.driver
       end
 
-      def default_filter(value, scope, _grid)
+      def default_filter(value, scope)
         return nil if dummy?
 
         if !driver.scope_has_column?(scope, name) && scope.respond_to?(name, true)

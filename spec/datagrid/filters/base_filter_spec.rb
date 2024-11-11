@@ -15,4 +15,20 @@ describe Datagrid::Filters::BaseFilter do
     expect(report.assets).not_to include(Entry.create!(name: "world"))
     expect(report.assets).not_to include(Entry.create!(name: ""))
   end
+
+  describe "#default_scope?" do
+
+    it "identifies filters without custom block" do
+      grid = test_report do
+        scope { Entry }
+        filter(:id, :integer)
+        filter(:group_id, :integer) do |value, scope|
+          scope("group_id >= ?", value)
+        end
+      end
+
+      expect(grid.filter_by_name(:id)).to be_default_scope
+      expect(grid.filter_by_name(:group_id)).to_not be_default_scope
+    end
+  end
 end
