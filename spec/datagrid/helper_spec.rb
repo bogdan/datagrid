@@ -20,6 +20,8 @@ describe Datagrid::Helper do
     allow(subject).to receive(:url_for) do |options|
       options.is_a?(String) ? options : ["/location", options.to_param.presence].compact.join("?")
     end
+
+    ActionView::Helpers::FormTagHelper.default_enforce_utf8 = false
   end
 
   let(:group) { Group.create!(name: "Pop") }
@@ -481,8 +483,7 @@ describe Datagrid::Helper do
       end
       object = FormForGrid.new(category: "hello")
       expect(subject.datagrid_form_for(object, url: "/grid")).to equal_to_dom(<<~HTML)
- <form class="datagrid-form form_for_grid" id="new_form_for_grid" action="/grid" accept-charset="UTF-8" method="get">
- <input name="utf8" type="hidden" value="&#x2713;" autocomplete="off" />    <div class="datagrid-filter filter">
+ <form class="datagrid-form form_for_grid" id="new_form_for_grid" action="/grid" accept-charset="UTF-8" method="get">    <div class="datagrid-filter filter">
       <label for="form_for_grid_category">Category</label>
       <input value="hello" class="category default_filter" type="text" name="form_for_grid[category]" id="form_for_grid_category" />
     </div>
