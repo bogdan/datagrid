@@ -40,11 +40,27 @@ datagrid_form_with(model: @users_grid, url: users_path)
 
 Built-in partial uses `form_with` no matter
 
+[Grep all deprecations](./deprecations.sh).
+
 ## Deprecated datagrid\_order\_for
 
 `datagrid_order_for` helper serves no purpose and should not be used directly.
 The recommended way is to include your ordering code directly into `datagrid/head` partial.
 See default [head partial](../app/views/datagrid/_head.html.erb) for example.
+[Grep all deprecations](./deprecations.sh).
+
+## Inherit Datagrid::Base
+
+`include Datagrid` causes method name space to be clamsy.
+Version 2 introduces a difference between the class
+that needs to be inherited and high level namespace (just like most gems do):
+
+``` ruby
+class ApplicationGrid < Datagrid::Base
+end
+```
+
+[Grep all deprecations](./deprecations.sh).
 
 ## Endless ranges for range filters
 
@@ -91,6 +107,11 @@ grid.id = 3..7
 grid = UsersGrid.new(ActiveSupport::JSON.load(grid.attributes.to_json))
 grid.id # => 3..7
 ```
+
+This very likely breaks all `range: true` filters with custom block passed.
+All such filters can be seen with this script (works only for V2):
+
+[Search all broken range filters](./find_broken_range_filters.rb)
 
 ## Modern CSS classes naming conventions
 
@@ -335,17 +356,6 @@ Renders:
 
 [Modify built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials)
 if you want to change this behavior completely.
-
-## Inherit Datagrid::Base
-
-`include Datagrid` causes method name space to be clamsy.
-Version 2 introduces a difference between the class
-that needs to be inherited and high level namespace (just like most gems do):
-
-``` ruby
-class ApplicationGrid < Datagrid::Base
-end
-```
 
 ## ApplicationGrid base class
 
