@@ -183,12 +183,12 @@ route  resources :skills
 insert  app/assets/stylesheet/application.css
 ```
 
-#### Customize Built-in partials
+#### Customize Built-in views
 
-In order to get a control on datagrid built-in partials run:
+In order to get a control on datagrid built-in views run:
 
 ``` sh
-rake datagrid:copy_partials
+rails g datagrid::views
 ```
 
 #### Advanced frontend

@@ -25,5 +25,6 @@ module Datagrid
 end
 
 require "datagrid/base"
-require "datagrid/scaffold"
+require "datagrid/generators/scaffold"
+require "datagrid/generators/views"
 I18n.load_path << File.expand_path("datagrid/locale/en.yml", __dir__)

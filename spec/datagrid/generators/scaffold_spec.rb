@@ -2,8 +2,8 @@
 
 require "spec_helper"
 
-describe Datagrid::Scaffold do
-  subject { Datagrid::Scaffold.new(["user"]) }
+describe Datagrid::Generators::Scaffold do
+  subject { Datagrid::Generators::Scaffold.new(["user"]) }
 
   describe ".pagination_helper_code" do
     it "uses kaminari by default" do

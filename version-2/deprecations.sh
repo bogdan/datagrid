@@ -10,6 +10,9 @@ git grep 'datagrid_column_classes'
 # Inherit Datagrid::Base
 git grep 'include Datagrid' 
 
+# Use rails g datagrid:views
+git grep 'datagrid:copy_partials'
+
 # Rename to ApplicationGrid (optional)
 git grep 'BaseDatagrid'
 git grep 'BaseGrid'

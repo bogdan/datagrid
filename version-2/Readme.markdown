@@ -21,6 +21,7 @@ List of things introduces:
 1. Inherit `Datagrid::Base` instead of `include Datagrid`
 1. `ApplicationGrid` is recommended base class instead of `BaseGrid`
 1. Remove SASS dependency
+1. Replace `rake datagrid:copy_partials` with `rails g datagrid:views`
 
 ## Use form\_with
 

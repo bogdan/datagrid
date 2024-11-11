@@ -5,6 +5,8 @@ require "rails/generators"
 # @!visibility private
 module Datagrid
   # @!visibility private
+  module Generators
+  # @!visibility private
   class Scaffold < Rails::Generators::NamedBase
     include Rails::Generators::ResourceHelpers
 
@@ -166,5 +168,6 @@ module Datagrid
       name = Rails.root.join(name) unless name.to_s.first == "/"
       File.exist?(name)
     end
+  end
   end
 end
