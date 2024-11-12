@@ -91,7 +91,7 @@ describe Datagrid do
     end
   end
 
-  it "deprecates inclucsion of Datagrid module" do
+  it "deprecates inclusion of Datagrid module" do
     silence_warnings do
       class DeprecatedInclusion
         include Datagrid
