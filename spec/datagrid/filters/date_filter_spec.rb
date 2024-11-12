@@ -7,14 +7,28 @@ describe Datagrid::Filters::DateFilter do
   it "supports date range argument" do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
-    e3 = Entry.create!(created_at: 1.day.ago)
+    e3 = Entry.create!(created_at: 3.days.ago)
+    e4 = Entry.create!(created_at: 1.day.ago)
+
     report = test_report(created_at: 5.day.ago..3.days.ago) do
       scope { Entry }
-      filter(:created_at, :date)
+      filter(:created_at, :date, range: true)
     end
+
+    expect(report.created_at).to eq(5.days.ago.to_date..3.days.ago.to_date)
     expect(report.assets).not_to include(e1)
     expect(report.assets).to include(e2)
-    expect(report.assets).not_to include(e3)
+    expect(report.assets).to include(e3)
+    expect(report.assets).not_to include(e4)
+  end
+
+  it "raises when range assigned to non-range filter" do
+    expect {
+      test_report(created_at: 5.day.ago..3.days.ago) do
+        scope { Entry }
+        filter(:created_at, :date)
+      end
+    }.to raise_error(ArgumentError)
   end
 
   it "endless date range argument" do
@@ -22,7 +36,7 @@ describe Datagrid::Filters::DateFilter do
     e2 = Entry.create!(created_at: 4.days.ago)
     report = test_report(created_at: 5.days.ago..) do
       scope { Entry }
-      filter(:created_at, :date)
+      filter(:created_at, :date, range: true)
     end
     expect(report.assets).not_to include(e1)
     expect(report.assets).to include(e2)
@@ -31,7 +45,7 @@ describe Datagrid::Filters::DateFilter do
     expect(report.assets).not_to include(e2)
   end
 
-  it "supports hash argument" do
+  it "supports hash argument for range filter" do
     report = test_report do
       scope { Entry }
       filter(:created_at, :date, range: true)

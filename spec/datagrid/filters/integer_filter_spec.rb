@@ -13,7 +13,7 @@ describe Datagrid::Filters::IntegerFilter do
   it "should support integer range argument" do
     report = test_report(group_id: 3..5) do
       scope { Entry }
-      filter(:group_id, :integer)
+      filter(:group_id, :integer, range: true)
     end
     expect(report.assets).not_to include(entry1)
     expect(report.assets).to include(entry4)
@@ -168,6 +168,40 @@ describe Datagrid::Filters::IntegerFilter do
     expect(report.group_id).to eq(nil)
 
     report.group_id = (nil...nil).as_json
+    expect(report.group_id).to eq(nil)
+  end
+
+  it "type casts value" do
+    report = test_report do
+      scope { Entry }
+      filter(:group_id, :integer)
+    end
+
+    report.group_id = "1"
+    expect(report.group_id).to eq(1)
+
+    report.group_id = " 1 "
+    expect(report.group_id).to eq(1)
+
+    report.group_id = 1.1
+    expect(report.group_id).to eq(1)
+
+    report.group_id = "1.1"
+    expect(report.group_id).to eq(1)
+
+    report.group_id = "-1"
+    expect(report.group_id).to eq(-1)
+
+    report.group_id = "-1.1"
+    expect(report.group_id).to eq(-1)
+
+    report.group_id = "1a"
+    expect(report.group_id).to eq(1)
+
+    report.group_id = "aa"
+    expect(report.group_id).to eq(nil)
+
+    report.group_id = "a1"
     expect(report.group_id).to eq(nil)
   end
 end

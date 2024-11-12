@@ -54,12 +54,18 @@ module Datagrid
         if multiple?
           return nil if value.nil?
 
-          normalize_multiple_value(value).map do |v|
+          return normalize_multiple_value(value).map do |v|
             parse(v)
           end
-        elsif value.is_a?(Array)
+        end
+
+        case value
+        when Array
           raise Datagrid::ArgumentError,
             "#{grid_class}##{name} filter can not accept Array argument. Use :multiple option."
+        when Range
+          raise Datagrid::ArgumentError,
+            "#{grid_class}##{name} filter can not accept Range argument. Use :range option."
         else
           parse(value)
         end
