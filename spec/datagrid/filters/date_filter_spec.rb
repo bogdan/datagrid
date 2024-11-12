@@ -239,4 +239,15 @@ describe Datagrid::Filters::DateFilter do
       expect(report.filter_value_as_string(:created_at)).to eq("01/02/2012")
     end
   end
+
+  it "deserializes range" do
+    report = test_report do
+      scope  { Entry }
+      filter(:created_at, :date, range: true)
+    end
+
+    value = Date.new(2012, 1, 1)..Date.new(2012, 1, 2)
+    report.created_at = value.as_json
+    expect(report.created_at).to eq(value)
+  end
 end

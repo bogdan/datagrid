@@ -53,7 +53,7 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should find something in one integer interval" do
-    report = test_report(group_id: (4..4)) do
+    report = test_report(group_id: 4) do
       scope { Entry }
       filter(:group_id, :integer, range: true)
     end
