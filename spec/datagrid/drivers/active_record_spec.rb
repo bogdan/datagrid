@@ -37,13 +37,13 @@ describe Datagrid::Drivers::ActiveRecord do
     end
   end
 
-  describe "gotcha #datagrid_where_by_timestamp" do
+  describe "where by timestamp" do
     subject do
       test_report(created_at: 10.days.ago..5.days.ago) do
         scope { Entry }
 
         filter(:created_at, :date, range: true) do |value, scope, _grid|
-          scope.joins(:group).datagrid_where_by_timestamp("groups.created_at", value)
+          scope.joins(:group).where(groups: {created_at: value})
         end
       end.assets
     end

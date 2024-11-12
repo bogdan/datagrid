@@ -93,13 +93,6 @@ module Datagrid
         raise NotImplementedError
       end
 
-      def where_by_timestamp_gotcha(scope, name, value)
-        value = Datagrid::Utils.format_date_as_timestamp(value)
-        scope = greater_equal(scope, name, value.first) if value.first
-        scope = less_equal(scope, name, value.last) if value.last
-        scope
-      end
-
       def default_preload(scope, value)
         raise NotImplementedError
       end
