@@ -400,7 +400,7 @@ end
 
 ## Remove SASS dependency
 
-SASS is no longer a default choice when starting a rails project.
+SASS is no longer a default choice when starting a Ruby on Rails project.
 Version 2 makes it more flexible by avoiding the dependency on any particular CSS framework.
 
 See [a new built-in CSS file](../app/assets/stylesheets/datagrid.css).
