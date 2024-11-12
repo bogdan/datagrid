@@ -25,7 +25,7 @@ module Datagrid
 
       def deprecator
         defined?(Rails) && Rails.version >= "7.1.0" ?
-          Rails.deprecator : ActiveSupport::Deprecator
+          Rails.deprecator : ActiveSupport::Deprecation
       end
 
       def warn_once(message, delay = 5)
