@@ -27,7 +27,7 @@ List of things introduces:
 
 Rails [deprecates form\_for in favor of form\_with](https://guides.rubyonrails.org/form_helpers.html#using-form-tag-and-form-for).
 
-`datagrid_form_for` is now depreacted if favor of `datagrid_form_with`.
+`datagrid_form_for` is now deprecated if favor of `datagrid_form_with`.
 However, `datagrid_form_for` would also use Rails `form_with` because they share the same view partial.
 
 TODO: update the wiki
