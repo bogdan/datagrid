@@ -92,7 +92,7 @@ describe Datagrid do
   end
 
   it "deprecates inclucsion of Datagrid module" do
-    silence_warnings do
+    silence_deprecator do
       class DeprecatedInclusion
         include Datagrid
         scope { Entry }

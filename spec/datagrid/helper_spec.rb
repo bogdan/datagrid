@@ -429,7 +429,7 @@ describe Datagrid::Helper do
         column(:category)
       end
       object = OrderedGrid.new(descending: true, order: :category)
-      silence_warnings do
+      silence_deprecator do
         expect(subject.datagrid_order_for(object, object.column_by_name(:category))).to equal_to_dom(<<~HTML)
         <div class="order">
         <a class="asc" href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category">&uarr;</a>
@@ -442,7 +442,7 @@ describe Datagrid::Helper do
 
   describe ".datagrid_form_for" do
     around(:each) do |e|
-      silence_warnings do
+      silence_deprecator do
         e.run
       end
     end
@@ -736,7 +736,7 @@ describe Datagrid::Helper do
         column(:name)
         column(:group_id, class: 'short-column')
       end
-      silence_warnings do
+      silence_deprecator do
         expect(subject.send(:datagrid_column_classes, grid, :name)).to eq(
           "name ordered desc"
         )

@@ -23,12 +23,18 @@ module Datagrid
         I18n.t(lookups.shift, default: lookups).presence
       end
 
+      def deprecator
+        defined?(Rails) && Rails.version >= "7.1.0" ?
+          Rails.deprecator : ActiveSupport::Deprecator
+      end
+
       def warn_once(message, delay = 5)
+
         @warnings ||= {}
         timestamp = @warnings[message]
         return false if timestamp && timestamp >= Time.now - delay
 
-        warn message
+        deprecator.warn(message)
         @warnings[message] = Time.now
         true
       end
