@@ -17,12 +17,11 @@ describe Datagrid::Filters::BaseFilter do
   end
 
   describe "#default_scope?" do
-
     it "identifies filters without custom block" do
       grid = test_report do
         scope { Entry }
         filter(:id, :integer)
-        filter(:group_id, :integer) do |value, scope|
+        filter(:group_id, :integer) do |value, _scope|
           scope("group_id >= ?", value)
         end
       end

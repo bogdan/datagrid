@@ -7,9 +7,9 @@ module Datagrid
     # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
     # @param options [Hash] options of rails form input helper
     # @return [String] a form input html for the corresponding filter
-    def datagrid_filter(filter_or_attribute, **options, &block)
+    def datagrid_filter(filter_or_attribute, ...)
       filter = datagrid_get_filter(filter_or_attribute)
-      send(filter.form_builder_helper_name, filter, **options, &block)
+      send(filter.form_builder_helper_name, filter, ...)
     end
 
     # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
@@ -44,9 +44,7 @@ module Datagrid
         text_area filter.name, value: object.filter_value_as_string(filter), **options, &block
       when :checkbox
         value = options.fetch(:value, 1).to_s
-        if filter.enum_checkboxes? && enum_checkbox_checked?(filter, value)
-          options = {checked: true, **options}
-        end
+        options = { checked: true, **options } if filter.enum_checkboxes? && enum_checkbox_checked?(filter, value)
         check_box filter.name, options, value
       when :hidden
         hidden_field filter.name, **options

@@ -3,7 +3,7 @@
 module Datagrid
   module Filters
     module RangedFilter
-      SERIALIZED_RANGE = %r{\A(.*)\.{2,3}(.*)\z}.freeze
+      SERIALIZED_RANGE = %r{\A(.*)\.{2,3}(.*)\z}
 
       def parse_values(value)
         return super unless range?

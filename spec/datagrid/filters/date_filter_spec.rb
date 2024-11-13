@@ -23,12 +23,12 @@ describe Datagrid::Filters::DateFilter do
   end
 
   it "raises when range assigned to non-range filter" do
-    expect {
+    expect do
       test_report(created_at: 5.day.ago..3.days.ago) do
         scope { Entry }
         filter(:created_at, :date)
       end
-    }.to raise_error(ArgumentError)
+    end.to raise_error(ArgumentError)
   end
 
   it "endless date range argument" do

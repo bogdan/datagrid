@@ -132,8 +132,8 @@ describe Datagrid::FormBuilder do
       context "datetime filter type is text" do
         let(:_filter) { :created_at }
         let(:_grid) do
-          created_at = ActiveSupport::TimeZone['UTC'].local(
-            2024, 1, 1, 9, 25, 15
+          created_at = ActiveSupport::TimeZone["UTC"].local(
+            2024, 1, 1, 9, 25, 15,
           )
           test_report(created_at: created_at) do
             scope { Entry }

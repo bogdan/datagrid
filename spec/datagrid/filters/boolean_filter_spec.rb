@@ -1,4 +1,6 @@
-require 'spec_helper'
+# frozen_string_literal: true
+
+require "spec_helper"
 
 describe Datagrid::Filters::BooleanFilter do
   it "applies default filtering" do

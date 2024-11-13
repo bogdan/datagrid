@@ -431,10 +431,10 @@ describe Datagrid::Helper do
       object = OrderedGrid.new(descending: true, order: :category)
       silence_deprecator do
         expect(subject.datagrid_order_for(object, object.column_by_name(:category))).to equal_to_dom(<<~HTML)
-        <div class="order">
-        <a class="asc" href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category">&uarr;</a>
-        <a class="desc" href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category">&darr;</a>
-        </div>
+          <div class="order">
+          <a class="asc" href="/location?ordered_grid%5Bdescending%5D=false&amp;ordered_grid%5Border%5D=category">&uarr;</a>
+          <a class="desc" href="/location?ordered_grid%5Bdescending%5D=true&amp;ordered_grid%5Border%5D=category">&darr;</a>
+          </div>
         HTML
       end
     end
@@ -461,16 +461,16 @@ describe Datagrid::Helper do
       end
       object = FormForGrid.new(category: "hello")
       expect(subject.datagrid_form_for(object, url: "/grid")).to equal_to_dom(<<~HTML)
- <form class="datagrid-form" action="/grid" accept-charset="UTF-8" method="get">
-  <div class="datagrid-filter" data-filter="category" data-type="string">
-    <label for="form_for_grid_category">Category</label>
-    <input value="hello" type="text" name="form_for_grid[category]" id="form_for_grid_category" />
-  </div>
-  <div class="datagrid-actions">
-    <input type="submit" name="commit" value="Search" class="datagrid-submit" data-disable-with="Search" />
-    <a class="datagrid-reset" href="/location">Reset</a>
-  </div>
-</form>
+         <form class="datagrid-form" action="/grid" accept-charset="UTF-8" method="get">
+          <div class="datagrid-filter" data-filter="category" data-type="string">
+            <label for="form_for_grid_category">Category</label>
+            <input value="hello" type="text" name="form_for_grid[category]" id="form_for_grid_category" />
+          </div>
+          <div class="datagrid-actions">
+            <input type="submit" name="commit" value="Search" class="datagrid-submit" data-disable-with="Search" />
+            <a class="datagrid-reset" href="/location">Reset</a>
+          </div>
+        </form>
       HTML
     end
     it "should support html classes for grid class with namespace" do
@@ -517,7 +517,6 @@ describe Datagrid::Helper do
     end
   end
 
-
   describe ".datagrid_form_with" do
     it "returns namespaced partial if partials options is passed" do
       rendered_form = subject.datagrid_form_with(
@@ -534,16 +533,16 @@ describe Datagrid::Helper do
       end
       object = FormWithGrid.new(category: "hello")
       expect(subject.datagrid_form_with(model: object, url: "/grid")).to equal_to_dom(<<~HTML)
- <form class="datagrid-form" action="/grid" accept-charset="UTF-8" method="get">
-  <div class="datagrid-filter" data-filter="category" data-type="string">
-    <label for="form_with_grid_category">Category</label>
-    <input value="hello" type="text" name="form_with_grid[category]" id="form_with_grid_category" />
-  </div>
-  <div class="datagrid-actions">
-    <input type="submit" name="commit" value="Search" class="datagrid-submit" data-disable-with="Search" />
-    <a class="datagrid-reset" href="/location">Reset</a>
-  </div>
-</form>
+         <form class="datagrid-form" action="/grid" accept-charset="UTF-8" method="get">
+          <div class="datagrid-filter" data-filter="category" data-type="string">
+            <label for="form_with_grid_category">Category</label>
+            <input value="hello" type="text" name="form_with_grid[category]" id="form_with_grid_category" />
+          </div>
+          <div class="datagrid-actions">
+            <input type="submit" name="commit" value="Search" class="datagrid-submit" data-disable-with="Search" />
+            <a class="datagrid-reset" href="/location">Reset</a>
+          </div>
+        </form>
       HTML
     end
     it "should support html classes for grid class with namespace" do
@@ -590,7 +589,6 @@ describe Datagrid::Helper do
       expect(rendered_form).to include "form_partial_test"
     end
   end
-
 
   describe ".datagrid_row" do
     let(:grid) do
@@ -734,14 +732,14 @@ describe Datagrid::Helper do
       grid = test_report(order: :name, descending: true) do
         scope { Entry }
         column(:name)
-        column(:group_id, class: 'short-column')
+        column(:group_id, class: "short-column")
       end
       silence_deprecator do
         expect(subject.send(:datagrid_column_classes, grid, :name)).to eq(
-          "name ordered desc"
+          "name ordered desc",
         )
         expect(subject.send(:datagrid_column_classes, grid, :group_id)).to eq(
-          "group_id short-column"
+          "group_id short-column",
         )
       end
     end

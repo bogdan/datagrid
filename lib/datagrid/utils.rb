@@ -24,12 +24,14 @@ module Datagrid
       end
 
       def deprecator
-        defined?(Rails) && Rails.version >= "7.1.0" ?
-          Rails.deprecator : ActiveSupport::Deprecation
+        if defined?(Rails) && Rails.version >= "7.1.0"
+          Rails.deprecator
+        else
+          ActiveSupport::Deprecation
+        end
       end
 
       def warn_once(message, delay = 5)
-
         @warnings ||= {}
         timestamp = @warnings[message]
         return false if timestamp && timestamp >= Time.now - delay
@@ -99,9 +101,7 @@ module Datagrid
       def parse_datetime(value)
         return nil if value.blank?
         return value if value.is_a?(Range)
-        if defined?(ActiveSupport::TimeWithZone) && value.is_a?(ActiveSupport::TimeWithZone)
-          return value
-        end
+        return value if defined?(ActiveSupport::TimeWithZone) && value.is_a?(ActiveSupport::TimeWithZone)
 
         if value.is_a?(String)
           Array(Datagrid.configuration.datetime_formats).each do |format|
@@ -120,7 +120,7 @@ module Datagrid
       def format_date_as_timestamp(value)
         if !value
           value
-        # elsif value.is_a?(Array)
+          # elsif value.is_a?(Array)
           # value.first&.beginning_of_day..value.last&.end_of_day
         elsif value.is_a?(Range)
           value.begin&.beginning_of_day..value.end&.end_of_day

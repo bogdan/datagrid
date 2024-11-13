@@ -43,7 +43,7 @@ describe Datagrid::Drivers::ActiveRecord do
         scope { Entry }
 
         filter(:created_at, :date, range: true) do |value, scope, _grid|
-          scope.joins(:group).where(groups: {created_at: value})
+          scope.joins(:group).where(groups: { created_at: value })
         end
       end.assets
     end

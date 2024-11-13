@@ -27,16 +27,15 @@ module Datagrid
           method: :get,
           as: grid.param_name,
           local: true,
-          **options
+          **options,
         },
       )
     end
 
     def form_with(**options)
       grid = options[:model]
-      if grid&.filters&.empty?
-        raise ArgumentError, "Grid has no available filters"
-      end
+      raise ArgumentError, "Grid has no available filters" if grid&.filters&.empty?
+
       _render_partial("form", options[:partials], { grid: options[:model], options: options })
     end
 

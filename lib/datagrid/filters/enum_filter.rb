@@ -10,7 +10,7 @@ module Datagrid
       # @!visibility private
       def initialize(grid, name, **options, &block)
         options[:multiple] = true if options[:checkboxes]
-        super(grid, name, **options, &block)
+        super
         raise Datagrid::ConfigurationError, ":select option not specified" unless options[:select]
       end
 

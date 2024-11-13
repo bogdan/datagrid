@@ -14,13 +14,12 @@ group :development do
   gem "pry-byebug"
   gem "rails-dom-testing", "~> 2.2"
   gem "rspec"
+  gem "rubocop", "~> 1.68"
   gem "sequel"
   gem "sqlite3", "~> 1.7.0"
-  gem "rubocop", "~> 1.68"
 
   group :mongo do
     gem "bson"
     gem "mongoid", "~> 9.0"
   end
 end
-

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Datagrid
   module Generators
     class Views < Rails::Generators::Base
@@ -6,7 +8,7 @@ module Datagrid
       desc "Copies Datagrid partials to your application."
       def copy_views
         Dir.glob(File.join(self.class.source_root, "**", "*")).each do |file_path|
-          relative_path = file_path.sub(self.class.source_root + "/", "")
+          relative_path = file_path.sub("#{self.class.source_root}/", "")
 
           next if relative_path == "_order_for.html.erb"
 

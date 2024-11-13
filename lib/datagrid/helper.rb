@@ -114,9 +114,8 @@ module Datagrid
     # @param grid [Datagrid] grid object
     # @return [String] form HTML tag markup
     def datagrid_form_with(**options)
-      if block_given?
-        raise ArgumentError, 'datagrid_form_with block argument is invalid. Use form_with instead.'
-      end
+      raise ArgumentError, "datagrid_form_with block argument is invalid. Use form_with instead." if block_given?
+
       datagrid_renderer.form_with(**options)
     end
 
@@ -155,8 +154,8 @@ module Datagrid
     #   Last Name: <%= row.last_name %>
     # @example
     #   <%= datagrid_row(grid, user, columns: [:first_name, :last_name, :actions]) %>
-    def datagrid_row(grid, asset, **options, &block)
-      datagrid_renderer.row(grid, asset, **options, &block)
+    def datagrid_row(grid, asset, ...)
+      datagrid_renderer.row(grid, asset, ...)
     end
 
     # Generates an ascending or descending order url for the given column
@@ -176,8 +175,8 @@ module Datagrid
 
     def datagrid_column_classes(grid, column)
       Datagrid::Utils.warn_once(<<~MSG)
-      datagrid_column_classes is deprecated. Assign necessary classes manually.
-      Correspond to default datagrid/rows partial for example.)
+        datagrid_column_classes is deprecated. Assign necessary classes manually.
+        Correspond to default datagrid/rows partial for example.)
       MSG
       column = grid.column_by_name(column)
       order_class = if grid.ordered_by?(column)

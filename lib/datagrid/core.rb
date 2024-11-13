@@ -161,9 +161,6 @@ module Datagrid
     #   grid.attributes = {first_name: 'John', last_name: 'Smith'}
     #   grid.first_name # => 'John'
     #   grid.last_name # => 'Smith'
-    def attributes=(value)
-      super
-    end
 
     # @return [Object] Any datagrid attribute value
     def [](attribute)

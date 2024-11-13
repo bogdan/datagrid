@@ -5,10 +5,9 @@ require "datagrid/utils"
 module Datagrid
   module Filters
     class BooleanFilter < Datagrid::Filters::BaseFilter
-
       # @!visibility private
       def initialize(grid, name, **opts)
-        super(grid, name, **opts)
+        super
         options[:default] ||= false
       end
 

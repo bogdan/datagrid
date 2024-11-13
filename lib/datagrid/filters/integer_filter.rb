@@ -19,9 +19,7 @@ module Datagrid
         end
         return value if value.is_a?(Range)
 
-        if value.to_i == 0 && value.is_a?(String) && value !~ %r{\A\s*-?0}
-          return nil
-        end
+        return nil if value.to_i.zero? && value.is_a?(String) && value !~ %r{\A\s*-?0}
 
         value.to_i
       end

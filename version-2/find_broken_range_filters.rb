@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Important in development to have all classes in memory
 Rails.application.eager_load!
 

@@ -22,12 +22,12 @@ module Datagrid
       def initialize(grid, name, **options, &block)
         options[:select] ||= default_select
         options[:operations] ||= DEFAULT_OPERATIONS
-        options[:include_blank] = false unless  options.key?(:include_blank)
-        super(grid, name, **options, &block)
+        options[:include_blank] = false unless options.key?(:include_blank)
+        super
       end
 
       def default_input_options
-        {**super, type: nil}
+        { **super, type: nil }
       end
 
       def parse_values(filter)
