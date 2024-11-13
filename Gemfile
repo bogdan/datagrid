@@ -9,6 +9,7 @@ group :development do
   gem "appraisal"
   gem "bump"
   gem "csv" # removed from standard library in Ruby 3.4
+  gem "debug"
   gem "nokogiri" # used to test html output
   gem "pry-byebug"
   gem "rspec"
