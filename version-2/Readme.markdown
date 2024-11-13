@@ -20,6 +20,7 @@ List of things introduces:
 1. HTML5 data attributes
 1. Inherit `Datagrid::Base` instead of `include Datagrid`
 1. `ApplicationGrid` is recommended base class instead of `BaseGrid`
+1. Introduced `datagrid.filters.range.separator` localization
 1. Remove SASS dependency
 1. Replace `rake datagrid:copy_partials` with `rails g datagrid:views`
 
@@ -397,6 +398,14 @@ class UsersGrid < ApplicationGrid
   timestamp_column(:created_at)
 end
 ```
+
+## Introduced range filter separator localization
+
+A separator symbol between range filter inputs is now a part of localizations to avoid hardcore.
+Add `datagrid.filters.range.separator` to your localization file.
+
+[See commit for details](https://github.com/bogdan/datagrid/commit/2bd914a39a5f8367758ad697d7ccf8d98379fff7#diff-0e78e11f3e693a6523052bc71095ec539fa390cf04b50d74c35c9af5260f50f3L2)
+
 
 ## Remove SASS dependency
 
