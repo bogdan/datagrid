@@ -28,9 +28,9 @@ module Datagrid
       options = add_filter_options(filter, **options)
       type = options.delete(:type)&.to_sym
       if %i[datetime-local date].include?(type)
-        if options.key?(:value) && options[:value].nil? &&
+        if options.key?(:value) && options[:value].nil?
            # https://github.com/rails/rails/pull/53387
-           (options[:value] = "")
+           options[:value] = ""
         end
       elsif options[:value]
         options[:value] = filter.format(options[:value])
