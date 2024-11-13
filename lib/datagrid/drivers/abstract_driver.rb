@@ -63,7 +63,7 @@ module Datagrid
         raise NotImplementedError
       end
 
-      def is_timestamp?(scope, field)
+      def timestamp_column?(scope, field)
         normalized_column_type(scope, field) == :timestamp
       end
 

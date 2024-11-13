@@ -298,16 +298,16 @@ describe Datagrid::Filters do
     end
 
     context "with delegation to attribute" do
-      let(:role) { Struct.new(:admin?).new(admin) }
+      let(:role) { Struct.new(:admin).new(admin) }
       let(:klass) do
         test_report_class do
           attr_accessor :role
 
-          delegate :admin?, to: :role
+          delegate :admin, to: :role
 
           scope { Entry }
 
-          filter(:id, :integer, if: :admin?)
+          filter(:id, :integer, if: :admin)
         end
       end
 

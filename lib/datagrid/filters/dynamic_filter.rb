@@ -42,7 +42,7 @@ module Datagrid
         field = filter.field
         operation = filter.operation
         value = filter.value
-        date_conversion = value.is_a?(Date) && driver.is_timestamp?(scope, field)
+        date_conversion = value.is_a?(Date) && driver.timestamp_column?(scope, field)
 
         return scope if field.blank? || operation.blank?
 
