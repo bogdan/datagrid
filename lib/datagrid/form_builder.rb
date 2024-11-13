@@ -205,7 +205,7 @@ module Datagrid
       return attribute_or_filter unless Utils.string_like?(attribute_or_filter)
 
       object.class.filter_by_name(attribute_or_filter) ||
-        raise(Error, "Datagrid filter #{attribute_or_filter} not found")
+        raise(ArgumentError, "Datagrid filter #{attribute_or_filter} not found")
     end
 
     def add_html_classes(options, *classes)
@@ -227,9 +227,6 @@ module Datagrid
 
     def add_filter_options(filter, **options)
       { **filter.default_input_options, **filter.input_options, **options }
-    end
-
-    class Error < StandardError
     end
   end
 end
