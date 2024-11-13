@@ -25,7 +25,7 @@ module Datagrid
       end
 
       def default_filter_where(scope, value)
-        value = Datagrid::Utils.format_date_as_timestamp(value) if driver.is_timestamp?(scope, name)
+        value = Datagrid::Utils.format_date_as_timestamp(value) if driver.timestamp_column?(scope, name)
         super
       end
 

@@ -21,13 +21,10 @@ require "mongoid"
 begin
   require "mongo_mapper"
 rescue LoadError
+  nil
 end
 
 require "datagrid"
-begin
-  require "ruby-debug"
-rescue LoadError
-end
 require "rspec"
 require "logger"
 

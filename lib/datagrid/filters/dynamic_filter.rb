@@ -41,7 +41,7 @@ module Datagrid
 
       def default_filter_where(scope, filter)
         field, operation, value = filter
-        date_conversion = value.is_a?(Date) && driver.is_timestamp?(scope, field)
+        date_conversion = value.is_a?(Date) && driver.timestamp_column?(scope, field)
 
         return scope if field.blank? || operation.blank?
 

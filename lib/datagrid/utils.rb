@@ -79,6 +79,7 @@ module Datagrid
           Array(Datagrid.configuration.date_formats).each do |format|
             return Date.strptime(value, format)
           rescue ::ArgumentError
+            nil
           end
         end
         return Date.parse(value) if value.is_a?(String)
@@ -97,6 +98,7 @@ module Datagrid
           Array(Datagrid.configuration.datetime_formats).each do |format|
             return Time.strptime(value, format)
           rescue ::ArgumentError
+            nil
           end
         end
         return Time.parse(value) if value.is_a?(String)
