@@ -18,6 +18,7 @@ List of things introduces:
 1. Native Rails Engines.
    * while supported, the library was not initially designed for it.
 1. HTML5 data attributes
+1. Consistent id attribute for range filter inputs
 1. Inherit `Datagrid::Base` instead of `include Datagrid`
 1. `ApplicationGrid` is recommended base class instead of `BaseGrid`
 1. Introduced `datagrid.filters.range.separator` localization
@@ -373,6 +374,31 @@ Renders:
 [Modify built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials)
 if you want to change this behavior completely.
 
+## id attribute for range filter inputs
+
+[W3 validator](https://validator.w3.org/) complains when 
+a `label[for]` attribute doesn't correspond to any `input[id]` in the same form.
+Version 1 generated no id attribute for range filter inputs by default which resulted in a warning:
+
+``` html
+<label for="musics_grid_year">Year</label>
+<input class="year integer_fiilter from" multiple name="musics_grid[year][]" type="text">
+<span class="separator integer"> - </span>
+<input class="year integer_filter to" multiple name="musics_grid[year][]" type="text">
+```
+
+Version 2 generates id attribute only for the first input, so that a click on label focuses the first input:
+
+``` html
+<label for="musics_grid_year">Year</label>
+<input id="musics_grid_year" step="1" class="datagrid-range-from" name="musics_grid[year][from]" type="number">
+<span class="datagrid-range-separator"> - </span>
+<input step="1" class="datagrid-range-to" name="musics_grid[year][to]" type="number">
+```
+
+The behavior can be changed by modifying 
+[built-in view](https://github.com/bogdan/datagrid/blob/version-2/app/views/datagrid/_range_filter.html.erb#L3).
+
 ## ApplicationGrid base class
 
 Previously recommended base class `BaseGrid` is incosistent
@@ -404,7 +430,7 @@ end
 A separator symbol between range filter inputs is now a part of localizations to avoid hardcore.
 Add `datagrid.filters.range.separator` to your localization file.
 
-[See commit for details](https://github.com/bogdan/datagrid/commit/2bd914a39a5f8367758ad697d7ccf8d98379fff7#diff-0e78e11f3e693a6523052bc71095ec539fa390cf04b50d74c35c9af5260f50f3L2)
+[See related view](https://github.com/bogdan/datagrid/blob/version-2/app/views/datagrid/_range_filter.html.erb#L2)
 
 
 ## Remove SASS dependency
