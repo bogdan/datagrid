@@ -9,7 +9,7 @@ module Datagrid
       TRUTH_VALUES = [true, "true", "y", "yes"].freeze
       FALSE_VALUES = [false, "false", "n", "no"].freeze
 
-      def initialize(report, attribute, options = {}, &block)
+      def initialize(*args, **options)
         options[:select] = -> { boolean_select }
         super
       end

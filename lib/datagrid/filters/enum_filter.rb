@@ -7,9 +7,10 @@ module Datagrid
     class EnumFilter < Datagrid::Filters::BaseFilter
       include Datagrid::Filters::SelectOptions
 
-      def initialize(*args)
-        super
-        options[:multiple] = true if enum_checkboxes?
+      # @!visibility private
+      def initialize(grid, name, **options, &block)
+        options[:multiple] = true if options[:checkboxes]
+        super(grid, name, **options, &block)
         raise Datagrid::ConfigurationError, ":select option not specified" unless options[:select]
       end
 

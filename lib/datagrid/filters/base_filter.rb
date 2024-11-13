@@ -13,7 +13,7 @@ module Datagrid
     class BaseFilter
       attr_accessor :grid_class, :options, :block, :name
 
-      def initialize(grid_class, name, options = {}, &block)
+      def initialize(grid_class, name, **options, &block)
         self.grid_class = grid_class
         self.name = name.to_sym
         self.options = options
