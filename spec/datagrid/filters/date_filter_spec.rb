@@ -267,4 +267,19 @@ describe Datagrid::Filters::DateFilter do
     expect(report.assets).to include(e4)
     expect(report.assets).to_not include(e5)
   end
+
+
+  it "allows filter to be defined before scope" do
+    class ParentGrid < Datagrid::Base
+      filter(:created_at, :date, range: true)
+    end
+
+    class ChildGrid < ParentGrid
+      scope do
+        Entry
+      end
+    end
+
+    expect(ChildGrid.new.assets).to eq([])
+  end
 end
