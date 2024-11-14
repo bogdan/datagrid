@@ -1,5 +1,4 @@
 <%= form.datagrid_filter_input(filter, class: 'datagrid-range-from', **from_options) %>
 <span class="datagrid-range-separator"><%= I18n.t('datagrid.filters.range.separator') %></span>
-<%# Generating id only for "from" input to make sure 
-  # there is no duplicate id in DOM and click on label focuses the first input -%>
-<%= form.datagrid_filter_input(filter, class: 'datagrid-range-to', **to_options, id: nil) %>
+<%# Generating id only for "from" input to make sure -%>
+<%# there is no duplicate id in DOM and click on label focuses the first input -%> <%= form.datagrid_filter_input(filter, class: 'datagrid-range-to', **to_options, id: nil) %>

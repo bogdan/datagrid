@@ -12,7 +12,9 @@ module Datagrid
       end
 
       def apply(grid_object, scope, value)
-        value = value.begin&.beginning_of_day..value.end&.end_of_day if value.is_a?(Range)
+        if value.is_a?(Range) && driver.timestamp_column?(scope, name)
+          value = value.begin&.beginning_of_day..value.end&.end_of_day
+        end
         super
       end
 
@@ -26,11 +28,6 @@ module Datagrid
         else
           super
         end
-      end
-
-      def default_filter_where(scope, value)
-        value = Datagrid::Utils.format_date_as_timestamp(value) if driver.timestamp_column?(scope, name)
-        super
       end
 
       protected
