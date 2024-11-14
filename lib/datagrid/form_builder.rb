@@ -7,9 +7,17 @@ module Datagrid
     # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
     # @param options [Hash] options of rails form input helper
     # @return [String] a form input html for the corresponding filter
-    def datagrid_filter(filter_or_attribute, ...)
+    def datagrid_filter(filter_or_attribute, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
-      send(filter.form_builder_helper_name, filter, ...)
+      if filter.range?
+        datagrid_range_filter(filter, options, &block)
+      elsif filter.enum_checkboxes?
+        datagrid_enum_checkboxes_filter(filter, options, &block)
+      elsif filter.type == :dynamic
+        datagrid_dynamic_filter(filter, options, &block)
+      else
+        datagrid_filter_input(filter, **options, &block)
+      end
     end
 
     # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
@@ -74,45 +82,21 @@ module Datagrid
 
     protected
 
-    def datagrid_extended_boolean_filter(filter, options = {}, &block)
-      datagrid_filter_input(filter, **options, &block)
-    end
-
-    def datagrid_boolean_filter(filter, options = {})
-      datagrid_filter_input(filter.name, **options)
-    end
-
-    def datagrid_date_filter(filter, options = {})
-      datagrid_range_filter(:date, filter, options)
-    end
-
-    def datagrid_date_time_filter(filter, options = {})
-      datagrid_range_filter(:datetime, filter, options)
-    end
-
-    def datagrid_default_filter(filter, options = {})
-      datagrid_filter_input(filter, **options)
-    end
-
-    def datagrid_enum_filter(filter, options = {}, &block)
-      if filter.enum_checkboxes?
-        elements = object.select_options(filter).map do |element|
-          text, value = @template.send(:option_text_and_value, element)
-          checked = enum_checkbox_checked?(filter, value)
-          [value, text, checked]
-        end
-        render_partial(
-          "enum_checkboxes",
-          {
-            elements: elements,
-            form: self,
-            filter: filter,
-            options: options,
-          },
-        )
-      else
-        datagrid_filter_input(filter, **options, &block)
+    def datagrid_enum_checkboxes_filter(filter, options = {}, &block)
+      elements = object.select_options(filter).map do |element|
+        text, value = @template.send(:option_text_and_value, element)
+        checked = enum_checkbox_checked?(filter, value)
+        [value, text, checked]
       end
+      render_partial(
+        "enum_checkboxes",
+        {
+          elements: elements,
+          form: self,
+          filter: filter,
+          options: options,
+        },
+      )
     end
 
     def enum_checkbox_checked?(filter, option_value)
@@ -124,11 +108,6 @@ module Datagrid
       else
         current_value.to_s == option_value.to_s
       end
-    end
-
-    def datagrid_integer_filter(filter, options = {})
-      options[:value] = "" if filter.multiple? && object[filter.name].blank?
-      datagrid_range_filter(:integer, filter, options)
     end
 
     def datagrid_dynamic_filter(filter, options = {})
@@ -178,16 +157,12 @@ module Datagrid
       end
     end
 
-    def datagrid_range_filter(_type, filter, options = {})
-      if filter.range?
-        from_options = datagrid_range_filter_options(object, filter, :from, **options)
-        to_options = datagrid_range_filter_options(object, filter, :to, **options)
-        render_partial "range_filter", {
-          from_options: from_options, to_options: to_options, filter: filter, form: self,
-        }
-      else
-        datagrid_filter_input(filter, **options)
-      end
+    def datagrid_range_filter(filter, options = {})
+      from_options = datagrid_range_filter_options(object, filter, :from, **options)
+      to_options = datagrid_range_filter_options(object, filter, :to, **options)
+      render_partial "range_filter", {
+        from_options: from_options, to_options: to_options, filter: filter, form: self,
+      }
     end
 
     def datagrid_range_filter_options(object, filter, section, **options)
@@ -195,14 +170,6 @@ module Datagrid
       options[:value] = object[filter.name]&.public_send(type_method_map[section])
       options[:name] = @template.field_name(object_name, filter.name, section)
       options
-    end
-
-    def datagrid_string_filter(filter, options = {})
-      datagrid_range_filter(:string, filter, options)
-    end
-
-    def datagrid_float_filter(filter, options = {})
-      datagrid_range_filter(:float, filter, options)
     end
 
     def datagrid_get_filter(attribute_or_filter)

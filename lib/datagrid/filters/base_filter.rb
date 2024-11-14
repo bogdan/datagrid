@@ -98,6 +98,10 @@ module Datagrid
         options[:multiple]
       end
 
+      def range?
+        false
+      end
+
       def allow_nil?
         options.key?(:allow_nil) ? options[:allow_nil] : options[:allow_blank]
       end
