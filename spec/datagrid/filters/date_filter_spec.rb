@@ -206,14 +206,14 @@ describe Datagrid::Filters::DateFilter do
     end
   end
 
-  it "should automatically reverse Array if first more than last" do
+  it "should automatically reverse if first more than last" do
     report = test_report(created_at: %w[2013-01-01 2012-01-01]) do
       scope  { Entry }
       filter(:created_at, :date, range: true)
     end
     expect(report.created_at).to eq(Date.new(2012, 0o1, 0o1)..Date.new(2013, 0o1, 0o1))
   end
-  it "should automatically reverse Array if first more than last" do
+  it "should automatically reverse if first more than last" do
     report = test_report(created_at: %w[2013-01-01 2012-01-01]) do
       scope  { Entry }
       filter(:created_at, :date, range: true)
@@ -249,5 +249,22 @@ describe Datagrid::Filters::DateFilter do
     value = Date.new(2012, 1, 1)..Date.new(2012, 1, 2)
     report.created_at = value.as_json
     expect(report.created_at).to eq(value)
+  end
+
+  it "supports search by timestamp column" do
+    report = test_report(created_at: Date.today) do
+      scope {Entry}
+      filter(:created_at, :date)
+    end
+    e1 = Entry.create!(created_at: Date.yesterday + 23.hours)
+    e2 = Entry.create!(created_at: Date.today.to_time)
+    e3 = Entry.create!(created_at: Date.today + 12.hours)
+    e4 = Entry.create!(created_at: Date.today + 23.hours)
+    e5 = Entry.create!(created_at: Date.tomorrow)
+    expect(report.assets).to_not include(e1)
+    expect(report.assets).to include(e2)
+    expect(report.assets).to include(e3)
+    expect(report.assets).to include(e4)
+    expect(report.assets).to_not include(e5)
   end
 end

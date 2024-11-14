@@ -12,8 +12,8 @@ module Datagrid
       end
 
       def apply(grid_object, scope, value)
-        if value.is_a?(Range) && driver.timestamp_column?(scope, name)
-          value = value.begin&.beginning_of_day..value.end&.end_of_day
+        if driver.timestamp_column?(scope, name)
+          value = Datagrid::Utils.format_date_as_timestamp(value)
         end
         super
       end
