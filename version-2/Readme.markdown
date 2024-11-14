@@ -9,21 +9,51 @@ Version 2 addresses all that evolution.
 
 List of things introduces:
 
+## API changes
+
+1. Ruby endless ranges for range filters.
+1. Use Hash instead of Array for multiparameter attributes.
+1. Remove `column[url]` option.
+1. Inherit `Datagrid::Base` instead of `include Datagrid`.
+1. `ApplicationGrid` is recommended base class instead of `BaseGrid`.
+
+## Frontend Changes
+
 1. Use `form_with` instead of `form_for`.
 1. Deprecated `datagrid_order_for`
-1. Ruby endless ranges for range filters.
 1. Modern modular CSS classes.
 1. HTML5 input types: number, date, datetime-local.
-1. Use Hash instead of Array for multiparameter attirubtes.
-1. Native Rails Engines.
+1. Native Rails Engines:
    * while supported, the library was not initially designed for it.
 1. HTML5 data attributes
-1. Consistent id attribute for range filter inputs
-1. Inherit `Datagrid::Base` instead of `include Datagrid`
-1. `ApplicationGrid` is recommended base class instead of `BaseGrid`
+1. Consistent `label[for]` and `input[id]` for range filters.
 1. Introduced `datagrid.filters.range.separator` localization
 1. Remove SASS dependency
 1. Replace `rake datagrid:copy_partials` with `rails g datagrid:views`
+
+## Remove column[url] option
+
+`column[url]` option was introduced before flexible data/html output layer for columns was established. Here is how the deprecated option can be migrated to modern setup:
+
+Version 1:
+
+``` ruby
+column(:user, url: -> (user) => { user_profile_path(user) }) do
+  user.name
+end
+```
+
+Version 2:
+
+``` ruby
+column(:user) do |user|
+  format(user.name) do |value|
+    link_to value, user_profile_path(user)
+  end
+end
+```
+
+All deprecated columns can be found [with a script](./find_deprecated_url_option.rb)
 
 ## Use form\_with
 
