@@ -294,8 +294,18 @@ will always generate from/to inputs instead:
 It is more semantic and collision proof to use `data-*` attributes
 instead of classes for meta information from backend.
 Therefor built-in partials now generate data attributes by default
-instead of classes for column names:
+instead of classes for column names.
 
+* Filter name `input[class]` implemented as `.datagrid-filter[data-filter]`.
+* Filter type `input[class]` implemented as `.datagrid-filter[data-type]`.
+* Grid class `table[class]` removed due to:
+  * security concerns from some users
+  * breaking CSS classes naming convention
+* Column name `th[class], td[class]` implemented as `td[data-column], th[data-column]`.
+
+Note that the behavior change can be reverted by 
+[updating built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials).
+Version 2 makes it as easy as possible to override the defaults of the UI.
 
 ### Filters
 
@@ -319,42 +329,46 @@ Version 2:
 </div>
 ```
 
-Diff for [built-in partials between V1 and V2](./views.diff)
+Diff for [built-in views between V1 and V2](./views.diff)
 
 ### Columns
 
 Version 1:
 
 ``` html
-<tr>
-    <th class="name">Name</th>
-    <th class="category">Category</th>
-</tr>
-<tr>
-    <td class="name">John</th>
-    <td class="category">Worker</th>
-</tr>
-<tr>
-    <td class="name">Mike</th>
-    <td class="category">Manager</th>
-</tr>
+<table class="datagrid users_grid">
+    <tr>
+        <th class="name">Name</th>
+        <th class="category">Category</th>
+    </tr>
+    <tr>
+        <td class="name">John</th>
+        <td class="category">Worker</th>
+    </tr>
+    <tr>
+        <td class="name">Mike</th>
+        <td class="category">Manager</th>
+    </tr>
+</table>
 ```
 
 Version 2:
 
 ``` html
-<tr>
-    <th data-column="name">Name</th>
-    <th data-column="category">Category</th>
-</tr>
-<tr>
-    <td data-column="name">John</th>
-    <td data-column="category">Worker</th>
-</tr>
-<tr>
-    <td data-column="name">Mike</th>
-    <td data-column="category">Manager</th>
-</tr>
+<table class="datagrid-table">
+    <tr>
+        <th data-column="name">Name</th>
+        <th data-column="category">Category</th>
+    </tr>
+    <tr>
+        <td data-column="name">John</th>
+        <td data-column="category">Worker</th>
+    </tr>
+    <tr>
+        <td data-column="name">Mike</th>
+        <td data-column="category">Manager</th>
+    </tr>
+</table>
 ```
 
 If you still want to have an HTML class attached to a column use `class` column option:
@@ -371,7 +385,7 @@ Renders:
 <td class="short-column" data-column="name">John</td>
 ```
 
-[Modify built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials)
+[Modify built-in views](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials)
 if you want to change this behavior completely.
 
 ## id attribute for range filter inputs
