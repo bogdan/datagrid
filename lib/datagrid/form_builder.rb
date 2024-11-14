@@ -75,11 +75,11 @@ module Datagrid
     protected
 
     def datagrid_extended_boolean_filter(filter, options = {}, &block)
-      datagrid_filter_input(filter, **options, type: :select, &block)
+      datagrid_filter_input(filter, **options, &block)
     end
 
     def datagrid_boolean_filter(filter, options = {})
-      datagrid_filter_input(filter.name, **options, type: :checkbox)
+      datagrid_filter_input(filter.name, **options)
     end
 
     def datagrid_date_filter(filter, options = {})
@@ -111,7 +111,7 @@ module Datagrid
           },
         )
       else
-        datagrid_filter_input(filter, **options, type: :select, &block)
+        datagrid_filter_input(filter, **options, &block)
       end
     end
 
@@ -190,10 +190,10 @@ module Datagrid
       end
     end
 
-    def datagrid_range_filter_options(object, filter, type, **options)
+    def datagrid_range_filter_options(object, filter, section, **options)
       type_method_map = { from: :begin, to: :end }
-      options[:value] = object[filter.name]&.public_send(type_method_map[type])
-      options[:name] = @template.field_name(object_name, filter.name, type)
+      options[:value] = object[filter.name]&.public_send(type_method_map[section])
+      options[:name] = @template.field_name(object_name, filter.name, section)
       options
     end
 
