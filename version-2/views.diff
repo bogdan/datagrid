@@ -78,16 +78,17 @@ index e939128..b355528 100644
    <% end %>
  </tr>
 diff --git a/app/views/datagrid/_range_filter.html.erb b/app/views/datagrid/_range_filter.html.erb
-index 7a8a123..3b8ca85 100644
+index 7a8a123..ffbb0f8 100644
 --- a/app/views/datagrid/_range_filter.html.erb
 +++ b/app/views/datagrid/_range_filter.html.erb
-@@ -1,3 +1,3 @@
+@@ -1,3 +1,4 @@
 -<%= form.datagrid_filter_input(filter, **from_options) %>
 -<span class="separator <%= filter.type %>"><%= I18n.t('datagrid.filters.range.separator') %></span>
 -<%= form.datagrid_filter_input(filter, **to_options) %>
 +<%= form.datagrid_filter_input(filter, class: 'datagrid-range-from', **from_options) %>
 +<span class="datagrid-range-separator"><%= I18n.t('datagrid.filters.range.separator') %></span>
-+<%= form.datagrid_filter_input(filter, class: 'datagrid-range-to', **to_options) %>
++<%# Generating id only for "from" input to make sure -%>
++<%# there is no duplicate id in DOM and click on label focuses the first input -%> <%= form.datagrid_filter_input(filter, class: 'datagrid-range-to', **to_options, id: nil) %>
 diff --git a/app/views/datagrid/_row.html.erb b/app/views/datagrid/_row.html.erb
 index f54d21c..340aea6 100644
 --- a/app/views/datagrid/_row.html.erb

@@ -121,8 +121,6 @@ module Datagrid
       def format_date_as_timestamp(value)
         if !value
           value
-          # elsif value.is_a?(Array)
-          # value.first&.beginning_of_day..value.last&.end_of_day
         elsif value.is_a?(Range)
           value.begin&.beginning_of_day..value.end&.end_of_day
         else
