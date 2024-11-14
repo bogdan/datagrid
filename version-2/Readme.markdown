@@ -60,7 +60,6 @@ All deprecated columns can be found [with a script](./find_deprecated_url_option
 Rails [deprecates form\_for in favor of form\_with](https://guides.rubyonrails.org/form_helpers.html#using-form-tag-and-form-for).
 
 `datagrid_form_for` is now deprecated if favor of `datagrid_form_with`.
-However, `datagrid_form_for` would also use Rails `form_with` because they share the same view partial.
 
 TODO: update the wiki
 
@@ -71,7 +70,8 @@ datagrid_form_for(@users_grid, url: users_path)
 datagrid_form_with(model: @users_grid, url: users_path)
 ```
 
-Built-in partial uses `form_with` no matter
+Version 2 built-in view `datagrid/form` uses `form_with` no matter of the with helper is used.
+Beware of that.
 
 [Grep all deprecations](./deprecations.sh).
 
@@ -79,6 +79,18 @@ Built-in partial uses `form_with` no matter
 
 `datagrid_order_for` helper serves no purpose and should not be used directly.
 The recommended way is to include your ordering code directly into `datagrid/head` partial.
+You implement `datagrid_order_for` in `ApplicationHelper` 
+and copy [datagrid/order\_for](../app/views/datagrid/_order_for.html.erb) into your project
+if you consider it useful:
+
+``` ruby
+module ApplicationHelper
+  def datagrid_order_for(grid, column)
+    render(partial: "datagrid/order_for", locals: { grid: grid, column: column })
+  end
+end
+```
+
 See default [head partial](../app/views/datagrid/_head.html.erb) for example.
 [Grep all deprecations](./deprecations.sh).
 

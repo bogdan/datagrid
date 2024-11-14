@@ -5,6 +5,7 @@ git grep 'datagrid_form_for'
 git grep 'datagrid_order_for'
 
 # Put necessary classes manually
+# or copy the helper from datagrid source code to ApplicationHelper
 git grep 'datagrid_column_classes' 
 
 # Inherit Datagrid::Base
