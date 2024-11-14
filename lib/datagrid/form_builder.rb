@@ -41,8 +41,8 @@ module Datagrid
       type = options.delete(:type)&.to_sym
       if %i[datetime-local date].include?(type)
         if options.key?(:value) && options[:value].nil?
-           # https://github.com/rails/rails/pull/53387
-           options[:value] = ""
+          # https://github.com/rails/rails/pull/53387
+          options[:value] = ""
         end
       elsif options[:value]
         options[:value] = filter.format(options[:value])
@@ -82,7 +82,7 @@ module Datagrid
 
     protected
 
-    def datagrid_enum_checkboxes_filter(filter, options = {}, &block)
+    def datagrid_enum_checkboxes_filter(filter, options = {})
       elements = object.select_options(filter).map do |element|
         text, value = @template.send(:option_text_and_value, element)
         checked = enum_checkbox_checked?(filter, value)
