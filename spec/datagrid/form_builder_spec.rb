@@ -466,6 +466,10 @@ describe Datagrid::FormBuilder do
           )
         }
 
+        it "disables label[for] attribute" do
+          expect(view.datagrid_label(_filter)).to eq("<label>Category</label>")
+        end
+
         context "when partials option passed and partial exists" do
           let(:view_options) { { partials: "custom_checkboxes" } }
           it { should equal_to_dom("custom_enum_checkboxes") }
