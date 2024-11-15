@@ -39,15 +39,14 @@ index 7e175c1..fc4f4ae 100644
    </div>
  <% end -%>
 diff --git a/app/views/datagrid/_head.html.erb b/app/views/datagrid/_head.html.erb
-index e939128..b355528 100644
+index e939128..71e6b03 100644
 --- a/app/views/datagrid/_head.html.erb
 +++ b/app/views/datagrid/_head.html.erb
-@@ -1,8 +1,31 @@
+@@ -1,8 +1,30 @@
  <tr>
    <% grid.html_columns(*options[:columns]).each do |column| %>
 -    <th class="<%= datagrid_column_classes(grid, column) %>">
-+    <%= content_tag(
-+      :th,
++    <%= tag.th(
 +      class: {
 +        # Adding HTML classes based on condition
 +        # Consider maintaining consistency with datagrid/rows partial
@@ -78,33 +77,33 @@ index e939128..b355528 100644
    <% end %>
  </tr>
 diff --git a/app/views/datagrid/_range_filter.html.erb b/app/views/datagrid/_range_filter.html.erb
-index 7a8a123..ffbb0f8 100644
+index 7a8a123..faa2575 100644
 --- a/app/views/datagrid/_range_filter.html.erb
 +++ b/app/views/datagrid/_range_filter.html.erb
-@@ -1,3 +1,4 @@
+@@ -1,3 +1,5 @@
 -<%= form.datagrid_filter_input(filter, **from_options) %>
 -<span class="separator <%= filter.type %>"><%= I18n.t('datagrid.filters.range.separator') %></span>
 -<%= form.datagrid_filter_input(filter, **to_options) %>
 +<%= form.datagrid_filter_input(filter, class: 'datagrid-range-from', **from_options) %>
 +<span class="datagrid-range-separator"><%= I18n.t('datagrid.filters.range.separator') %></span>
 +<%# Generating id only for "from" input to make sure -%>
-+<%# there is no duplicate id in DOM and click on label focuses the first input -%> <%= form.datagrid_filter_input(filter, class: 'datagrid-range-to', **to_options, id: nil) %>
++<%# there is no duplicate id in DOM and click on label focuses the first input -%>
++<%= form.datagrid_filter_input(filter, class: 'datagrid-range-to', **to_options, id: nil) %>
 diff --git a/app/views/datagrid/_row.html.erb b/app/views/datagrid/_row.html.erb
-index f54d21c..340aea6 100644
+index f54d21c..f57c729 100644
 --- a/app/views/datagrid/_row.html.erb
 +++ b/app/views/datagrid/_row.html.erb
-@@ -1,5 +1,16 @@
+@@ -1,5 +1,15 @@
  <tr>
    <% grid.html_columns(*options[:columns]).each do |column| %>
 -    <td class="<%= datagrid_column_classes(grid, column) %>"><%= datagrid_value(grid, column, asset) %></td>
-+    <%= content_tag(
-+      :td,
++    <%= tag.td(
 +      datagrid_value(grid, column, asset),
 +      class: {
-+        # Adding HTML classes based on condition
++        # Adding html clases based on condition
 +        # Consider maintaining consistency with datagrid/head partial
 +        "datagrid-order-active-asc": grid.ordered_by?(column, false),
-+        "datagrid-order-active-desc": grid.ordered_by?(column, true),
++        "datagrid-order-active-desc": grid.ordered_by?(column ,true),
 +        column.html_class => column.html_class.present?,
 +      },
 +      "data-column": column.name
@@ -112,7 +111,7 @@ index f54d21c..340aea6 100644
    <% end %>
  </tr>
 diff --git a/app/views/datagrid/_table.html.erb b/app/views/datagrid/_table.html.erb
-index 8708c05..0b5ff24 100644
+index 8708c05..2e9273e 100644
 --- a/app/views/datagrid/_table.html.erb
 +++ b/app/views/datagrid/_table.html.erb
 @@ -5,7 +5,7 @@ Local variables:
@@ -120,7 +119,7 @@ index 8708c05..0b5ff24 100644
  %>
  <% if grid.html_columns(*options[:columns]).any? %>
 -  <%= content_tag :table, options[:html] do %>
-+  <%= content_tag :table, class: 'datagrid-table', **options.fetch(:html, {}) do %>
++  <%= tag.table class: 'datagrid-table', **options.fetch(:html, {}) do %>
      <thead>
        <%= datagrid_header(grid, options) %>
      </thead>
