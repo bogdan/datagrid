@@ -54,14 +54,22 @@ describe Datagrid::Filters::DateFilter do
     to = 3.days.ago
     report.created_at = { from: from, to: to }
     expect(report.created_at).to eq(from.to_date..to.to_date)
+
+    report.created_at = { "from" => from, "to" => to }
+    expect(report.created_at).to eq(from.to_date..to.to_date)
+
     report.created_at = {}
     expect(report.created_at).to eq(nil)
+
     report.created_at = { from: nil, to: nil }
     expect(report.created_at).to eq(nil)
+
     report.created_at = { from: Date.today, to: nil }
     expect(report.created_at).to eq(Date.today..nil)
+
     report.created_at = { from: nil, to: Date.today }
     expect(report.created_at).to eq(nil..Date.today)
+
     report.created_at = { from: Time.now, to: Time.now }
     expect(report.created_at).to eq(Date.today..Date.today)
   end

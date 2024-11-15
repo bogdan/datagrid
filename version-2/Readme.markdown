@@ -483,7 +483,7 @@ end
 
 ## Introduced range filter separator localization
 
-A separator symbol between range filter inputs is now a part of localizations to avoid hardcore.
+A separator symbol between range filter inputs is now a part of localizations to avoid hard coding.
 Add `datagrid.filters.range.separator` to your localization file.
 
 [See related view](https://github.com/bogdan/datagrid/blob/version-2/app/views/datagrid/_range_filter.html.erb#L2)

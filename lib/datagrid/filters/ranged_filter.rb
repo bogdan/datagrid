@@ -46,7 +46,7 @@ module Datagrid
       protected
 
       def parse_hash(result)
-        to_range(result[:from], result[:to])
+        to_range(result[:from] || result["from"], result[:to] || result["to"])
       end
 
       def to_range(from, to, exclusive = false)
