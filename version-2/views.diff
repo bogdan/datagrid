@@ -101,7 +101,7 @@ index f54d21c..340aea6 100644
 +      :td,
 +      datagrid_value(grid, column, asset),
 +      class: {
-+        # Adding html clases based on condition
++        # Adding HTML classes based on condition
 +        # Consider maintaining consistency with datagrid/head partial
 +        "datagrid-order-active-asc": grid.ordered_by?(column, false),
 +        "datagrid-order-active-desc": grid.ordered_by?(column ,true),
