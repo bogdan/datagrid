@@ -376,7 +376,7 @@ describe Datagrid::FormBuilder do
       context "when block is given" do
         let(:_filter_block) do
           proc do
-            template.content_tag(:option, "block option", value: "block_value")
+            template.tag.option("block option", value: "block_value")
           end
         end
         it {

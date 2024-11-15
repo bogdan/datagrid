@@ -115,7 +115,7 @@ module Datagrid
       # @example
       #   column(:name) do |model|
       #     format(model.name) do |value|
-      #       content_tag(:strong, value)
+      #       tag.strong(value)
       #     end
       #   end
       def format(value, &block)
@@ -325,7 +325,7 @@ module Datagrid
     # @example
     #   column(:name) do |model|
     #     format(model.name) do |value|
-    #       content_tag(:strong, value)
+    #       tag.strong(value)
     #     end
     #   end
     #

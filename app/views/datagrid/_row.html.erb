@@ -1,7 +1,6 @@
 <tr>
   <% grid.html_columns(*options[:columns]).each do |column| %>
-    <%= content_tag(
-      :td,
+    <%= tag.td(
       datagrid_value(grid, column, asset),
       class: {
         # Adding html clases based on condition

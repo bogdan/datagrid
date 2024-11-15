@@ -201,7 +201,7 @@ describe Datagrid::Helper do
       end
       expect(
         subject.datagrid_rows(rp) do |row|
-          subject.content_tag(:strong, row.name)
+          subject.tag.strong(row.name)
         end,
       ).to match_css_pattern(
         "strong" => "Star",
@@ -233,7 +233,7 @@ describe Datagrid::Helper do
       rp = test_report do
         scope { Entry }
         column(:name, html: true) do |model|
-          content_tag(:span, model.name)
+          tag.span(model.name)
         end
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
@@ -279,7 +279,7 @@ describe Datagrid::Helper do
     it "should render argument-based html columns" do
       rp = test_report do
         scope { Entry }
-        column(:name, html: ->(data) { content_tag :h1, data })
+        column(:name, html: ->(data) { tag.h1 data })
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td[data-column=name] h1" => "Star",
@@ -289,7 +289,7 @@ describe Datagrid::Helper do
     it "should render argument-based html columns with custom data" do
       rp = test_report do
         scope { Entry }
-        column(:name, html: ->(data) { content_tag :em, data }) do
+        column(:name, html: ->(data) { tag.em data }) do
           name.upcase
         end
       end
@@ -302,7 +302,7 @@ describe Datagrid::Helper do
       rp = test_report do
         scope { Entry }
         column(:name, html: true) do |model, grid|
-          content_tag(:span, "#{model.name}-#{grid.assets.klass}")
+          tag.span("#{model.name}-#{grid.assets.klass}")
         end
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
@@ -314,7 +314,7 @@ describe Datagrid::Helper do
       rp = test_report do
         scope { Entry }
         column(:name, html: lambda { |data, model|
-          content_tag :h1, "#{data}-#{model.name.downcase}"
+          tag.h1 "#{data}-#{model.name.downcase}"
         },)
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(

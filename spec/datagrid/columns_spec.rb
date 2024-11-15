@@ -215,7 +215,7 @@ describe Datagrid::Columns do
       filter(:name)
       column(:entries_count, "count(entries.id)") do |model|
         format("(#{model.entries_count})") do |value|
-          content_tag(:span, value)
+          tag.span(value)
         end
       end
     end

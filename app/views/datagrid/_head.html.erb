@@ -1,7 +1,6 @@
 <tr>
   <% grid.html_columns(*options[:columns]).each do |column| %>
-    <%= content_tag(
-      :th,
+    <%= tag.th(
       class: {
         # Adding HTML classes based on condition
         # Consider maintaining consistency with datagrid/rows partial
