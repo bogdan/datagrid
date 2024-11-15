@@ -103,7 +103,7 @@ index f54d21c..f57c729 100644
 +        # Adding html clases based on condition
 +        # Consider maintaining consistency with datagrid/head partial
 +        "datagrid-order-active-asc": grid.ordered_by?(column, false),
-+        "datagrid-order-active-desc": grid.ordered_by?(column ,true),
++        "datagrid-order-active-desc": grid.ordered_by?(column, true),
 +        column.html_class => column.html_class.present?,
 +      },
 +      "data-column": column.name
