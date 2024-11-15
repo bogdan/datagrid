@@ -79,9 +79,10 @@ Beware of that.
 
 `datagrid_order_for` helper serves no purpose and should not be used directly.
 The recommended way is to include your ordering code directly into `datagrid/head` partial.
-You implement `datagrid_order_for` in `ApplicationHelper` 
-and copy [datagrid/order\_for](../app/views/datagrid/_order_for.html.erb) into your project
-if you consider it useful:
+See default [head partial](../app/views/datagrid/_head.html.erb) for example.
+
+You can implement `datagrid_order_for` in `ApplicationHelper` 
+and copy [datagrid/order\_for](../app/views/datagrid/_order_for.html.erb) into your project if you consider it useful:
 
 ``` ruby
 module ApplicationHelper
@@ -91,7 +92,6 @@ module ApplicationHelper
 end
 ```
 
-See default [head partial](../app/views/datagrid/_head.html.erb) for example.
 [Grep all deprecations](./deprecations.sh).
 
 ## Inherit Datagrid::Base
@@ -188,7 +188,7 @@ if you want to change them.
 Diff for [built-in partials between V1 and V2](./views.diff)
 See [a new built-in CSS file](../app/assets/datagrid.css).
 
-### Example
+### Form layout difference
 
 The difference in layout generation from v1 to v2.
 
@@ -230,9 +230,32 @@ Version 1 layout:
 
 Version 2 layout:
 
-TODO
-
 ``` html
+<form class="datagrid-form" action="/users" accept-charset="UTF-8" method="get">
+  <div class="datagrid-filter" data-filter="id" data-type="integer">
+    <label for="g_id">Id</label>
+    <input step="1" class="datagrid-range-from" name="g[id][from]" type="number" id="g_id" />
+    <span class="datagrid-range-separator"> - </span>
+    <input step="1" class="datagrid-range-to" name="g[id][to]" type="number" />
+  </div>
+
+  <div class="datagrid-filter" data-filter="group_id" data-type="enum">
+    <label>Group</label>
+    <div class="datagrid-enum-checkboxes">
+      <label for="g_group_id_1" class="datagrid-enum-checkbox-label">
+        <input id="g_group_id_1" value="1" type="checkbox" name="g[group_id][]" />1
+      </label>
+      <label for="g_group_id_2" class="datagrid-enum-checkbox-label">
+        <input id="g_group_id_2" value="2" type="checkbox" name="g[group_id][]" />2
+      </label>
+    </div>
+  </div>
+
+  <div class="datagrid-actions">
+    <input type="submit" name="commit" value="Search" class="datagrid-submit" data-disable-with="Search" />
+    <a class="datagrid-reset" href="/location">Reset</a>
+  </div>
+</form>
 ```
 
 ## HTML5 input types
