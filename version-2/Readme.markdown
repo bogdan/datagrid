@@ -201,8 +201,6 @@ Version 1 layout:
 ``` html
 <form class="datagrid-form partial_default_grid" id="new_g"
     action="/users" accept-charset="UTF-8" method="get">
-  <input name="utf8" type="hidden" value="✓" autocomplete="off" />
-
   <div class="datagrid-filter filter">
     <label for="g_id">Id</label>
     <input class="id integer_filter from" multiple type="text" name="g[id][]" />
@@ -252,7 +250,8 @@ Version 2 layout:
   </div>
 
   <div class="datagrid-actions">
-    <input type="submit" name="commit" value="Search" class="datagrid-submit" data-disable-with="Search" />
+    <input type="submit" name="commit" value="Search"
+      class="datagrid-submit" data-disable-with="Search" />
     <a class="datagrid-reset" href="/location">Reset</a>
   </div>
 </form>
