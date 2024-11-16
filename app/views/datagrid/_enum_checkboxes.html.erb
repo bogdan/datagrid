@@ -5,7 +5,7 @@ You can add indent if whitespace doesn't matter for you
 <div class="datagrid-enum-checkboxes">
 <%- elements.each do |value, text, checked| -%>
 <%- id = [form.object_name, filter.name, value].join('_').underscore -%>
-<%= form.datagrid_label(filter.name, for: id, class: 'datagrid-enum-checkbox-label', **options) do -%>
+<%= form.datagrid_label(filter.name, for: id, **options) do -%>
 <%= form.datagrid_filter_input(filter.name, id: id, value: value) -%>
 <%= text -%>
 <%- end -%>

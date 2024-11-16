@@ -451,12 +451,12 @@ describe Datagrid::FormBuilder do
           should equal_to_dom(
             <<~HTML,
               <div class="datagrid-enum-checkboxes">
-              <label for="report_category_first" class="datagrid-enum-checkbox-label">
+              <label for="report_category_first">
               <input type="checkbox" id="report_category_first"
                   value="first" name="report[category][]" />
               first
               </label>
-              <label for="report_category_second" class="datagrid-enum-checkbox-label">
+              <label for="report_category_second">
               <input type="checkbox" id="report_category_second"
                   value="second" name="report[category][]" />
               second
@@ -643,15 +643,15 @@ describe Datagrid::FormBuilder do
       let(:expected_html) do
         <<~DOM
           <div class="datagrid-enum-checkboxes">
-            <label for="report_column_names_id" class="datagrid-enum-checkbox-label">
+            <label for="report_column_names_id">
               <input id="report_column_names_id" type="checkbox" value="id" checked name="report[column_names][]">
               Id
             </label>
-            <label for="report_column_names_name" class="datagrid-enum-checkbox-label">
+            <label for="report_column_names_name">
               <input id="report_column_names_name" type="checkbox" value="name" checked name="report[column_names][]"/>
               Name
             </label>
-            <label for="report_column_names_category" class="datagrid-enum-checkbox-label">
+            <label for="report_column_names_category">
               <input id="report_column_names_category" type="checkbox" value="category" name="report[column_names][]">
               Category
             </label>

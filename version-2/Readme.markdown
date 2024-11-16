@@ -240,10 +240,10 @@ Version 2 layout:
   <div class="datagrid-filter" data-filter="group_id" data-type="enum">
     <label>Group</label>
     <div class="datagrid-enum-checkboxes">
-      <label for="g_group_id_1" class="datagrid-enum-checkbox-label">
+      <label for="g_group_id_1">
         <input id="g_group_id_1" value="1" type="checkbox" name="g[group_id][]" />1
       </label>
-      <label for="g_group_id_2" class="datagrid-enum-checkbox-label">
+      <label for="g_group_id_2">
         <input id="g_group_id_2" value="2" type="checkbox" name="g[group_id][]" />2
       </label>
     </div>

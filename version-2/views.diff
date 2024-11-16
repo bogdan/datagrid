@@ -11,7 +11,7 @@ index 9f48319..f225cc6 100644
  <%- id = [form.object_name, filter.name, value].join('_').underscore -%>
 -<%= form.label filter.name, options.merge(for: id) do -%>
 -<%= form.check_box(filter.name, {multiple: true, id: id, checked: checked, include_hidden: false}, value.to_s, nil) -%>
-+<%= form.datagrid_label(filter.name, **options, for: id, class: 'datagrid-enum-checkbox-label') do -%>
++<%= form.datagrid_label(filter.name, **options, for: id) do -%>
 +<%= form.datagrid_filter_input(filter.name, id: id, value: value) -%>
  <%= text -%>
  <%- end -%>
