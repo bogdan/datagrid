@@ -74,9 +74,13 @@ input.datagrid-range-from, input.datagrid-range-to {
   height: 100px;
 }
 
+select.datagrid-dynamic-field {
+  width: 228px
+}
+
 select.datagrid-dynamic-operation {
   margin-left: 7px;
-  width: 50px;
+  width: 60px;
 }
 
 .datagrid-dynamic-value {
@@ -91,10 +95,6 @@ select.datagrid-dynamic-operation {
 
 .datagrid-enum-checkboxes {
   display: inline-block;
-}
-
-select.datagrid-dynamic-field {
-  width: 238px
 }
 
 .datagrid-enum-checkboxes input {
