@@ -51,36 +51,21 @@ table.datagrid-table th {
   margin: 10px;
 }
 
-.datagrid-filter::before,
-.datagrid-filter::after {
-  content: '';
-  display: table;
-}
-
-.datagrid-filter::after {
-  clear: both;
-}
-
 .datagrid-filter label {
   width: 150px;
-  float: left;
+  display: inline-block;
 }
 
-.datagrid-filter input {
+.datagrid-filter input, .datagrid-filter select {
   border: 2px solid #ccc;
   border-radius: 4px;
-  float: left;
+  display: inline-block;
   padding: 5px 12px;
   width: 300px;
 }
 
 input.datagrid-range-from, input.datagrid-range-to {
-  width: 144px;
-}
-
-.datagrid-filter select {
-  float: left;
-  width: 300px
+  width: 138px;
 }
 
 .datagrid-filter select[multiple] {
@@ -95,32 +80,30 @@ select.datagrid-dynamic-operation {
 }
 
 .datagrid-dynamic-value {
-  margin: 10px 0 0 150px;
+  margin: 10px 0 0 154px;
   clear: both;
 }
 
 .datagrid-range-separator {
-  float: left;
+  display: inline-block;
   margin: 6px 4px 0;
 }
 
 .datagrid-enum-checkboxes {
-  float: left;
+  display: inline-block;
 }
 
 select.datagrid-dynamic-field {
-  width: 242px
+  width: 238px
 }
 
 .datagrid-enum-checkboxes input {
   margin: 7px;
-  float: none;
   width: auto;
 }
 
 .datagrid-enum-checkboxes label {
   display: block;
-  float: none;
   width: 100%;
 }
 
