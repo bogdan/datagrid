@@ -474,6 +474,21 @@ describe Datagrid::FormBuilder do
           let(:view_options) { { partials: "custom_checkboxes" } }
           it { should equal_to_dom("custom_enum_checkboxes") }
         end
+
+        context "when inline class attribute specified" do
+          let(:_filter_options) { {for: nil, class: 'custom-class'} }
+
+          it { should equal_to_dom(<<~HTML) }
+          <div class="datagrid-enum-checkboxes">
+            <label class="custom-class">
+              <input id="report_category_first" value="first" type="checkbox" name="report[category][]">first
+            </label>
+            <label class="custom-class">
+              <input id="report_category_second" value="second" type="checkbox" name="report[category][]">second
+            </label>
+          </div>
+          HTML
+        end
       end
     end
 
