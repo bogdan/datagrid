@@ -1,5 +1,5 @@
 diff --git a/app/views/datagrid/_enum_checkboxes.html.erb b/app/views/datagrid/_enum_checkboxes.html.erb
-index 9f48319..f225cc6 100644
+index 9f48319..5668c49 100644
 --- a/app/views/datagrid/_enum_checkboxes.html.erb
 +++ b/app/views/datagrid/_enum_checkboxes.html.erb
 @@ -2,10 +2,12 @@
@@ -11,7 +11,7 @@ index 9f48319..f225cc6 100644
  <%- id = [form.object_name, filter.name, value].join('_').underscore -%>
 -<%= form.label filter.name, options.merge(for: id) do -%>
 -<%= form.check_box(filter.name, {multiple: true, id: id, checked: checked, include_hidden: false}, value.to_s, nil) -%>
-+<%= form.datagrid_label(filter.name, **options, for: id) do -%>
++<%= form.datagrid_label(filter.name, for: id, **options) do -%>
 +<%= form.datagrid_filter_input(filter.name, id: id, value: value) -%>
  <%= text -%>
  <%- end -%>
@@ -90,7 +90,7 @@ index 7a8a123..faa2575 100644
 +<%# there is no duplicate id in DOM and click on label focuses the first input -%>
 +<%= form.datagrid_filter_input(filter, class: 'datagrid-range-to', **to_options, id: nil) %>
 diff --git a/app/views/datagrid/_row.html.erb b/app/views/datagrid/_row.html.erb
-index f54d21c..f57c729 100644
+index f54d21c..c64b0bf 100644
 --- a/app/views/datagrid/_row.html.erb
 +++ b/app/views/datagrid/_row.html.erb
 @@ -1,5 +1,15 @@
