@@ -273,7 +273,7 @@ module Datagrid
       if forbidden_attributes_protection
         super
       elsif defined?(ActionController::Parameters) && attributes.is_a?(ActionController::Parameters)
-        attributes.permit!.to_h
+        attributes.to_unsafe_h
       else
         attributes
       end
