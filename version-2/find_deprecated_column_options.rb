@@ -13,7 +13,7 @@ end
 classes = [*included_classes, *base_subclasses].uniq
 
 classes.flat_map(&:columns).select do |f|
-  f.options[:url]
+  f.options[:url] || f.options[:class]
 end.map do |f|
   [f.grid_class, f.name].join("#")
 end

@@ -55,7 +55,7 @@ column(:user) do |user|
 end
 ```
 
-All deprecated columns can be found [with a script](./find_deprecated_url_option.rb)
+All deprecated columns can be found [with a script](./find_deprecated_column_options.rb).
 
 ## Use form\_with
 
@@ -467,6 +467,8 @@ column(:status, class: 'issue-status')
 # V2
 column(:status, tag_options: {class: 'issue-status'})
 ```
+
+All deprecated columns can be found [with a script](./find_deprecated_column_options.rb).
 
 ## id attribute for range filter inputs
 

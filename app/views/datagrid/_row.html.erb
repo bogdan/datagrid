@@ -2,14 +2,15 @@
   <% grid.html_columns(*options[:columns]).each do |column| %>
     <%= tag.td(
       datagrid_value(grid, column, asset),
-      class: {
-        # Adding html clases based on condition
-        # Consider maintaining consistency with datagrid/head partial
-        "datagrid-order-active-asc": grid.ordered_by?(column, false),
-        "datagrid-order-active-desc": grid.ordered_by?(column, true),
-      },
+      # Consider maintaining consistency with datagrid/rows partial
       "data-column": column.name,
       **column.tag_options,
+      class: class_names(
+        column.tag_options[:class],
+        # Adding HTML classes based on condition
+        "datagrid-order-active-asc": grid.ordered_by?(column, false),
+        "datagrid-order-active-desc": grid.ordered_by?(column, true),
+      )
     ) %>
   <% end %>
 </tr>

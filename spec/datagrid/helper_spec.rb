@@ -390,17 +390,18 @@ describe Datagrid::Helper do
     end
 
     it "supports tag_options option" do
-      report = test_report do
+      report = test_report(order: :name, descending: true) do
         scope { Entry }
         column(:name, tag_options: {
           class: 'my-class',
-          "data-sort-method": "qsort"
+          "data-column-group": "core",
+          "data-column": nil,
         })
       end
 
       expect(subject.datagrid_rows(report, [entry])).to equal_to_dom(<<~HTML)
         <tr>
-          <td class="my-class" data-column="name" data-sort-method="qsort">Star</td>
+          <td class="my-class datagrid-order-active-desc" data-column-group="core">Star</td>
         </tr>
        HTML
     end
@@ -742,6 +743,23 @@ describe Datagrid::Helper do
         </div>
         </th></tr>
       HTML
+    end
+
+    it "supports tag_options option" do
+      grid = test_report(order: :name, descending: true) do
+        scope { Entry }
+        column(:name, order: false, tag_options: {
+          class: 'my-class',
+          "data-column-group": "core",
+          "data-column": nil,
+        })
+      end
+
+      expect(subject.datagrid_header(grid)).to equal_to_dom(<<~HTML)
+        <tr>
+          <th class="my-class datagrid-order-active-desc" data-column-group="core">Name</th>
+        </tr>
+       HTML
     end
   end
 
