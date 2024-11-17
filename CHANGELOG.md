@@ -2,6 +2,9 @@
 
 ## 2.0.0
 
+Version 2 is a major update implementing a lot of major improvements
+at the cost of backward compatibility.
+
 [Changes and migration guide](./version-2)
 
 ## 1.8.3

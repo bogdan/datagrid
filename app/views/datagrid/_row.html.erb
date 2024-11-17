@@ -7,9 +7,9 @@
         # Consider maintaining consistency with datagrid/head partial
         "datagrid-order-active-asc": grid.ordered_by?(column, false),
         "datagrid-order-active-desc": grid.ordered_by?(column, true),
-        column.html_class => column.html_class.present?,
       },
-      "data-column": column.name
+      "data-column": column.name,
+      **column.tag_options,
     ) %>
   <% end %>
 </tr>

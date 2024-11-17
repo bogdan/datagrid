@@ -39,6 +39,15 @@ module Datagrid
         self.grid_class = grid_class
         self.name = name.to_sym
         self.options = options
+        if options[:class]
+          Datagrid::Utils.warn_once(
+            "column[class] option is deprecated. Use {tag_options: {class: ...}} instead."
+          )
+          self.options[:tag_options] = {
+            **self.options.fetch(:tag_options, {}),
+            class: options[:class],
+          }
+        end
         if options[:html] == true
           self.html_block = block
         else
@@ -108,7 +117,14 @@ module Datagrid
         !!options[:mandatory]
       end
 
+      def tag_options
+        options[:tag_options] || {}
+      end
+
       def html_class
+        Datagrid::Utils.warn_once(
+          "Column#html_class is deprecated. Use Column#tag_options instead."
+        )
         options[:class]
       end
 

@@ -71,7 +71,7 @@ module Datagrid
       # * <tt>html</tt> - determines if current column should be present in html table and how is it formatted
       # * <tt>order</tt> - determines if this column could be sortable and how.
       #   The value of order is explicitly passed to ORM ordering method.
-      #   Ex: <tt>"created_at, id"</tt> for ActiveRecord, <tt>[:created_at, :id]</tt> for Mongoid
+      #   Example: <tt>"created_at, id"</tt> for ActiveRecord, <tt>[:created_at, :id]</tt> for Mongoid
       # * <tt>order_desc</tt> - determines a descending order for given column
       #   (only in case when <tt>:order</tt> can not be easily reversed by ORM)
       # * <tt>order_by_value</tt> - used in case it is easier to perform ordering at ruby level not on database level.
@@ -85,6 +85,8 @@ module Datagrid
       # * <tt>if</tt> - the column is shown if the reult of calling this argument is true
       # * <tt>unless</tt> - the column is shown unless the reult of calling this argument is true
       # * <tt>preload</tt> - spefies which associations of the scope should be preloaded for this column
+      # * `tag_options` - specify HTML attributes to be set for `<td>` or `<th>` of a column
+      #   Example: `{ class: "content-align-right", "data-group": "statistics" }`
       #
       # @see https://github.com/bogdan/datagrid/wiki/Columns
       def column(name, query = nil, **options, &block)

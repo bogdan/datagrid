@@ -377,14 +377,32 @@ describe Datagrid::Helper do
     end
 
     it "should allow CSS classes to be specified for a column" do
-      rp = test_report do
-        scope { Entry }
-        column(:name, class: "my_class")
+      rp = expect_deprecated do
+        test_report do
+          scope { Entry }
+          column(:name, class: "my-class")
+        end
       end
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
-        "tr td[data-column=name].my_class" => "Star",
+        "tr td[data-column=name].my-class" => "Star",
       )
+    end
+
+    it "supports tag_options option" do
+      report = test_report do
+        scope { Entry }
+        column(:name, tag_options: {
+          class: 'my-class',
+          "data-sort-method": "qsort"
+        })
+      end
+
+      expect(subject.datagrid_rows(report, [entry])).to equal_to_dom(<<~HTML)
+        <tr>
+          <td class="my-class" data-column="name" data-sort-method="qsort">Star</td>
+        </tr>
+       HTML
     end
 
     context "when grid has complicated columns" do

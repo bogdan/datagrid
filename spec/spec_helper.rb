@@ -106,6 +106,11 @@ def silence_deprecator(&block)
   Datagrid::Utils.deprecator.silence(&block)
 end
 
+def expect_deprecated(message = /deprecated/, &block)
+  expect(Datagrid::Utils.deprecator).to receive(:warn).with(message)
+  block.call
+end
+
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

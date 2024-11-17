@@ -26,6 +26,7 @@ List of things introduces:
 1. Native Rails Engines:
    * while supported, the library was not initially designed for it.
 1. HTML5 data attributes
+1. Use `column[tag_options]` option instead of `column[class]`.
 1. Consistent `label[for]` and `input[id]` for range filters.
 1. Updated app/views/datagrid/enum\_checkboxes
 1. Introduced `datagrid.filters.range.separator` localization
@@ -452,6 +453,20 @@ Renders:
 
 [Modify built-in views](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials)
 if you want to change this behavior completely.
+
+## Use column[tag\_options]
+
+`column[class]` option is deprecated in favor of more flexible `column[tag_options]` 
+that allows to specify any `td/td` html attribute.
+
+Example migration:
+
+``` ruby
+# V1
+column(:status, class: 'issue-status')
+# V2
+column(:status, tag_options: {class: 'issue-status'})
+```
 
 ## id attribute for range filter inputs
 
