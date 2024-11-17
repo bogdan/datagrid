@@ -46,7 +46,7 @@ describe Datagrid do
 
     context "when not defined on class level" do
       subject do
-        test_report do
+        test_grid do
           column(:id)
         end
       end
@@ -68,7 +68,7 @@ describe Datagrid do
 
     context "when defined in the grid class" do
       subject do
-        test_report do
+        test_grid do
           self.batch_size = 25
         end
       end
@@ -80,7 +80,7 @@ describe Datagrid do
 
     context "when set to nil in the grid class" do
       subject do
-        test_report do
+        test_grid do
           self.batch_size = nil
         end
       end

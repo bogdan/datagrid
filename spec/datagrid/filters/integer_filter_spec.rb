@@ -11,10 +11,9 @@ describe Datagrid::Filters::IntegerFilter do
   let(:entry7) { Entry.create!(group_id: 7) }
 
   it "should support integer range argument" do
-    report = test_report(group_id: 3..5) do
-      scope { Entry }
-      filter(:group_id, :integer, range: true)
-    end
+    report = test_grid_filter(:group_id, :integer, range: true)
+
+    report.group_id = 3..5
     expect(report.assets).not_to include(entry1)
     expect(report.assets).to include(entry4)
     expect(report.assets).not_to include(entry7)
@@ -29,49 +28,43 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should support integer range given as array argument" do
-    report = test_report(group_id: [3.to_s, 5.to_s]) do
-      scope { Entry }
-      filter(:group_id, :integer, range: true)
-    end
+    report = test_grid_filter(:group_id, :integer, range: true)
+    report.group_id = [3.to_s, 5.to_s]
     expect(report.group_id).to eq(3..5)
   end
 
   it "should support minimum integer argument" do
-    report = test_report(group_id: [5.to_s, nil]) do
-      scope { Entry }
-      filter(:group_id, :integer, range: true)
-    end
+    report = test_grid_filter(:group_id, :integer, range: true)
+    report.group_id = [5.to_s, nil]
+
     expect(report.group_id).to eq(5..)
   end
 
   it "should support maximum integer argument" do
-    report = test_report(group_id: [nil, 5.to_s]) do
-      scope { Entry }
-      filter(:group_id, :integer, range: true)
-    end
+    report = test_grid_filter(:group_id, :integer, range: true)
+    report.group_id = [nil, 5.to_s]
+
     expect(report.group_id).to eq(..5)
   end
 
   it "should find something in one integer interval" do
-    report = test_report(group_id: 4) do
-      scope { Entry }
-      filter(:group_id, :integer, range: true)
-    end
+    report = test_grid_filter(:group_id, :integer, range: true)
+    report.group_id = 4
+
     expect(report.assets).not_to include(entry7)
     expect(report.assets).to include(entry4)
     expect(report.assets).not_to include(entry1)
   end
 
   it "supports range inversion" do
-    report = test_report(group_id: (7..1)) do
-      scope { Entry }
-      filter(:group_id, :integer, range: true)
-    end
+    report = test_grid_filter(:group_id, :integer, range: true)
+    report.group_id = 7..1
+
     expect(report.group_id).to eq(1..7)
   end
 
   it "converts infinite range to nil" do
-    report = test_report(group_id: (nil..nil)) do
+    report = test_grid(group_id: (nil..nil)) do
       scope { Entry }
       filter(:group_id, :integer, range: true)
     end
@@ -79,18 +72,17 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should support block" do
-    report = test_report(group_id: 5) do
-      scope { Entry }
-      filter(:group_id, :integer, range: true) do |value|
-        where("group_id >= ?", value)
-      end
+    report = test_grid_filter(:group_id, :integer, range: true) do |value|
+      where("group_id >= ?", value)
     end
+    report.group_id = 5
+
     expect(report.assets).not_to include(entry1)
     expect(report.assets).to include(entry5)
   end
 
   it "should not prefix table name if column is joined" do
-    report = test_report(rating: [4, nil]) do
+    report = test_grid(rating: [4, nil]) do
       scope { Entry.joins(:group) }
       filter(:rating, :integer, range: true)
     end
@@ -100,20 +92,18 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should support multiple values" do
-    report = test_report(group_id: "1,2") do
-      scope { Entry }
-      filter(:group_id, :integer, multiple: true)
-    end
+    report = test_grid_filter(:group_id, :integer, multiple: true)
+    report.group_id = "1,2"
+
     expect(report.group_id).to eq([1, 2])
     expect(report.assets).to include(entry1)
     expect(report.assets).to include(entry2)
     expect(report.assets).not_to include(entry3)
   end
   it "should support custom separator multiple values" do
-    report = test_report(group_id: "1|2") do
-      scope { Entry }
-      filter(:group_id, :integer, multiple: "|")
-    end
+    report = test_grid_filter(:group_id, :integer, multiple: "|")
+    report.group_id = "1|2"
+
     expect(report.group_id).to eq([1, 2])
     expect(report.assets).to include(entry1)
     expect(report.assets).to include(entry2)
@@ -121,10 +111,8 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should support multiple with allow_blank allow_nil options" do
-    report = test_report do
-      scope { Entry }
-      filter(:group_id, :integer, multiple: true, allow_nil: false, allow_blank: true)
-    end
+    report = test_grid_filter(:group_id, :integer, multiple: true, allow_nil: false, allow_blank: true)
+
     report.group_id = []
     expect(report.assets).to_not include(entry1)
     expect(report.assets).to_not include(entry2)
@@ -137,20 +125,15 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "normalizes AR object to ID" do
+    report = test_grid_filter(:group_id, :integer)
     group = Group.create!
-    report  = test_report(group_id: group) do
-      scope { Entry }
-      filter(:group_id, :integer)
-    end
+    report.group_id = group
 
     expect(report.group_id).to eq(group.id)
   end
 
   it "supports serialized range value" do
-    report  = test_report do
-      scope { Entry }
-      filter(:group_id, :integer, range: true)
-    end
+    report  = test_grid_filter(:group_id, :integer, range: true)
 
     report.group_id = (1..5).as_json
     expect(report.group_id).to eq(1..5)
@@ -172,10 +155,7 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "type casts value" do
-    report = test_report do
-      scope { Entry }
-      filter(:group_id, :integer)
-    end
+    report = test_grid_filter(:group_id, :integer)
 
     report.group_id = "1"
     expect(report.group_id).to eq(1)

@@ -86,7 +86,7 @@ describe Datagrid::Drivers::MongoMapper, :mongomapper do
       end
       it "should not provide default order for non declared fields" do
         expect do
-          test_report(order: :test) do
+          test_grid(order: :test) do
             scope { MongoMapperEntry }
             column(:test)
           end.assets

@@ -96,7 +96,7 @@ describe Datagrid::Drivers::Sequel do
 
     it "should provide default order for non declared fields" do
       expect do
-        test_report(order: :test) do
+        test_grid(order: :test) do
           scope { SequelEntry }
           column(:test) do
             "test"
@@ -106,7 +106,7 @@ describe Datagrid::Drivers::Sequel do
     end
 
     it "should support batch_size" do
-      report = test_report do
+      report = test_grid do
         scope { SequelEntry }
         self.batch_size = 1
         column(:name)

@@ -9,7 +9,7 @@ describe Datagrid::Filters::DateTimeFilter do
         let(:klass) { klass }
 
         let(:grid) do
-          test_report(created_at: _created_at) do
+          test_grid(created_at: _created_at) do
             scope { klass }
             filter(:created_at, :datetime, range: true)
           end
@@ -64,10 +64,10 @@ describe Datagrid::Filters::DateTimeFilter do
     e1 = Entry.create!(created_at: Time.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(created_at: Time.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(created_at: Time.new(2013, 1, 1, 3, 0))
-    report = test_report(created_at: [Time.new(2013, 1, 1, 1, 30).to_s, Time.new(2013, 1, 1, 2, 30).to_s]) do
-      scope { Entry }
-      filter(:created_at, :datetime, range: true)
-    end
+
+    report = test_grid_filter(:created_at, :datetime, range: true)
+    report.created_at = [Time.new(2013, 1, 1, 1, 30).to_s, Time.new(2013, 1, 1, 2, 30).to_s]
+
     expect(report.assets).not_to include(e1)
     expect(report.assets).to include(e2)
     expect(report.assets).not_to include(e3)
@@ -77,10 +77,10 @@ describe Datagrid::Filters::DateTimeFilter do
     e1 = Entry.create!(created_at: Time.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(created_at: Time.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(created_at: Time.new(2013, 1, 1, 3, 0))
-    report = test_report(created_at: [Time.new(2013, 1, 1, 1, 30).to_s, nil]) do
-      scope { Entry }
-      filter(:created_at, :datetime, range: true)
-    end
+
+    report = test_grid_filter(:created_at, :datetime, range: true)
+    report.created_at = [Time.new(2013, 1, 1, 1, 30).to_s, nil]
+
     expect(report.assets).not_to include(e1)
     expect(report.assets).to include(e2)
     expect(report.assets).to include(e3)
@@ -90,10 +90,10 @@ describe Datagrid::Filters::DateTimeFilter do
     e1 = Entry.create!(created_at: Time.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(created_at: Time.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(created_at: Time.new(2013, 1, 1, 3, 0))
-    report = test_report(created_at: [nil, Time.new(2013, 1, 1, 2, 30).to_s]) do
-      scope { Entry }
-      filter(:created_at, :datetime, range: true)
-    end
+
+    report = test_grid_filter(:created_at, :datetime, range: true)
+    report.created_at = [nil, Time.new(2013, 1, 1, 2, 30).to_s]
+
     expect(report.assets).to include(e1)
     expect(report.assets).to include(e2)
     expect(report.assets).not_to include(e3)
@@ -103,10 +103,10 @@ describe Datagrid::Filters::DateTimeFilter do
     e1 = Entry.create!(created_at: Time.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(created_at: Time.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(created_at: Time.new(2013, 1, 1, 3, 0))
-    report = test_report(created_at: Time.new(2013, 1, 1, 2, 0)..Time.new(2013, 1, 1, 2, 0)) do
-      scope { Entry }
-      filter(:created_at, :datetime, range: true)
-    end
+
+    report = test_grid_filter(:created_at, :datetime, range: true)
+    report.created_at = Time.new(2013, 1, 1, 2, 0)..Time.new(2013, 1, 1, 2, 0)
+
     expect(report.assets).not_to include(e1)
     expect(report.assets).to include(e2)
     expect(report.assets).not_to include(e3)
@@ -117,10 +117,10 @@ describe Datagrid::Filters::DateTimeFilter do
     e1 = Entry.create!(created_at: Time.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(created_at: Time.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(created_at: Time.new(2013, 1, 1, 3, 0))
-    report = test_report(created_at: range) do
-      scope { Entry }
-      filter(:created_at, :datetime, range: true)
-    end
+
+    report = test_grid_filter(:created_at, :datetime, range: true)
+    report.created_at = range
+
     expect(report.created_at).to eq(range.last..range.first)
     expect(report.assets).to include(e1)
     expect(report.assets).to include(e2)
@@ -128,12 +128,11 @@ describe Datagrid::Filters::DateTimeFilter do
   end
 
   it "should support block" do
-    report = test_report(created_at: Time.now..) do
-      scope { Entry }
-      filter(:created_at, :datetime, range: true) do |value|
-        where(created_at: value)
-      end
+    report = test_grid_filter(:created_at, :datetime) do |value|
+      where("created_at >= ?", value)
     end
+    report.created_at = Time.now
+
     expect(report.assets).not_to include(Entry.create!(created_at: 1.day.ago))
     expect(report.assets).to include(Entry.create!(created_at: Time.now + 1.day))
   end
@@ -146,37 +145,30 @@ describe Datagrid::Filters::DateTimeFilter do
     end
 
     it "should have configurable datetime format" do
-      report = test_report(created_at: "10/01/2013 01:00") do
-        scope  { Entry }
-        filter(:created_at, :datetime)
-      end
+      report = test_grid_filter(:created_at, :datetime)
+      report.created_at = "10/01/2013 01:00"
       expect(report.created_at).to eq(Time.new(2013, 10, 0o1, 1, 0))
     end
 
     it "should support default explicit datetime" do
-      report = test_report(created_at: Time.parse("2013-10-01 01:00")) do
-        scope  { Entry }
-        filter(:created_at, :datetime)
-      end
+      report = test_grid_filter(:created_at, :datetime)
+      report.created_at = Time.parse("2013-10-01 01:00")
+
       expect(report.created_at).to eq(Time.new(2013, 10, 0o1, 1, 0))
     end
   end
 
   it "should automatically reverse Array if first more than last" do
-    report = test_report(created_at: ["2013-01-01 01:00", "2012-01-01 01:00"]) do
-      scope  { Entry }
-      filter(:created_at, :datetime, range: true)
-    end
+    report = test_grid_filter(:created_at, :datetime, range: true)
+    report.created_at = ["2013-01-01 01:00", "2012-01-01 01:00"]
+
     expect(report.created_at).to eq(Time.new(2012, 0o1, 0o1, 1, 0)..Time.new(2013, 0o1, 0o1, 1, 0))
   end
 
   it "supports serialized range value" do
     from = Time.parse("2013-01-01 01:00")
     to = Time.parse("2013-01-02 02:00")
-    report  = test_report do
-      scope { Entry }
-      filter(:created_at, :datetime, range: true)
-    end
+    report  = test_grid_filter(:created_at, :datetime, range: true)
 
     report.created_at = (from..to).as_json
     expect(report.created_at).to eq(from..to)

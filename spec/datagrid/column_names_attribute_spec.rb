@@ -9,7 +9,7 @@ describe Datagrid::ColumnNamesAttribute do
 
   let(:report) do
     options = column_names_filter_options
-    test_report do
+    test_grid do
       scope { Entry }
       column_names_filter(**options)
       column(:id)
@@ -64,7 +64,7 @@ describe Datagrid::ColumnNamesAttribute do
 
   context "when some columns are disabled" do
     subject do
-      test_report do
+      test_grid do
         scope { Entry }
         column(:id, mandatory: true)
         column(:name)

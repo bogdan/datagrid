@@ -18,15 +18,16 @@ describe Datagrid::Drivers::ActiveRecord do
   end
 
   it "should support append_column_queries" do
-    scope = subject.append_column_queries(Entry.where({}),
-      [Datagrid::Columns::Column.new(test_report_class, :sum_group_id,
-        "sum(entries.group_id)",)],)
+    scope = subject.append_column_queries(
+      Entry.where({}),
+      [Datagrid::Columns::Column.new(test_grid_class, :sum_group_id, "sum(entries.group_id)")],
+    )
     expect(scope.to_sql.strip).to eq('SELECT "entries".*, sum(entries.group_id) AS sum_group_id FROM "entries"')
   end
 
   describe "Arel" do
     subject do
-      test_report(order: :test, descending: true) do
+      test_grid(order: :test, descending: true) do
         scope { Entry }
         column(:test, order: Entry.arel_table[:group_id].count)
       end.assets
@@ -39,7 +40,7 @@ describe Datagrid::Drivers::ActiveRecord do
 
   describe "where by timestamp" do
     subject do
-      test_report(created_at: 10.days.ago..5.days.ago) do
+      test_grid(created_at: 10.days.ago..5.days.ago) do
         scope { Entry }
 
         filter(:created_at, :date, range: true) do |value, scope, _grid|
@@ -67,7 +68,7 @@ describe Datagrid::Drivers::ActiveRecord do
 
   describe "batches usage" do
     it "should be incompatible with scope with limit" do
-      report = test_report do
+      report = test_grid do
         scope { Entry.limit(5) }
         self.batch_size = 20
         column(:id)
