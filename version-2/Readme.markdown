@@ -27,6 +27,7 @@ List of things introduces:
    * while supported, the library was not initially designed for it.
 1. HTML5 data attributes
 1. Consistent `label[for]` and `input[id]` for range filters.
+1. Updated app/views/datagrid/enum\_checkboxes
 1. Introduced `datagrid.filters.range.separator` localization
 1. Remove SASS dependency
 1. Replace `rake datagrid:copy_partials` with `rails g datagrid:views`
@@ -476,6 +477,17 @@ Version 2 generates id attribute only for the first input, so that a click on la
 
 The behavior can be changed by modifying 
 [built-in view](https://github.com/bogdan/datagrid/blob/version-2/app/views/datagrid/_range_filter.html.erb#L3).
+
+## Updated enum\_checkboxes view
+
+`app/views/datagrid/enum_checkboxes` is now configured differently:
+
+1. Use `datagrid_filter_input` instead of `check_box` to ensure `filter` options behave consistently.
+2. Use `choices` local variable instead of `elements`
+  * `elements` variables contains values: `value`, `text` and `checked`.
+  * `choices` has only first two values to ensure `checked` is determined automatically and consistently.
+
+Diff for [built-in partials between V1 and V2](./views.diff)
 
 ## ApplicationGrid base class
 

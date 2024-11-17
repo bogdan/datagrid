@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "action_view"
+require 'datagrid/deprecated_object'
 
 module Datagrid
   module FormBuilder
@@ -88,11 +89,22 @@ module Datagrid
         checked = enum_checkbox_checked?(filter, value)
         [value, text, checked]
       end
+      choices = elements.map do |value, text, *_|
+        [value, text]
+      end
       render_partial(
         "enum_checkboxes",
         {
-          elements: elements,
           form: self,
+          elements: Datagrid::DeprecatedObject.new(
+            elements,
+
+          ) do
+            Datagrid::Utils.warn_once(
+              "Using `elements` variable in app/views/datagrid/enum_checkboxes is deprecated, use `choices` instead."
+            )
+          end,
+          choices: choices,
           filter: filter,
           options: options,
         },

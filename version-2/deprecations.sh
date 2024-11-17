@@ -18,3 +18,8 @@ git grep 'datagrid:copy_partials'
 git grep 'BaseDatagrid'
 git grep 'BaseGrid'
 
+# Use choices instead
+git grep 'elements' app/views/datagrid/_enum_checkboxes.*
+
+# Use datagrid_filter_input instead
+git grep 'check_box' app/views/datagrid/_enum_checkboxes.*

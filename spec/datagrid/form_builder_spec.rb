@@ -475,6 +475,18 @@ describe Datagrid::FormBuilder do
           it { should equal_to_dom("custom_enum_checkboxes") }
         end
 
+        context "when using deprecated elements variable in partial" do
+          around do |ex|
+            Datagrid::Utils.deprecator.silence do
+              ex.run
+            end
+          end
+          let(:view_options) { { partials: "deprecated_enum_checkboxes" } }
+          it { should equal_to_dom(
+            [["first", "first",false],["second","second",false]].to_json
+          ) }
+        end
+
         context "when inline class attribute specified" do
           let(:_filter_options) { {for: nil, class: 'custom-class'} }
 
