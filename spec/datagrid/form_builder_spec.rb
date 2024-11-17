@@ -373,13 +373,15 @@ describe Datagrid::FormBuilder do
           filter(:category, :enum, select: %w[first second], **filter_options)
         end
       end
+
       it {
-        should equal_to_dom(
-          %(<select class="category enum_filter" name="report[category]" id="report_category">
-       <option value="" label=" "></option>
-       <option value="first">first</option>
-       <option value="second">second</option></select>),
-        )
+        should equal_to_dom(<<~HTML)
+          <select class="category enum_filter" name="report[category]" id="report_category">
+            <option value="" label=" "></option>
+            <option value="first">first</option>
+            <option value="second">second</option>
+          </select>
+        HTML
       }
 
       context "when block is given" do
@@ -388,79 +390,100 @@ describe Datagrid::FormBuilder do
             template.content_tag(:option, "block option", value: "block_value")
           end
         end
+
         it {
-          should equal_to_dom(
-            %(<select class="category enum_filter" name="report[category]" id="report_category">
-          <option value="" label=" "></option>
-          <option value="block_value">block option</option></select>),
-          )
+          should equal_to_dom(<<~HTML)
+            <select class="category enum_filter" name="report[category]" id="report_category">
+              <option value="" label=" "></option>
+              <option value="block_value">block option</option>
+            </select>
+          HTML
         }
       end
+
       context "when first option is selected" do
         before(:each) do
           _grid.category = "first"
         end
+
         it {
-          should equal_to_dom(
-            %(<select class="category enum_filter" name="report[category]" id="report_category">
-       <option value="" label=" "></option>
-       <option selected value="first">first</option>
-       <option value="second">second</option></select>),
-          )
+          should equal_to_dom(<<~HTML)
+            <select class="category enum_filter" name="report[category]" id="report_category">
+              <option value="" label=" "></option>
+              <option selected value="first">first</option>
+              <option value="second">second</option>
+            </select>
+          HTML
         }
       end
+
       context "with include_blank option set to false" do
         let(:_category_filter_options) { { include_blank: false } }
+
         it {
-          should equal_to_dom(
-            '<select class="category enum_filter" name="report[category]" id="report_category">
-         <option value="first">first</option>
-         <option value="second">second</option></select>',
-          )
+          should equal_to_dom(<<~HTML)
+            <select class="category enum_filter" name="report[category]" id="report_category">
+              <option value="first">first</option>
+              <option value="second">second</option>
+            </select>
+          HTML
         }
       end
+
       context "with dynamic include_blank option" do
         let(:_category_filter_options) { { include_blank: proc { "Choose plz" } } }
+
         it {
-          should equal_to_dom(
-            '<select class="category enum_filter" name="report[category]" id="report_category">
-         <option value="">Choose plz</option>
-         <option value="first">first</option>
-         <option value="second">second</option></select>',
-          )
+          should equal_to_dom(<<~HTML)
+            <select class="category enum_filter" name="report[category]" id="report_category">
+              <option value="">Choose plz</option>
+              <option value="first">first</option>
+              <option value="second">second</option>
+            </select>
+          HTML
         }
       end
 
       context "with prompt option" do
         let(:_category_filter_options) { { prompt: "My Prompt" } }
+
         it {
-          should equal_to_dom(
-            '<select class="category enum_filter" name="report[category]" id="report_category"><option value="">My Prompt</option>
-         <option value="first">first</option>
-         <option value="second">second</option></select>',
-          )
+          should equal_to_dom(<<~HTML)
+            <select class="category enum_filter" name="report[category]" id="report_category">
+              <option value="">My Prompt</option>
+              <option value="first">first</option>
+              <option value="second">second</option>
+            </select>
+          HTML
         }
       end
 
       context "with input_options class" do
         let(:_category_filter_options) { { input_options: { class: "custom-class" } } }
+
         it {
-          should equal_to_dom(
-            '<select class="custom-class category enum_filter" name="report[category]" id="report_category"><option value="" label=" "></option>
-         <option value="first">first</option>
-         <option value="second">second</option></select>',
-          )
+          should equal_to_dom(<<~HTML)
+            <select class="custom-class category enum_filter" name="report[category]" id="report_category">
+              <option value="" label=" "></option>
+              <option value="first">first</option>
+              <option value="second">second</option>
+            </select>
+          HTML
         }
       end
+
       context "with checkboxes option" do
         let(:_category_filter_options) { { checkboxes: true } }
+
         it {
-          should equal_to_dom(
-            '
-<label class="category enum_filter checkboxes" for="report_category_first"><input id="report_category_first" type="checkbox" value="first" name="report[category][]" />first</label>
-<label class="category enum_filter checkboxes" for="report_category_second"><input id="report_category_second" type="checkbox" value="second" name="report[category][]" />second</label>
-              ',
-          )
+          should equal_to_dom(<<~HTML)
+            <label class="category enum_filter checkboxes" for="report_category_first">
+              <input id="report_category_first" type="checkbox" value="first" name="report[category][]" />first
+            </label>
+            <label class="category enum_filter checkboxes" for="report_category_second">
+              <input id="report_category_second" type="checkbox" value="second" name="report[category][]" />second
+            </label>
+          HTML
         }
 
         context "when partials option passed and partial exists" do
