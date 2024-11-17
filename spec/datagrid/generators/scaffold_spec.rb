@@ -42,6 +42,29 @@ describe Datagrid::Generators::Scaffold do
         end
       RUBY
     end
+
+    context "with pagy" do
+      before do
+        allow(subject).to receive(:pagy?).and_return(true)
+      end
+
+      it "works" do
+        expect(subject.controller_code).to eq(<<~RUBY)
+        class UsersController < ApplicationController
+          def index
+            @grid = UsersGrid.new(grid_params)
+            @pagy, @assets = pagy(@grid.assets)
+          end
+
+          protected
+
+          def grid_params
+            params.fetch(:users_grid, {}).permit!
+          end
+        end
+        RUBY
+      end
+    end
   end
 
   describe "#view_code" do
@@ -53,6 +76,22 @@ describe Datagrid::Generators::Scaffold do
       <%= datagrid_table @grid %>
       <%= paginate(@grid.assets) %>
       ERB
+    end
+
+    context "with pagy" do
+      before do
+        allow(subject).to receive(:pagy?).and_return(true)
+      end
+
+      it "works" do
+        expect(subject.view_code).to eq(<<~ERB)
+        <%= datagrid_form_with model: @grid, url: users_path %>
+
+        <%= pagy_nav(@pagy) %>
+        <%= datagrid_table @grid, @records %>
+        <%= pagy_nav(@pagy) %>
+        ERB
+      end
     end
   end
 end
