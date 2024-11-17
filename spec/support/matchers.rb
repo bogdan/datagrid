@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "nokogiri"
+require "rails/dom/testing"
 
 def equal_to_dom(text)
   EqualToDom.new(text)
@@ -11,17 +11,19 @@ def match_css_pattern(pattern)
 end
 
 class EqualToDom
+  include Rails::Dom::Testing::Assertions::DomAssertions
+
   def initialize(expectation)
     @expectation = normalize(expectation)
   end
 
   def matches?(text)
     @matcher = normalize(text)
-    @matcher == @expectation
+    compare_doms(@expectation, @matcher, false)
   end
 
   def normalize(text)
-    Nokogiri::HTML::DocumentFragment.parse(text.split("\n").map(&:strip).join).to_s
+    fragment(text)
   end
 
   def failure_message

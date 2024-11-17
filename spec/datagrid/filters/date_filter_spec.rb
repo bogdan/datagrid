@@ -207,7 +207,7 @@ describe Datagrid::Filters::DateFilter do
 
   it "supports search by timestamp column" do
     report = test_report(created_at: Date.today) do
-      scope {Entry}
+      scope { Entry }
       filter(:created_at, :date)
     end
     e1 = Entry.create!(created_at: Date.yesterday + 23.hours)
