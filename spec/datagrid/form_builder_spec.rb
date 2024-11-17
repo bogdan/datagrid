@@ -35,7 +35,7 @@ describe Datagrid::FormBuilder do
 
     context "with default filter type" do
       let(:_grid) do
-        test_report do
+        test_grid do
           scope { Entry }
           filter(:name)
         end
@@ -52,7 +52,7 @@ describe Datagrid::FormBuilder do
     context "with integer filter type" do
       let(:_filter) { :group_id }
       let(:_grid) do
-        test_report do
+        test_grid do
           scope { Entry }
           filter(:group_id, :integer)
         end
@@ -78,7 +78,7 @@ describe Datagrid::FormBuilder do
     context "with date filter type" do
       let(:_filter) { :created_at }
       let(:_grid) do
-        test_report do
+        test_grid do
           scope { Entry }
           filter(:created_at, :date)
         end
@@ -110,7 +110,7 @@ describe Datagrid::FormBuilder do
       context "type is date" do
         let(:_filter) { :created_at }
         let(:_grid) do
-          test_report do
+          test_grid do
             scope { Entry }
             filter(:created_at, :date, input_options: { type: :date })
           end
@@ -126,7 +126,7 @@ describe Datagrid::FormBuilder do
       context "type is textarea" do
         let(:_filter) { :name }
         let(:_grid) do
-          test_report do
+          test_grid do
             scope { Entry }
             filter(:name, :string, input_options: { type: :textarea })
           end
@@ -142,7 +142,7 @@ describe Datagrid::FormBuilder do
       context "type is datetime-local" do
         let(:_filter) { :created_at }
         let(:_grid) do
-          test_report(created_at: Time.new(2024, 1, 1, 9, 25, 15)) do
+          test_grid(created_at: Time.new(2024, 1, 1, 9, 25, 15)) do
             scope { Entry }
             filter(:created_at, :datetime, input_options: { type: "datetime-local" })
           end
@@ -170,7 +170,7 @@ describe Datagrid::FormBuilder do
       context "type is date" do
         let(:_filter) { :created_at }
         let(:_grid) do
-          test_report(created_at: Date.new(2024, 1, 1)) do
+          test_grid(created_at: Date.new(2024, 1, 1)) do
             scope { Entry }
             filter(:created_at, :datetime, input_options: { type: :date })
           end
@@ -187,7 +187,7 @@ describe Datagrid::FormBuilder do
     context "with integer filter type and range option" do
       let(:_filter) { :group_id }
       let(:_grid) do
-        test_report(group_id: _range) do
+        test_grid(group_id: _range) do
           scope { Entry }
           filter(:group_id, :integer, range: true)
         end
@@ -268,7 +268,7 @@ describe Datagrid::FormBuilder do
     context "with float filter type and range option" do
       let(:_filter) { :rating }
       let(:_grid) do
-        test_report(rating: _range) do
+        test_grid(rating: _range) do
           scope { Group }
           filter(:rating, :float, range: true)
         end
@@ -287,7 +287,7 @@ describe Datagrid::FormBuilder do
     context "with date filter type and range option" do
       let(:_filter) { :created_at }
       let(:_grid) do
-        test_report(created_at: _range) do
+        test_grid(created_at: _range) do
           scope { Entry }
           filter(:created_at, :date, range: true)
         end
@@ -368,7 +368,7 @@ describe Datagrid::FormBuilder do
       let(:_category_filter_options) { {} }
       let(:_grid) do
         filter_options = _category_filter_options
-        test_report do
+        test_grid do
           scope { Entry }
           filter(:category, :enum, select: %w[first second], **filter_options)
         end
@@ -496,7 +496,7 @@ describe Datagrid::FormBuilder do
     context "with boolean filter type" do
       let(:_filter) { :disabled }
       let(:_grid) do
-        test_report do
+        test_grid do
           scope { Entry }
           filter(:disabled, :boolean, default: true)
         end
@@ -512,7 +512,7 @@ describe Datagrid::FormBuilder do
     context "with xboolean filter type" do
       let(:_filter) { :disabled }
       let(:_grid) do
-        test_report do
+        test_grid do
           scope { Entry }
           filter(:disabled, :xboolean)
         end
@@ -528,7 +528,7 @@ describe Datagrid::FormBuilder do
     end
     context "with string filter" do
       let(:_grid) do
-        test_report do
+        test_grid do
           scope { Entry }
           filter(:name, :string)
         end
@@ -544,7 +544,7 @@ describe Datagrid::FormBuilder do
 
       context "when multiple option is set" do
         let(:_grid) do
-          test_report(name: "one,two") do
+          test_grid(name: "one,two") do
             scope { Entry }
             filter(:name, :string, multiple: true)
           end
@@ -562,7 +562,7 @@ describe Datagrid::FormBuilder do
 
     context "with non multiple filter" do
       let(:_grid) do
-        test_report do
+        test_grid do
           scope { Entry }
           filter(
             :name, :enum,
@@ -577,7 +577,7 @@ describe Datagrid::FormBuilder do
     end
     context "with float filter type" do
       let(:_grid) do
-        test_report do
+        test_grid do
           scope { Entry }
           filter(:group_id, :float)
         end
@@ -592,7 +592,7 @@ describe Datagrid::FormBuilder do
 
     context "with enum multiple filter" do
       let(:_grid) do
-        test_report do
+        test_grid do
           scope { Entry }
           filter(:group_id, :enum, select: ["hello"], multiple: true)
         end
@@ -610,7 +610,7 @@ describe Datagrid::FormBuilder do
 
     context "with column names filter" do
       let(:_grid) do
-        test_report(column_names: %i[id name]) do
+        test_grid(column_names: %i[id name]) do
           scope { Entry }
 
           column_names_filter
@@ -633,7 +633,7 @@ describe Datagrid::FormBuilder do
     end
     context "with column_names_filter default given as symbols" do
       let(:_grid) do
-        test_report do
+        test_grid do
           scope { Entry }
 
           column_names_filter(default: %i[id name], checkboxes: true)
@@ -664,7 +664,7 @@ describe Datagrid::FormBuilder do
 
       let(:_grid) do
         options = filter_options
-        test_report do
+        test_grid do
           scope { Entry }
           filter(:condition, :dynamic, **options)
         end
@@ -748,7 +748,7 @@ describe Datagrid::FormBuilder do
 
   describe ".datagrid_label" do
     let(:_grid) do
-      test_report do
+      test_grid do
         scope { Entry }
         filter(:name, :string)
         filter(:created_at, :date, label_options: { class: "js-date-selector" })

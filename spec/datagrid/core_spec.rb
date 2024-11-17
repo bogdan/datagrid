@@ -6,7 +6,7 @@ require "action_controller/metal/strong_parameters"
 describe Datagrid::Core do
   describe "#original_scope" do
     it "does not wrap instance scope" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
       end
 
@@ -14,7 +14,7 @@ describe Datagrid::Core do
     end
 
     it "does not wrap class scope" do
-      klass = test_report_class do
+      klass = test_grid_class do
         scope { Entry }
       end
 
@@ -35,7 +35,7 @@ describe Datagrid::Core do
 
     describe "#scope" do
       it "wraps scope" do
-        grid = test_report do
+        grid = test_grid do
           scope { Entry }
         end
         expect(grid.scope).to be_kind_of(ActiveRecord::Relation)
@@ -138,7 +138,7 @@ describe Datagrid::Core do
 
   describe "dynamic helper" do
     it "should work" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:id)
         dynamic do
@@ -155,7 +155,7 @@ describe Datagrid::Core do
     end
 
     it "has access to attributes" do
-      grid = test_report(attribute_name: "value") do
+      grid = test_grid(attribute_name: "value") do
         scope { Entry }
         datagrid_attribute :attribute_name
         dynamic do
@@ -168,7 +168,7 @@ describe Datagrid::Core do
     end
 
     it "applies before instance scope" do
-      klass = test_report_class do
+      klass = test_grid_class do
         scope { Entry }
         dynamic do
           scope do |s|
@@ -185,7 +185,7 @@ describe Datagrid::Core do
     end
 
     it "has access to grid attributes within scope" do
-      grid = test_report(name: "one") do
+      grid = test_grid(name: "one") do
         scope { Entry }
         dynamic do
           scope do |s|
@@ -208,7 +208,7 @@ describe Datagrid::Core do
 
     it "permites all attributes by default" do
       expect do
-        test_report(params) do
+        test_grid(params) do
           scope { Entry }
           filter(:name)
         end
@@ -216,7 +216,7 @@ describe Datagrid::Core do
     end
     it "doesn't permit attributes when forbidden_attributes_protection is set" do
       expect do
-        test_report(params) do
+        test_grid(params) do
           scope { Entry }
           self.forbidden_attributes_protection = true
           filter(:name)
@@ -225,7 +225,7 @@ describe Datagrid::Core do
     end
     it "permits attributes when forbidden_attributes_protection is set and attributes are permitted" do
       expect do
-        test_report(params.permit!) do
+        test_grid(params.permit!) do
           scope { Entry }
           self.forbidden_attributes_protection = true
           filter(:name)
@@ -236,7 +236,7 @@ describe Datagrid::Core do
 
   describe ".query_param" do
     it "works" do
-      grid = test_report(name: "value") do
+      grid = test_grid(name: "value") do
         scope { Entry }
         filter(:name)
         def param_name

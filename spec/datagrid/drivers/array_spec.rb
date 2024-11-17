@@ -91,7 +91,7 @@ describe Datagrid::Drivers::Array do
 
   describe "when using enumerator scope" do
     it "should work fine" do
-      grid = test_report(to_enum: true) do
+      grid = test_grid(to_enum: true) do
         scope { [] }
         filter(:to_enum, :boolean) do |_, scope|
           scope.to_enum

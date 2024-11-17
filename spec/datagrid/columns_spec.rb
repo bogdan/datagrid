@@ -26,7 +26,7 @@ describe Datagrid::Columns do
     let(:date) { Date.new(2013, 8, 1) }
 
     it "should have data columns without html columns" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:name)
         column(:action, html: true) do
@@ -38,7 +38,7 @@ describe Datagrid::Columns do
     end
 
     it "allows a column argument" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:name)
       end
@@ -46,7 +46,7 @@ describe Datagrid::Columns do
     end
 
     it "should build rows of data" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:name)
         column(:action, html: true) do
@@ -56,7 +56,7 @@ describe Datagrid::Columns do
       expect(grid.rows).to eq([["Star"]])
     end
     it "should generate header without html columns" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:name)
         column(:action, html: true) do
@@ -106,7 +106,7 @@ describe Datagrid::Columns do
     end
 
     it "should return html_columns" do
-      report = test_report do
+      report = test_grid do
         scope { Entry }
         column(:id)
         column(:name, html: false)
@@ -115,7 +115,7 @@ describe Datagrid::Columns do
     end
 
     it "should return html_columns when column definition has 2 arguments" do
-      report = test_report(name: "Hello") do
+      report = test_grid(name: "Hello") do
         scope { Entry }
         filter(:name)
         column(:id)
@@ -135,7 +135,7 @@ describe Datagrid::Columns do
     end
 
     it "supports dynamic header" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:id, header: proc { rand(10**9) })
       end
@@ -167,7 +167,7 @@ describe Datagrid::Columns do
   end
 
   it "should support columns with model and report arguments" do
-    report = test_report(category: "foo") do
+    report = test_grid(category: "foo") do
       scope { Entry.order(:category) }
       filter(:category) do |value|
         where("category LIKE '%#{value}%'")
@@ -199,7 +199,7 @@ describe Datagrid::Columns do
     expect(child.column_by_name(:group_id)).not_to be_nil
   end
   it "should support defining a query for a column" do
-    report = test_report do
+    report = test_grid do
       scope { Entry }
       filter(:name)
       column(:id)
@@ -210,7 +210,7 @@ describe Datagrid::Columns do
   end
 
   it "should support post formatting for column defined with query" do
-    report = test_report do
+    report = test_grid do
       scope { Group.joins(:entries).group("groups.id") }
       filter(:name)
       column(:entries_count, "count(entries.id)") do |model|
@@ -223,7 +223,7 @@ describe Datagrid::Columns do
     expect(report.rows).to eq([["(3)"]])
   end
   it "should support hidding columns through if and unless" do
-    report = test_report do
+    report = test_grid do
       scope { Entry }
       column(:id, if: :show?)
       column(:name, unless: proc { |grid| !grid.show? })
@@ -240,7 +240,7 @@ describe Datagrid::Columns do
 
   it "raises when incorrect unless option is given" do
     expect do
-      test_report do
+      test_grid do
         column(:id, if: Object.new)
       end
     end.to raise_error(Datagrid::ConfigurationError)
@@ -248,7 +248,7 @@ describe Datagrid::Columns do
 
   it "raises when :before and :after used together" do
     expect do
-      test_report do
+      test_grid do
         column(:id)
         column(:name, before: :id, after: :name)
       end
@@ -257,7 +257,7 @@ describe Datagrid::Columns do
 
   describe ".column_names attributes" do
     let(:grid) do
-      test_report(column_names: %w[id name]) do
+      test_grid(column_names: %w[id name]) do
         scope { Entry }
         column(:id)
         column(:name)
@@ -285,7 +285,7 @@ describe Datagrid::Columns do
 
   context "when grid has formatted column" do
     it "should output correct data" do
-      report = test_report do
+      report = test_grid do
         scope { Entry }
         column(:name) do |entry|
           format(entry.name) do |value|
@@ -300,7 +300,7 @@ describe Datagrid::Columns do
 
   describe ".default_column_options" do
     it "should pass default options to each column definition" do
-      report = test_report do
+      report = test_grid do
         scope { Entry }
         self.default_column_options = { order: false }
         column(:id)
@@ -319,7 +319,7 @@ describe Datagrid::Columns do
 
   describe "fetching data in batches" do
     it "should pass the batch size to the find_each method" do
-      report = test_report do
+      report = test_grid do
         scope { Entry }
         column :id
         self.batch_size = 25
@@ -332,7 +332,7 @@ describe Datagrid::Columns do
       report.rows
     end
     it "should be able to disable batches" do
-      report = test_report do
+      report = test_grid do
         scope { Entry }
         column :id
         self.batch_size = 0
@@ -347,7 +347,7 @@ describe Datagrid::Columns do
     end
 
     it "should support instance level batch size" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column :id
         self.batch_size = 25
@@ -364,7 +364,7 @@ describe Datagrid::Columns do
 
   describe ".data_row" do
     it "should give access to column values via an object" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:id)
         column(:name) do
@@ -389,7 +389,7 @@ describe Datagrid::Columns do
       group = Group.create!
       Entry.create(group: group)
       Entry.create(group: group)
-      grid = test_report do
+      grid = test_grid do
         scope { Group }
         column(:entries_count) do |g|
           g.entries.count
@@ -405,7 +405,7 @@ describe Datagrid::Columns do
 
   describe "instance level column definition" do
     let(:modified_grid) do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:id)
       end
@@ -476,14 +476,14 @@ describe Datagrid::Columns do
 
   describe ".data_value" do
     it "should return value" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:name)
       end
       expect(grid.data_value(:name, Entry.create!(name: "Hello"))).to eq("Hello")
     end
     it "should raise for disabled columns" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:name, if: proc { false })
       end
@@ -495,7 +495,7 @@ describe Datagrid::Columns do
 
   describe "caching" do
     it "should work when enabled in class" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         self.cached = true
         column(:random1) { rand(10**9) }
@@ -536,7 +536,7 @@ describe Datagrid::Columns do
     end
 
     it "delegates column values to decorator" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         decorate { |model| EntryDecorator.new(model) }
         column(:capitalized_name)
@@ -552,7 +552,7 @@ describe Datagrid::Columns do
     end
 
     it "allows class decorator" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         decorate { EntryDecorator }
         column(:capitalized_name)
@@ -563,7 +563,7 @@ describe Datagrid::Columns do
 
   describe "column scope" do
     it "appends preload as non block" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:id, preload: [:group])
       end
@@ -571,7 +571,7 @@ describe Datagrid::Columns do
     end
 
     it "appends preload with no args" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:id, preload: -> { order(:id) })
       end
@@ -579,7 +579,7 @@ describe Datagrid::Columns do
     end
 
     it "appends preload with arg" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:id, preload: ->(a) { a.order(:id) })
       end
@@ -587,7 +587,7 @@ describe Datagrid::Columns do
     end
 
     it "appends preload as true value" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:group, preload: true)
       end
@@ -595,7 +595,7 @@ describe Datagrid::Columns do
     end
 
     it "doesn't append preload when column is invisible" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         column(:id1, preload: ->(a) { a.order(:id) })
         column(:id2, preload: ->(a) { a.order(:id) }, if: ->(_a) { false })

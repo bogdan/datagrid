@@ -4,7 +4,7 @@ require "spec_helper"
 
 describe Datagrid::Filters do
   it "should support default option as proc" do
-    expect(test_report do
+    expect(test_grid do
       scope { Entry }
       filter(:created_at, :date, default: proc { Date.today })
     end.created_at).to eq(Date.today)
@@ -12,7 +12,7 @@ describe Datagrid::Filters do
 
   it "should stack with other filters" do
     Entry.create(name: "ZZ", category: "first")
-    report = test_report(name: "Pop", category: "first") do
+    report = test_grid(name: "Pop", category: "first") do
       scope  { Entry }
       filter(:name)
       filter(:category, :enum, select: %w[first second])
@@ -21,7 +21,7 @@ describe Datagrid::Filters do
   end
 
   it "should not support array argument for not multiple filter" do
-    report = test_report do
+    report = test_grid do
       scope { Entry }
       filter(:group_id, :integer)
     end
@@ -31,7 +31,7 @@ describe Datagrid::Filters do
   end
 
   it "should filter block with 2 arguments" do
-    report = test_report do
+    report = test_grid do
       scope { Entry }
       filter(:group_id, :integer) do |value, scope|
         scope.where(group_id: value)
@@ -72,7 +72,7 @@ describe Datagrid::Filters do
   describe "allow_blank and allow_nil options" do
     def check_performed(value, result, **options)
       filter_performed = false
-      report = test_report(name: value) do
+      report = test_grid(name: value) do
         scope { Entry }
         filter(:name, **options) do |_|
           filter_performed = true
@@ -105,7 +105,7 @@ describe Datagrid::Filters do
     it "should create default filter if scope respond to filter name method" do
       Entry.create!
       Entry.create!
-      grid = test_report(limit: 1) do
+      grid = test_grid(limit: 1) do
         scope { Entry }
         filter(:limit)
       end
@@ -115,7 +115,7 @@ describe Datagrid::Filters do
   describe "default filter as scope" do
     it "should create default filter if scope respond to filter name method" do
       Entry.create!
-      grid = test_report(custom: "skip") do
+      grid = test_grid(custom: "skip") do
         scope { Entry }
         filter(:custom) do |value|
           where(custom: value) if value != "skip"
@@ -127,7 +127,7 @@ describe Datagrid::Filters do
 
   describe "positioning filter before another" do
     it "should insert the filter before the specified element" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         filter(:limit)
         filter(:name, before: :limit)
@@ -138,7 +138,7 @@ describe Datagrid::Filters do
 
   describe "positioning filter after another" do
     it "should insert the filter before the specified element" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         filter(:limit)
         filter(:name)
@@ -149,7 +149,7 @@ describe Datagrid::Filters do
   end
 
   it "should support dummy filter" do
-    grid = test_report do
+    grid = test_grid do
       scope { Entry }
       filter(:period, :date, dummy: true, default: proc { Date.today })
     end
@@ -159,7 +159,7 @@ describe Datagrid::Filters do
 
   describe "#filter_by" do
     it "should allow partial filtering" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         filter(:id)
         filter(:name)
@@ -172,7 +172,7 @@ describe Datagrid::Filters do
   end
 
   it "supports dynamic header" do
-    grid = test_report do
+    grid = test_grid do
       scope { Entry }
       filter(:id, :integer, header: proc { rand(10**9) })
     end
@@ -183,7 +183,7 @@ describe Datagrid::Filters do
 
   describe "#filter_by_name" do
     it "should return filter object" do
-      r = test_report do
+      r = test_grid do
         scope { Entry }
         filter(:id, :integer)
       end
@@ -234,7 +234,7 @@ describe Datagrid::Filters do
         name: [["a", 1], ["b", 2]],
         category: { a: 1, b: 2 },
       }
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         filters.each do |name, options|
           filter(name, :enum, select: options, multiple: true)
@@ -249,7 +249,7 @@ describe Datagrid::Filters do
     end
 
     it "should raise ArgumentError for filter without options" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         filter(:id, :integer)
       end
@@ -288,7 +288,7 @@ describe Datagrid::Filters do
 
   describe ":if :unless options" do
     it "supports :if option" do
-      klass = test_report_class do
+      klass = test_grid_class do
         scope { Entry }
         filter(:admin_mode, :boolean, dummy: true)
         filter(:id, :integer, if: :admin_mode)
@@ -306,7 +306,7 @@ describe Datagrid::Filters do
     context "with delegation to attribute" do
       let(:role) { Struct.new(:admin).new(admin) }
       let(:klass) do
-        test_report_class do
+        test_grid_class do
           attr_accessor :role
 
           delegate :admin, to: :role

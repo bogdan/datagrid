@@ -4,7 +4,7 @@ require "spec_helper"
 
 describe Datagrid::Filters::EnumFilter do
   it "should support select option" do
-    report = test_report do
+    report = test_grid do
       scope { Entry }
       filter(:group_id, :enum, select: [1, 2])
     end
@@ -12,7 +12,7 @@ describe Datagrid::Filters::EnumFilter do
   end
 
   it "should support select option as proc" do
-    grid = test_report do
+    grid = test_grid do
       scope { Entry }
       filter(:group_id, :enum, select: proc { [1, 2] })
     end
@@ -20,7 +20,7 @@ describe Datagrid::Filters::EnumFilter do
   end
 
   it "should support select option as proc with instace input" do
-    klass = test_report do
+    klass = test_grid do
       scope { Entry }
       filter(:group_id, :enum, select: proc(&:object_id))
     end.class
@@ -37,7 +37,7 @@ describe Datagrid::Filters::EnumFilter do
   end
 
   it "should support select given as symbol" do
-    report = test_report do
+    report = test_grid do
       scope { Entry }
       filter(:group_id, :enum, select: :selectable_group_ids)
       def selectable_group_ids

@@ -34,7 +34,7 @@ describe Datagrid::Helper do
 
   context "when grid has no records" do
     let(:grid) do
-      test_report do
+      test_grid do
         scope { Entry.where("1 != 1") }
         column(:id)
       end
@@ -110,7 +110,7 @@ describe Datagrid::Helper do
 
     context "with column_names attribute" do
       let(:grid) do
-        test_report(column_names: "name") do
+        test_grid(column_names: "name") do
           scope { Entry }
           column(:name)
           column(:category)
@@ -129,7 +129,7 @@ describe Datagrid::Helper do
 
     context "when grid has no columns" do
       let(:grid) do
-        test_report do
+        test_grid do
           scope { Entry }
         end
       end
@@ -141,7 +141,7 @@ describe Datagrid::Helper do
 
     context "with partials attribute" do
       let(:grid) do
-        test_report do
+        test_grid do
           scope { Entry }
           column(:name)
           column(:category)
@@ -161,7 +161,7 @@ describe Datagrid::Helper do
 
     context "when scope is enumerator" do
       let(:grid) do
-        test_report do
+        test_grid do
           scope { %w[a b].to_enum }
           column(:name) do |value|
             value
@@ -177,7 +177,7 @@ describe Datagrid::Helper do
     end
     context "when scope is lazy enumerator" do
       let(:grid) do
-        test_report do
+        test_grid do
           scope { %w[a b].lazy }
           column(:name) do |value|
             value
@@ -195,7 +195,7 @@ describe Datagrid::Helper do
 
   describe ".datagrid_rows" do
     it "should support urls" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, url: ->(model) { "/entries/#{model.name.downcase}" })
       end
@@ -205,7 +205,7 @@ describe Datagrid::Helper do
     end
 
     it "should support conditional urls" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, url: ->(_model) { false })
       end
@@ -215,7 +215,7 @@ describe Datagrid::Helper do
     end
 
     it "should add ordering classes to column" do
-      rp = test_report(order: :name) do
+      rp = test_grid(order: :name) do
         scope { Entry }
         column(:name)
       end
@@ -224,7 +224,7 @@ describe Datagrid::Helper do
       )
     end
     it "should add ordering classes to column" do
-      rp = test_report(order: :name) do
+      rp = test_grid(order: :name) do
         scope { Entry }
         column(:name)
       end
@@ -238,7 +238,7 @@ describe Datagrid::Helper do
     end
 
     it "should add ordering classes to column" do
-      rp = test_report(order: :name, descending: true) do
+      rp = test_grid(order: :name, descending: true) do
         scope { Entry }
         column(:name)
       end
@@ -248,7 +248,7 @@ describe Datagrid::Helper do
     end
 
     it "should render columns with &:symbol block" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, &:name)
       end
@@ -259,7 +259,7 @@ describe Datagrid::Helper do
     end
 
     it "should render html columns" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, html: true) do |model|
           content_tag(:span, model.name)
@@ -271,7 +271,7 @@ describe Datagrid::Helper do
     end
 
     it "should render :html columns with &:symbol block" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, html: true, &:name)
       end
@@ -282,7 +282,7 @@ describe Datagrid::Helper do
     end
 
     it "should render format columns with &:symbol block" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name) do |record|
           format(record, &:name)
@@ -295,7 +295,7 @@ describe Datagrid::Helper do
     end
 
     it "should render :html columns with &:symbol block with a data attribute" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, html: true, data: "DATA", &:name)
       end
@@ -306,7 +306,7 @@ describe Datagrid::Helper do
     end
 
     it "should render argument-based html columns" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, html: ->(data) { content_tag :h1, data })
       end
@@ -316,7 +316,7 @@ describe Datagrid::Helper do
     end
 
     it "should render argument-based html columns with custom data" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, html: ->(data) { content_tag :em, data }) do
           name.upcase
@@ -328,7 +328,7 @@ describe Datagrid::Helper do
     end
 
     it "should render html columns with double arguments for column" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, html: true) do |model, grid|
           content_tag(:span, "#{model.name}-#{grid.assets.klass}")
@@ -340,7 +340,7 @@ describe Datagrid::Helper do
     end
 
     it "should render argument-based html blocks with double arguments" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, html: lambda { |data, model|
           content_tag :h1, "#{data}-#{model.name.downcase}"
@@ -352,7 +352,7 @@ describe Datagrid::Helper do
     end
 
     it "should render argument-based html blocks with triple arguments" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, html: lambda { |data, model, grid|
           content_tag :h1, "#{data}-#{model.name.downcase}-#{grid.assets.klass}"
@@ -364,7 +364,7 @@ describe Datagrid::Helper do
     end
 
     it "should render argument-based html blocks with double arguments and custom data" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, html: lambda { |data, model|
           content_tag :h1, "#{data}-#{model.name}"
@@ -378,7 +378,7 @@ describe Datagrid::Helper do
     end
 
     it "should render argument-based html blocks with triple arguments and custom data" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, html: lambda { |data, model, grid|
           content_tag :h1, "#{data}-#{model.name}-#{grid.assets.klass}"
@@ -392,7 +392,7 @@ describe Datagrid::Helper do
     end
 
     it "should support columns option" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name)
         column(:category)
@@ -406,7 +406,7 @@ describe Datagrid::Helper do
     end
 
     it "should allow CSS classes to be specified for a column" do
-      rp = test_report do
+      rp = test_grid do
         scope { Entry }
         column(:name, class: "my_class")
       end
@@ -418,7 +418,7 @@ describe Datagrid::Helper do
 
     context "when grid has complicated columns" do
       let(:grid) do
-        test_report(name: "Hello") do
+        test_grid(name: "Hello") do
           scope { Entry }
           filter(:name)
           column(:name) do |model, grid|
@@ -549,7 +549,7 @@ describe Datagrid::Helper do
 
   describe ".datagrid_row" do
     let(:grid) do
-      test_report do
+      test_grid do
         scope { Entry }
         column(:name)
         column(:category)
@@ -595,7 +595,7 @@ describe Datagrid::Helper do
     end
 
     it "should use cache" do
-      grid = test_report do
+      grid = test_grid do
         scope { Entry }
         self.cached = true
         column(:random1, html: true) { rand(10**9) }
@@ -626,7 +626,7 @@ describe Datagrid::Helper do
 
   describe ".datagrid_value" do
     it "should format value by column name" do
-      report = test_report do
+      report = test_grid do
         scope { Entry }
         column(:name) do |e|
           "<b>#{e.name}</b>"
@@ -636,7 +636,7 @@ describe Datagrid::Helper do
       expect(subject.datagrid_value(report, :name, entry)).to eq("<b>Star</b>")
     end
     it "should support format in column" do
-      report = test_report do
+      report = test_grid do
         scope { Entry }
         column(:name) do |e|
           format(e.name) do |value|
@@ -649,7 +649,7 @@ describe Datagrid::Helper do
     end
 
     it "applies decorator" do
-      report = test_report do
+      report = test_grid do
         scope { Entry }
         decorate do |_model|
           Class.new(Struct.new(:model)) do
@@ -667,7 +667,7 @@ describe Datagrid::Helper do
 
   describe ".datagrid_header" do
     it "should support order_by_value colums" do
-      grid = test_report(order: "category") do
+      grid = test_grid(order: "category") do
         scope { Entry }
         column(:category, order: false, order_by_value: true)
 

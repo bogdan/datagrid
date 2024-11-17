@@ -8,7 +8,7 @@ describe Datagrid::Filters::DateFilter do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
     e3 = Entry.create!(created_at: 1.day.ago)
-    report = test_report(created_at: 5.day.ago..3.days.ago) do
+    report = test_grid(created_at: 5.day.ago..3.days.ago) do
       scope { Entry }
       filter(:created_at, :date)
     end
@@ -20,7 +20,7 @@ describe Datagrid::Filters::DateFilter do
   it "endless date range argument" do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
-    report = test_report(created_at: 5.days.ago..) do
+    report = test_grid(created_at: 5.days.ago..) do
       scope { Entry }
       filter(:created_at, :date)
     end
@@ -36,7 +36,7 @@ describe Datagrid::Filters::DateFilter do
       describe "date to timestamp conversion" do
         let(:klass) { klass }
         subject do
-          test_report(created_at: _created_at) do
+          test_grid(created_at: _created_at) do
             scope { klass }
             filter(:created_at, :date, range: true)
           end.assets.to_a
@@ -71,7 +71,7 @@ describe Datagrid::Filters::DateFilter do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
     e3 = Entry.create!(created_at: 1.day.ago)
-    report = test_report(created_at: [5.day.ago.to_date.to_s, 3.days.ago.to_date.to_s]) do
+    report = test_grid(created_at: [5.day.ago.to_date.to_s, 3.days.ago.to_date.to_s]) do
       scope { Entry }
       filter(:created_at, :date, range: true)
     end
@@ -84,7 +84,7 @@ describe Datagrid::Filters::DateFilter do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
     e3 = Entry.create!(created_at: 1.day.ago)
-    report = test_report(created_at: [5.day.ago.to_date.to_s, nil]) do
+    report = test_grid(created_at: [5.day.ago.to_date.to_s, nil]) do
       scope { Entry }
       filter(:created_at, :date, range: true)
     end
@@ -97,7 +97,7 @@ describe Datagrid::Filters::DateFilter do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
     e3 = Entry.create!(created_at: 1.day.ago)
-    report = test_report(created_at: [nil, 3.days.ago.to_date.to_s]) do
+    report = test_grid(created_at: [nil, 3.days.ago.to_date.to_s]) do
       scope { Entry }
       filter(:created_at, :date, range: true)
     end
@@ -110,7 +110,7 @@ describe Datagrid::Filters::DateFilter do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
     e3 = Entry.create!(created_at: 1.day.ago)
-    report = test_report(created_at: (4.days.ago.to_date..4.days.ago.to_date)) do
+    report = test_grid(created_at: (4.days.ago.to_date..4.days.ago.to_date)) do
       scope { Entry }
       filter(:created_at, :date, range: true)
     end
@@ -124,7 +124,7 @@ describe Datagrid::Filters::DateFilter do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
     e3 = Entry.create!(created_at: 1.day.ago)
-    report = test_report(created_at: range) do
+    report = test_grid(created_at: range) do
       scope { Entry }
       filter(:created_at, :date, range: true)
     end
@@ -137,7 +137,7 @@ describe Datagrid::Filters::DateFilter do
   it "should support block" do
     date = Date.new(2018, 0o1, 0o7)
     time = Time.utc(2018, 0o1, 0o7, 2, 2)
-    report = test_report(created_at: date) do
+    report = test_grid(created_at: date) do
       scope { Entry }
       filter(:created_at, :date, range: true) do |value|
         where("created_at >= ?", value)
@@ -155,7 +155,7 @@ describe Datagrid::Filters::DateFilter do
     end
 
     it "should have configurable date format" do
-      report = test_report(created_at: "10/01/2013") do
+      report = test_grid(created_at: "10/01/2013") do
         scope  { Entry }
         filter(:created_at, :date)
       end
@@ -163,7 +163,7 @@ describe Datagrid::Filters::DateFilter do
     end
 
     it "should support default explicit date" do
-      report = test_report(created_at: Date.parse("2013-10-01")) do
+      report = test_grid(created_at: Date.parse("2013-10-01")) do
         scope  { Entry }
         filter(:created_at, :date)
       end
@@ -172,14 +172,14 @@ describe Datagrid::Filters::DateFilter do
   end
 
   it "should automatically reverse if first more than last" do
-    report = test_report(created_at: %w[2013-01-01 2012-01-01]) do
+    report = test_grid(created_at: %w[2013-01-01 2012-01-01]) do
       scope  { Entry }
       filter(:created_at, :date, range: true)
     end
     expect(report.created_at).to eq([Date.new(2012, 0o1, 0o1), Date.new(2013, 0o1, 0o1)])
   end
   it "should automatically reverse if first more than last" do
-    report = test_report(created_at: %w[2013-01-01 2012-01-01]) do
+    report = test_grid(created_at: %w[2013-01-01 2012-01-01]) do
       scope  { Entry }
       filter(:created_at, :date, range: true)
     end
@@ -187,7 +187,7 @@ describe Datagrid::Filters::DateFilter do
   end
 
   it "should nullify blank range" do
-    report = test_report(created_at: [nil, nil]) do
+    report = test_grid(created_at: [nil, nil]) do
       scope  { Entry }
       filter(:created_at, :date, range: true)
     end
@@ -197,7 +197,7 @@ describe Datagrid::Filters::DateFilter do
 
   it "should properly format date in filter_value_as_string" do
     with_date_format do
-      report = test_report(created_at: "2012-01-02") do
+      report = test_grid(created_at: "2012-01-02") do
         scope  { Entry }
         filter(:created_at, :date)
       end
@@ -206,7 +206,7 @@ describe Datagrid::Filters::DateFilter do
   end
 
   it "supports search by timestamp column" do
-    report = test_report(created_at: Date.today) do
+    report = test_grid(created_at: Date.today) do
       scope { Entry }
       filter(:created_at, :date)
     end

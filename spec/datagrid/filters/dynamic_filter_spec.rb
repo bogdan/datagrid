@@ -4,7 +4,7 @@ require "spec_helper"
 
 describe Datagrid::Filters::DynamicFilter do
   let(:report) do
-    test_report do
+    test_grid do
       scope { Entry }
       filter(:condition, :dynamic)
     end
@@ -121,7 +121,7 @@ describe Datagrid::Filters::DynamicFilter do
   end
 
   it "should support allow_nil and allow_blank options" do
-    grid = test_report do
+    grid = test_grid do
       scope { Entry }
       filter(:condition, :dynamic, allow_nil: true, allow_blank: true,
         operations: [">=", "<="],) do |(field, operation, value), scope|
@@ -144,7 +144,7 @@ describe Datagrid::Filters::DynamicFilter do
   it "should support custom operations" do
     entry = Entry.create!(name: "hello")
 
-    grid = test_report do
+    grid = test_grid do
       scope { Entry }
       filter(
         :condition, :dynamic, operations: ["=", "!="],

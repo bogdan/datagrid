@@ -11,7 +11,7 @@ describe Datagrid::Filters::IntegerFilter do
   let(:entry7) { Entry.create!(group_id: 7) }
 
   it "should support integer range argument" do
-    report = test_report(group_id: 3..5) do
+    report = test_grid(group_id: 3..5) do
       scope { Entry }
       filter(:group_id, :integer)
     end
@@ -29,7 +29,7 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should support integer range given as array argument" do
-    report = test_report(group_id: [3.to_s, 5.to_s]) do
+    report = test_grid(group_id: [3.to_s, 5.to_s]) do
       scope { Entry }
       filter(:group_id, :integer, range: true)
     end
@@ -39,7 +39,7 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should support minimum integer argument" do
-    report = test_report(group_id: [5.to_s, nil]) do
+    report = test_grid(group_id: [5.to_s, nil]) do
       scope { Entry }
       filter(:group_id, :integer, range: true)
     end
@@ -49,7 +49,7 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should support maximum integer argument" do
-    report = test_report(group_id: [nil, 5.to_s]) do
+    report = test_grid(group_id: [nil, 5.to_s]) do
       scope { Entry }
       filter(:group_id, :integer, range: true)
     end
@@ -59,7 +59,7 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should find something in one integer interval" do
-    report = test_report(group_id: (4..4)) do
+    report = test_grid(group_id: (4..4)) do
       scope { Entry }
       filter(:group_id, :integer, range: true)
     end
@@ -69,7 +69,7 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should support invalid range" do
-    report = test_report(group_id: (7..1)) do
+    report = test_grid(group_id: (7..1)) do
       scope { Entry }
       filter(:group_id, :integer, range: true)
     end
@@ -80,7 +80,7 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should support block" do
-    report = test_report(group_id: 5) do
+    report = test_grid(group_id: 5) do
       scope { Entry }
       filter(:group_id, :integer, range: true) do |value|
         where("group_id >= ?", value)
@@ -91,7 +91,7 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should not prefix table name if column is joined" do
-    report = test_report(rating: [4, nil]) do
+    report = test_grid(rating: [4, nil]) do
       scope { Entry.joins(:group) }
       filter(:rating, :integer, range: true)
     end
@@ -101,7 +101,7 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should support multiple values" do
-    report = test_report(group_id: "1,2") do
+    report = test_grid(group_id: "1,2") do
       scope { Entry }
       filter(:group_id, :integer, multiple: true)
     end
@@ -111,7 +111,7 @@ describe Datagrid::Filters::IntegerFilter do
     expect(report.assets).not_to include(entry3)
   end
   it "should support custom separator multiple values" do
-    report = test_report(group_id: "1|2") do
+    report = test_grid(group_id: "1|2") do
       scope { Entry }
       filter(:group_id, :integer, multiple: "|")
     end
@@ -122,7 +122,7 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "should support multiple with allow_blank allow_nil options" do
-    report = test_report do
+    report = test_grid do
       scope { Entry }
       filter(:group_id, :integer, multiple: true, allow_nil: false, allow_blank: true)
     end
@@ -139,7 +139,7 @@ describe Datagrid::Filters::IntegerFilter do
 
   it "normalizes AR object to ID" do
     group = Group.create!
-    report  = test_report(group_id: group) do
+    report  = test_grid(group_id: group) do
       scope { Entry }
       filter(:group_id, :integer)
     end

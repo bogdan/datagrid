@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-def test_report(attributes = {}, &block)
-  klass = test_report_class(&block)
+def test_grid(attributes = {}, &block)
+  klass = test_grid_class(&block)
   klass.new(attributes)
 end
 
-def test_report_class(&block)
+def test_grid_class(&block)
   Class.new.tap do |klass|
     klass.class_eval do
       include Datagrid

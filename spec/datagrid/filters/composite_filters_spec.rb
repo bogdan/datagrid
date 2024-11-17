@@ -8,7 +8,7 @@ describe Datagrid::Filters::CompositeFilters do
       e1 = Entry.create!(shipping_date: 6.days.ago)
       e2 = Entry.create!(shipping_date: 4.days.ago)
       e3 = Entry.create!(shipping_date: 1.days.ago)
-      assets = test_report(from_shipping_date: 5.days.ago, to_shipping_date: 2.day.ago) do
+      assets = test_grid(from_shipping_date: 5.days.ago, to_shipping_date: 2.day.ago) do
         scope { Entry }
         silence_warnings do
           date_range_filters(:shipping_date)
@@ -20,7 +20,7 @@ describe Datagrid::Filters::CompositeFilters do
     end
 
     it "should support options" do
-      report = test_report do
+      report = test_grid do
         silence_warnings do
           date_range_filters(:shipping_date, { default: 10.days.ago.to_date }, { default: Date.today })
         end
@@ -29,7 +29,7 @@ describe Datagrid::Filters::CompositeFilters do
       expect(report.to_shipping_date).to eq(Date.today)
     end
     it "should support table name in field" do
-      report = test_report do
+      report = test_grid do
         silence_warnings do
           date_range_filters("entries.shipping_date", { default: 10.days.ago.to_date }, { default: Date.today })
         end
@@ -44,7 +44,7 @@ describe Datagrid::Filters::CompositeFilters do
       e1 = Entry.create!(group_id: 1)
       e2 = Entry.create!(group_id: 3)
       e3 = Entry.create!(group_id: 5)
-      assets = test_report(from_group_id: 2, to_group_id: 4) do
+      assets = test_grid(from_group_id: 2, to_group_id: 4) do
         scope { Entry }
         silence_warnings do
           integer_range_filters(:group_id)
@@ -55,7 +55,7 @@ describe Datagrid::Filters::CompositeFilters do
       expect(assets).not_to include(e1, e3)
     end
     it "should support options" do
-      report = test_report do
+      report = test_grid do
         silence_warnings do
           integer_range_filters(:group_id, { default: 0 }, { default: 100 })
         end
@@ -64,7 +64,7 @@ describe Datagrid::Filters::CompositeFilters do
       expect(report.to_group_id).to eq(100)
     end
     it "should table name in field name" do
-      report = test_report do
+      report = test_grid do
         silence_warnings do
           integer_range_filters("entries.group_id", { default: 0 }, { default: 100 })
         end

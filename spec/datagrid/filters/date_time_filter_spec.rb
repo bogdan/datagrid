@@ -9,7 +9,7 @@ describe Datagrid::Filters::DateTimeFilter do
         let(:klass) { klass }
 
         let(:grid) do
-          test_report(created_at: _created_at) do
+          test_grid(created_at: _created_at) do
             scope { klass }
             filter(:created_at, :datetime, range: true)
           end
@@ -64,7 +64,7 @@ describe Datagrid::Filters::DateTimeFilter do
     e1 = Entry.create!(created_at: Time.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(created_at: Time.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(created_at: Time.new(2013, 1, 1, 3, 0))
-    report = test_report(created_at: [Time.new(2013, 1, 1, 1, 30).to_s, Time.new(2013, 1, 1, 2, 30).to_s]) do
+    report = test_grid(created_at: [Time.new(2013, 1, 1, 1, 30).to_s, Time.new(2013, 1, 1, 2, 30).to_s]) do
       scope { Entry }
       filter(:created_at, :datetime, range: true)
     end
@@ -77,7 +77,7 @@ describe Datagrid::Filters::DateTimeFilter do
     e1 = Entry.create!(created_at: Time.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(created_at: Time.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(created_at: Time.new(2013, 1, 1, 3, 0))
-    report = test_report(created_at: [Time.new(2013, 1, 1, 1, 30).to_s, nil]) do
+    report = test_grid(created_at: [Time.new(2013, 1, 1, 1, 30).to_s, nil]) do
       scope { Entry }
       filter(:created_at, :datetime, range: true)
     end
@@ -90,7 +90,7 @@ describe Datagrid::Filters::DateTimeFilter do
     e1 = Entry.create!(created_at: Time.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(created_at: Time.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(created_at: Time.new(2013, 1, 1, 3, 0))
-    report = test_report(created_at: [nil, Time.new(2013, 1, 1, 2, 30).to_s]) do
+    report = test_grid(created_at: [nil, Time.new(2013, 1, 1, 2, 30).to_s]) do
       scope { Entry }
       filter(:created_at, :datetime, range: true)
     end
@@ -103,7 +103,7 @@ describe Datagrid::Filters::DateTimeFilter do
     e1 = Entry.create!(created_at: Time.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(created_at: Time.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(created_at: Time.new(2013, 1, 1, 3, 0))
-    report = test_report(created_at: Time.new(2013, 1, 1, 2, 0)..Time.new(2013, 1, 1, 2, 0)) do
+    report = test_grid(created_at: Time.new(2013, 1, 1, 2, 0)..Time.new(2013, 1, 1, 2, 0)) do
       scope { Entry }
       filter(:created_at, :datetime, range: true)
     end
@@ -117,7 +117,7 @@ describe Datagrid::Filters::DateTimeFilter do
     e1 = Entry.create!(created_at: Time.new(2013, 1, 1, 1, 0))
     e2 = Entry.create!(created_at: Time.new(2013, 1, 1, 2, 0))
     e3 = Entry.create!(created_at: Time.new(2013, 1, 1, 3, 0))
-    report = test_report(created_at: range) do
+    report = test_grid(created_at: range) do
       scope { Entry }
       filter(:created_at, :datetime, range: true)
     end
@@ -128,7 +128,7 @@ describe Datagrid::Filters::DateTimeFilter do
   end
 
   it "should support block" do
-    report = test_report(created_at: Time.now) do
+    report = test_grid(created_at: Time.now) do
       scope { Entry }
       filter(:created_at, :datetime, range: true) do |value|
         where("created_at >= ?", value)
@@ -146,7 +146,7 @@ describe Datagrid::Filters::DateTimeFilter do
     end
 
     it "should have configurable datetime format" do
-      report = test_report(created_at: "10/01/2013 01:00") do
+      report = test_grid(created_at: "10/01/2013 01:00") do
         scope  { Entry }
         filter(:created_at, :datetime)
       end
@@ -154,7 +154,7 @@ describe Datagrid::Filters::DateTimeFilter do
     end
 
     it "should support default explicit datetime" do
-      report = test_report(created_at: Time.parse("2013-10-01 01:00")) do
+      report = test_grid(created_at: Time.parse("2013-10-01 01:00")) do
         scope  { Entry }
         filter(:created_at, :datetime)
       end
@@ -163,7 +163,7 @@ describe Datagrid::Filters::DateTimeFilter do
   end
 
   it "should automatically reverse Array if first more than last" do
-    report = test_report(created_at: ["2013-01-01 01:00", "2012-01-01 01:00"]) do
+    report = test_grid(created_at: ["2013-01-01 01:00", "2012-01-01 01:00"]) do
       scope  { Entry }
       filter(:created_at, :datetime, range: true)
     end

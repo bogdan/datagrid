@@ -85,7 +85,7 @@ describe Datagrid::Drivers::Mongoid, :mongoid do
 
     it "should not provide default order for non declared fields" do
       expect do
-        test_report(order: :test) do
+        test_grid(order: :test) do
           scope { MongoidEntry }
           column(:test)
         end.assets
@@ -93,7 +93,7 @@ describe Datagrid::Drivers::Mongoid, :mongoid do
     end
 
     it "should support batch_size" do
-      report = test_report do
+      report = test_grid do
         scope { MongoidEntry }
         self.batch_size = 1
         column(:name)

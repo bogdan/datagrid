@@ -4,7 +4,7 @@ require "spec_helper"
 
 describe Datagrid::Filters::ExtendedBooleanFilter do
   it "should support select option" do
-    grid = test_report do
+    grid = test_grid do
       scope { Entry }
       filter(:disabled, :xboolean)
     end
@@ -12,7 +12,7 @@ describe Datagrid::Filters::ExtendedBooleanFilter do
   end
 
   it "should generate pass boolean value to filter block" do
-    grid = test_report do
+    grid = test_grid do
       scope { Entry }
       filter(:disabled, :xboolean)
     end
@@ -34,7 +34,7 @@ describe Datagrid::Filters::ExtendedBooleanFilter do
   end
 
   it "should normalize true/false as YES/NO" do
-    grid = test_report do
+    grid = test_grid do
       scope { Entry }
       filter(:disabled, :xboolean)
     end
