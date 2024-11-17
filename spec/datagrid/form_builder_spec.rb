@@ -213,11 +213,11 @@ describe Datagrid::FormBuilder do
       context "with only right bound" do
         let(:_range) { [nil, 10] }
         it {
-          should equal_to_dom(
-            '<input class="datagrid-range-from" type="number" step="1" name="report[group_id][from]" id="report_group_id"/>' \
-            '<span class="datagrid-range-separator"> - </span>' \
-            '<input value="10" class="datagrid-range-to" type="number" step="1" name="report[group_id][to]"/>',
-          )
+          should equal_to_dom(<<~HTML)
+            <input class="datagrid-range-from" type="number" step="1" name="report[group_id][from]" id="report_group_id"/>
+            <span class="datagrid-range-separator"> - </span>
+            <input value="10" class="datagrid-range-to" type="number" step="1" name="report[group_id][to]"/>
+          HTML
         }
         it { should be_html_safe }
       end
@@ -225,11 +225,11 @@ describe Datagrid::FormBuilder do
       context "with invalid range value" do
         let(:_range) { 2..1 }
         it {
-          should equal_to_dom(
-            '<input value="1" class="datagrid-range-from" type="number" step="1" name="report[group_id][from]" id="report_group_id"/>' \
-            '<span class="datagrid-range-separator"> - </span>' \
-            '<input value="2" class="datagrid-range-to" type="number" step="1" name="report[group_id][to]"/>',
-          )
+          should equal_to_dom(<<~HTML)
+            <input value="1" class="datagrid-range-from" type="number" step="1" name="report[group_id][from]" id="report_group_id"/>
+            <span class="datagrid-range-separator"> - </span>
+            <input value="2" class="datagrid-range-to" type="number" step="1" name="report[group_id][to]"/>
+          HTML
         }
       end
 
@@ -247,11 +247,11 @@ describe Datagrid::FormBuilder do
         let(:view_options) { { partials: "not_existed" } }
         let(:_range) { nil }
         it {
-          should equal_to_dom(
-            '<input class="datagrid-range-from" type="number" step="1" name="report[group_id][from]" id="report_group_id">
+          should equal_to_dom(<<~HTML)
+            <input class="datagrid-range-from" type="number" step="1" name="report[group_id][from]" id="report_group_id">
             <span class="datagrid-range-separator"> - </span>
-            <input class="datagrid-range-to" type="number" step="1" name="report[group_id][to]">',
-          )
+            <input class="datagrid-range-to" type="number" step="1" name="report[group_id][to]">
+          HTML
         }
       end
     end
@@ -287,11 +287,11 @@ describe Datagrid::FormBuilder do
       context "with only left bound" do
         let(:_range) { ["2012-01-03", nil] }
         it {
-          should equal_to_dom(
-            '<input value="2012-01-03" class="datagrid-range-from" type="date" name="report[created_at][from]" id="report_created_at"/>' \
-            '<span class="datagrid-range-separator"> - </span>' \
-            '<input class="datagrid-range-to" type="date" name="report[created_at][to]" value=""/>',
-          )
+          should equal_to_dom(<<~HTML)
+            <input value="2012-01-03" class="datagrid-range-from" type="date" name="report[created_at][from]" id="report_created_at"/>
+            <span class="datagrid-range-separator"> - </span>
+            <input class="datagrid-range-to" type="date" name="report[created_at][to]" value=""/>
+          HTML
         }
         it { should be_html_safe }
       end
@@ -346,11 +346,11 @@ describe Datagrid::FormBuilder do
         end
         let(:_range) { [nil, nil] }
         it {
-          should equal_to_dom(
-            '<input class="datagrid-range-from" type="date" value="" name="report[created_at][from]" id="report_created_at"/>' \
-            '<span class="datagrid-range-separator"> - </span>' \
-            '<input class="datagrid-range-to" type="date" value="" name="report[created_at][to]"/>',
-          )
+          should equal_to_dom(<<~HTML)
+            <input class="datagrid-range-from" type="date" value="" name="report[created_at][from]" id="report_created_at"/>
+            <span class="datagrid-range-separator"> - </span>
+            <input class="datagrid-range-to" type="date" value="" name="report[created_at][to]"/>
+          HTML
         }
       end
     end
@@ -482,23 +482,25 @@ describe Datagrid::FormBuilder do
             end
           end
           let(:view_options) { { partials: "deprecated_enum_checkboxes" } }
-          it { should equal_to_dom(
-            [["first", "first",false],["second","second",false]].to_json
-          ) }
+          it {
+            should equal_to_dom(
+              [["first", "first", false], ["second", "second", false]].to_json,
+            )
+          }
         end
 
         context "when inline class attribute specified" do
-          let(:_filter_options) { {for: nil, class: 'custom-class'} }
+          let(:_filter_options) { { for: nil, class: "custom-class" } }
 
           it { should equal_to_dom(<<~HTML) }
-          <div class="datagrid-enum-checkboxes">
-            <label class="custom-class">
-              <input id="report_category_first" value="first" type="checkbox" name="report[category][]">first
-            </label>
-            <label class="custom-class">
-              <input id="report_category_second" value="second" type="checkbox" name="report[category][]">second
-            </label>
-          </div>
+            <div class="datagrid-enum-checkboxes">
+              <label class="custom-class">
+                <input id="report_category_first" value="first" type="checkbox" name="report[category][]">first
+              </label>
+              <label class="custom-class">
+                <input id="report_category_second" value="second" type="checkbox" name="report[category][]">second
+              </label>
+            </div>
           HTML
         end
       end

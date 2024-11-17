@@ -34,7 +34,7 @@ module Datagrid
           # Each checkbox has its own label
           # The main label has no specific input to focus
           # See app/views/datagrid/_enum_checkboxes.html.erb
-          {for: nil, **super}
+          { for: nil, **super }
         else
           super
         end

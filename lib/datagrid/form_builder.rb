@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "action_view"
-require 'datagrid/deprecated_object'
+require "datagrid/deprecated_object"
 
 module Datagrid
   module FormBuilder
@@ -98,10 +98,11 @@ module Datagrid
           form: self,
           elements: Datagrid::DeprecatedObject.new(
             elements,
-
           ) do
             Datagrid::Utils.warn_once(
-              "Using `elements` variable in app/views/datagrid/enum_checkboxes is deprecated, use `choices` instead."
+              <<~MSG,
+                Using `elements` variable in enum_checkboxes view is deprecated, use `choices` instead.
+              MSG
             )
           end,
           choices: choices,

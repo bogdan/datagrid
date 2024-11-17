@@ -261,7 +261,7 @@ describe Datagrid::Filters::DateFilter do
 
   it "supports search by timestamp column" do
     report = test_report(created_at: Date.today) do
-      scope {Entry}
+      scope { Entry }
       filter(:created_at, :date)
     end
     e1 = Entry.create!(created_at: Date.yesterday + 23.hours)
@@ -275,7 +275,6 @@ describe Datagrid::Filters::DateFilter do
     expect(report.assets).to include(e4)
     expect(report.assets).to_not include(e5)
   end
-
 
   it "allows filter to be defined before scope" do
     class ParentGrid < Datagrid::Base

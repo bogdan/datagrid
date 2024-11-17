@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Datagrid
   # @!visibility private
   class DeprecatedObject < BasicObject
@@ -6,9 +8,9 @@ module Datagrid
       @block = block
     end
 
-    def method_missing(method_name, *args, &block)
+    def method_missing(method_name, ...)
       @block.call
-      @real_object.public_send(method_name, *args, &block)
+      @real_object.public_send(method_name, ...)
     end
 
     def respond_to_missing?(method_name, include_private = false)

@@ -50,18 +50,18 @@ describe Datagrid::Generators::Scaffold do
 
       it "works" do
         expect(subject.controller_code).to eq(<<~RUBY)
-        class UsersController < ApplicationController
-          def index
-            @grid = UsersGrid.new(grid_params)
-            @pagy, @assets = pagy(@grid.assets)
-          end
+          class UsersController < ApplicationController
+            def index
+              @grid = UsersGrid.new(grid_params)
+              @pagy, @assets = pagy(@grid.assets)
+            end
 
-          protected
+            protected
 
-          def grid_params
-            params.fetch(:users_grid, {}).permit!
+            def grid_params
+              params.fetch(:users_grid, {}).permit!
+            end
           end
-        end
         RUBY
       end
     end
@@ -70,11 +70,11 @@ describe Datagrid::Generators::Scaffold do
   describe "#view_code" do
     it "works" do
       expect(subject.view_code).to eq(<<~ERB)
-      <%= datagrid_form_with model: @grid, url: users_path %>
+        <%= datagrid_form_with model: @grid, url: users_path %>
 
-      <%= paginate(@grid.assets) %>
-      <%= datagrid_table @grid %>
-      <%= paginate(@grid.assets) %>
+        <%= paginate(@grid.assets) %>
+        <%= datagrid_table @grid %>
+        <%= paginate(@grid.assets) %>
       ERB
     end
 
@@ -85,11 +85,11 @@ describe Datagrid::Generators::Scaffold do
 
       it "works" do
         expect(subject.view_code).to eq(<<~ERB)
-        <%= datagrid_form_with model: @grid, url: users_path %>
+          <%= datagrid_form_with model: @grid, url: users_path %>
 
-        <%= pagy_nav(@pagy) %>
-        <%= datagrid_table @grid, @records %>
-        <%= pagy_nav(@pagy) %>
+          <%= pagy_nav(@pagy) %>
+          <%= datagrid_table @grid, @records %>
+          <%= pagy_nav(@pagy) %>
         ERB
       end
     end

@@ -35,3 +35,7 @@ Metrics/ModuleLength:
   Enabled: false
 Style/Documentation:
   Enabled: false
+Style/OptionalBooleanParameter:
+  Enabled: false
+Style/MultilineBlockChain:
+  Enabled: false
