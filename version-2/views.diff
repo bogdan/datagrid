@@ -1,13 +1,14 @@
 diff --git a/app/views/datagrid/_enum_checkboxes.html.erb b/app/views/datagrid/_enum_checkboxes.html.erb
-index 9f48319..5668c49 100644
+index 9f48319..281bb6f 100644
 --- a/app/views/datagrid/_enum_checkboxes.html.erb
 +++ b/app/views/datagrid/_enum_checkboxes.html.erb
 @@ -2,10 +2,12 @@
  Indent in this file may cause extra space to appear.
  You can add indent if whitespace doesn't matter for you
  %>
+-<%- elements.each do |value, text, checked| -%>
 +<div class="datagrid-enum-checkboxes">
- <%- elements.each do |value, text, checked| -%>
++<%- choices.each do |value, text| -%>
  <%- id = [form.object_name, filter.name, value].join('_').underscore -%>
 -<%= form.label filter.name, options.merge(for: id) do -%>
 -<%= form.check_box(filter.name, {multiple: true, id: id, checked: checked, include_hidden: false}, value.to_s, nil) -%>
