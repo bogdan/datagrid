@@ -24,7 +24,7 @@ describe Datagrid::Generators::Scaffold do
     end
   end
 
-  describe ".controller_code" do
+  describe "#controller_code" do
     it "works" do
       expect(subject.controller_code).to eq(<<~RUBY)
         class UsersController < ApplicationController
@@ -41,6 +41,18 @@ describe Datagrid::Generators::Scaffold do
           end
         end
       RUBY
+    end
+  end
+
+  describe "#view_code" do
+    it "works" do
+      expect(subject.view_code).to eq(<<~ERB)
+      <%= datagrid_form_with model: @grid, url: users_path %>
+
+      <%= paginate(@grid.assets) %>
+      <%= datagrid_table @grid %>
+      <%= paginate(@grid.assets) %>
+      ERB
     end
   end
 end

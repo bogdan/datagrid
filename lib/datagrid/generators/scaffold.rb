@@ -23,7 +23,7 @@ module Datagrid
         end
         create_file view_file, view_code
         route(generate_routing_namespace("resources :#{grid_controller_short_name}"))
-        gem "kaminari" unless defined?(::Kaminari) || defined?(::WillPaginate) || defined?(::Pagy)
+        gem "kaminari" unless kaminari? || will_paginate? || pagy?
         in_root do
           {
             "css" => " *= require datagrid",
@@ -71,9 +71,9 @@ module Datagrid
       end
 
       def pagination_helper_code
-        if defined?(::WillPaginate)
+        if will_paginate?
           "will_paginate(@grid.assets)"
-        elsif defined?(::Pagy)
+        elsif pagy?
           "pagy_nav(@pagy)"
         else
           # Kaminari is default
@@ -82,7 +82,7 @@ module Datagrid
       end
 
       def table_helper_code
-        if defined?(::Pagy)
+        if pagy?
           "datagrid_table @grid, @records"
         else
           "datagrid_table @grid"
@@ -98,7 +98,7 @@ module Datagrid
       end
 
       def index_code
-        if defined?(::Pagy)
+        if pagy?
           <<-RUBY
     @grid = #{grid_class_name}.new(grid_params)
     @pagy, @assets = pagy(@grid.assets)
@@ -129,7 +129,7 @@ module Datagrid
       end
 
       def view_code
-        indent(<<~ERB)
+        <<~ERB
           <%= datagrid_form_with model: @grid, url: #{grid_route_name} %>
 
           <%= #{pagination_helper_code} %>
@@ -167,6 +167,18 @@ module Datagrid
       def file_exists?(name)
         name = Rails.root.join(name) unless name.to_s.first == "/"
         File.exist?(name)
+      end
+
+      def pagy?
+        defined?(::Pagy)
+      end
+
+      def will_paginate?
+        defined?(::WillPaginate)
+      end
+
+      def kaminari?
+        defined?(::Kaminari)
       end
     end
   end
