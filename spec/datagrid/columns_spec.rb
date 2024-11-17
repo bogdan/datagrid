@@ -38,10 +38,7 @@ describe Datagrid::Columns do
     end
 
     it "allows a column argument" do
-      grid = test_grid do
-        scope { Entry }
-        column(:name)
-      end
+      grid = test_grid_column(:name)
       expect(grid.data_columns(grid.column_by_name(:name)).map(&:name)).to eq([:name])
     end
 
@@ -135,10 +132,7 @@ describe Datagrid::Columns do
     end
 
     it "supports dynamic header" do
-      grid = test_grid do
-        scope { Entry }
-        column(:id, header: proc { rand(10**9) })
-      end
+      grid = test_grid_column(:id, header: proc { rand(10**9) })
 
       expect(grid.header).to_not eq(grid.header)
     end
@@ -285,12 +279,9 @@ describe Datagrid::Columns do
 
   context "when grid has formatted column" do
     it "should output correct data" do
-      report = test_grid do
-        scope { Entry }
-        column(:name) do |entry|
-          format(entry.name) do |value|
-            "<strong>#{value}</strong"
-          end
+      report = test_grid_column(:name) do |entry|
+        format(entry.name) do |value|
+          "<strong>#{value}</strong"
         end
       end
       Entry.create!(name: "Hello World")
@@ -405,10 +396,7 @@ describe Datagrid::Columns do
 
   describe "instance level column definition" do
     let(:modified_grid) do
-      grid = test_grid do
-        scope { Entry }
-        column(:id)
-      end
+      grid = test_grid_column(:id)
       grid.column(:name)
       grid
     end
@@ -476,17 +464,11 @@ describe Datagrid::Columns do
 
   describe ".data_value" do
     it "should return value" do
-      grid = test_grid do
-        scope { Entry }
-        column(:name)
-      end
+      grid = test_grid_column(:name)
       expect(grid.data_value(:name, Entry.create!(name: "Hello"))).to eq("Hello")
     end
     it "should raise for disabled columns" do
-      grid = test_grid do
-        scope { Entry }
-        column(:name, if: proc { false })
-      end
+      grid = test_grid_column(:name, if: proc { false })
       expect do
         grid.data_value(:name, Entry.create!(name: "Hello"))
       end.to raise_error(Datagrid::ColumnUnavailableError)
@@ -563,34 +545,22 @@ describe Datagrid::Columns do
 
   describe "column scope" do
     it "appends preload as non block" do
-      grid = test_grid do
-        scope { Entry }
-        column(:id, preload: [:group])
-      end
+      grid = test_grid_column(:id, preload: [:group])
       expect(grid.assets.preload_values).to_not be_blank
     end
 
     it "appends preload with no args" do
-      grid = test_grid do
-        scope { Entry }
-        column(:id, preload: -> { order(:id) })
-      end
+      grid = test_grid_column(:id, preload: -> { order(:id) })
       expect(grid.assets.order_values).to_not be_blank
     end
 
     it "appends preload with arg" do
-      grid = test_grid do
-        scope { Entry }
-        column(:id, preload: ->(a) { a.order(:id) })
-      end
+      grid = test_grid_column(:id, preload: ->(a) { a.order(:id) })
       expect(grid.assets.order_values).to_not be_blank
     end
 
     it "appends preload as true value" do
-      grid = test_grid do
-        scope { Entry }
-        column(:group, preload: true)
-      end
+      grid = test_grid_column(:group, preload: true)
       expect(grid.assets.preload_values).to eq([:group])
     end
 

@@ -6,9 +6,7 @@ require "action_controller/metal/strong_parameters"
 describe Datagrid::Core do
   describe "#original_scope" do
     it "does not wrap instance scope" do
-      grid = test_grid do
-        scope { Entry }
-      end
+      grid = test_grid
 
       expect(grid.original_scope).to eq(Entry)
     end
@@ -35,9 +33,7 @@ describe Datagrid::Core do
 
     describe "#scope" do
       it "wraps scope" do
-        grid = test_grid do
-          scope { Entry }
-        end
+        grid = test_grid
         expect(grid.scope).to be_kind_of(ActiveRecord::Relation)
       end
 

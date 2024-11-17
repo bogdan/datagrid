@@ -13,7 +13,25 @@ def test_grid_class(&block)
         "TestGrid"
       end
     end
-    klass.class_eval(&block) if block
+    if block
+      klass.class_eval(&block)
+    else
+      klass.scope { Entry }
+    end
+  end
+end
+
+def test_grid_column(name, query = nil, **options, &block)
+  test_grid do
+    scope { Entry }
+    column(name, query, **options, &block)
+  end
+end
+
+def test_grid_filter(name, type = :default, **options, &block)
+  test_grid do
+    scope { Entry }
+    filter(name, type, **options, &block)
   end
 end
 

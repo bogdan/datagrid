@@ -4,10 +4,7 @@ require "spec_helper"
 
 describe Datagrid::Filters::BooleanFilter do
   it "applies default filtering" do
-    grid = test_grid do
-      scope { Entry }
-      filter(:disabled, :boolean)
-    end
+    grid = test_grid_filter(:disabled, :boolean)
 
     disabled_entry = Entry.create!(disabled: true)
     enabled_entry = Entry.create!(disabled: false)
@@ -26,10 +23,7 @@ describe Datagrid::Filters::BooleanFilter do
   end
 
   it "type casts any value to boolean" do
-    grid = test_grid do
-      scope { Entry }
-      filter(:disabled, :boolean)
-    end
+    grid = test_grid_filter(:disabled, :boolean)
 
     grid.disabled = true
     expect(grid.disabled).to eq(true)

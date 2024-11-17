@@ -35,10 +35,7 @@ describe Datagrid::FormBuilder do
 
     context "with default filter type" do
       let(:_grid) do
-        test_grid do
-          scope { Entry }
-          filter(:name)
-        end
+        test_grid_filter(:name)
       end
 
       let(:_filter) { :name }
@@ -52,10 +49,7 @@ describe Datagrid::FormBuilder do
     context "with integer filter type" do
       let(:_filter) { :group_id }
       let(:_grid) do
-        test_grid do
-          scope { Entry }
-          filter(:group_id, :integer)
-        end
+        test_grid_filter(:group_id, :integer)
       end
 
       it {
@@ -78,10 +72,7 @@ describe Datagrid::FormBuilder do
     context "with date filter type" do
       let(:_filter) { :created_at }
       let(:_grid) do
-        test_grid do
-          scope { Entry }
-          filter(:created_at, :date)
-        end
+        test_grid_filter(:created_at, :date)
       end
 
       it {
@@ -110,10 +101,7 @@ describe Datagrid::FormBuilder do
       context "type is date" do
         let(:_filter) { :created_at }
         let(:_grid) do
-          test_grid do
-            scope { Entry }
-            filter(:created_at, :date, input_options: { type: :date })
-          end
+          test_grid_filter(:created_at, :date, input_options: { type: :date })
         end
 
         it {
@@ -126,10 +114,7 @@ describe Datagrid::FormBuilder do
       context "type is textarea" do
         let(:_filter) { :name }
         let(:_grid) do
-          test_grid do
-            scope { Entry }
-            filter(:name, :string, input_options: { type: :textarea })
-          end
+          test_grid_filter(:name, :string, input_options: { type: :textarea })
         end
 
         it {
@@ -187,10 +172,9 @@ describe Datagrid::FormBuilder do
     context "with integer filter type and range option" do
       let(:_filter) { :group_id }
       let(:_grid) do
-        test_grid(group_id: _range) do
-          scope { Entry }
-          filter(:group_id, :integer, range: true)
-        end
+        grid = test_grid_filter(:group_id, :integer, range: true)
+        grid.group_id = _range
+        grid
       end
 
       context "when datagrid_filter options has id" do
@@ -368,10 +352,7 @@ describe Datagrid::FormBuilder do
       let(:_category_filter_options) { {} }
       let(:_grid) do
         filter_options = _category_filter_options
-        test_grid do
-          scope { Entry }
-          filter(:category, :enum, select: %w[first second], **filter_options)
-        end
+        test_grid_filter(:category, :enum, select: %w[first second], **filter_options)
       end
 
       it {
@@ -496,10 +477,7 @@ describe Datagrid::FormBuilder do
     context "with boolean filter type" do
       let(:_filter) { :disabled }
       let(:_grid) do
-        test_grid do
-          scope { Entry }
-          filter(:disabled, :boolean, default: true)
-        end
+        test_grid_filter(:disabled, :boolean, default: true)
       end
 
       it {
@@ -512,10 +490,7 @@ describe Datagrid::FormBuilder do
     context "with xboolean filter type" do
       let(:_filter) { :disabled }
       let(:_grid) do
-        test_grid do
-          scope { Entry }
-          filter(:disabled, :xboolean)
-        end
+        test_grid_filter(:disabled, :xboolean)
       end
       it {
         should equal_to_dom(
@@ -528,10 +503,7 @@ describe Datagrid::FormBuilder do
     end
     context "with string filter" do
       let(:_grid) do
-        test_grid do
-          scope { Entry }
-          filter(:name, :string)
-        end
+        test_grid_filter(:name, :string)
       end
 
       let(:_filter) { :name }
@@ -562,25 +534,19 @@ describe Datagrid::FormBuilder do
 
     context "with non multiple filter" do
       let(:_grid) do
-        test_grid do
-          scope { Entry }
-          filter(
-            :name, :enum,
-            include_blank: false,
-            multiple: false,
-            select: [],
-          )
-        end
+        test_grid_filter(
+          :name, :enum,
+          include_blank: false,
+          multiple: false,
+          select: [],
+        )
       end
       let(:_filter) { :name }
       it { should equal_to_dom('<select class="name enum_filter" name="report[name]" id="report_name"></select>') }
     end
     context "with float filter type" do
       let(:_grid) do
-        test_grid do
-          scope { Entry }
-          filter(:group_id, :float)
-        end
+        test_grid_filter(:group_id, :float)
       end
       let(:_filter) { :group_id }
       it {
@@ -592,10 +558,7 @@ describe Datagrid::FormBuilder do
 
     context "with enum multiple filter" do
       let(:_grid) do
-        test_grid do
-          scope { Entry }
-          filter(:group_id, :enum, select: ["hello"], multiple: true)
-        end
+        test_grid_filter(:group_id, :enum, select: ["hello"], multiple: true)
       end
       let(:_filter) { :group_id }
       let(:expected_html) do
@@ -664,10 +627,7 @@ describe Datagrid::FormBuilder do
 
       let(:_grid) do
         options = filter_options
-        test_grid do
-          scope { Entry }
-          filter(:condition, :dynamic, **options)
-        end
+        test_grid_filter(:condition, :dynamic, **options)
       end
       let(:_filter) { :condition }
       context "with no options" do

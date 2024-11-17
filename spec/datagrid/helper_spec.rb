@@ -129,9 +129,7 @@ describe Datagrid::Helper do
 
     context "when grid has no columns" do
       let(:grid) do
-        test_grid do
-          scope { Entry }
-        end
+        test_grid
       end
 
       it "should render no_columns message" do
@@ -195,39 +193,31 @@ describe Datagrid::Helper do
 
   describe ".datagrid_rows" do
     it "should support urls" do
-      rp = test_grid do
-        scope { Entry }
-        column(:name, url: ->(model) { "/entries/#{model.name.downcase}" })
-      end
+      rp = test_grid_column(:name, url: ->(model) { "/entries/#{model.name.downcase}" })
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name a[href='/entries/star']" => "Star",
       )
     end
 
     it "should support conditional urls" do
-      rp = test_grid do
-        scope { Entry }
-        column(:name, url: ->(_model) { false })
-      end
+      rp = test_grid_column(:name, url: ->(_model) { false })
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name" => "Star",
       )
     end
 
     it "should add ordering classes to column" do
-      rp = test_grid(order: :name) do
-        scope { Entry }
-        column(:name)
-      end
+      rp = test_grid_column(:name)
+      rp.order = :name
+
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name.ordered.asc" => "Star",
       )
     end
     it "should add ordering classes to column" do
-      rp = test_grid(order: :name) do
-        scope { Entry }
-        column(:name)
-      end
+      rp = test_grid_column(:name)
+      rp.order = :name
+
       expect(
         subject.datagrid_rows(rp) do |row|
           subject.content_tag(:strong, row.name)
@@ -238,20 +228,17 @@ describe Datagrid::Helper do
     end
 
     it "should add ordering classes to column" do
-      rp = test_grid(order: :name, descending: true) do
-        scope { Entry }
-        column(:name)
-      end
+      rp = test_grid_column(:name)
+      rp.order = :name
+      rp.descending = true
+
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name.ordered.desc" => "Star",
       )
     end
 
     it "should render columns with &:symbol block" do
-      rp = test_grid do
-        scope { Entry }
-        column(:name, &:name)
-      end
+      rp = test_grid_column(:name, &:name)
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name" => "Star",
@@ -259,11 +246,8 @@ describe Datagrid::Helper do
     end
 
     it "should render html columns" do
-      rp = test_grid do
-        scope { Entry }
-        column(:name, html: true) do |model|
-          content_tag(:span, model.name)
-        end
+      rp = test_grid_column(:name, html: true) do |model|
+        content_tag(:span, model.name)
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name span" => "Star",
@@ -271,10 +255,7 @@ describe Datagrid::Helper do
     end
 
     it "should render :html columns with &:symbol block" do
-      rp = test_grid do
-        scope { Entry }
-        column(:name, html: true, &:name)
-      end
+      rp = test_grid_column(:name, html: true, &:name)
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name" => "Star",
@@ -295,10 +276,7 @@ describe Datagrid::Helper do
     end
 
     it "should render :html columns with &:symbol block with a data attribute" do
-      rp = test_grid do
-        scope { Entry }
-        column(:name, html: true, data: "DATA", &:name)
-      end
+      rp = test_grid_column(:name, html: true, data: "DATA", &:name)
 
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name" => "Star",
@@ -306,21 +284,15 @@ describe Datagrid::Helper do
     end
 
     it "should render argument-based html columns" do
-      rp = test_grid do
-        scope { Entry }
-        column(:name, html: ->(data) { content_tag :h1, data })
-      end
+      rp = test_grid_column(:name, html: ->(data) { content_tag :h1, data })
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name h1" => "Star",
       )
     end
 
     it "should render argument-based html columns with custom data" do
-      rp = test_grid do
-        scope { Entry }
-        column(:name, html: ->(data) { content_tag :em, data }) do
-          name.upcase
-        end
+      rp = test_grid_column(:name, html: ->(data) { content_tag :em, data }) do
+        name.upcase
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name em" => "STAR",
@@ -328,11 +300,8 @@ describe Datagrid::Helper do
     end
 
     it "should render html columns with double arguments for column" do
-      rp = test_grid do
-        scope { Entry }
-        column(:name, html: true) do |model, grid|
-          content_tag(:span, "#{model.name}-#{grid.assets.klass}")
-        end
+      rp = test_grid_column(:name, html: true) do |model, grid|
+        content_tag(:span, "#{model.name}-#{grid.assets.klass}")
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name span" => "Star-Entry",
@@ -340,37 +309,28 @@ describe Datagrid::Helper do
     end
 
     it "should render argument-based html blocks with double arguments" do
-      rp = test_grid do
-        scope { Entry }
-        column(:name, html: lambda { |data, model|
-          content_tag :h1, "#{data}-#{model.name.downcase}"
-        },)
-      end
+      rp = test_grid_column(:name, html: lambda { |data, model|
+        content_tag :h1, "#{data}-#{model.name.downcase}"
+      })
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name h1" => "Star-star",
       )
     end
 
     it "should render argument-based html blocks with triple arguments" do
-      rp = test_grid do
-        scope { Entry }
-        column(:name, html: lambda { |data, model, grid|
-          content_tag :h1, "#{data}-#{model.name.downcase}-#{grid.assets.klass}"
-        },)
-      end
+      rp = test_grid_column(:name, html: lambda { |data, model, grid|
+        content_tag :h1, "#{data}-#{model.name.downcase}-#{grid.assets.klass}"
+      })
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name h1" => "Star-star-Entry",
       )
     end
 
     it "should render argument-based html blocks with double arguments and custom data" do
-      rp = test_grid do
-        scope { Entry }
-        column(:name, html: lambda { |data, model|
-          content_tag :h1, "#{data}-#{model.name}"
-        },) do
-          name.upcase
-        end
+      rp = test_grid_column(:name, html: lambda { |data, model|
+        content_tag :h1, "#{data}-#{model.name}"
+      }) do
+        name.upcase
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td.name h1" => "STAR-Star",
