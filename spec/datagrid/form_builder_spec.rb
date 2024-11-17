@@ -32,6 +32,7 @@ describe Datagrid::FormBuilder do
 
     let(:_filter_options) { {} }
     let(:_filter_block) { nil }
+
     context "with default filter type" do
       let(:_grid) do
         test_report do
@@ -39,13 +40,15 @@ describe Datagrid::FormBuilder do
           filter(:name)
         end
       end
+
       let(:_filter) { :name }
       it {
-        should equal_to_dom(
-        '<input class="name default_filter" type="text" name="report[name]" id="report_name"/>',
-      )
+        should equal_to_dom(<<~HTML)
+          <input class="name default_filter" type="text" name="report[name]" id="report_name"/>
+        HTML
       }
     end
+
     context "with integer filter type" do
       let(:_filter) { :group_id }
       let(:_grid) do
@@ -54,18 +57,20 @@ describe Datagrid::FormBuilder do
           filter(:group_id, :integer)
         end
       end
+
       it {
-        should equal_to_dom(
-        '<input class="group_id integer_filter" type="text" name="report[group_id]" id="report_group_id"/>',
-      )
+        should equal_to_dom(<<~HTML)
+          <input class="group_id integer_filter" type="text" name="report[group_id]" id="report_group_id"/>
+        HTML
       }
 
       context "when partials option is passed for filter that don't support range" do
         let(:view_options) { { partials: "anything" } }
+
         it {
-          should equal_to_dom(
-          '<input class="group_id integer_filter" type="text" name="report[group_id]" id="report_group_id"/>',
-        )
+          should equal_to_dom(<<~HTML)
+            <input class="group_id integer_filter" type="text" name="report[group_id]" id="report_group_id"/>
+          HTML
         }
       end
     end
@@ -78,11 +83,13 @@ describe Datagrid::FormBuilder do
           filter(:created_at, :date)
         end
       end
+
       it {
-        should equal_to_dom(
-        '<input class="created_at date_filter" type="text" name="report[created_at]" id="report_created_at"/>',
-      )
+        should equal_to_dom(<<~HTML)
+          <input class="created_at date_filter" type="text" name="report[created_at]" id="report_created_at"/>
+        HTML
       }
+
       context "when special date format specified" do
         around(:each) do |example|
           _grid.created_at = Date.parse("2012-01-02")
@@ -90,13 +97,15 @@ describe Datagrid::FormBuilder do
             example.run
           end
         end
+
         it {
-          should equal_to_dom(
-          '<input value="01/02/2012" class="created_at date_filter" type="text" name="report[created_at]" id="report_created_at"/>',
-        )
+          should equal_to_dom(<<~HTML)
+            <input value="01/02/2012" class="created_at date_filter" type="text" name="report[created_at]" id="report_created_at"/>
+          HTML
         }
       end
     end
+
     context "with input_options" do
       context "type is date" do
         let(:_filter) { :created_at }
@@ -106,12 +115,14 @@ describe Datagrid::FormBuilder do
             filter(:created_at, :date, input_options: { type: :date })
           end
         end
+
         it {
-          should equal_to_dom(
-          '<input type="date" class="created_at date_filter" name="report[created_at]" id="report_created_at"/>',
-        )
+          should equal_to_dom(<<~HTML)
+            <input type="date" class="created_at date_filter" name="report[created_at]" id="report_created_at"/>
+          HTML
         }
       end
+
       context "type is textarea" do
         let(:_filter) { :name }
         let(:_grid) do
@@ -120,10 +131,11 @@ describe Datagrid::FormBuilder do
             filter(:name, :string, input_options: { type: :textarea })
           end
         end
+
         it {
-          should equal_to_dom(
-          '<textarea class="name string_filter" name="report[name]" id="report_name"/>',
-        )
+          should equal_to_dom(<<~HTML)
+            <textarea class="name string_filter" name="report[name]" id="report_name"></textarea>
+          HTML
         }
       end
 
@@ -448,13 +460,12 @@ describe Datagrid::FormBuilder do
           filter(:disabled, :boolean, default: true)
         end
       end
+
       it {
-        should equal_to_dom(
-        # hidden is important when default is set to true
-        %(<input name="report[disabled]" type="hidden" value="0" autocomplete="off">
-        <input class="disabled boolean_filter" type="checkbox" value="1"
-        checked name="report[disabled]" id="report_disabled">),
-      )
+        should equal_to_dom(<<~HTML)
+          <input name="report[disabled]" type="hidden" value="0" autocomplete="off">
+          <input class="disabled boolean_filter" type="checkbox" value="1" checked name="report[disabled]" id="report_disabled">
+        HTML
       }
     end
     context "with xboolean filter type" do
@@ -702,15 +713,17 @@ describe Datagrid::FormBuilder do
         filter(:created_at, :date, label_options: { class: "js-date-selector" })
       end
     end
+
     it "should generate label for filter" do
-      expect(view.datagrid_label(:created_at)).to equal_to_dom(
-        '<label class="js-date-selector" for="report_created_at">Created at</label>',
-      )
+      expect(view.datagrid_label(:created_at)).to equal_to_dom(<<~HTML)
+        <label class="js-date-selector" for="report_created_at">Created at</label>
+      HTML
     end
+
     it "should generate label for filter" do
-      expect(view.datagrid_label(:name)).to equal_to_dom(
-        '<label for="report_name">Name</label>',
-      )
+      expect(view.datagrid_label(:name)).to equal_to_dom(<<~HTML)
+        <label for="report_name">Name</label>
+      HTML
     end
     it "should pass options through to the helper" do
       expect(view.datagrid_label(:name, class: "foo")).to equal_to_dom(

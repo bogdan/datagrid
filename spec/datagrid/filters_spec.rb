@@ -71,17 +71,17 @@ describe Datagrid::Filters do
 
   describe "allow_blank and allow_nil options" do
     def check_performed(value, result, **options)
-      $FILTER_PERFORMED = false
+      filter_performed = false
       report = test_report(name: value) do
         scope { Entry }
         filter(:name, **options) do |_|
-          $FILTER_PERFORMED = true
+          filter_performed = true
           self
         end
       end
       expect(report.name).to eq(value)
       report.assets
-      expect($FILTER_PERFORMED).to eq(result)
+      expect(filter_performed).to eq(result)
     end
 
     it "should support allow_blank argument" do
