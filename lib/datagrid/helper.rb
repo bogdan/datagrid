@@ -55,15 +55,15 @@ module Datagrid
   #
   # Use the built-in partial:
   #
-  #     = datagrid_form_for @grid, url: report_path, other_form_for_option: value
+  #     = datagrid_form_with model: @grid, url: report_path, other_form_for_option: value
   #
-  # {#datagrid_form_for} supports the same options as Rails `form_for`.
+  # {#datagrid_form_with} supports the same options as Rails `form_with`.
   #
   # === Advanced Method
   #
   # You can use Rails built-in tools to create a form. Additionally, Datagrid provides helpers to generate input/select elements for filters:
   #
-  #     - form_for UserGrid.new, method: :get, url: users_path do |f|
+  #     - form_with model: UserGrid.new, method: :get, url: users_path do |f|
   #       %div
   #         = f.datagrid_label :name
   #         = f.datagrid_filter :name # => <input name="grid[name]" type="text"/>
@@ -73,7 +73,7 @@ module Datagrid
   #
   # To create a report form:
   #
-  #     - form_for @report, method: :get, url: users_path do |f|
+  #     - form_with model: @report, method: :get, url: users_path do |f|
   #       - @report.filters.each do |filter|
   #         %div
   #           = f.datagrid_label filter
@@ -156,7 +156,7 @@ module Datagrid
   #
   # Modify the form for AJAX:
   #
-  #     = datagrid_form_for @grid, html: {class: 'js-datagrid-form'}
+  #     = datagrid_form_with model: @grid, html: {class: 'js-datagrid-form'}
   #     .js-datagrid-table
   #       = datagrid_table @grid
   #     .js-pagination
@@ -179,9 +179,8 @@ module Datagrid
   #
   #     app/views/datagrid/
   #     ├── _enum_checkboxes.html.erb # datagrid_filter for filter(name, :enum, checkboxes: true)
-  #     ├── _form.html.erb            # datagrid_form_for
+  #     ├── _form.html.erb            # datagrid_form_with
   #     ├── _head.html.erb            # datagrid_header
-  #     ├── _order_for.html.erb       # datagrid_order_for
   #     ├── _range_filter.html.erb    # datagrid_filter for filter(name, type, range: true)
   #     ├── _row.html.erb             # datagrid_rows/datagrid_rows
   #     └── _table.html.erb           # datagrid_table
@@ -198,18 +197,14 @@ module Datagrid
   #       category.orders.sum(:subtotal) / category.orders.count
   #     end
   #
-  # The `:description` option is not built into Datagrid, but you can implement it by modifying the column header
-  # partial `app/views/datagrid/_header.html.erb` like this:
+  # The `:description` option is not built into Datagrid, but you can implement it
+  # by adding the following to partial `app/views/datagrid/_header.html.erb`:
   #
-  #     %tr
-  #       - grid.html_columns(*options[:columns]).each do |column|
-  #         %th{class: datagrid_column_classes(grid, column)}
-  #           = column.header
-  #           - if column.options[:description]
-  #             %a{data: {toggle: 'tooltip', title: column.options[:description]}}
-  #               %i.icon-question-sign
-  #           - if column.order && options[:order]
-  #             = datagrid_order_for(grid, column, options)
+  #     <% if column.options[:description] %>
+  #       <a data-toggle="tooltip" title="<%= column.options[:description] %>">
+  #         <i class="icon-question-sign"></i>
+  #       </a>
+  #     <% end %>
   #
   # This modification allows the `:description` tooltip to work with your chosen UI and JavaScript library.
   # The same technique can be applied to filters by calling `filter.options` in corresponding partials.
@@ -228,8 +223,7 @@ module Datagrid
   #
   # This allows you to define a custom `row_class` method in your grid class, like this:
   #
-  #     class IssuesGrid
-  #       include Datagrid
+  #     class IssuesGrid < ApplicationGrid
   #       scope { Issue }
   #
   #       def row_class(issue)
@@ -396,7 +390,7 @@ module Datagrid
     #
     # * <tt>:partials</tt> - Path for form partial lookup.
     #   Default: 'datagrid'.
-    # * All options supported by Rails <tt>form_for</tt> helper
+    # * All options supported by Rails <tt>form_with</tt> helper
     # @deprecated Use {#datagrid_form_with} instead.
     # @param grid [Datagrid] grid object
     # @param [Hash] options

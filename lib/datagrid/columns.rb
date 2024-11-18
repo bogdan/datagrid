@@ -6,9 +6,7 @@ require "active_support/core_ext/class/attribute"
 module Datagrid
   # Defines a column to be used for displaying data in a Datagrid.
   #
-  #     class UserGrid
-  #       include Datagrid
-  #
+  #     class UserGrid < ApplicationGrid
   #       scope do
   #         User.order("users.created_at desc").joins(:group)
   #       end

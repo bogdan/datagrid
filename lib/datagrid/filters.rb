@@ -6,9 +6,7 @@ module Datagrid
   # Defines the accessible attribute that is used to filter
   # the scope by the specified value with specified code.
   #
-  #     class UserGrid
-  #       include Datagrid
-  #
+  #     class UserGrid < ApplicationGrid
   #       scope do
   #         User
   #       end
@@ -64,13 +62,13 @@ module Datagrid
   #
   # `:date` - Converts value to a date. Supports the `:range` option to accept date ranges.
   #
-  #     filter(:created_at, :date, range: true, default: proc { [1.month.ago.to_date, Date.today] })
+  #     filter(:created_at, :date, range: true, default: proc { 1.month.ago.to_date..Date.today })
   #
   # == Datetime
   #
   # `:datetime` - Converts value to a timestamp. Supports the `:range` option to accept time ranges.
   #
-  #     filter(:created_at, :datetime, range: true, default: proc { [1.hour.ago, Time.now] })
+  #     filter(:created_at, :datetime, range: true, default: proc { 1.hour.ago..Time.now })
   #
   # == Enum
   #
@@ -93,7 +91,7 @@ module Datagrid
   #
   # `:integer` - Converts value to an integer. Supports the `:range` option.
   #
-  #     filter(:posts_count, :integer, range: true, default: [1, nil])
+  #     filter(:posts_count, :integer, range: true, default: (1..nil))
   #
   # == String
   #
@@ -123,7 +121,7 @@ module Datagrid
   # Example:
   #
   #     filter(:id, :integer, header: "Identifier")
-  #     filter(:created_at, :date, range: true, default: proc { [1.month.ago.to_date, Date.today] })
+  #     filter(:created_at, :date, range: true, default: proc { 1.month.ago.to_date..Date.today })
   #
   # = Localization
   #
