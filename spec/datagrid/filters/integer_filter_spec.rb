@@ -64,10 +64,9 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "converts infinite range to nil" do
-    report = test_grid(group_id: (nil..nil)) do
-      scope { Entry }
-      filter(:group_id, :integer, range: true)
-    end
+    report = test_grid_filter(:group_id, :integer, range: true)
+    report.group_id = nil..nil
+
     expect(report.group_id).to eq(nil)
   end
 

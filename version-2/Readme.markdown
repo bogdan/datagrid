@@ -72,7 +72,7 @@ datagrid_form_for(@users_grid, url: users_path)
 datagrid_form_with(model: @users_grid, url: users_path)
 ```
 
-Version 2 built-in view `datagrid/form` uses `form_with` no matter of the with helper is used.
+Version 2 built-in view `datagrid/form` uses `form_with` no matter of the which helper is used.
 Beware of that.
 
 [Grep all deprecations](./deprecations.sh).
@@ -133,7 +133,7 @@ grid.id # V1: [1, nil]
 Version 2 makes an effort to make the transition as smooth as possible to you:
 
 * Old Array format will be converted to new Range format
-* Serialization/Deserialization of Range is help correctly
+* Serialization/Deserialization of Range is held correctly
 
 ``` ruby
 grid.id = 1..5
@@ -457,7 +457,7 @@ if you want to change this behavior completely.
 ## Use column[tag\_options]
 
 `column[class]` option is deprecated in favor of more flexible `column[tag_options]` 
-that allows to specify any `td/td` html attribute.
+that allows to specify any `th/td` html attribute.
 
 Example migration:
 

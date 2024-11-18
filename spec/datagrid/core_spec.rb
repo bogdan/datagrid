@@ -231,12 +231,9 @@ describe Datagrid::Core do
     end
 
     it "supports hash attribute assignment" do
-      grid = test_grid(
-        ActionController::Parameters.new(group_id: { from: 1, to: 2 }),
-      ) do
-        scope { Entry }
-        filter(:group_id, :integer, range: true)
-      end
+      grid = test_grid_filter(:group_id, :integer, range: true)
+      grid.attributes = ActionController::Parameters.new(group_id: { from: 1, to: 2 })
+
       expect(grid.group_id).to eq(1..2)
     end
   end
