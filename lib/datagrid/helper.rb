@@ -167,12 +167,7 @@ module Datagrid
       datagrid_renderer.order_path(grid, column, descending, request)
     end
 
-    protected
-
-    def datagrid_renderer
-      Renderer.for(self)
-    end
-
+    # @!visibility private
     def datagrid_column_classes(grid, column)
       Datagrid::Utils.warn_once(<<~MSG)
         datagrid_column_classes is deprecated. Assign necessary classes manually.
@@ -182,7 +177,13 @@ module Datagrid
       order_class = if grid.ordered_by?(column)
                       ["ordered", grid.descending ? "desc" : "asc"]
                     end
-      [column.name, order_class, column.options[:class]].compact.join(" ")
+      class_names(column.name, order_class, column.options[:class], column.tag_options[:class])
+    end
+
+    protected
+
+    def datagrid_renderer
+      Renderer.for(self)
     end
   end
 end

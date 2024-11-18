@@ -731,13 +731,17 @@ describe Datagrid::Helper do
       grid = test_grid(order: :name, descending: true) do
         scope { Entry }
         column(:name)
+        column(:category, tag_options: { class: "long-column" })
         column(:group_id, class: "short-column")
       end
       silence_deprecator do
-        expect(subject.send(:datagrid_column_classes, grid, :name)).to eq(
+        expect(subject.datagrid_column_classes(grid, :name)).to eq(
           "name ordered desc",
         )
-        expect(subject.send(:datagrid_column_classes, grid, :group_id)).to eq(
+        expect(subject.datagrid_column_classes(grid, :category)).to eq(
+          "category long-column",
+        )
+        expect(subject.datagrid_column_classes(grid, :group_id)).to eq(
           "group_id short-column",
         )
       end
