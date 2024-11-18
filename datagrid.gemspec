@@ -12,12 +12,12 @@ Gem::Specification.new do |s|
   s.email = "agresso@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "Readme.markdown",
+    "README.md",
   ]
   s.files = [
     "LICENSE.txt",
     "CHANGELOG.md",
-    "Readme.markdown",
+    "README.md",
     "datagrid.gemspec",
   ]
   s.files += `git ls-files | grep -E '^(app|lib|templates)'`.split("\n")

@@ -40,7 +40,7 @@ including admin panels, analytics and data representation:
 [Datagrid DEMO application](http://datagrid.herokuapp.com) is available live!
 [Demo source code](https://github.com/bogdan/datagrid-demo).
 
-<img src="http://datagrid.herokuapp.com/datagrid_demo_screenshot.png" style="margin: 7px; border: 1px solid black">
+<!-- <img src="http://datagrid.herokuapp.com/datagrid_demo_screenshot.png" style="margin: 7px; border: 1px solid black"> -->
 
 ### Example
 
