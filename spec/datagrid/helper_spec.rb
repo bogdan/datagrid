@@ -286,7 +286,7 @@ describe Datagrid::Helper do
     it "should render argument-based html blocks with double arguments" do
       rp = test_grid_column(:name, html: lambda { |data, model|
         tag.h1 "#{data}-#{model.name.downcase}"
-      })
+      },)
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td[data-column=name] h1" => "Star-star",
       )
@@ -354,17 +354,17 @@ describe Datagrid::Helper do
       report = test_grid(order: :name, descending: true) do
         scope { Entry }
         column(:name, tag_options: {
-          class: 'my-class',
+          class: "my-class",
           "data-column-group": "core",
           "data-column": nil,
-        })
+        },)
       end
 
       expect(subject.datagrid_rows(report, [entry])).to equal_to_dom(<<~HTML)
         <tr>
           <td class="my-class datagrid-order-active-desc" data-column-group="core">Star</td>
         </tr>
-       HTML
+      HTML
     end
 
     context "when grid has complicated columns" do
@@ -710,30 +710,30 @@ describe Datagrid::Helper do
       grid = test_grid(order: :name, descending: true) do
         scope { Entry }
         column(:name, order: false, tag_options: {
-          class: 'my-class',
+          class: "my-class",
           "data-column-group": "core",
           "data-column": nil,
-        })
+        },)
       end
 
       expect(subject.datagrid_header(grid)).to equal_to_dom(<<~HTML)
         <tr>
           <th class="my-class datagrid-order-active-desc" data-column-group="core">Name</th>
         </tr>
-       HTML
+      HTML
     end
 
     it "supports deprecated options passing" do
       grid = test_grid_column(:name)
       silence_deprecator do
         expect(
-          subject.datagrid_header(grid, {order: false})
+          subject.datagrid_header(grid, { order: false }),
         ).to equal_to_dom(<<~HTML)
-        <tr>
-          <th data-column="name" class="">
-            Name
-          </th>
-        </tr>
+          <tr>
+            <th data-column="name" class="">
+              Name
+            </th>
+          </tr>
         HTML
       end
     end

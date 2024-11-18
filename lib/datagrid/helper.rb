@@ -69,6 +69,7 @@ module Datagrid
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
     # @param grid [Datagrid] grid object
+    # @param [Object] opts (deprecated) pass keyword arguments instead
     # @param [Hash] options
     # @return [String] HTML table header tag markup
     def datagrid_header(grid, opts = :__unspecified__, **options)
@@ -135,6 +136,7 @@ module Datagrid
     # * <tt>:model</tt> - Datagrid object to be rendedred.
     # * All options supported by Rails <tt>form_with</tt> helper
     # @param grid [Datagrid] grid object
+    # @param [Hash{Symbol => Object}] options
     # @return [String] form HTML tag markup
     def datagrid_form_with(**options)
       raise ArgumentError, "datagrid_form_with block argument is invalid. Use form_with instead." if block_given?

@@ -132,7 +132,7 @@ describe Datagrid::Filters::IntegerFilter do
   end
 
   it "supports serialized range value" do
-    report  = test_grid_filter(:group_id, :integer, range: true)
+    report = test_grid_filter(:group_id, :integer, range: true)
 
     report.group_id = (1..5).as_json
     expect(report.group_id).to eq(1..5)

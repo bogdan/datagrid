@@ -102,7 +102,7 @@ describe Datagrid::FormBuilder do
       context "date filter type is text" do
         let(:_filter) { :created_at }
         let(:_grid) do
-          test_grid_filter(:created_at, :date, input_options: { type: 'text' })
+          test_grid_filter(:created_at, :date, input_options: { type: "text" })
         end
 
         it {

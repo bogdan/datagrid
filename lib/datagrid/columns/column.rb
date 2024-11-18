@@ -41,7 +41,7 @@ module Datagrid
         self.options = options
         if options[:class]
           Datagrid::Utils.warn_once(
-            "column[class] option is deprecated. Use {tag_options: {class: ...}} instead."
+            "column[class] option is deprecated. Use {tag_options: {class: ...}} instead.",
           )
           self.options[:tag_options] = {
             **self.options.fetch(:tag_options, {}),
@@ -123,7 +123,7 @@ module Datagrid
 
       def html_class
         Datagrid::Utils.warn_once(
-          "Column#html_class is deprecated. Use Column#tag_options instead."
+          "Column#html_class is deprecated. Use Column#tag_options instead.",
         )
         options[:class]
       end

@@ -168,7 +168,7 @@ describe Datagrid::Filters::DateTimeFilter do
   it "supports serialized range value" do
     from = Time.parse("2013-01-01 01:00")
     to = Time.parse("2013-01-02 02:00")
-    report  = test_grid_filter(:created_at, :datetime, range: true)
+    report = test_grid_filter(:created_at, :datetime, range: true)
 
     report.created_at = (from..to).as_json
     expect(report.created_at).to eq(from..to)

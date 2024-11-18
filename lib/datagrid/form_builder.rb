@@ -39,6 +39,7 @@ module Datagrid
     #   * `type` - special attribute the determines an input tag to be made.
     #     Examples: `text`, `select`, `textarea`, `number`, `date` etc.
     # @return [String] an input tag for the corresponding filter name
+    # @param [Object] attribute_or_filter
     def datagrid_filter_input(attribute_or_filter, **options, &block)
       filter = datagrid_get_filter(attribute_or_filter)
       options = add_filter_options(filter, **options)

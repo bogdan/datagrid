@@ -106,7 +106,7 @@ def silence_deprecator(&block)
   Datagrid::Utils.deprecator.silence(&block)
 end
 
-def expect_deprecated(message = /deprecated/, &block)
+def expect_deprecated(message = %r{deprecated}, &block)
   expect(Datagrid::Utils.deprecator).to receive(:warn).with(message)
   block.call
 end
