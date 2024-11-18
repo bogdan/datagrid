@@ -4,7 +4,7 @@ Datagrid Version 2.0.0 is here.
 
 [Migration Guide](./version-2).
 
-[![Build Status](https://github.com/bogdan/datagrid/workflows/CI/badge.svg?branch=master)](https://github.com/bogdan/datagrid/actions)
+[![Build Status](https://github.com/bogdan/datagrid/actions/workflows/ci.yml/badge.svg)](https://github.com/bogdan/datagrid/actions/workflows/ci.yml)
 
 A really mighty and flexible ruby library that generates reports
 including admin panels, analytics and data browsers:
