@@ -40,7 +40,7 @@ index 7e175c1..fc4f4ae 100644
    </div>
  <% end -%>
 diff --git a/app/views/datagrid/_head.html.erb b/app/views/datagrid/_head.html.erb
-index e939128..ee5d89e 100644
+index e939128..2c59aa7 100644
 --- a/app/views/datagrid/_head.html.erb
 +++ b/app/views/datagrid/_head.html.erb
 @@ -1,8 +1,31 @@
@@ -51,12 +51,12 @@ index e939128..ee5d89e 100644
 +      # Consider maintaining consistency with datagrid/rows partial
 +      "data-column": column.name,
 +      **column.tag_options,
-+      class: class_names(
++      class: [        
 +        column.tag_options[:class],
 +        # Adding HTML classes based on condition
 +        "datagrid-order-active-asc": grid.ordered_by?(column, false),
 +        "datagrid-order-active-desc": grid.ordered_by?(column, true),
-+      )
++      ]
 +    ) do %>
        <%= column.header %>
 -      <%= datagrid_order_for(grid, column, options) if column.supports_order? && options[:order]%>
@@ -92,7 +92,7 @@ index 7a8a123..faa2575 100644
 +<%# there is no duplicate id in DOM and click on label focuses the first input -%>
 +<%= form.datagrid_filter_input(filter, class: 'datagrid-range-to', **to_options, id: nil) %>
 diff --git a/app/views/datagrid/_row.html.erb b/app/views/datagrid/_row.html.erb
-index f54d21c..b493cfe 100644
+index f54d21c..a2254b0 100644
 --- a/app/views/datagrid/_row.html.erb
 +++ b/app/views/datagrid/_row.html.erb
 @@ -1,5 +1,16 @@
@@ -104,29 +104,30 @@ index f54d21c..b493cfe 100644
 +      # Consider maintaining consistency with datagrid/rows partial
 +      "data-column": column.name,
 +      **column.tag_options,
-+      class: class_names(
++      class: [ 
 +        column.tag_options[:class],
 +        # Adding HTML classes based on condition
 +        "datagrid-order-active-asc": grid.ordered_by?(column, false),
 +        "datagrid-order-active-desc": grid.ordered_by?(column, true),
-+      )
++      ]
 +    ) %>
    <% end %>
  </tr>
 diff --git a/app/views/datagrid/_table.html.erb b/app/views/datagrid/_table.html.erb
-index 8708c05..2e9273e 100644
+index 8708c05..88eeafb 100644
 --- a/app/views/datagrid/_table.html.erb
 +++ b/app/views/datagrid/_table.html.erb
-@@ -5,7 +5,7 @@ Local variables:
+@@ -5,18 +5,18 @@ Local variables:
  * options - passed options Hash
  %>
  <% if grid.html_columns(*options[:columns]).any? %>
 -  <%= content_tag :table, options[:html] do %>
 +  <%= tag.table class: 'datagrid-table', **options.fetch(:html, {}) do %>
      <thead>
-       <%= datagrid_header(grid, options) %>
+-      <%= datagrid_header(grid, options) %>
++      <%= datagrid_header(grid, **options) %>
      </thead>
-@@ -13,10 +13,10 @@ Local variables:
+     <tbody>
        <% if assets.any? %>
          <%= datagrid_rows(grid, assets, **options) %>
        <% else %>
