@@ -26,12 +26,11 @@ module Datagrid
       label(filter.name, text || filter.header, **filter.label_options, **options, &block)
     end
 
-    # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
+    # @param [Datagrid::Filters::BaseFilter, String, Symbol] attribute_or_filter filter object or filter name
     # @param options [Hash{Symbol => Object}] HTML attributes to assign to input tag
     #   * `type` - special attribute the determines an input tag to be made.
     #     Examples: `text`, `select`, `textarea`, `number`, `date` etc.
     # @return [String] an input tag for the corresponding filter name
-    # @param [Filter, String, Symbol] attribute_or_filter filter name or Datagrid::Filters::BaseFilter object
     def datagrid_filter_input(attribute_or_filter, **options)
       filter = datagrid_get_filter(attribute_or_filter)
       value = object.filter_value_as_string(filter)

@@ -5,7 +5,7 @@ require "datagrid/helper"
 require "datagrid/form_builder"
 
 module Datagrid
-  # @!private
+  # @!visibility private
   class Engine < ::Rails::Engine
     def self.extend_modules
       ActionView::Base.include(Datagrid::Helper)
