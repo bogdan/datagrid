@@ -133,8 +133,8 @@ describe Datagrid::Filters::DateFilter do
     date = Date.new(2018, 0o1, 0o7)
     time = Time.utc(2018, 0o1, 0o7, 2, 2)
     report = test_grid_filter(:created_at, :date, range: true) do |value|
-        where("created_at >= ?", value)
-      end
+      where("created_at >= ?", value)
+    end
     report.created_at = date
     expect(report.assets).not_to include(Entry.create!(created_at: time - 1.day))
     expect(report.assets).to include(Entry.create!(created_at: time))
@@ -171,7 +171,7 @@ describe Datagrid::Filters::DateFilter do
 
   it "should nullify blank range" do
     report = test_grid_filter(:created_at, :date, range: true)
-    report.created_at = [nil ,nil]
+    report.created_at = [nil, nil]
 
     expect(report.created_at).to eq(nil)
   end

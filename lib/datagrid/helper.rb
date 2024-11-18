@@ -38,6 +38,7 @@ module Datagrid
     #   Default: 'datagrid'.
     # @param grid [Datagrid] grid object
     # @param assets [Array] objects from grid scope
+    # @param [Hash{Symbol => Object}] options HTML attributes to be passed to `<table>` tag
     # @return [String] table tag HTML markup
     # @example
     #   assets = grid.assets.page(params[:page])
@@ -58,6 +59,7 @@ module Datagrid
     # * <tt>:partials</tt> - Path for partials lookup.
     #   Default: 'datagrid'.
     # @param grid [Datagrid] grid object
+    # @param [Hash] options
     # @return [String] HTML table header tag markup
     def datagrid_header(grid, options = {})
       datagrid_renderer.header(grid, options)
@@ -104,6 +106,7 @@ module Datagrid
     #   Default: 'datagrid'.
     # * All options supported by Rails <tt>form_for</tt> helper
     # @param grid [Datagrid] grid object
+    # @param [Hash] options
     # @return [String] form HTML tag markup
     def datagrid_form_for(grid, options = {})
       datagrid_renderer.form_for(grid, options)
@@ -114,6 +117,7 @@ module Datagrid
     # @param grid [Datagrid] grid object
     # @param asset [Object] object from grid scope
     # @param block [Proc] block with Datagrid::Helper::HtmlRow as an argument returning a HTML markup as a String
+    # @param [Hash{Symbol => Object}] options
     # @return [Datagrid::Helper::HtmlRow, String] captured HTML markup if block given otherwise row object
     # @example
     #   # Suppose that grid has first_name and last_name columns
@@ -136,7 +140,7 @@ module Datagrid
     # Generates an ascending or descending order url for the given column
     # @param grid [Datagrid] grid object
     # @param column [Datagrid::Columns::Column, String, Symbol] column name
-    # @param descending [Boolean] specifies order direction. Ascending if false, otherwise descending.
+    # @param descending [Boolean] order direction, descending if true, otherwise ascending.
     # @return [String] order layout HTML markup
     def datagrid_order_path(grid, column, descending)
       datagrid_renderer.order_path(grid, column, descending, request)

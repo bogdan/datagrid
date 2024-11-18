@@ -1,3 +1,5 @@
+require: rubocop-yard
+
 AllCops:
   NewCops: enable
 Style/StringLiterals:

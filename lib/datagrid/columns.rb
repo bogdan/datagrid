@@ -34,6 +34,7 @@ module Datagrid
     # @see #batch_size=
 
     # @visibility private
+    # @param [Object] base
     def self.included(base)
       base.extend ClassMethods
       base.class_eval do
@@ -62,7 +63,7 @@ module Datagrid
       #
       # @param name [Symbol] column name
       # @param query [String, nil] a string representing the query to select this column (supports only ActiveRecord)
-      # @param options [Hash<Symbol, Object>] hash of options
+      # @param options [Hash{Symbol => Object}] hash of options
       # @param block [Block] proc to calculate a column value
       # @return [Datagrid::Columns::Column]
       #
@@ -245,7 +246,7 @@ module Datagrid
       rows(*column_names).unshift(header(*column_names))
     end
 
-    # @return [Array<{Symbol => Object}>] an array of hashes representing the rows in the filtered datagrid relation
+    # @return [Array<Hash{Symbol => Object}>] an array of hashes representing the rows in the filtered datagrid relation
     #
     # @example
     #   class MyGrid
@@ -286,6 +287,8 @@ module Datagrid
     end
 
     # @param column_names [Array<Symbol, String>]
+    # @param [Boolean] data return only data columns
+    # @param [Boolean] html return only HTML columns
     # @return [Array<Datagrid::Columns::Column>] all columns selected in grid instance
     # @example
     #   MyGrid.new.columns # => all defined columns
@@ -300,16 +303,18 @@ module Datagrid
       end
     end
 
-    # @param column_names [Array<String, Symbol>] list of column names if you want to limit data only to specified columns
+    # @param column_names [Array<String, Symbol>] list of column names if you want to limit only to specified columns
+    # @param [Boolean] html return only HTML columns
     # @return [Array<Datagrid::Columns::Column>] columns that can be represented in plain data(non-html) way
-    def data_columns(*column_names, **options)
-      columns(*column_names, **options, data: true)
+    def data_columns(*column_names, html: false)
+      columns(*column_names, html: html, data: true)
     end
 
     # @param column_names [Array<String>] list of column names if you want to limit data only to specified columns
+    # @param [Boolean] data return only data columns
     # @return all columns that can be represented in HTML table
-    def html_columns(*column_names, **options)
-      columns(*column_names, **options, html: true)
+    def html_columns(*column_names, data: false)
+      columns(*column_names, data: data, html: true)
     end
 
     # Finds a column definition by name

@@ -120,7 +120,7 @@ describe Datagrid::Filters::DynamicFilter do
   it "should support allow_nil and allow_blank options" do
     grid = test_grid_filter(
       :condition, :dynamic, allow_nil: true, allow_blank: true,
-      operations: [">=", "<="]
+      operations: [">=", "<="],
     ) do |(field, operation, value), scope|
       if value.blank?
         scope.where(disabled: false)

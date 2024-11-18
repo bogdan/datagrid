@@ -23,3 +23,5 @@ group :development do
 end
 
 gem "rubocop", "~> 1.68"
+
+gem "rubocop-yard", "~> 0.9.3", require: false

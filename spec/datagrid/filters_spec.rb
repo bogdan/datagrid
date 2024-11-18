@@ -6,10 +6,9 @@ describe Datagrid::Filters do
   it "should support default option as proc" do
     expect(
       test_grid_filter(
-        :created_at, :date, default: proc { Date.today }
-      ).created_at
+        :created_at, :date, default: proc { Date.today },
+      ).created_at,
     ).to eq(Date.today)
-
   end
 
   it "should stack with other filters" do
