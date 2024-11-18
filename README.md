@@ -33,9 +33,12 @@ including admin panels, analytics and data browsers:
 
 ## Documentation
 
-* Readme - this read-me for basic information.
-* [Wiki](https://github.com/bogdan/datagrid/wiki) - general reference on how to use the gem.
-* [Rdoc](https://rubydoc.info/gems/datagrid) - API reference.
+* [Rdoc](https://rubydoc.info/gems/datagrid) - full API reference
+* [Scope](https://rubydoc.info/gems/datagrid/Datagrid/Core) - working with datagrid scope
+* [Columns](https://rubydoc.info/gems/datagrid/Datagrid/Columns) - definging datagrid columns
+* [Filters](https://rubydoc.info/gems/datagrid/Datagrid/Filters) - defining datagrid filters
+* [Frontend](https://rubydoc.info/gems/datagrid/Datagrid/Helper) - building a frontend 
+* [Configuration](https://rubydoc.info/gems/datagrid/Datagrid/Configuration) - configuring the gem
 
 ### Live Demo
 
@@ -122,7 +125,7 @@ scope do
 end
 ```
 
-[More about scope](https://github.com/bogdan/datagrid/wiki/Scope)
+[More about scope](https://rubydoc.info/gems/datagrid/Datagrid/Core)
 
 ### Filters
 
@@ -146,7 +149,7 @@ Datagrid supports different type of filters including:
 * string
 * dynamic - build dynamic SQL condition
 
-[More about filters](https://github.com/bogdan/datagrid/wiki/Filters)
+[More about filters](https://rubydoc.info/gems/datagrid/Datagrid/Filters)
 
 ### Columns
 
@@ -195,7 +198,7 @@ rails g datagrid::views
 
 All advanced frontend things are described in:
 
-[Frontend section on wiki](https://github.com/bogdan/datagrid/wiki/Frontend)
+[Frontend section on wiki](https://rubydoc.info/gems/datagrid/Datagrid/Helper)
 
 ## Questions & Issues
 
