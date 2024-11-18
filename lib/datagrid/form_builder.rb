@@ -7,7 +7,10 @@ module Datagrid
   module FormBuilder
     # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
     # @param options [Hash] options of rails form input helper
-    # @return [String] a form input html for the corresponding filter
+    # @return [String] a form input html for the corresponding filter name
+    #   * <tt>select</tt> for enum, xboolean filter types
+    #   * <tt>check_box</tt> for boolean filter type
+    #   * <tt>text_field</tt> for other filter types
     def datagrid_filter(filter_or_attribute, **options, &block)
       filter = datagrid_get_filter(filter_or_attribute)
       if filter.range?
@@ -32,7 +35,7 @@ module Datagrid
     end
 
     # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
-    # @param options [{Symbol => Object}] HTML attributes to assign to input tag
+    # @param options [Hash{Symbol => Object}] HTML attributes to assign to input tag
     #   * `type` - special attribute the determines an input tag to be made.
     #     Examples: `text`, `select`, `textarea`, `number`, `date` etc.
     # @return [String] an input tag for the corresponding filter name

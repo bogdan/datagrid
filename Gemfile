@@ -15,6 +15,7 @@ group :development do
   gem "rails-dom-testing", "~> 2.2"
   gem "rspec"
   gem "rubocop", "~> 1.68"
+  gem "rubocop-yard", "~> 0.9.3", require: false
   gem "sequel"
   gem "sqlite3", "~> 1.7.0"
 

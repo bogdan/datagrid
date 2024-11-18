@@ -295,7 +295,7 @@ describe Datagrid::Helper do
     it "should render argument-based html blocks with triple arguments" do
       rp = test_grid_column(:name, html: lambda { |data, model, grid|
         content_tag :h1, "#{data}-#{model.name.downcase}-#{grid.assets.klass}"
-      })
+      },)
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(
         "tr td[data-column=name] h1" => "Star-star-Entry",
       )
@@ -304,7 +304,7 @@ describe Datagrid::Helper do
     it "should render argument-based html blocks with double arguments and custom data" do
       rp = test_grid_column(:name, html: lambda { |data, model|
         content_tag :h1, "#{data}-#{model.name}"
-      }) do
+      },) do
         name.upcase
       end
       expect(subject.datagrid_rows(rp, [entry])).to match_css_pattern(

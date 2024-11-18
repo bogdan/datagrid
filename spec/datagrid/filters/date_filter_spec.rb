@@ -213,7 +213,7 @@ describe Datagrid::Filters::DateFilter do
 
   it "should nullify blank range" do
     report = test_grid_filter(:created_at, :date, range: true)
-    report.created_at = [nil ,nil]
+    report.created_at = [nil, nil]
 
     expect(report.created_at).to eq(nil)
   end

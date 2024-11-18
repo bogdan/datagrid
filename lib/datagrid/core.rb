@@ -122,7 +122,7 @@ module Datagrid
       end
     end
 
-    # @param [{String, Symbol => Object}, nil] attributes a hash of attributes to initialize the object
+    # @param [Hash{String, Symbol => Object}] attributes a hash of attributes to initialize the object
     # @yield [block] an optional block that is passed to the scope method for further customization
     # @return [void] Initializes a new instance with optional attributes and an optional block.
     def initialize(attributes = nil, &block)
@@ -136,7 +136,7 @@ module Datagrid
       scope(&block)
     end
 
-    # @return [{Symbol => Object}] grid attributes including filter values and ordering values
+    # @return [Hash{Symbol => Object}] grid attributes including filter values and ordering values
     # @example
     #   class UsersGrid < ApplicationGrid
     #     scope { User }
@@ -154,14 +154,7 @@ module Datagrid
       result
     end
 
-    # Updates datagrid attributes with a passed hash argument
-    # @param attributes [{Symbol => Object}]
-    # @example
-    #   grid = UsersGrid.new
-    #   grid.attributes = {first_name: 'John', last_name: 'Smith'}
-    #   grid.first_name # => 'John'
-    #   grid.last_name # => 'Smith'
-
+    # @param [String, Symbol] attribute attribute name
     # @return [Object] Any datagrid attribute value
     def [](attribute)
       public_send(attribute)
@@ -180,7 +173,7 @@ module Datagrid
       scope
     end
 
-    # @return [{Symbol => Object}] serializable query arguments skipping all nil values
+    # @return [Hash{Symbol => Object}] serializable query arguments skipping all nil values
     # @example
     #   grid = ProductsGrid.new(category: 'dresses', available: true)
     #   grid.as_query # => {category: 'dresses', available: true}
@@ -192,7 +185,7 @@ module Datagrid
       attributes
     end
 
-    # @return [{ Symbol => { Symbol => Object } }] query parameters to link this grid from a page
+    # @return [Hash{Symbol => Hash{Symbol => Object}}] query parameters to link this grid from a page
     # @example
     #   grid = ProductsGrid.new(category: 'dresses', available: true)
     #   Rails.application.routes.url_helpers.products_path(grid.query_params)
