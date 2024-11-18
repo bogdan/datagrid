@@ -7,7 +7,7 @@ Local variables:
 <p>Namespaced table partial.</p>
 <%= content_tag :table, options[:html] do %>
   <thead>
-    <%= datagrid_header(grid, options) %>
+    <%= datagrid_header(grid, **options) %>
   </thead>
   <tbody>
     <% if assets.empty? %>

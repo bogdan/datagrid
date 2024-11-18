@@ -7,7 +7,7 @@ Local variables:
 <% if grid.html_columns(*options[:columns]).any? %>
   <%= tag.table class: 'datagrid-table', **options.fetch(:html, {}) do %>
     <thead>
-      <%= datagrid_header(grid, options) %>
+      <%= datagrid_header(grid, **options) %>
     </thead>
     <tbody>
       <% if assets.any? %>

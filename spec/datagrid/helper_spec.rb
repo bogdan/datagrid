@@ -724,6 +724,21 @@ describe Datagrid::Helper do
         </tr>
        HTML
     end
+
+    it "supports deprecated options passing" do
+      grid = test_grid_column(:name)
+      silence_deprecator do
+        expect(
+          subject.datagrid_header(grid, {order: false})
+        ).to equal_to_dom(<<~HTML)
+        <tr>
+          <th data-column="name">
+            Name
+          </th>
+        </tr>
+        HTML
+      end
+    end
   end
 
   describe ".datagrid_column_classes" do

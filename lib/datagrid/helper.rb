@@ -16,7 +16,9 @@ module Datagrid
     #     <% end %>
     #   </ul>
     def datagrid_value(grid, column, model)
-      datagrid_renderer.format_value(grid, column, model)
+      column = grid.column_by_name(column) if column.is_a?(String) || column.is_a?(Symbol)
+
+      grid.html_value(column, self, model)
     end
 
     # @!visibility private
@@ -44,7 +46,14 @@ module Datagrid
     #   assets = grid.assets.page(params[:page])
     #   datagrid_table(grid, assets, options)
     def datagrid_table(grid, assets = grid.assets, **options)
-      datagrid_renderer.table(grid, assets, **options)
+      _render_partial(
+        "table", options[:partials],
+        {
+          grid: grid,
+          options: options,
+          assets: assets,
+        },
+      )
     end
 
     # Renders HTML table header for given grid instance using columns defined in it
@@ -60,8 +69,15 @@ module Datagrid
     #   Default: 'datagrid'.
     # @param grid [Datagrid] grid object
     # @return [String] HTML table header tag markup
-    def datagrid_header(grid, options = {})
-      datagrid_renderer.header(grid, options)
+    def datagrid_header(grid, opts = :__unspecified__, **options)
+      unless opts == :__unspecified__
+        Datagrid::Utils.warn_once("datagrid_header now requires ** operator when passing options.")
+        options.reverse_merge!(opts)
+      end
+      options[:order] = true unless options.key?(:order)
+
+      _render_partial("head", options[:partials],
+        { grid: grid, options: options },)
     end
 
     # Renders HTML table rows using given grid definition using columns defined in it.
@@ -84,7 +100,11 @@ module Datagrid
     #       %td= row.project_name
     #       %td.project-status{class: row.status}= row.status
     def datagrid_rows(grid, assets = grid.assets, **options, &block)
-      datagrid_renderer.rows(grid, assets, **options, &block)
+      safe_join(
+        assets.map do |asset|
+          datagrid_row(grid, asset, **options, &block)
+        end.to_a,
+      )
     end
 
     # @return [String] renders ordering controls for the given column name
@@ -99,7 +119,8 @@ module Datagrid
         Put necessary code inline inside datagrid/head partial.
         See built-in partial for example.
       MSG
-      datagrid_renderer.order_for(grid, column, options)
+      _render_partial("order_for", options[:partials],
+        { grid: grid, column: column },)
     end
 
     # Renders HTML for grid with all filters inputs and labels defined in it
@@ -116,7 +137,10 @@ module Datagrid
     def datagrid_form_with(**options)
       raise ArgumentError, "datagrid_form_with block argument is invalid. Use form_with instead." if block_given?
 
-      datagrid_renderer.form_with(**options)
+      grid = options[:model]
+      raise ArgumentError, "Grid has no available filters" if grid&.filters&.empty?
+
+      _render_partial("form", options[:partials], { grid: options[:model], options: options })
     end
 
     # Renders HTML for grid with all filters inputs and labels defined in it
@@ -131,7 +155,16 @@ module Datagrid
     # @return [String] form HTML tag markup
     def datagrid_form_for(grid, options = {})
       Datagrid::Utils.warn_once("datagrid_form_for is deprecated if favor of datagrid_form_with.")
-      datagrid_renderer.form_for(grid, options)
+      _render_partial(
+        "form", options[:partials],
+        grid: grid,
+        options: {
+          method: :get,
+          as: grid.param_name,
+          local: true,
+          **options,
+        },
+      )
     end
 
     # Provides access to datagrid columns data.
@@ -154,8 +187,10 @@ module Datagrid
     #   Last Name: <%= row.last_name %>
     # @example
     #   <%= datagrid_row(grid, user, columns: [:first_name, :last_name, :actions]) %>
-    def datagrid_row(grid, asset, ...)
-      datagrid_renderer.row(grid, asset, ...)
+    def datagrid_row(grid, asset, **options, &block)
+      Datagrid::Helper::HtmlRow.new(self, grid, asset, options).tap do |row|
+        return capture(row, &block) if block_given?
+      end
     end
 
     # Generates an ascending or descending order url for the given column
@@ -164,7 +199,12 @@ module Datagrid
     # @param descending [Boolean] specifies order direction. Ascending if false, otherwise descending.
     # @return [String] order layout HTML markup
     def datagrid_order_path(grid, column, descending)
-      datagrid_renderer.order_path(grid, column, descending, request)
+      column = grid.column_by_name(column)
+      query = request&.query_parameters || {}
+      ActionDispatch::Http::URL.path_for(
+        path: request&.path || "/",
+        params: query.merge(grid.query_params(order: column.name, descending: descending)),
+      )
     end
 
     # @!visibility private
@@ -182,8 +222,71 @@ module Datagrid
 
     protected
 
-    def datagrid_renderer
-      Renderer.for(self)
+    def _render_partial(partial_name, partials_path, locals = {})
+      render({
+        partial: File.join(partials_path || "datagrid", partial_name),
+        locals: locals,
+      })
+    end
+
+    # Represents a datagrid row that provides access to column values for the given asset
+    # @example
+    #   row = datagrid_row(grid, user)
+    #   row.class      # => Datagrid::Helper::HtmlRow
+    #   row.first_name # => "<strong>Bogdan</strong>"
+    #   row.grid       # => Grid object
+    #   row.asset      # => User object
+    #   row.each do |value|
+    #     puts value
+    #   end
+    class HtmlRow
+      include Enumerable
+
+      attr_reader :grid, :asset, :options
+
+      # @!visibility private
+      def initialize(renderer, grid, asset, options)
+        @renderer = renderer
+        @grid = grid
+        @asset = asset
+        @options = options
+      end
+
+      # @return [Object] a column value for given column name
+      def get(column)
+        @renderer.datagrid_value(@grid, column, @asset)
+      end
+
+      # Iterates over all column values that are available in the row
+      # param block [Proc] column value iterator
+      def each(&block)
+        (@options[:columns] || @grid.html_columns).each do |column|
+          block.call(get(column))
+        end
+      end
+
+      # @return [String] HTML row format
+      def to_s
+        @renderer.send(:_render_partial, "row", options[:partials], {
+          grid: grid,
+          options: options,
+          asset: asset,
+        },)
+      end
+
+      protected
+
+      def method_missing(method, *args, &blk)
+        if (column = @grid.column_by_name(method))
+          get(column)
+        else
+          super
+        end
+      end
+
+      def respond_to_missing?(method, include_private = false)
+        !!@grid.column_by_name(method) || super
+      end
     end
   end
 end

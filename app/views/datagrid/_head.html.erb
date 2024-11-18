@@ -9,7 +9,7 @@
         # Adding HTML classes based on condition
         "datagrid-order-active-asc": grid.ordered_by?(column, false),
         "datagrid-order-active-desc": grid.ordered_by?(column, true),
-      )
+      ).presence
     ) do %>
       <%= column.header %>
       <% if column.supports_order? && options[:order] -%>

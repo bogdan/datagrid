@@ -14,8 +14,6 @@ module Datagrid
   autoload :Helper
   autoload :FormBuilder
 
-  autoload :Renderer
-
   autoload :Engine
 
   # Main datagrid class allowing to define columns and filters on your objects
