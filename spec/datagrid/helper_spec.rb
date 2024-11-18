@@ -5,8 +5,6 @@ require "active_support/core_ext/hash"
 require "active_support/core_ext/object"
 require "action_controller"
 
-require "datagrid/renderer"
-
 describe Datagrid::Helper do
   subject do
     action_view_template
@@ -732,7 +730,7 @@ describe Datagrid::Helper do
           subject.datagrid_header(grid, {order: false})
         ).to equal_to_dom(<<~HTML)
         <tr>
-          <th data-column="name">
+          <th data-column="name" class="">
             Name
           </th>
         </tr>
