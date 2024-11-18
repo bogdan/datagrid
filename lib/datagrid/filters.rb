@@ -3,6 +3,134 @@
 require "active_support/core_ext/class/attribute"
 
 module Datagrid
+  # Defines the accessible attribute that is used to filter
+  # the scope by the specified value with specified code.
+  #
+  #     class UserGrid
+  #       include Datagrid
+  #
+  #       scope do
+  #         User
+  #       end
+  #
+  #       filter(:name)
+  #       filter(:posts_count, :integer) do |value|
+  #         self.where(["posts_count >= ?", value])
+  #       end
+  #     end
+  #
+  # Each filter becomes a grid attribute.
+  #
+  # To create a grid displaying all users with the name 'John' who have more than zero posts:
+  #
+  #     grid = UserGrid.new(posts_count: 1, name: "John")
+  #     grid.assets # SELECT * FROM users WHERE users.posts_count > 1 AND name = 'John'
+  #
+  # = Filter Block
+  #
+  # Filter blocks should always return a chainable ORM object (e.g., `ActiveRecord::Relation`) rather than an `Array`.
+  #
+  # Filter blocks should have at least one argument representing the value assigned to the grid object attribute:
+  #
+  #     filter(:name, :string) # { |value| where(name: value) }
+  #
+  # You can pass additional arguments:
+  #
+  #     filter(:name, :string) { |value, scope| scope.where("name ilike ?", "%#{value}%") }
+  #     filter(:name, :string) do |value, scope, grid|
+  #       scope.where("name #{grid.predicate} ?", "%#{value}%")
+  #     end
+  #
+  # = Filter Types
+  #
+  # Filters perform automatic type conversion. Supported filter types include:
+  #
+  # - `default`
+  # - `date`
+  # - `datetime`
+  # - `enum`
+  # - `boolean`
+  # - `xboolean`
+  # - `integer`
+  # - `float`
+  # - `string`
+  # - `dynamic`
+  #
+  # == Default
+  #
+  # `:default` - Leaves the value as is.
+  #
+  # == Date
+  #
+  # `:date` - Converts value to a date. Supports the `:range` option to accept date ranges.
+  #
+  #     filter(:created_at, :date, range: true, default: proc { [1.month.ago.to_date, Date.today] })
+  #
+  # == Datetime
+  #
+  # `:datetime` - Converts value to a timestamp. Supports the `:range` option to accept time ranges.
+  #
+  #     filter(:created_at, :datetime, range: true, default: proc { [1.hour.ago, Time.now] })
+  #
+  # == Enum
+  #
+  # `:enum` - For collection selection with options like `:select` and `:multiple`.
+  #
+  #     filter(:user_type, :enum, select: ['Admin', 'Customer', 'Manager'])
+  #     filter(:category_id, :enum, select: proc { Category.all.map { |c| [c.name, c.id] } }, multiple: true)
+  #
+  # == Boolean
+  #
+  # `:boolean` - Converts value to `true` or `false`.
+  #
+  # == Xboolean
+  #
+  # `:xboolean` - Subtype of `enum` filter that provides "Yes", "No", and "Any" options.
+  #
+  #     filter(:active, :xboolean)
+  #
+  # == Integer
+  #
+  # `:integer` - Converts value to an integer. Supports the `:range` option.
+  #
+  #     filter(:posts_count, :integer, range: true, default: [1, nil])
+  #
+  # == String
+  #
+  # `:string` - Converts value to a string.
+  #
+  #     filter(:email, :string)
+  #
+  # == Dynamic
+  #
+  # Provides a builder for dynamic SQL conditions.
+  #
+  #     filter(:condition1, :dynamic)
+  #     filter(:condition2, :dynamic)
+  #     UsersGrid.new(condition1: [:name, "=~", "John"], condition2: [:posts_count, ">=", 1])
+  #     UsersGrid.assets # SELECT * FROM users WHERE name like '%John%' and posts_count >= 1
+  #
+  # = Filter Options
+  #
+  # Options that can be passed to any filter:
+  #
+  # - `:header` - Human-readable filter name (default: generated from the filter name).
+  # - `:default` - Default filter value (default: `nil`).
+  # - `:multiple` - Allows multiple values (default: `false`).
+  # - `:allow_nil` - Whether to apply the filter when the value is `nil` (default: `false`).
+  # - `:allow_blank` - Whether to apply the filter when the value is blank (default: `false`).
+  #
+  # Example:
+  #
+  #     filter(:id, :integer, header: "Identifier")
+  #     filter(:created_at, :date, range: true, default: proc { [1.month.ago.to_date, Date.today] })
+  #
+  # = Localization
+  #
+  # Filter labels can be localized or specified via the `:header` option:
+  #
+  #     filter(:created_at, :date, header: "Creation date")
+  #     filter(:created_at, :date, header: proc { I18n.t("creation_date") })
   module Filters
     require "datagrid/filters/base_filter"
     require "datagrid/filters/enum_filter"

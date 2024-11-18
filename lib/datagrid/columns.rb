@@ -4,11 +4,207 @@ require "datagrid/utils"
 require "active_support/core_ext/class/attribute"
 
 module Datagrid
+  # Defines a column to be used for displaying data in a Datagrid.
+  #
+  #     class UserGrid
+  #       include Datagrid
+  #
+  #       scope do
+  #         User.order("users.created_at desc").joins(:group)
+  #       end
+  #
+  #       column(:name)
+  #       column(:group, order: "groups.name") do
+  #         self.group.name
+  #       end
+  #       column(:active, header: "Activated") do |user|
+  #         !user.disabled
+  #       end
+  #     end
+  #
+  # Each column is used to generate data for the grid.
+  #
+  # To create a grid displaying all users:
+  #
+  #     grid = UserGrid.new
+  #     grid.header    # => ["Group", "Name", "Disabled"]
+  #     grid.rows      # => [
+  #                    #      ["Steve", "Spammers", true],
+  #                    #      ["John", "Spoilers", true],
+  #                    #      ["Berry", "Good people", false]
+  #                    #    ]
+  #     grid.data      # => Header & Rows
+  #     grid.data_hash # => [
+  #                    #      { name: "Steve", group: "Spammers", active: true },
+  #                    #      { name: "John", group: "Spoilers", active: true },
+  #                    #      { name: "Berry", group: "Good people", active: false },
+  #                    #    ]
+  #     }
+  #
+  # == Column Value
+  #
+  # The value of a column can be defined by passing a block to `Datagrid.column`.
+  #
+  # === Basic Column Value
+  #
+  # If no block is provided, the column value is generated automatically by sending the column name method to the model.
+  #
+  #     column(:name) # => asset.name
+  #
+  # Using <tt>instance_eval</tt>:
+  #
+  #     column(:completed) { completed? }
+  #
+  # Using the asset as an argument:
+  #
+  #     column(:completed) { |asset| asset.completed? }
+  #
+  # === Advanced Column Value
+  #
+  # You can also pass the Datagrid object itself to define more complex column values.
+  #
+  # Using filters with columns:
+  #
+  #     filter(:category) do |value|
+  #       where("category LIKE '%#{value}%'")
+  #     end
+  #
+  #     column(:exactly_matches_category) do |asset, grid|
+  #       asset.category == grid.category
+  #     end
+  #
+  # Combining columns:
+  #
+  #     column(:total_sales) do |merchant|
+  #       merchant.purchases.sum(:subtotal)
+  #     end
+  #     column(:number_of_sales) do |merchant|
+  #       merchant.purchases.count
+  #     end
+  #     column(:average_order_value) do |_, _, row|
+  #       row.total_sales / row.number_of_sales
+  #     end
+  #
+  # == Using Database Expressions
+  #
+  # Columns can use database expressions to directly manipulate data in the database.
+  #
+  #     column(:count_of_users, 'count(user_id)')
+  #     column(:uppercase_name, 'upper(name)')
+  #
+  # == HTML Columns
+  #
+  # Columns can have different formats for HTML and non-HTML representations.
+  #
+  #     column(:name) do |asset|
+  #       format(asset.name) do |value|
+  #         content_tag(:strong, value)
+  #       end
+  #     end
+  #
+  # == Column Value Cache
+  #
+  # Enables grid-level caching for column values.
+  #
+  #     self.cached = true
+  #
+  # == Ordering
+  #
+  # Columns can specify SQL ordering expressions using the `:order` and `:order_desc` options.
+  #
+  # Basic ordering:
+  #
+  #     column(:group_name, order: "groups.name") { self.group.name }
+  #
+  # In example above descending order is automatically inherited from ascending order specified.
+  # When such default is not enough, specify both options together:
+  #
+  #     column(
+  #       :priority,
+  #       # models with null priority are always on bottom
+  #       # no matter if sorting ascending or descending
+  #       order: "priority is not null desc, priority",
+  #       order_desc: "priority is not null desc, priority desc"
+  #     )
+  #
+  # Disable order like this:
+  #
+  #     column(:title, order: false)
+  #
+  # Order by joined table
+  # Allows to join specified table only when order is enabled
+  # for performance:
+  #
+  #     column(:profile_updated_at, order: proc { |scope|
+  #       scope.joins(:profile).order("profiles.updated_at")
+  #     }) do |model|
+  #       model.profile.updated_at.to_date
+  #     end
+  #
+  # Order by a calculated value
+  #
+  #     column(
+  #       :duration_request,
+  #       order: "(requests.finished_at - requests.accepted_at)"
+  #     ) do |model|
+  #       Time.at(model.finished_at - model.accepted_at).strftime("%H:%M:%S")
+  #     end
+  #
+  # == Default Column Options
+  #
+  # Default options for all columns in a grid can be set using `default_column_options`.
+  #
+  #     self.default_column_options = { order: false }
+  #
+  # == Columns Visibility
+  #
+  # Columns can be dynamically shown or hidden based on the grid's `column_names` accessor.
+  #
+  #     grid.column_names = [:id, :name]
+  #
+  # == Dynamic Columns
+  #
+  # Columns can be defined dynamically on a grid instance or based on data.
+  #
+  # Adding a dynamic column:
+  #
+  #     grid.column(:extra_data) do |model|
+  #       model.extra_data
+  #     end
+  #
+  # == Localization
+  #
+  # Column headers can be localized using the `:header` option or through i18n files.
+  #
+  #     column(:active, header: Proc.new { I18n.t("activated") })
+  #
+  # == Preloading Associations
+  #
+  # Preload database associations for better performance.
+  #
+  # Automatic association preloading:
+  #
+  #     column(:group) do |user|
+  #       user.group.name
+  #     end
+  #
+  # Custom preloading:
+  #
+  #     column(:account_name, preload: { |s| s.includes(:account) })
+  #
+  # == Decorator
+  #
+  # A decorator or presenter class can be used around each object in the `scope`.
+  #
+  #     decorate { UserPresenter }
+  #     column(:created_at) do |presenter|
+  #       presenter.user.created_at
+  #     end
   module Columns
     require "datagrid/columns/column"
 
-    # @!method default_column_options=
-    # @param value [Hash] default options passed to #column method call
+    # @!method default_column_options=(value)
+    # @param [Hash] value default options passed to #column method call
     # @return [Hash] default options passed to #column method call
     # @example
     #   # Disable default order
@@ -20,8 +216,8 @@ module Datagrid
     # @return [Hash]
     # @see #default_column_options=
 
-    # @!method batch_size=
-    # @param value [Integer] Specify a default batch size when generating CSV or just data. Default: 1000
+    # @!method batch_size=(value)
+    # @param [Integer] value Specify a default batch size when generating CSV or just data. Default: 1000
     # @return [Integer] Specify a default batch size when generating CSV or just data.
     # @example
     #   self.batch_size = 500

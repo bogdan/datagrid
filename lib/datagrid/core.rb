@@ -5,6 +5,43 @@ require "active_support/core_ext/class/attribute"
 require "active_model/attribute_assignment"
 
 module Datagrid
+  # Simple example of using Datagrid scope as the assets source to be queried from the database.
+  #
+  # In most cases, the scope is a model class with some default ORM scopes, like `order` or `includes`:
+  #
+  # The scope is also used to:
+  # - Choose an ORM driver (e.g., Mongoid, ActiveRecord, etc.).
+  # - Association preloading
+  # - Columns Providing default order
+  #
+  # You can set the scope at class level or instance level.
+  # Both having appropriate use cases
+  #
+  # @example Defining a scope in a grid class
+  #   class ProjectsGrid
+  #     include Datagrid
+  #     scope { Project.includes(:category) }
+  #   end
+  #
+  # @example Setting a scope at the instance level
+  #   grid = ProjectsGrid.new(grid_params) do |scope|
+  #     scope.where(owner_id: current_user.id)
+  #   end
+  #
+  #   grid.assets # => SELECT * FROM projects WHERE projects.owner_id = ? AND [other filtering conditions]
+  #
+  # @example Retrieving and redefining the scope
+  #   grid.scope # => SELECT * FROM projects WHERE projects.user_id = ?
+  #   grid.redefined_scope? # => true
+  #
+  #   # Reset scope to default class value
+  #   grid.reset_scope
+  #   grid.assets # => SELECT * FROM projects
+  #   grid.redefined_scope? # => false
+  #
+  #   # Overwriting the scope (ignoring previously defined)
+  #   grid.scope { current_user.projects }
+  #   grid.redefined_scope? # => true
   module Core
     include ::ActiveModel::AttributeAssignment
 
