@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "datagrid/utils"
-# @!visibility private
+
 module Datagrid
   module Filters
     class BooleanFilter < Datagrid::Filters::BaseFilter

@@ -2,8 +2,8 @@
 
 require "rails/generators"
 
-# @!visibility private
 module Datagrid
+  # @!visibility private
   class Scaffold < Rails::Generators::NamedBase
     include Rails::Generators::ResourceHelpers
 
