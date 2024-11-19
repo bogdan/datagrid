@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
     "CHANGELOG.md",
     "README.md",
     "datagrid.gemspec",
+    ".yardopts",
   ]
   s.files += `git ls-files | grep -E '^(app|lib|templates)'`.split("\n")
   s.homepage = "https://github.com/bogdan/datagrid"
