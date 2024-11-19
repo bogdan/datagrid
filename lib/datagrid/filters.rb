@@ -192,35 +192,28 @@ module Datagrid
       # @param [Hash] options hash of options
       # @param [Proc] block proc to apply the filter
       # @return [Datagrid::Filters::BaseFilter] Filter definition object
-      # @see https://github.com/bogdan/datagrid/wiki/Filters
-      #
-      # Available options:
-      #
-      # * <tt>:header</tt> - determines the header of the filter
-      # * <tt>:default</tt> - the default filter value.
-      #   Can be a <tt>Proc</tt> in case default should be recalculated.
-      # * <tt>:range</tt> - if true, filter can accept two values that are treated
-      #   as a range that will be used for filtering.
-      #   Not all of the filter types support this option. Here are the list of types that do:
-      #   <tt>:integer</tt>, <tt>:float</tt>, <tt>:date</tt>, <tt>:datetime</tt>, <tt>:string</tt>
-      # * <tt>:multiple</tt> -  if true multiple values can be assigned to this filter.
-      #   If String is assigned as a filter value, it is parsed from string using a separator symbol (`,` by default).
-      #   But you can specify a different separator as option value. Default: false.
-      # * <tt>:allow_nil</tt> - determines if the value can be nil
-      # * <tt>:allow_blank</tt> - determines if the value can be blank
-      # * <tt>:before</tt> - determines the position of this filter,
-      #   by adding it before the filter passed here (when using datagrid_form_with helper)
-      # * <tt>:after</tt> - determines the position of this filter,
-      #   by adding it after the filter passed here (when using datagrid_form_with helper)
-      # * <tt>:dummy</tt> - if true, this filter will not be applied automatically
-      #   and will be just displayed in form. In case you may want to apply it manually.
-      # * <tt>:if</tt> - specify the condition when the filter can be dislayed and used.
-      #   Accepts a block or a symbol with an instance method name
-      # * <tt>:unless</tt> - specify the reverse condition when the filter can be dislayed and used.
-      #   Accepts a block or a symbol with an instance method name
-      # * <tt>:input_options</tt> - options passed when rendering html input tag attributes.
-      #   Use <tt>input_options.type</tt> to control input type including <tt>textarea</tt>.
-      # * <tt>:label_options</tt> - options passed when rendering html label tag attributes
+      # @see Datagrid::Filters
+      # @option options [String] header Determines the header of the filter.
+      # @option options [Object, Proc] default The default filter value. Accepts a `Proc` to allow dynamic calculation.
+      # @option options [Boolean] range Whether the filter accepts two values to define a range.
+      #   Supported by types: `:integer`, `:float`, `:date`, `:datetime`, and `:string`.
+      # @option options [Boolean, String] multiple If true, allows multiple values for the filter.
+      #   Strings are parsed using a separator (default: `,`). Can accept a custom separator. Default: `false`.
+      # @option options [Boolean] allow_nil Whether the filter value can be `nil`. Default: `false`.
+      # @option options [Boolean] allow_blank Whether the filter value can be blank. Default: `false`.
+      # @option options [Symbol] before Specifies the position of this filter by placing it before another filter.
+      #   Used with the `datagrid_form_for` helper.
+      # @option options [Symbol] after Specifies the position of this filter by placing it after another filter.
+      #   Used with the `datagrid_form_for` helper.
+      # @option options [Boolean] dummy If true, the filter is not applied automatically and is only displayed in the form.
+      #   Useful for manual application.
+      # @option options [Proc, Symbol] if Specifies a condition under which the filter is displayed and used.
+      #   Accepts a block or the name of an instance method.
+      # @option options [Proc, Symbol] unless Specifies a condition under which the filter is NOT displayed or used.
+      #   Accepts a block or the name of an instance method.
+      # @option options [Hash] input_options Options passed to the HTML input tag for rendering attributes.
+      #   Use `input_options[:type]` to control the input type (e.g., `textarea`).
+      # @option options [Hash] label_options Options passed to the HTML label tag for rendering attributes.
       def filter(name, type = :default, **options, &block)
         klass = type.is_a?(Class) ? type : FILTER_TYPES[type]
         raise ConfigurationError, "filter class #{type.inspect} not found" unless klass

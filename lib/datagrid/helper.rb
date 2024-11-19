@@ -264,19 +264,16 @@ module Datagrid
     # Renders html table with columns defined in grid class.
     # In the most common used you need to pass paginated collection
     # to datagrid table because datagrid do not have pagination compatibilities:
-    # Supported options:
-    #
-    # * <tt>:html</tt> - hash of attributes for <table> tag
-    # * <tt>:order</tt> - If false do not generate ordering controlls.
-    #   Default: true.
-    # * <tt>:columns</tt> - Array of column names to display.
-    #   Used in case when same grid class is used in different places
-    #   and needs different columns. Default: all defined columns.
-    # * <tt>:partials</tt> - Path for partials lookup.
-    #   Default: 'datagrid'.
     # @param grid [Datagrid] grid object
     # @param assets [Array] objects from grid scope
     # @param [Hash{Symbol => Object}] options HTML attributes to be passed to `<table>` tag
+    # @option options [Hash] html A hash of attributes for the `<table>` tag.
+    # @option options [Boolean] order Whether to generate ordering controls.
+    #   If set to `false`, ordering controls are not generated. Default: `true`.
+    # @option options [Array<Symbol>] columns An array of column names to display.
+    #   Use this when the same grid class is used in different contexts and requires different columns.
+    #   Default: all defined columns.
+    # @option options [String] partials The path for partials lookup. Default: `'datagrid'`.
     # @return [String] table tag HTML markup
     # @example
     #   assets = grid.assets.page(params[:page])
@@ -294,15 +291,13 @@ module Datagrid
 
     # Renders HTML table header for given grid instance using columns defined in it
     #
-    # Supported options:
-    #
-    # * <tt>:order</tt> - display ordering controls built-in into header
-    #   Default: true
-    # * <tt>:columns</tt> - Array of column names to display.
-    #   Used in case when same grid class is used in different places
-    #   and needs different columns. Default: all defined columns.
-    # * <tt>:partials</tt> - Path for partials lookup.
-    #   Default: 'datagrid'.
+    # @option options [Boolean] order Whether to display ordering controls built into the header.
+    #   Default: `true`.
+    # @option options [Array<Symbol,String>] columns An array of column names to display.
+    #   Use this when the same grid class is used in different contexts and requires different columns.
+    #   Default: all defined columns.
+    # @option options [String] partials The path for partials lookup.
+    #   Default: `'datagrid'`.
     # @param grid [Datagrid] grid object
     # @param [Object] opts (deprecated) pass keyword arguments instead
     # @param [Hash] options
@@ -321,19 +316,16 @@ module Datagrid
     # Renders HTML table rows using given grid definition using columns defined in it.
     # Allows to provide a custom layout for each for in place with a block
     #
-    # Supported options:
-    #
-    # * <tt>:columns</tt> - Array of column names to display.
-    #   Used in case when same grid class is used in different places
-    #   and needs different columns. Default: all defined columns.
-    # * <tt>:partials</tt> - Path for partials lookup.
-    #   Default: 'datagrid'.
-    #
+    # @option options [Array<Symbol>] columns An array of column names to display.
+    #   Use this when the same grid class is used in different contexts and requires different columns.
+    #   Default: all defined columns.
+    # @option options [String] partials The path for partials lookup.
+    #   Default: `'datagrid'`.
     # @return [String]
-    # @example
-    #   = datagrid_rows(grid) # Generic table rows Layout
-    #
-    #   = datagrid_rows(grid) do |row| # Custom Layout
+    # @example Generic table rows Layout
+    #   = datagrid_rows(grid)
+    # @example Custom Layout
+    #   = datagrid_rows(grid) do |row|
     #     %tr
     #       %td= row.project_name
     #       %td.project-status{class: row.status}= row.status
@@ -346,11 +338,8 @@ module Datagrid
     end
 
     # @return [String] renders ordering controls for the given column name
-    #
-    # Supported options:
-    #
-    # * <tt>:partials</tt> - Path for partials lookup.
-    #   Default: 'datagrid'.
+    # @option options [String] partials The path for partials lookup.
+    #   Default: `'datagrid'`.
     def datagrid_order_for(grid, column, options = {})
       Datagrid::Utils.warn_once(<<~MSG)
         datagrid_order_for is deprecated.
@@ -414,20 +403,19 @@ module Datagrid
     # @param block [Proc] block with Datagrid::Helper::HtmlRow as an argument returning a HTML markup as a String
     # @param [Hash{Symbol => Object}] options
     # @return [Datagrid::Helper::HtmlRow, String] captured HTML markup if block given otherwise row object
-    # @example
-    #   # Suppose that grid has first_name and last_name columns
+    # @example Render default layout for row
+    #   <%= datagrid_row(grid, user, columns: [:first_name, :last_name, :actions]) %>
+    # @example Rendering custom layout for `first_name` and `last_name` columns
     #   <%= datagrid_row(grid, user) do |row| %>
     #     <tr>
     #       <td><%= row.first_name %></td>
     #       <td><%= row.last_name %></td>
     #     </tr>
     #   <% end %>
-    # @example
+    # @example Rendering custom layout passing a block
     #   <% row = datagrid_row(grid, user) %>
     #   First Name: <%= row.first_name %>
     #   Last Name: <%= row.last_name %>
-    # @example
-    #   <%= datagrid_row(grid, user, columns: [:first_name, :last_name, :actions]) %>
     def datagrid_row(grid, asset, **options, &block)
       Datagrid::Helper::HtmlRow.new(self, grid, asset, options).tap do |row|
         return capture(row, &block) if block_given?
