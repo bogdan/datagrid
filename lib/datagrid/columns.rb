@@ -2,6 +2,7 @@
 
 require "datagrid/utils"
 require "active_support/core_ext/class/attribute"
+require "datagrid/columns/column"
 
 module Datagrid
   # Defines a column to be used for displaying data in a Datagrid.
@@ -199,29 +200,26 @@ module Datagrid
   #       presenter.user.created_at
   #     end
   module Columns
-    require "datagrid/columns/column"
-
-    # @!method default_column_options=(value)
-    # @param [Hash] value default options passed to #column method call
-    # @return [Hash] default options passed to #column method call
-    # @example
-    #   # Disable default order
+    # @param [Hash] value default options passed to {#column} method call
+    # @return [Hash] default options passed to {#column} method call
+    # @example Disable default order
     #   self.default_column_options = { order: false }
-    #   # Makes entire report HTML
+    # @example Makes entire report HTML
     #   self.default_column_options = { html: true }
+    # @!method default_column_options=(value)
 
-    # @!method default_column_options
-    # @return [Hash]
+    # @return [Hash] default options passed to {#column} method call
     # @see #default_column_options=
+    # @!method default_column_options
 
     # @!method batch_size=(value)
-    # @param [Integer] value Specify a default batch size when generating CSV or just data. Default: 1000
-    # @return [Integer] Specify a default batch size when generating CSV or just data.
-    # @example
+    # Specify a default batch size when generating CSV or just data.
+    # @param [Integer] value a batch size when generating CSV or just data. Default: 1000
+    # @return [void]
+    # @example Set batch size to 500
     #   self.batch_size = 500
-    #   # Disable batches
+    # @example Disable batches
     #   self.batch_size = nil
-    #
 
     # @!method batch_size
     # @return [Integer]
@@ -253,37 +251,31 @@ module Datagrid
         filter_columns(columns_array, *column_names, data: data, html: html)
       end
 
-      # Defines new datagrid column
-      #
+      # Defines a new datagrid column
       # @param name [Symbol] column name
       # @param query [String, nil] a string representing the query to select this column (supports only ActiveRecord)
-      # @param options [Hash{Symbol => Object}] hash of options
       # @param block [Block] proc to calculate a column value
+      # @option options [Boolean, String] html Determines if the column should be present
+      #   in the HTML table and how it is formatted.
+      # @option options [String, Array<Symbol>] order Determines if the column can be sortable and
+      #   specifies the ORM ordering method.
+      #   Example: `"created_at, id"` for ActiveRecord, `[:created_at, :id]` for Mongoid.
+      # @option options [String] order_desc Specifies a descending order for the column
+      #   (used when `:order` cannot be easily reversed by the ORM).
+      # @option options [Boolean, Proc] order_by_value Enables Ruby-level ordering for the column.
+      #   Warning: Sorting large datasets in Ruby is not recommended.
+      #   If `true`, Datagrid orders by the column value.
+      #   If a block is provided, Datagrid orders by the block's return value.
+      # @option options [Boolean] mandatory If `true`, the column will never be hidden by the `#column_names` selection.
+      # @option options [Symbol] before Places the column before the specified column when determining order.
+      # @option options [Symbol] after Places the column after the specified column when determining order.
+      # @option options [Boolean, Proc] if conditions when a column is available.
+      # @option options [Boolean, Proc] unless conditions when a column is not available.
+      # @option options [Symbol, Array<Symbol>] preload Specifies associations
+      #   to preload for the column within the scope.
+      # @option options [Hash] tag_options Specifies HTML attributes for the `<td>` or `<th>` of the column.
+      #   Example: `{ class: "content-align-right", "data-group": "statistics" }`.
       # @return [Datagrid::Columns::Column]
-      #
-      # Available options:
-      #
-      # * <tt>html</tt> - determines if current column should be present in html table and how is it formatted
-      # * <tt>order</tt> - determines if this column could be sortable and how.
-      #   The value of order is explicitly passed to ORM ordering method.
-      #   Example: <tt>"created_at, id"</tt> for ActiveRecord, <tt>[:created_at, :id]</tt> for Mongoid
-      # * <tt>order_desc</tt> - determines a descending order for given column
-      #   (only in case when <tt>:order</tt> can not be easily reversed by ORM)
-      # * <tt>order_by_value</tt> - used in case it is easier to perform ordering at ruby level not on database level.
-      #   Warning: using ruby to order large datasets is very unrecommended.
-      #   If set to true - datagrid will use column value to order by this column
-      #   If block is given - datagrid will use value returned from block
-      # * <tt>mandatory</tt> - if true, column will never be hidden with #column_names selection
-      # * <tt>url</tt> - a proc with one argument, pass this option to easily convert the value into an URL
-      # * <tt>before</tt> - determines the position of this column, by adding it before the column passed here
-      # * <tt>after</tt> - determines the position of this column, by adding it after the column passed here
-      # * <tt>if</tt> - the column is shown if the reult of calling this argument is true
-      # * <tt>unless</tt> - the column is shown unless the reult of calling this argument is true
-      # * <tt>preload</tt> - spefies which associations of the scope should be preloaded for this column
-      # * `tag_options` - specify HTML attributes to be set for `<td>` or `<th>` of a column
-      #   Example: `{ class: "content-align-right", "data-group": "statistics" }`
-      #
-      # @see https://github.com/bogdan/datagrid/wiki/Columns
       def column(name, query = nil, **options, &block)
         define_column(columns_array, name, query, **options, &block)
       end
@@ -333,10 +325,10 @@ module Datagrid
       # Defines a model decorator that will be used to define a column value.
       # All column blocks will be given a decorated version of the model.
       # @return [void]
-      # @example
+      # @example Wrapping a model with presenter
       #   decorate { |user| UserPresenter.new(user) }
-      #
-      #   decorate { UserPresenter } # a shortcut
+      # @example A shortcut for doing the same
+      #   decorate { UserPresenter }
       def decorate(model = nil, &block)
         if !model && !block
           raise ArgumentError, "decorate needs either a block to define decoration or a model to decorate"
@@ -403,14 +395,16 @@ module Datagrid
       )
     end
 
-    # @param column_names [Array<String, Symbol>] list of column names if you want to limit data only to specified columns
+    # @param column_names [Array<String, Symbol>] list of column names
+    #   if you want to limit data only to specified columns
     # @return [Array<String>] human readable column names. See also "Localization" section
     def header(*column_names)
       data_columns(*column_names).map(&:header)
     end
 
     # @param asset [Object] asset from datagrid scope
-    # @param column_names [Array<String, Symbol>] list of column names if you want to limit data only to specified columns
+    # @param column_names [Array<String, Symbol>] list of column names
+    #   if you want to limit data only to specified columns
     # @return [Array<Object>] column values for given asset
     def row_for(asset, *column_names)
       data_columns(*column_names).map do |column|
@@ -419,7 +413,8 @@ module Datagrid
     end
 
     # @param asset [Object] asset from datagrid scope
-    # @return [Hash] A mapping where keys are column names and values are column values for the given asset
+    # @return [Hash] A mapping where keys are column names and
+    #   values are column values for the given asset
     def hash_for(asset)
       result = {}
       data_columns.each do |column|
@@ -428,7 +423,8 @@ module Datagrid
       result
     end
 
-    # @param column_names [Array<String,Symbol>] list of column names if you want to limit data only to specified columns
+    # @param column_names [Array<String,Symbol>] list of column names
+    #   if you want to limit data only to specified columns
     # @return [Array<Array<Object>>] with data for each row in datagrid assets without header
     def rows(*column_names)
       map_with_batches do |asset|
@@ -436,7 +432,8 @@ module Datagrid
       end
     end
 
-    # @param column_names [Array<String, Symbol>] list of column names if you want to limit data only to specified columns
+    # @param column_names [Array<String, Symbol>] list of column names
+    #   if you want to limit data only to specified columns.
     # @return [Array<Array<Object>>] data for each row in datagrid assets with header.
     def data(*column_names)
       rows(*column_names).unshift(header(*column_names))
@@ -514,7 +511,7 @@ module Datagrid
       columns(*column_names, data: data, html: true)
     end
 
-    # Finds a column definition by name
+    # Finds a column by name
     # @param name [String, Symbol] column name to be found
     # @return [Datagrid::Columns::Column, nil]
     def column_by_name(name)
@@ -522,17 +519,16 @@ module Datagrid
     end
 
     # Gives ability to have a different formatting for CSV and HTML column value.
-    #
-    # @example
+    # @example Formating using Rails view helpers
     #   column(:name) do |model|
     #     format(model.name) do |value|
     #       tag.strong(value)
     #     end
     #   end
-    #
+    # @example Formatting using a separated view template
     #   column(:company) do |model|
     #     format(model.company.name) do
-    #       render partial: "company_with_logo", locals: {company: model.company }
+    #       render partial: "companies/company_with_logo", locals: {company: model.company }
     #     end
     #   end
     # @return [Datagrid::Columns::Column::ResponseFormat] Format object
@@ -548,18 +544,18 @@ module Datagrid
     # @param [Object] asset one of the assets from grid scope
     # @return [Datagrid::Columns::DataRow] an object representing a grid row.
     # @example
-    #  class MyGrid
-    #    scope { User }
-    #    column(:id)
-    #    column(:name)
-    #    column(:number_of_purchases) do |user|
-    #      user.purchases.count
-    #    end
-    #  end
+    #   class MyGrid
+    #     scope { User }
+    #     column(:id)
+    #     column(:name)
+    #     column(:number_of_purchases) do |user|
+    #       user.purchases.count
+    #     end
+    #   end
     #
-    #  row = MyGrid.new.data_row(User.last)
-    #  row.id # => user.id
-    #  row.number_of_purchases # => user.purchases.count
+    #   row = MyGrid.new.data_row(User.last)
+    #   row.id # => user.id
+    #   row.number_of_purchases # => user.purchases.count
     def data_row(asset)
       ::Datagrid::Columns::DataRow.new(self, asset)
     end

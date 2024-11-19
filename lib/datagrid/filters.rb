@@ -204,8 +204,8 @@ module Datagrid
       #   Used with the `datagrid_form_for` helper.
       # @option options [Symbol] after Specifies the position of this filter by placing it after another filter.
       #   Used with the `datagrid_form_for` helper.
-      # @option options [Boolean] dummy If true, the filter is not applied automatically and is only displayed in the form.
-      #   Useful for manual application.
+      # @option options [Boolean] dummy If true, the filter is not applied automatically and
+      #   is only displayed in the form. Useful for manual application.
       # @option options [Proc, Symbol] if Specifies a condition under which the filter is displayed and used.
       #   Accepts a block or the name of an instance method.
       # @option options [Proc, Symbol] unless Specifies a condition under which the filter is NOT displayed or used.

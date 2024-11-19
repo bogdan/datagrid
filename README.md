@@ -162,7 +162,7 @@ end
 Some formatting options are also available.
 Each column is sortable.
 
-[More about columns](https://github.com/bogdan/datagrid/wiki/Columns)
+[More about columns](https://rubydoc.info/gems/datagrid/Datagrid/Columns)
 
 ### Front end
 

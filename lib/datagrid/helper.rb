@@ -17,7 +17,8 @@ module Datagrid
   # [built-in CSS](https://github.com/bogdan/datagrid/blob/master/app/assets/stylesheets/datagrid.sass).
   #
   # Datagrid includes helpers and a form builder for easy frontend generation.
-  # If you need a fully-featured custom GUI, create your templates manually with the help of the {Datagrid::Columns} API.
+  # If you need a fully-featured custom GUI, create your templates manually
+  # with the help of the {Datagrid::Columns} API.
   #
   # ## Controller and Routing
   #
@@ -63,7 +64,8 @@ module Datagrid
   #
   # ### Advanced Method
   #
-  # You can use Rails built-in tools to create a form. Additionally, Datagrid provides helpers to generate input/select elements for filters:
+  # You can use Rails built-in tools to create a form.
+  # Additionally, Datagrid provides helpers to generate input/select elements for filters:
   #
   # ``` haml
   # - form_with model: UserGrid.new, method: :get, url: users_path do |f|
@@ -360,9 +362,8 @@ module Datagrid
     # @option options [String] partials Path for form partial lookup.
     #   Default: `'datagrid'`, which uses `app/views/datagrid/` partials.
     #   Example: `'datagrid_admin'` uses `app/views/datagrid_admin` partials.
-    # @option options [Object] model The Datagrid object to be rendered.
+    # @option options [Datagrid::Base] model a Datagrid object to be rendered.
     # @option options [Hash] All options supported by Rails `form_with` helper.
-    # @param grid [Datagrid::Base] grid object
     # @param [Hash{Symbol => Object}] options
     # @return [String] form HTML tag markup
     def datagrid_form_with(**options)
@@ -466,7 +467,7 @@ module Datagrid
     #   row = datagrid_row(grid, user)
     #   row.class      # => Datagrid::Helper::HtmlRow
     #   row.first_name # => "<strong>Bogdan</strong>"
-    #   row.grid       # => Grid object
+    #   row.grid       # => Datagrid::Base object
     #   row.asset      # => User object
     #   row.each do |value|
     #     puts value

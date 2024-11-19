@@ -63,8 +63,6 @@ Rails [deprecates form\_for in favor of form\_with](https://guides.rubyonrails.o
 
 `datagrid_form_for` is now deprecated if favor of `datagrid_form_with`.
 
-TODO: update the wiki
-
 ``` ruby
 # V1
 datagrid_form_for(@users_grid, url: users_path)
@@ -184,7 +182,7 @@ and avoid collisions with other libraries:
 | checkboxes   | datagrid-enum-checkboxes            |
 
 All classes are now explicitly assinged inside datagrid partials.
-[Modify built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials)
+[Modify built-in partials](https://rubydoc.info/gems/datagrid/Datagrid/Helper#modifying-built-in-partials)
 if you want to change them.
 
 Diff for [built-in partials between V1 and V2](./views.diff)
@@ -370,7 +368,7 @@ instead of classes for column names.
 * Column name `th[class], td[class]` implemented as `td[data-column], th[data-column]`.
 
 Note that the behavior change can be reverted by 
-[updating built-in partials](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials).
+[Modify built-in partials](https://rubydoc.info/gems/datagrid/Datagrid/Helper#modifying-built-in-partials)
 Version 2 makes it as easy as possible to override the defaults of the UI.
 
 ### Filters
@@ -451,7 +449,7 @@ Renders:
 <td class="short-column" data-column="name">John</td>
 ```
 
-[Modify built-in views](https://github.com/bogdan/datagrid/wiki/Frontend#modifying-built-in-partials)
+[Modify built-in partials](https://rubydoc.info/gems/datagrid/Datagrid/Helper#modifying-built-in-partials)
 if you want to change this behavior completely.
 
 ## Use column[tag\_options]
