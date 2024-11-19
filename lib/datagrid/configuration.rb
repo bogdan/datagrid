@@ -1,6 +1,20 @@
 # frozen_string_literal: true
 
 module Datagrid
+  # @return [Configuration] current Datagrid configuration
+  def self.configuration
+    @configuration ||= Configuration.new
+  end
+
+  # @yield block to configure
+  # @yieldparam [Configuration] configuration
+  # @yieldreturn [void]
+  # @return [void] configure datagrid
+  # @see Datagrid::Configuration
+  def self.configure(&block)
+    block.call(configuration)
+  end
+
   # ## Configuration
   #
   # Datagrid provides several configuration options.
@@ -12,7 +26,7 @@ module Datagrid
   #   # Defines date formats that can be used to parse dates.
   #   # Note: Multiple formats can be specified. The first format is used to format dates as strings,
   #   # while other formats are used only for parsing dates from strings (e.g., if your app supports multiple formats).
-  #   config.date_formats = ["%m/%d/%Y", "%Y-%m-%d"]
+  #   config.date_formats = "%m/%d/%Y", "%Y-%m-%d"
   #
   #   # Defines timestamp formats that can be used to parse timestamps.
   #   # Note: Multiple formats can be specified. The first format is used to format timestamps as strings,

@@ -7,7 +7,6 @@ module Datagrid
   end
 end
 
-# @!visibility private
 module Datagrid
   module Filters
     class BaseFilter

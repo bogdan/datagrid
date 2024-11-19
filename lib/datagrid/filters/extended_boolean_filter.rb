@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# @!visibility private
 module Datagrid
   module Filters
     class ExtendedBooleanFilter < Datagrid::Filters::EnumFilter

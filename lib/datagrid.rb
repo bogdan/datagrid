@@ -4,7 +4,6 @@ require "action_view"
 require "datagrid/configuration"
 require "datagrid/engine"
 
-# @main README.md
 module Datagrid
   # @!visibility private
   def self.included(base)
@@ -17,15 +16,6 @@ module Datagrid
       include ::Datagrid::ColumnNamesAttribute
       include ::Datagrid::Ordering
     end
-  end
-
-  def self.configuration
-    @configuration ||= Configuration.new
-  end
-
-  # Configure
-  def self.configure(&block)
-    block.call(configuration)
   end
 
   class ConfigurationError < StandardError; end

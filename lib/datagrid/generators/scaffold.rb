@@ -2,7 +2,6 @@
 
 require "rails/generators"
 
-# @!visibility private
 module Datagrid
   # @!visibility private
   module Generators
