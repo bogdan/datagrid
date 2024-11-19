@@ -3,13 +3,15 @@
 require "action_view"
 
 module Datagrid
-  # = Datagrid Frontend Guide
+  # # Datagrid Frontend Guide
   #
-  # == Description
+  # ## Description
   #
   # The easiest way to start with Datagrid frontend is by using the generator:
   #
-  #     rails generate datagrid:scaffold <model in plural> # e.g., users
+  # ``` sh
+  # rails generate datagrid:scaffold users
+  # ```
   #
   # This command builds the controller, view, route, and adds
   # [built-in CSS](https://github.com/bogdan/datagrid/blob/master/app/assets/stylesheets/datagrid.sass).
@@ -17,7 +19,7 @@ module Datagrid
   # Datagrid includes helpers and a form builder for easy frontend generation.
   # If you need a fully-featured custom GUI, create your templates manually with the help of the {Datagrid::Columns} API.
   #
-  # == Controller and Routing
+  # ## Controller and Routing
   #
   # Grids usually implement the `index` action of a Rails REST resource. Here's an example:
   #
@@ -49,9 +51,9 @@ module Datagrid
   #
   #     ModelsGrid.new(params[:models_grid].merge(current_user: current_user))
   #
-  # == Form Builder
+  # ## Form Builder
   #
-  # === Basic Method
+  # ### Basic Method
   #
   # Use the built-in partial:
   #
@@ -59,26 +61,19 @@ module Datagrid
   #
   # {#datagrid_form_with} supports the same options as Rails `form_with`.
   #
-  # === Advanced Method
+  # ### Advanced Method
   #
   # You can use Rails built-in tools to create a form. Additionally, Datagrid provides helpers to generate input/select elements for filters:
   #
-  #     - form_with model: UserGrid.new, method: :get, url: users_path do |f|
-  #       %div
-  #         = f.datagrid_label :name
-  #         = f.datagrid_filter :name # => <input name="grid[name]" type="text"/>
-  #       %div
-  #         = f.datagrid_label :category_id
-  #         = f.datagrid_filter :category_id # => <select name="grid[category_id]">....</select>
-  #
-  # To create a report form:
-  #
-  #     - form_with model: @report, method: :get, url: users_path do |f|
-  #       - @report.filters.each do |filter|
-  #         %div
-  #           = f.datagrid_label filter
-  #           = f.datagrid_filter filter
-  #       = f.submit
+  # ``` haml
+  # - form_with model: UserGrid.new, method: :get, url: users_path do |f|
+  #   %div
+  #     = f.datagrid_label :name
+  #     = f.datagrid_filter :name # => <input name="grid[name]" type="text"/>
+  #   %div
+  #     = f.datagrid_label :category_id
+  #     = f.datagrid_filter :category_id # => <select name="grid[category_id]">....</select>
+  # ```
   #
   # For more flexibility, use Rails default helpers:
   #
@@ -88,7 +83,7 @@ module Datagrid
   #
   # See the localization section of {Datagrid::Filters}.
   #
-  # == Datagrid Table
+  # ## Datagrid Table
   #
   # Use the helper to display a report:
   #
@@ -97,11 +92,12 @@ module Datagrid
   #     = will_paginate @report.assets
   #
   # Options:
+  #
   # - `:html` - Attributes for the `<table>` tag.
   # - `:order` - Set to `false` to disable ordering controls (default: `true`).
   # - `:columns` - Specify an array of column names to display.
   #
-  # == Pagination
+  # ## Pagination
   #
   # Datagrid is abstracted from pagination but integrates seamlessly with tools like Kaminari, WillPaginate, or Pagy:
   #
@@ -126,7 +122,7 @@ module Datagrid
   #     # Pagy
   #     <%= datagrid_table(@grid, @records, options) %>
   #
-  # == CSV Export
+  # ## CSV Export
   #
   # Add CSV support to your controller:
   #
@@ -146,7 +142,7 @@ module Datagrid
   #
   #     link_to "Get CSV", url_for(format: 'csv', users_grid: params[:users_grid])
   #
-  # == AJAX
+  # ## AJAX
   #
   # Datagrid supports asynchronous data loading. Add this to your controller:
   #
@@ -169,7 +165,7 @@ module Datagrid
   #         });
   #       });
   #
-  # == Modifying Built-In Partials
+  # ## Modifying Built-In Partials
   #
   # To customize Datagrid views:
   #
@@ -185,7 +181,7 @@ module Datagrid
   #     ├── _row.html.erb             # datagrid_rows/datagrid_rows
   #     └── _table.html.erb           # datagrid_table
   #
-  # == Custom Options
+  # ## Custom Options
   #
   # You can add custom options to Datagrid columns and filters and implement their support on the frontend.
   # For example, you might want to add a `description` option to a column that appears as a tooltip on mouseover.
@@ -209,17 +205,19 @@ module Datagrid
   # This modification allows the `:description` tooltip to work with your chosen UI and JavaScript library.
   # The same technique can be applied to filters by calling `filter.options` in corresponding partials.
   #
-  # == Highlight Rows
+  # ## Highlight Rows
   #
   # To add custom HTML classes to each row for styling, modify the `_row.html.erb` partial:
   #
-  #     -<tr>
-  #     +<tr class="<%= grid.respond_to?(:row_class) ? grid.row_class(asset) : "" %>">
-  #        <% grid.html_columns(*options[:columns]).each do |column| %>
-  #          <td class="<%= datagrid_column_classes(grid, column) %>">
-  #            <%= datagrid_value(grid, column, asset) %>
-  #          </td>
-  #        <% end %>
+  # ``` diff
+  # -<tr>
+  # +<tr class="<%= grid.respond_to?(:row_class) ? grid.row_class(asset) : "" %>">
+  #    <% grid.html_columns(*options[:columns]).each do |column| %>
+  #      <td class="<%= datagrid_column_classes(grid, column) %>">
+  #        <%= datagrid_value(grid, column, asset) %>
+  #      </td>
+  #    <% end %>
+  # ```
   #
   # This allows you to define a custom `row_class` method in your grid class, like this:
   #
@@ -235,7 +233,7 @@ module Datagrid
   #       end
   #     end
   #
-  # == Localization
+  # ## Localization
   #
   # You can overwrite Datagrid’s custom localization keys at the application level.
   # See the localization keys here:

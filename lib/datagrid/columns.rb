@@ -39,11 +39,11 @@ module Datagrid
   #                    #    ]
   #     }
   #
-  # == Column Value
+  # ## Column Value
   #
   # The value of a column can be defined by passing a block to `Datagrid.column`.
   #
-  # === Basic Column Value
+  # ### Basic Column Value
   #
   # If no block is provided, the column value is generated automatically by sending the column name method to the model.
   #
@@ -57,7 +57,7 @@ module Datagrid
   #
   #     column(:completed) { |asset| asset.completed? }
   #
-  # === Advanced Column Value
+  # ### Advanced Column Value
   #
   # You can also pass the Datagrid object itself to define more complex column values.
   #
@@ -83,14 +83,14 @@ module Datagrid
   #       row.total_sales / row.number_of_sales
   #     end
   #
-  # == Using Database Expressions
+  # ## Using Database Expressions
   #
   # Columns can use database expressions to directly manipulate data in the database.
   #
   #     column(:count_of_users, 'count(user_id)')
   #     column(:uppercase_name, 'upper(name)')
   #
-  # == HTML Columns
+  # ## HTML Columns
   #
   # Columns can have different formats for HTML and non-HTML representations.
   #
@@ -100,13 +100,13 @@ module Datagrid
   #       end
   #     end
   #
-  # == Column Value Cache
+  # ## Column Value Cache
   #
   # Enables grid-level caching for column values.
   #
   #     self.cached = true
   #
-  # == Ordering
+  # ## Ordering
   #
   # Columns can specify SQL ordering expressions using the `:order` and `:order_desc` options.
   #
@@ -148,19 +148,19 @@ module Datagrid
   #       Time.at(model.finished_at - model.accepted_at).strftime("%H:%M:%S")
   #     end
   #
-  # == Default Column Options
+  # ## Default Column Options
   #
   # Default options for all columns in a grid can be set using `default_column_options`.
   #
   #     self.default_column_options = { order: false }
   #
-  # == Columns Visibility
+  # ## Columns Visibility
   #
   # Columns can be dynamically shown or hidden based on the grid's `column_names` accessor.
   #
   #     grid.column_names = [:id, :name]
   #
-  # == Dynamic Columns
+  # ## Dynamic Columns
   #
   # Columns can be defined dynamically on a grid instance or based on data.
   #
@@ -170,13 +170,13 @@ module Datagrid
   #       model.extra_data
   #     end
   #
-  # == Localization
+  # ## Localization
   #
   # Column headers can be localized using the `:header` option or through i18n files.
   #
   #     column(:active, header: Proc.new { I18n.t("activated") })
   #
-  # == Preloading Associations
+  # ## Preloading Associations
   #
   # Preload database associations for better performance.
   #
@@ -190,7 +190,7 @@ module Datagrid
   #
   #     column(:account_name, preload: { |s| s.includes(:account) })
   #
-  # == Decorator
+  # ## Decorator
   #
   # A decorator or presenter class can be used around each object in the `scope`.
   #
