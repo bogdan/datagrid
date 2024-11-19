@@ -403,14 +403,14 @@ module Datagrid
       )
     end
 
-    # @param column_names [Array<String>] list of column names if you want to limit data only to specified columns
+    # @param column_names [Array<String, Symbol>] list of column names if you want to limit data only to specified columns
     # @return [Array<String>] human readable column names. See also "Localization" section
     def header(*column_names)
       data_columns(*column_names).map(&:header)
     end
 
     # @param asset [Object] asset from datagrid scope
-    # @param column_names [Array<String>] list of column names if you want to limit data only to specified columns
+    # @param column_names [Array<String, Symbol>] list of column names if you want to limit data only to specified columns
     # @return [Array<Object>] column values for given asset
     def row_for(asset, *column_names)
       data_columns(*column_names).map do |column|
@@ -428,7 +428,7 @@ module Datagrid
       result
     end
 
-    # @param column_names [Array<String>] list of column names if you want to limit data only to specified columns
+    # @param column_names [Array<String,Symbol>] list of column names if you want to limit data only to specified columns
     # @return [Array<Array<Object>>] with data for each row in datagrid assets without header
     def rows(*column_names)
       map_with_batches do |asset|
@@ -436,7 +436,7 @@ module Datagrid
       end
     end
 
-    # @param column_names [Array<String>] list of column names if you want to limit data only to specified columns
+    # @param column_names [Array<String, Symbol>] list of column names if you want to limit data only to specified columns
     # @return [Array<Array<Object>>] data for each row in datagrid assets with header.
     def data(*column_names)
       rows(*column_names).unshift(header(*column_names))
@@ -461,7 +461,7 @@ module Datagrid
       end
     end
 
-    # @param column_names [Array<String>]
+    # @param column_names [Array<String,Symbol>]
     # @param options [Hash] CSV generation options
     # @return [String] a CSV representation of the data in the grid
     #
@@ -537,7 +537,7 @@ module Datagrid
     #   end
     # @return [Datagrid::Columns::Column::ResponseFormat] Format object
     def format(value, &block)
-      if block_given?
+      if block
         self.class.format(value, &block)
       else
         # don't override Object#format method
@@ -545,6 +545,7 @@ module Datagrid
       end
     end
 
+    # @param [Object] asset one of the assets from grid scope
     # @return [Datagrid::Columns::DataRow] an object representing a grid row.
     # @example
     #  class MyGrid
@@ -564,7 +565,6 @@ module Datagrid
     end
 
     # Defines a column at instance level
-    #
     # @see Datagrid::Columns::ClassMethods#column
     def column(name, query = nil, **options, &block)
       self.class.define_column(columns_array, name, query, **options, &block)
@@ -578,7 +578,6 @@ module Datagrid
 
     # @return [Array<Datagrid::Columns::Column>] all columns
     #   that are possible to be displayed for the current grid object
-    #
     # @example
     #   class MyGrid
     #     filter(:search) {|scope, value| scope.full_text_search(value)}
@@ -600,6 +599,8 @@ module Datagrid
       end
     end
 
+    # @param [String,Symbol] column_name column name
+    # @param [Object] asset one of the assets from grid scope
     # @return [Object] a cell data value for given column name and asset
     def data_value(column_name, asset)
       column = column_by_name(column_name)
@@ -611,6 +612,9 @@ module Datagrid
       end
     end
 
+    # @param [String,Symbol] column_name column name
+    # @param [Object] asset one of the assets from grid scope
+    # @param [ActionView::Base] context view context object
     # @return [Object] a cell HTML value for given column name and asset and view context
     def html_value(column_name, context, asset)
       column = column_by_name(column_name)
@@ -624,6 +628,7 @@ module Datagrid
       end
     end
 
+    # @param [Object] model one of the assets from grid scope
     # @return [Object] a decorated version of given model if decorator is specified or the model otherwise.
     def decorate(model)
       self.class.decorate(model)

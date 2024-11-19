@@ -161,7 +161,6 @@ module Datagrid
 
     extend ActiveSupport::Concern
 
-    # @!visibility private
     included do
       include Datagrid::Core
       class_attribute :filters_array, default: []

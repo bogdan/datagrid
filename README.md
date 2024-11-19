@@ -23,8 +23,6 @@ including admin panels, analytics and data browsers:
 * Sequel
 * Array (in-memory data of smaller scale)
 
-[Create an issue](https://github.com/bogdan/datagrid/issues/new) if you want more.
-
 ## Datagrid Philosophy
 
 1. Expressive DSL complements OOD instead of replacing it.

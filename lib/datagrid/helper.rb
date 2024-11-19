@@ -240,7 +240,7 @@ module Datagrid
   #
   # https://github.com/bogdan/datagrid/blob/master/lib/datagrid/locale/en.yml
   module Helper
-    # @param grid [Datagrid] grid object
+    # @param grid [Datagrid::Base] grid object
     # @param column [Datagrid::Columns::Column, String, Symbol] column name
     # @param model [Object] an object from grid scope
     # @return [Object] individual cell value from the given grid, column name and model
@@ -264,7 +264,7 @@ module Datagrid
     # Renders html table with columns defined in grid class.
     # In the most common used you need to pass paginated collection
     # to datagrid table because datagrid do not have pagination compatibilities:
-    # @param grid [Datagrid] grid object
+    # @param grid [Datagrid::Base] grid object
     # @param assets [Array] objects from grid scope
     # @param [Hash{Symbol => Object}] options HTML attributes to be passed to `<table>` tag
     # @option options [Hash] html A hash of attributes for the `<table>` tag.
@@ -298,7 +298,7 @@ module Datagrid
     #   Default: all defined columns.
     # @option options [String] partials The path for partials lookup.
     #   Default: `'datagrid'`.
-    # @param grid [Datagrid] grid object
+    # @param grid [Datagrid::Base] grid object
     # @param [Object] opts (deprecated) pass keyword arguments instead
     # @param [Hash] options
     # @return [String] HTML table header tag markup
@@ -329,6 +329,8 @@ module Datagrid
     #     %tr
     #       %td= row.project_name
     #       %td.project-status{class: row.status}= row.status
+    # @param [Datagrid::Base] grid datagrid object
+    # @param [Array<Object>] assets assets as per defined in grid scope
     def datagrid_rows(grid, assets = grid.assets, **options, &block)
       safe_join(
         assets.map do |asset|
@@ -340,6 +342,10 @@ module Datagrid
     # @return [String] renders ordering controls for the given column name
     # @option options [String] partials The path for partials lookup.
     #   Default: `'datagrid'`.
+    # @param [Datagrid::Base] grid datagrid object
+    # @param [Datagrid::Columns::Column] column
+    # @deprecated Put necessary code inline inside datagrid/head partial.
+    #   See built-in partial for example.
     def datagrid_order_for(grid, column, options = {})
       Datagrid::Utils.warn_once(<<~MSG)
         datagrid_order_for is deprecated.
@@ -351,15 +357,12 @@ module Datagrid
     end
 
     # Renders HTML for grid with all filters inputs and labels defined in it
-    #
-    # Supported options:
-    #
-    # * <tt>:partials</tt> - Path for form partial lookup.
-    #   Default: 'datagrid' results in using `app/views/datagrid/` partials.
-    #   Example: 'datagrid_admin' results in using `app/views/datagrid_admin` partials.
-    # * <tt>:model</tt> - Datagrid object to be rendedred.
-    # * All options supported by Rails <tt>form_with</tt> helper
-    # @param grid [Datagrid] grid object
+    # @option options [String] partials Path for form partial lookup.
+    #   Default: `'datagrid'`, which uses `app/views/datagrid/` partials.
+    #   Example: `'datagrid_admin'` uses `app/views/datagrid_admin` partials.
+    # @option options [Object] model The Datagrid object to be rendered.
+    # @option options [Hash] All options supported by Rails `form_with` helper.
+    # @param grid [Datagrid::Base] grid object
     # @param [Hash{Symbol => Object}] options
     # @return [String] form HTML tag markup
     def datagrid_form_with(**options)
@@ -379,7 +382,7 @@ module Datagrid
     #   Default: 'datagrid'.
     # * All options supported by Rails <tt>form_with</tt> helper
     # @deprecated Use {#datagrid_form_with} instead.
-    # @param grid [Datagrid] grid object
+    # @param grid [Datagrid::Base] grid object
     # @param [Hash] options
     # @return [String] form HTML tag markup
     def datagrid_form_for(grid, options = {})
@@ -398,7 +401,7 @@ module Datagrid
 
     # Provides access to datagrid columns data.
     # Used in case you want to build html table completelly manually
-    # @param grid [Datagrid] grid object
+    # @param grid [Datagrid::Base] grid object
     # @param asset [Object] object from grid scope
     # @param block [Proc] block with Datagrid::Helper::HtmlRow as an argument returning a HTML markup as a String
     # @param [Hash{Symbol => Object}] options
@@ -423,7 +426,7 @@ module Datagrid
     end
 
     # Generates an ascending or descending order url for the given column
-    # @param grid [Datagrid] grid object
+    # @param grid [Datagrid::Base] grid object
     # @param column [Datagrid::Columns::Column, String, Symbol] column name
     # @param descending [Boolean] order direction, descending if true, otherwise ascending.
     # @return [String] order layout HTML markup
