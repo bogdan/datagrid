@@ -200,30 +200,30 @@ module Datagrid
   #       presenter.user.created_at
   #     end
   module Columns
-    # @param [Hash] value default options passed to {#column} method call
-    # @return [Hash] default options passed to {#column} method call
-    # @example Disable default order
-    #   self.default_column_options = { order: false }
-    # @example Makes entire report HTML
-    #   self.default_column_options = { html: true }
     # @!method default_column_options=(value)
+    #   @param [Hash] value default options passed to {#column} method call
+    #   @return [Hash] default options passed to {#column} method call
+    #   @example Disable default order
+    #     self.default_column_options = { order: false }
+    #   @example Makes entire report HTML
+    #     self.default_column_options = { html: true }
 
-    # @return [Hash] default options passed to {#column} method call
-    # @see #default_column_options=
     # @!method default_column_options
+    #   @return [Hash] default options passed to {#column} method call
+    #   @see #default_column_options=
 
     # @!method batch_size=(value)
-    # Specify a default batch size when generating CSV or just data.
-    # @param [Integer] value a batch size when generating CSV or just data. Default: 1000
-    # @return [void]
-    # @example Set batch size to 500
-    #   self.batch_size = 500
-    # @example Disable batches
-    #   self.batch_size = nil
+    #   Specify a default batch size when generating CSV or just data.
+    #   @param [Integer] value a batch size when generating CSV or just data. Default: 1000
+    #   @return [void]
+    #   @example Set batch size to 500
+    #     self.batch_size = 500
+    #   @example Disable batches
+    #     self.batch_size = nil
 
     # @!method batch_size
-    # @return [Integer]
-    # @see #batch_size=
+    #   @return [Integer]
+    #   @see #batch_size=
 
     # @visibility private
     # @param [Object] base
