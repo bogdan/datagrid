@@ -34,6 +34,15 @@ module Datagrid
     end
   end
 
+  def self.configuration
+    @configuration ||= Configuration.new
+  end
+
+  # Configure
+  def self.configure(&block)
+    block.call(configuration)
+  end
+
   class ConfigurationError < StandardError; end
   class ArgumentError < ::ArgumentError; end
   class ColumnUnavailableError < StandardError; end

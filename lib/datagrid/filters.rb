@@ -26,7 +26,7 @@ module Datagrid
   #     grid = UserGrid.new(posts_count: 1, name: "John")
   #     grid.assets # SELECT * FROM users WHERE users.posts_count > 1 AND name = 'John'
   #
-  # = Filter Block
+  # # Filter Block
   #
   # Filter blocks should always return a chainable ORM object (e.g., `ActiveRecord::Relation`) rather than an `Array`.
   #
@@ -41,7 +41,7 @@ module Datagrid
   #       scope.where("name #{grid.predicate} ?", "%#{value}%")
   #     end
   #
-  # = Filter Types
+  # # Filter Types
   #
   # Filters perform automatic type conversion. Supported filter types include:
   #
@@ -56,52 +56,52 @@ module Datagrid
   # - `string`
   # - `dynamic`
   #
-  # == Default
+  # ## Default
   #
   # `:default` - Leaves the value as is.
   #
-  # == Date
+  # ## Date
   #
   # `:date` - Converts value to a date. Supports the `:range` option to accept date ranges.
   #
   #     filter(:created_at, :date, range: true, default: proc { [1.month.ago.to_date, Date.today] })
   #
-  # == Datetime
+  # ## Datetime
   #
   # `:datetime` - Converts value to a timestamp. Supports the `:range` option to accept time ranges.
   #
   #     filter(:created_at, :datetime, range: true, default: proc { [1.hour.ago, Time.now] })
   #
-  # == Enum
+  # ## Enum
   #
   # `:enum` - For collection selection with options like `:select` and `:multiple`.
   #
   #     filter(:user_type, :enum, select: ['Admin', 'Customer', 'Manager'])
   #     filter(:category_id, :enum, select: proc { Category.all.map { |c| [c.name, c.id] } }, multiple: true)
   #
-  # == Boolean
+  # ## Boolean
   #
   # `:boolean` - Converts value to `true` or `false`.
   #
-  # == Xboolean
+  # ## Xboolean
   #
   # `:xboolean` - Subtype of `enum` filter that provides "Yes", "No", and "Any" options.
   #
   #     filter(:active, :xboolean)
   #
-  # == Integer
+  # ## Integer
   #
   # `:integer` - Converts value to an integer. Supports the `:range` option.
   #
   #     filter(:posts_count, :integer, range: true, default: [1, nil])
   #
-  # == String
+  # ## String
   #
   # `:string` - Converts value to a string.
   #
   #     filter(:email, :string)
   #
-  # == Dynamic
+  # ## Dynamic
   #
   # Provides a builder for dynamic SQL conditions.
   #
@@ -110,7 +110,7 @@ module Datagrid
   #     UsersGrid.new(condition1: [:name, "=~", "John"], condition2: [:posts_count, ">=", 1])
   #     UsersGrid.assets # SELECT * FROM users WHERE name like '%John%' and posts_count >= 1
   #
-  # = Filter Options
+  # # Filter Options
   #
   # Options that can be passed to any filter:
   #
@@ -125,7 +125,7 @@ module Datagrid
   #     filter(:id, :integer, header: "Identifier")
   #     filter(:created_at, :date, range: true, default: proc { [1.month.ago.to_date, Date.today] })
   #
-  # = Localization
+  # # Localization
   #
   # Filter labels can be localized or specified via the `:header` option:
   #
