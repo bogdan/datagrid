@@ -171,7 +171,7 @@ module Datagrid
   #
   # To customize Datagrid views:
   #
-  #     rake datagrid:copy_partials
+  #     rails g datagrid:views
   #
   # This creates files in `app/views/datagrid/`, which you can modify to suit your needs:
   #

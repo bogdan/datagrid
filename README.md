@@ -196,7 +196,7 @@ rails g datagrid::views
 
 All advanced frontend things are described in:
 
-[Frontend section on wiki](https://rubydoc.info/gems/datagrid/Datagrid/Helper)
+[Frontend documentation](https://rubydoc.info/gems/datagrid/Datagrid/Helper)
 
 ## Questions & Issues
 
