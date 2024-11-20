@@ -438,7 +438,7 @@ Version 2:
 If you still want to have an HTML class attached to a column use `class` column option:
 
 ``` ruby
-column(:name, class: 'short-column')
+column(:name, tag_options: { class: 'short-column' })
 ```
 
 Renders:
