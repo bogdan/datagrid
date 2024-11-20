@@ -18,8 +18,7 @@ module Datagrid
   # Both having appropriate use cases
   #
   # @example Defining a scope in a grid class
-  #   class ProjectsGrid
-  #     include Datagrid
+  #   class ProjectsGrid < ApplicationGrid
   #     scope { Project.includes(:category) }
   #   end
   #

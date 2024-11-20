@@ -33,6 +33,35 @@ module Datagrid
       end
     end
 
+    # @!method order=(value)
+    #   Specify a column to be used to order the grid
+    #   @param [Symbol, String] value column name
+    #   @return [void]
+    #   @example
+    #     class MyGrid < ApplicationGrid
+    #       scope { User }
+    #       column(:name)
+    #     end
+    #
+    #     grid = MyGrid.new
+    #     grid.order = :name
+    #     grid.descending = true
+    #     grid.assets # => SELECT * FROM users ORDER BY users.name DESC
+
+    # @!method order
+    #   @return [Symbol, nil] specified order column name
+    #   @see #order=
+
+    # @!method descending=(value)
+    #   Specify an order direction for an order column
+    #   @param [Boolean] value specify `true` for descending order` or `false` for ascending
+    #   @return [void]
+    #   @see #order=
+
+    # @!method descending?
+    #   @return [Boolean] specified order direction
+    #   @see #descending=
+
     # @!visibility private
     def assets
       check_order_valid!
