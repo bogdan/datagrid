@@ -35,6 +35,7 @@ module Datagrid
 
       attr_accessor :grid_class, :options, :data_block, :name, :html_block, :query
 
+      # @!visibility private
       def initialize(grid_class, name, query, options = {}, &block)
         self.grid_class = grid_class
         self.name = name.to_sym
@@ -58,15 +59,18 @@ module Datagrid
         self.query = query
       end
 
+      # @deprecated Use {Datagrid::Columns#data_value} instead
       def data_value(model, grid)
         # backward compatibility method
         grid.data_value(name, model)
       end
 
+      # @deprecated Use {#header} instead
       def label
         options[:label]
       end
 
+      # @return [String] column header
       def header
         if (header = options[:header])
           Datagrid::Utils.callable(header)
@@ -75,7 +79,9 @@ module Datagrid
         end
       end
 
+      # @return [Object] column order expression
       def order
+        return nil if options[:order] == false
         if options.key?(:order) && options[:order] != true
           options[:order]
         else
@@ -83,10 +89,12 @@ module Datagrid
         end
       end
 
+      # @return [Boolean] weather column support order
       def supports_order?
-        order || order_by_value?
+        !!order || order_by_value?
       end
 
+      # @!visibility private
       def order_by_value(model, grid)
         if options[:order_by_value] == true
           grid.data_value(self, model)
@@ -95,6 +103,7 @@ module Datagrid
         end
       end
 
+      # @return [Boolean] weather a column should be ordered by value
       def order_by_value?
         !!options[:order_by_value]
       end
@@ -105,22 +114,27 @@ module Datagrid
         options[:order_desc]
       end
 
+      # @return [Boolean] weather a column should be displayed in HTML
       def html?
         options[:html] != false
       end
 
+      # @return [Boolean] weather a column should be displayed in data
       def data?
         data_block != nil
       end
 
+      # @return [Boolean] weather a column is explicitly marked mandatory
       def mandatory?
         !!options[:mandatory]
       end
 
+      # @return [Hash<Symbol, Object>] `tag_options` option value
       def tag_options
         options[:tag_options] || {}
       end
 
+      # @deprecated Use {#tag_options} instead.
       def html_class
         Datagrid::Utils.warn_once(
           "Column#html_class is deprecated. Use Column#tag_options instead.",
@@ -128,30 +142,38 @@ module Datagrid
         options[:class]
       end
 
+      # @return [Boolean] weather a `mandatory` option is explicitly set
       def mandatory_explicitly_set?
         options.key?(:mandatory)
       end
 
+      # @param [Datagrid::Base] grid object
+      # @return [Boolean] weather a column is available via `if` and `unless` options
       def enabled?(grid)
         ::Datagrid::Utils.process_availability(grid, options[:if], options[:unless])
       end
 
+      # @return [String] column console inspection
       def inspect
         "#<#{self.class} #{grid_class}##{name} #{options.inspect}>"
       end
 
+      # @return [String] column header
       def to_s
         header
       end
 
+      # @!visibility private
       def html_value(context, asset, grid)
         grid.html_value(name, context, asset)
       end
 
+      # @!visibility private
       def generic_value(model, grid)
         grid.generic_value(self, model)
       end
 
+      # @!visibility private
       def append_preload(relation)
         return relation unless preload
 
@@ -168,6 +190,7 @@ module Datagrid
         end
       end
 
+      # @return [Object] `preload` option value
       def preload
         preload = options[:preload]
 
@@ -177,6 +200,8 @@ module Datagrid
           preload
         end
       end
+
+      protected
 
       def driver
         grid_class.driver
