@@ -8,38 +8,52 @@ module Datagrid
       class ResponseFormat
         attr_accessor :data_block, :html_block
 
+        # @!visibility private
         def initialize
           yield(self)
         end
 
+        # @!visibility private
         def data(&block)
           self.data_block = block
         end
 
+        # @!visibility private
         def html(&block)
           self.html_block = block
         end
 
+        # @!visibility private
         def call_data
           data_block.call
         end
 
+        # @!visibility private
         def to_s
           call_data.to_s
         end
 
+        # @!visibility private
         def call_html(context)
           context.instance_eval(&html_block)
         end
       end
 
-      attr_accessor :grid_class, :options, :data_block, :name, :html_block, :query
+      # @attribute [r] grid_class
+      #   @return [Class] grid class where column is defined
+      # @attribute [r] name
+      #   @return [Symbol] column name
+      # @attribute [r] options
+      #   @return [Hash<Symbol, Object>] column options
+      attr_reader :grid_class, :name, :query, :options, :data_block, :html_block
 
       # @!visibility private
       def initialize(grid_class, name, query, options = {}, &block)
-        self.grid_class = grid_class
-        self.name = name.to_sym
-        self.options = options
+        @grid_class = grid_class
+        @name = name.to_sym
+        @query = query
+        @options = options
+
         if options[:class]
           Datagrid::Utils.warn_once(
             "column[class] option is deprecated. Use {tag_options: {class: ...}} instead.",
@@ -50,13 +64,12 @@ module Datagrid
           }
         end
         if options[:html] == true
-          self.html_block = block
+          @html_block = block
         else
-          self.data_block = block
+          @data_block = block
 
-          self.html_block = options[:html] if options[:html].is_a? Proc
+          @html_block = options[:html] if options[:html].is_a? Proc
         end
-        self.query = query
       end
 
       # @deprecated Use {Datagrid::Columns#data_value} instead
