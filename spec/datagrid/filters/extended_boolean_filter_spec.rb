@@ -3,12 +3,12 @@
 require "spec_helper"
 
 describe Datagrid::Filters::ExtendedBooleanFilter do
-  it "should support select option" do
+  it "supports select option" do
     grid = test_grid_filter(:disabled, :xboolean)
     expect(grid.filter_by_name(:disabled).select(grid)).to eq([%w[Yes YES], %w[No NO]])
   end
 
-  it "should generate pass boolean value to filter block" do
+  it "generates pass boolean value to filter block" do
     grid = test_grid_filter(:disabled, :xboolean)
 
     disabled_entry = Entry.create!(disabled: true)
@@ -27,7 +27,7 @@ describe Datagrid::Filters::ExtendedBooleanFilter do
     expect(grid.assets).not_to include(disabled_entry)
   end
 
-  it "should normalize true/false as YES/NO" do
+  it "normalizes true/false as YES/NO" do
     grid = test_grid_filter(:disabled, :xboolean)
 
     grid.disabled = true

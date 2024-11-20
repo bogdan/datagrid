@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe Datagrid::Filters do
-  it "should support default option as proc" do
+  it "supports default option as proc" do
     expect(
       test_grid_filter(
         :created_at, :date, default: proc { Date.today },
@@ -11,7 +11,7 @@ describe Datagrid::Filters do
     ).to eq(Date.today)
   end
 
-  it "should stack with other filters" do
+  it "stacks with other filters" do
     Entry.create(name: "ZZ", category: "first")
     report = test_grid(name: "Pop", category: "first") do
       scope  { Entry }
@@ -21,14 +21,14 @@ describe Datagrid::Filters do
     expect(report.assets).to be_empty
   end
 
-  it "should not support array argument for not multiple filter" do
+  it "does not support array argument for not multiple filter" do
     report = test_grid_filter(:group_id, :integer)
     expect do
       report.group_id = [1, 2]
     end.to raise_error(Datagrid::ArgumentError)
   end
 
-  it "should filter block with 2 arguments" do
+  it "filters block with 2 arguments" do
     report = test_grid_filter(:group_id, :integer) do |value, scope|
       scope.where(group_id: value)
     end
@@ -37,7 +37,7 @@ describe Datagrid::Filters do
     end.to raise_error(Datagrid::ArgumentError)
   end
 
-  it "should initialize when report Scope table not exists" do
+  it "initializes when report Scope table not exists" do
     class ModelWithoutTable < ActiveRecord::Base; end
     expect(ModelWithoutTable).not_to be_table_exists
     class TheReport < Datagrid::Base
@@ -49,7 +49,7 @@ describe Datagrid::Filters do
     expect(TheReport.new(name: "hello")).not_to be_nil
   end
 
-  it "should support inheritence" do
+  it "supports inheritence" do
     parent = Class.new(Datagrid::Base) do
       scope { Entry }
       filter(:name)
@@ -74,17 +74,17 @@ describe Datagrid::Filters do
       expect(filter_performed).to eq(result)
     end
 
-    it "should support allow_blank argument" do
+    it "supports allow_blank argument" do
       [nil, "", " "].each do |value|
         check_performed(value, true, allow_blank: true)
       end
     end
 
-    it "should support allow_nil argument" do
+    it "supports allow_nil argument" do
       check_performed(nil, true, allow_nil: true)
     end
 
-    it "should support combination on allow_nil and allow_blank" do
+    it "supports combination on allow_nil and allow_blank" do
       check_performed(nil, false, allow_nil: false, allow_blank: true)
       check_performed("", true, allow_nil: false, allow_blank: true)
       check_performed(nil, true, allow_nil: true, allow_blank: false)
@@ -92,7 +92,7 @@ describe Datagrid::Filters do
   end
 
   describe "default filter as scope" do
-    it "should create default filter if scope respond to filter name method" do
+    it "creates default filter if scope respond to filter name method" do
       Entry.create!
       Entry.create!
       grid = test_grid_filter(:limit)
@@ -100,8 +100,9 @@ describe Datagrid::Filters do
       expect(grid.assets.to_a.size).to eq(1)
     end
   end
+
   describe "default filter as scope" do
-    it "should create default filter if scope respond to filter name method" do
+    it "creates default filter if scope respond to filter name method" do
       Entry.create!
       grid = test_grid_filter(:custom) do |value|
         where(custom: value) if value != "skip"
@@ -112,7 +113,7 @@ describe Datagrid::Filters do
   end
 
   describe "positioning filter before another" do
-    it "should insert the filter before the specified element" do
+    it "inserts the filter before the specified element" do
       grid = test_grid do
         scope { Entry }
         filter(:limit)
@@ -123,7 +124,7 @@ describe Datagrid::Filters do
   end
 
   describe "positioning filter after another" do
-    it "should insert the filter before the specified element" do
+    it "inserts the filter before the specified element" do
       grid = test_grid do
         scope { Entry }
         filter(:limit)
@@ -134,14 +135,14 @@ describe Datagrid::Filters do
     end
   end
 
-  it "should support dummy filter" do
+  it "supports dummy filter" do
     grid = test_grid_filter(:period, :date, dummy: true, default: proc { Date.today })
     Entry.create!(created_at: 3.days.ago)
     expect(grid.assets).not_to be_empty
   end
 
   describe "#filter_by" do
-    it "should allow partial filtering" do
+    it "allows partial filtering" do
       grid = test_grid do
         scope { Entry }
         filter(:id)
@@ -158,11 +159,11 @@ describe Datagrid::Filters do
     grid = test_grid_filter(:id, :integer, header: proc { rand(10**9) })
 
     filter = grid.filter_by_name(:id)
-    expect(filter.header).to_not eq(filter.header)
+    expect(filter.header).not_to eq(filter.header)
   end
 
   describe "#filter_by_name" do
-    it "should return filter object" do
+    it "returns filter object" do
       r = test_grid_filter(:id, :integer)
 
       object = r.filter_by_name(:id)
@@ -204,7 +205,7 @@ describe Datagrid::Filters do
   end
 
   describe "#select_options" do
-    it "should return select options" do
+    it "returns select options" do
       filters = {
         id: [1, 2],
         name: [["a", 1], ["b", 2]],
@@ -224,7 +225,7 @@ describe Datagrid::Filters do
       end
     end
 
-    it "should raise ArgumentError for filter without options" do
+    it "raises ArgumentError for filter without options" do
       grid = test_grid_filter(:id, :integer)
       expect do
         grid.select_options(:id)
@@ -233,7 +234,7 @@ describe Datagrid::Filters do
   end
 
   describe "#inspect" do
-    it "should list all fitlers with types" do
+    it "lists all fitlers with types" do
       module ::NsInspect
         class TestGrid < Datagrid::Base
           scope { Entry }
@@ -269,12 +270,14 @@ describe Datagrid::Filters do
       admin_filters = klass.new(admin_mode: true).filters.map(&:name)
       non_admin_filters = klass.new(admin_mode: false).filters.map(&:name)
       expect(admin_filters).to include(:id)
-      expect(admin_filters).to_not include(:name)
-      expect(non_admin_filters).to_not include(:id)
+      expect(admin_filters).not_to include(:name)
+      expect(non_admin_filters).not_to include(:id)
       expect(non_admin_filters).to include(:name)
     end
 
     context "with delegation to attribute" do
+      subject { klass.new(role: role).filters.map(&:name) }
+
       let(:role) { Struct.new(:admin).new(admin) }
       let(:klass) do
         test_grid_class do
@@ -288,8 +291,6 @@ describe Datagrid::Filters do
         end
       end
 
-      subject { klass.new(role: role).filters.map(&:name) }
-
       context "when condition is true" do
         let(:admin) { true }
 
@@ -299,7 +300,7 @@ describe Datagrid::Filters do
       context "when condition is false" do
         let(:admin) { false }
 
-        it { is_expected.to_not include(:id) }
+        it { is_expected.not_to include(:id) }
       end
     end
   end

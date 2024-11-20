@@ -69,7 +69,7 @@ else
 end
 
 RSpec.configure do |config|
-  config.after(:each) do
+  config.after do
     # TODO: better database truncation
     Group.delete_all
     Entry.delete_all

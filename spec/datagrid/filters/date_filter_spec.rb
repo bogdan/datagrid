@@ -54,10 +54,10 @@ describe Datagrid::Filters::DateFilter do
     expect(report.created_at).to eq(from.to_date..to.to_date)
 
     report.created_at = {}
-    expect(report.created_at).to eq(nil)
+    expect(report.created_at).to be_nil
 
     report.created_at = { from: nil, to: nil }
-    expect(report.created_at).to eq(nil)
+    expect(report.created_at).to be_nil
 
     report.created_at = { from: Date.today, to: nil }
     expect(report.created_at).to eq(Date.today..nil)
@@ -72,7 +72,6 @@ describe Datagrid::Filters::DateFilter do
   { active_record: Entry, mongoid: MongoidEntry, sequel: SequelEntry }.each do |orm, klass|
     describe "with orm #{orm}", orm => true do
       describe "date to timestamp conversion" do
-        let(:klass) { klass }
         subject do
           test_grid(created_at: _created_at) do
             scope { klass }
@@ -80,32 +79,46 @@ describe Datagrid::Filters::DateFilter do
           end.assets.to_a
         end
 
+        let(:klass) { klass }
+
         def entry_dated(date)
           klass.create(created_at: date)
         end
 
-        context "when single date paramter given" do
+        def include_entry(date)
+          entry = entry_dated(date)
+          expect(subject).to include(entry)
+        end
+
+        def not_include_entry(date)
+          entry = entry_dated(date)
+          expect(subject).not_to include(entry)
+        end
+
+        context "when single date parameter given" do
           let(:_created_at) { Date.today }
-          it { should include(entry_dated(1.second.ago)) }
-          it { should include(entry_dated(Date.today.end_of_day)) }
-          it { should_not include(entry_dated(Date.today.beginning_of_day - 1.second)) }
-          it { should_not include(entry_dated(Date.today.end_of_day + 1.second)) }
+
+          it { include_entry(1.second.ago) }
+          it { include_entry(Date.today.end_of_day) }
+          it { not_include_entry(Date.today.beginning_of_day - 1.second) }
+          it { not_include_entry(Date.today.end_of_day + 1.second) }
         end
 
         context "when range date range given" do
           let(:_created_at) { [Date.yesterday, Date.today] }
-          it { should include(entry_dated(1.second.ago)) }
-          it { should include(entry_dated(1.day.ago)) }
-          it { should include(entry_dated(Date.today.end_of_day)) }
-          it { should include(entry_dated(Date.yesterday.beginning_of_day)) }
-          it { should_not include(entry_dated(Date.yesterday.beginning_of_day - 1.second)) }
-          it { should_not include(entry_dated(Date.today.end_of_day + 1.second)) }
+
+          it { include_entry(1.second.ago) }
+          it { include_entry(1.day.ago) }
+          it { include_entry(Date.today.end_of_day) }
+          it { include_entry(Date.yesterday.beginning_of_day) }
+          it { not_include_entry(Date.yesterday.beginning_of_day - 1.second) }
+          it { not_include_entry(Date.today.end_of_day + 1.second) }
         end
       end
     end
   end
 
-  it "should support date range given as array argument" do
+  it "supports date range given as array argument" do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
     e3 = Entry.create!(created_at: 1.day.ago)
@@ -118,7 +131,7 @@ describe Datagrid::Filters::DateFilter do
     expect(report.assets).not_to include(e3)
   end
 
-  it "should support minimum date argument" do
+  it "supports minimum date argument" do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
     e3 = Entry.create!(created_at: 1.day.ago)
@@ -130,7 +143,7 @@ describe Datagrid::Filters::DateFilter do
     expect(report.assets).to include(e3)
   end
 
-  it "should support maximum date argument" do
+  it "supports maximum date argument" do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
     e3 = Entry.create!(created_at: 1.day.ago)
@@ -142,7 +155,7 @@ describe Datagrid::Filters::DateFilter do
     expect(report.assets).not_to include(e3)
   end
 
-  it "should find something in one day interval" do
+  it "finds something in one day interval" do
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
     e3 = Entry.create!(created_at: 1.day.ago)
@@ -154,7 +167,7 @@ describe Datagrid::Filters::DateFilter do
     expect(report.assets).not_to include(e3)
   end
 
-  it "should invert invalid range" do
+  it "inverts invalid range" do
     range = 1.days.ago..7.days.ago
     e1 = Entry.create!(created_at: 7.days.ago)
     e2 = Entry.create!(created_at: 4.days.ago)
@@ -169,7 +182,7 @@ describe Datagrid::Filters::DateFilter do
     expect(report.assets).to include(e3)
   end
 
-  it "should support block" do
+  it "supports block" do
     date = Date.new(2018, 0o1, 0o7)
     time = Time.utc(2018, 0o1, 0o7, 2, 2)
 
@@ -183,20 +196,20 @@ describe Datagrid::Filters::DateFilter do
   end
 
   context "when date format is configured" do
-    around(:each) do |example|
+    around do |example|
       with_date_format do
         example.run
       end
     end
 
-    it "should have configurable date format" do
+    it "has configurable date format" do
       report = test_grid_filter(:created_at, :date)
       report.created_at = "10/01/2013"
 
       expect(report.created_at).to eq(Date.new(2013, 10, 0o1))
     end
 
-    it "should support default explicit date" do
+    it "supports default explicit date" do
       report = test_grid_filter(:created_at, :date)
       report.created_at = Date.parse("2013-10-01")
 
@@ -204,21 +217,21 @@ describe Datagrid::Filters::DateFilter do
     end
   end
 
-  it "should automatically reverse if first more than last" do
+  it "automaticallies reverse if first more than last" do
     report = test_grid_filter(:created_at, :date, range: true)
     report.created_at = %w[2013-01-01 2012-01-01]
 
     expect(report.created_at).to eq(Date.new(2012, 0o1, 0o1)..Date.new(2013, 0o1, 0o1))
   end
 
-  it "should nullify blank range" do
+  it "nullifies blank range" do
     report = test_grid_filter(:created_at, :date, range: true)
     report.created_at = [nil, nil]
 
-    expect(report.created_at).to eq(nil)
+    expect(report.created_at).to be_nil
   end
 
-  it "should properly format date in filter_value_as_string" do
+  it "properlies format date in filter_value_as_string" do
     with_date_format do
       report = test_grid_filter(:created_at, :date)
       report.created_at = "2012-01-02"
@@ -244,11 +257,11 @@ describe Datagrid::Filters::DateFilter do
     e3 = Entry.create!(created_at: Date.today + 12.hours)
     e4 = Entry.create!(created_at: Date.today + 23.hours)
     e5 = Entry.create!(created_at: Date.tomorrow)
-    expect(report.assets).to_not include(e1)
+    expect(report.assets).not_to include(e1)
     expect(report.assets).to include(e2)
     expect(report.assets).to include(e3)
     expect(report.assets).to include(e4)
-    expect(report.assets).to_not include(e5)
+    expect(report.assets).not_to include(e5)
   end
 
   it "allows filter to be defined before scope" do

@@ -10,7 +10,7 @@ describe Datagrid::Filters::IntegerFilter do
   let(:entry5) { Entry.create!(group_id: 5) }
   let(:entry7) { Entry.create!(group_id: 7) }
 
-  it "should support integer range argument" do
+  it "supports integer range argument" do
     report = test_grid_filter(:group_id, :integer, range: true)
 
     report.group_id = 3..5
@@ -27,27 +27,27 @@ describe Datagrid::Filters::IntegerFilter do
     expect(report.assets).not_to include(entry3)
   end
 
-  it "should support integer range given as array argument" do
+  it "supports integer range given as array argument" do
     report = test_grid_filter(:group_id, :integer, range: true)
     report.group_id = [3.to_s, 5.to_s]
     expect(report.group_id).to eq(3..5)
   end
 
-  it "should support minimum integer argument" do
+  it "supports minimum integer argument" do
     report = test_grid_filter(:group_id, :integer, range: true)
     report.group_id = [5.to_s, nil]
 
     expect(report.group_id).to eq(5..)
   end
 
-  it "should support maximum integer argument" do
+  it "supports maximum integer argument" do
     report = test_grid_filter(:group_id, :integer, range: true)
     report.group_id = [nil, 5.to_s]
 
     expect(report.group_id).to eq(..5)
   end
 
-  it "should find something in one integer interval" do
+  it "finds something in one integer interval" do
     report = test_grid_filter(:group_id, :integer, range: true)
     report.group_id = 4
 
@@ -67,10 +67,10 @@ describe Datagrid::Filters::IntegerFilter do
     report = test_grid_filter(:group_id, :integer, range: true)
     report.group_id = nil..nil
 
-    expect(report.group_id).to eq(nil)
+    expect(report.group_id).to be_nil
   end
 
-  it "should support block" do
+  it "supports block" do
     report = test_grid_filter(:group_id, :integer, range: true) do |value|
       where("group_id >= ?", value)
     end
@@ -80,7 +80,7 @@ describe Datagrid::Filters::IntegerFilter do
     expect(report.assets).to include(entry5)
   end
 
-  it "should not prefix table name if column is joined" do
+  it "does not prefix table name if column is joined" do
     report = test_grid(rating: [4, nil]) do
       scope { Entry.joins(:group) }
       filter(:rating, :integer, range: true)
@@ -90,7 +90,7 @@ describe Datagrid::Filters::IntegerFilter do
     expect(report.assets).to include(Entry.create!(group: Group.create!(rating: 5)))
   end
 
-  it "should support multiple values" do
+  it "supports multiple values" do
     report = test_grid_filter(:group_id, :integer, multiple: true)
     report.group_id = "1,2"
 
@@ -99,7 +99,8 @@ describe Datagrid::Filters::IntegerFilter do
     expect(report.assets).to include(entry2)
     expect(report.assets).not_to include(entry3)
   end
-  it "should support custom separator multiple values" do
+
+  it "supports custom separator multiple values" do
     report = test_grid_filter(:group_id, :integer, multiple: "|")
     report.group_id = "1|2"
 
@@ -109,15 +110,15 @@ describe Datagrid::Filters::IntegerFilter do
     expect(report.assets).not_to include(entry3)
   end
 
-  it "should support multiple with allow_blank allow_nil options" do
+  it "supports multiple with allow_blank allow_nil options" do
     report = test_grid_filter(:group_id, :integer, multiple: true, allow_nil: false, allow_blank: true)
 
     report.group_id = []
-    expect(report.assets).to_not include(entry1)
-    expect(report.assets).to_not include(entry2)
+    expect(report.assets).not_to include(entry1)
+    expect(report.assets).not_to include(entry2)
     report.group_id = [1]
     expect(report.assets).to include(entry1)
-    expect(report.assets).to_not include(entry2)
+    expect(report.assets).not_to include(entry2)
     report.group_id = nil
     expect(report.assets).to include(entry1)
     expect(report.assets).to include(entry2)
@@ -147,10 +148,10 @@ describe Datagrid::Filters::IntegerFilter do
     expect(report.group_id).to eq(1...5)
 
     report.group_id = (nil..nil).as_json
-    expect(report.group_id).to eq(nil)
+    expect(report.group_id).to be_nil
 
     report.group_id = (nil...nil).as_json
-    expect(report.group_id).to eq(nil)
+    expect(report.group_id).to be_nil
   end
 
   it "type casts value" do
@@ -178,9 +179,9 @@ describe Datagrid::Filters::IntegerFilter do
     expect(report.group_id).to eq(1)
 
     report.group_id = "aa"
-    expect(report.group_id).to eq(nil)
+    expect(report.group_id).to be_nil
 
     report.group_id = "a1"
-    expect(report.group_id).to eq(nil)
+    expect(report.group_id).to be_nil
   end
 end

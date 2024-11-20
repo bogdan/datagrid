@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe Datagrid::Filters::BaseFilter do
-  it "should support default option as block" do
+  it "supports default option as block" do
     report = test_grid do
       scope { Entry }
       filter(:name, :string, default: :name_default)
@@ -27,7 +27,7 @@ describe Datagrid::Filters::BaseFilter do
       end
 
       expect(grid.filter_by_name(:id)).to be_default_scope
-      expect(grid.filter_by_name(:group_id)).to_not be_default_scope
+      expect(grid.filter_by_name(:group_id)).not_to be_default_scope
     end
   end
 end

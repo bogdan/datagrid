@@ -6,18 +6,18 @@ describe Datagrid::Drivers::ActiveRecord do
   describe ".match?" do
     subject { described_class }
 
-    it { should be_match(Entry) }
-    it { should be_match(Entry.where(id: 1)) }
-    it { should_not be_match(MongoidEntry) }
+    it { is_expected.to be_match(Entry) }
+    it { is_expected.to be_match(Entry.where(id: 1)) }
+    it { is_expected.not_to be_match(MongoidEntry) }
   end
 
-  it "should convert any scope to AR::Relation" do
+  it "converts any scope to AR::Relation" do
     expect(subject.to_scope(Entry)).to be_a(ActiveRecord::Relation)
     expect(subject.to_scope(Entry.limit(5))).to be_a(ActiveRecord::Relation)
     expect(subject.to_scope(Group.create!.entries)).to be_a(ActiveRecord::Relation)
   end
 
-  it "should support append_column_queries" do
+  it "supports append_column_queries" do
     scope = subject.append_column_queries(
       Entry.where({}),
       [Datagrid::Columns::Column.new(test_grid_class, :sum_group_id, "sum(entries.group_id)")],
@@ -33,7 +33,7 @@ describe Datagrid::Drivers::ActiveRecord do
       end.assets
     end
 
-    it "should support ordering by Arel columns" do
+    it "supports ordering by Arel columns" do
       expect(subject.to_sql.strip).to include 'ORDER BY COUNT("entries"."group_id") DESC'
     end
   end
@@ -48,6 +48,7 @@ describe Datagrid::Drivers::ActiveRecord do
         end
       end.assets
     end
+
     it "includes object created in proper range" do
       expect(subject).to include(
         Entry.create!(group: Group.create!(created_at: 7.days.ago)),
@@ -55,19 +56,20 @@ describe Datagrid::Drivers::ActiveRecord do
     end
 
     it "excludes object created before the range" do
-      expect(subject).to_not include(
+      expect(subject).not_to include(
         Entry.create!(created_at: 7.days.ago, group: Group.create!(created_at: 11.days.ago)),
       )
     end
+
     it "excludes object created after the range" do
-      expect(subject).to_not include(
+      expect(subject).not_to include(
         Entry.create!(created_at: 7.days.ago, group: Group.create!(created_at: 4.days.ago)),
       )
     end
   end
 
   describe "batches usage" do
-    it "should be incompatible with scope with limit" do
+    it "is incompatible with scope with limit" do
       report = test_grid do
         scope { Entry.limit(5) }
         self.batch_size = 20

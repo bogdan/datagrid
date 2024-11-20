@@ -7,11 +7,12 @@ describe Datagrid::Drivers::MongoMapper, :mongomapper do
     describe ".match?" do
       subject { described_class }
 
-      it { should be_match(MongoMapperEntry) }
+      it { is_expected.to match(MongoMapperEntry) }
       # MongoMapper doesn't have a scoped method, instead it has a query method which returns a Plucky::Query object
-      it { should be_match(MongoMapperEntry.query) }
-      it { should_not be_match(Entry.where(id: 1)) }
+      it { is_expected.to match(MongoMapperEntry.query) }
+      it { is_expected.not_to match(Entry.where(id: 1)) }
     end
+
     describe "api" do
       subject do
         MongoMapperGrid.new(
@@ -36,30 +37,36 @@ describe Datagrid::Drivers::MongoMapper, :mongomapper do
 
       describe "#assets" do
         subject { super().assets }
-        it { should include(first, second) }
+
+        it { is_expected.to include(first, second) }
       end
 
       describe "#assets" do
         subject { super().assets }
+
         describe "#size" do
           subject { super().size }
-          it { should == 2 }
+
+          it { is_expected.to == 2 }
         end
       end
 
       describe "#rows" do
         subject { super().rows }
-        it { should == [["Main First", 2, false], ["Main Second", 3, true]] }
+
+        it { is_expected.to == [["Main First", 2, false], ["Main Second", 3, true]] }
       end
 
       describe "#header" do
         subject { super().header }
-        it { should == %w[Name Group Disabled] }
+
+        it { is_expected.to == %w[Name Group Disabled] }
       end
 
       describe "#data" do
         subject { super().data }
-        it { should == [["Name", "Group", "Disabled"], ["Main First", 2, false], ["Main Second", 3, true]] }
+
+        it { is_expected.to == [["Name", "Group", "Disabled"], ["Main First", 2, false], ["Main Second", 3, true]] }
       end
 
       describe "when some filters specified" do
@@ -67,12 +74,14 @@ describe Datagrid::Drivers::MongoMapper, :mongomapper do
 
         describe "#assets" do
           subject { super().assets }
-          it { should_not include(first) }
+
+          it { is_expected.not_to include(first) }
         end
 
         describe "#assets" do
           subject { super().assets }
-          it { should include(second) }
+
+          it { is_expected.to include(second) }
         end
       end
 
@@ -81,10 +90,12 @@ describe Datagrid::Drivers::MongoMapper, :mongomapper do
 
         describe "#rows" do
           subject { super().rows }
-          it { should == [["Main Second", 3, true], ["Main First", 2, false]] }
+
+          it { is_expected.to == [["Main Second", 3, true], ["Main First", 2, false]] }
         end
       end
-      it "should not provide default order for non declared fields" do
+
+      it "does not provide default order for non declared fields" do
         expect do
           test_grid(order: :test) do
             scope { MongoMapperEntry }

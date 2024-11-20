@@ -6,9 +6,9 @@ describe Datagrid::Drivers::Array do
   describe ".match?" do
     subject { described_class }
 
-    it { should be_match([]) }
-    it { should be_match(ActiveRecord::Result.new([], [])) }
-    it { should_not be_match({}) }
+    it { is_expected.to be_match([]) }
+    it { is_expected.to be_match(ActiveRecord::Result.new([], [])) }
+    it { is_expected.not_to be_match({}) }
   end
 
   describe "api" do
@@ -25,38 +25,43 @@ describe Datagrid::Drivers::Array do
       column(:age)
     end
 
-    let(:first) { ArrayGrid::User.new("Vasya", 15) }
-    let(:second) { ArrayGrid::User.new("Petya", 12) }
-    let(:third) { ArrayGrid::User.new("Vova", 13) }
-    let(:_attributes) { {} }
-
     subject do
       ArrayGrid.new(_attributes).scope do
         [first, second, third]
       end
     end
 
+    let(:first) { ArrayGrid::User.new("Vasya", 15) }
+    let(:second) { ArrayGrid::User.new("Petya", 12) }
+    let(:third) { ArrayGrid::User.new("Vova", 13) }
+    let(:_attributes) { {} }
+
     describe "#assets" do
       subject { super().assets }
+
       describe "#size" do
         subject { super().size }
-        it { should == 3 }
+
+        it { is_expected.to eq(3) }
       end
     end
 
     describe "#rows" do
       subject { super().rows }
-      it { should == [["Vasya", 15], ["Petya", 12], ["Vova", 13]] }
+
+      it { is_expected.to eq([["Vasya", 15], ["Petya", 12], ["Vova", 13]]) }
     end
 
     describe "#header" do
       subject { super().header }
-      it { should == %w[Name Age] }
+
+      it { is_expected.to eq(%w[Name Age]) }
     end
 
     describe "#data" do
       subject { super().data }
-      it { should == [%w[Name Age], ["Vasya", 15], ["Petya", 12], ["Vova", 13]] }
+
+      it { is_expected.to eq([%w[Name Age], ["Vasya", 15], ["Petya", 12], ["Vova", 13]]) }
     end
 
     describe "when some filters specified" do
@@ -64,17 +69,20 @@ describe Datagrid::Drivers::Array do
 
       describe "#assets" do
         subject { super().assets }
-        it { should_not include(first) }
+
+        it { is_expected.not_to include(first) }
       end
 
       describe "#assets" do
         subject { super().assets }
-        it { should include(second) }
+
+        it { is_expected.to include(second) }
       end
 
       describe "#assets" do
         subject { super().assets }
-        it { should include(third) }
+
+        it { is_expected.to include(third) }
       end
     end
 
@@ -83,13 +91,14 @@ describe Datagrid::Drivers::Array do
 
       describe "#assets" do
         subject { super().assets }
-        it { should == [third, first, second] }
+
+        it { is_expected.to eq([third, first, second]) }
       end
     end
   end
 
   describe "when using enumerator scope" do
-    it "should work fine" do
+    it "works fine" do
       grid = test_grid(to_enum: true) do
         scope { [] }
         filter(:to_enum, :boolean) do |_, scope|
@@ -113,11 +122,11 @@ describe Datagrid::Drivers::Array do
       column(:age)
     end
 
-    let(:_attributes) { {} }
-
     subject do
       HashGrid.new(_attributes)
     end
+
+    let(:_attributes) { {} }
 
     context "ordered" do
       let(:_attributes) { { order: :name, descending: true } }

@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe Datagrid::Filters::StringFilter do
-  it "should support multiple values" do
+  it "supports multiple values" do
     report = test_grid_filter(:name, :string, multiple: true)
     report.name = "one,two"
 
@@ -11,7 +11,8 @@ describe Datagrid::Filters::StringFilter do
     expect(report.assets).to include(Entry.create!(name: "two"))
     expect(report.assets).not_to include(Entry.create!(name: "three"))
   end
-  it "should support custom separator multiple values" do
+
+  it "supports custom separator multiple values" do
     report = test_grid_filter(:name, :string, multiple: "|")
     report.name = "one,1|two,2"
 

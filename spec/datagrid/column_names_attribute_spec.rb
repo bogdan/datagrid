@@ -3,8 +3,13 @@
 require "spec_helper"
 
 describe Datagrid::ColumnNamesAttribute do
+  subject { report }
+
   let(:column_names_filter_options) do
     {}
+  end
+  let!(:entry) do
+    Entry.create!(name: "hello", category: "greeting")
   end
 
   let(:report) do
@@ -17,13 +22,8 @@ describe Datagrid::ColumnNamesAttribute do
       column(:category)
     end
   end
-  subject { report }
 
-  let!(:entry) do
-    Entry.create!(name: "hello", category: "greeting")
-  end
-
-  it "should work" do
+  it "works" do
     subject.column_names = [:id]
     expect(subject.mandatory_columns.map(&:name)).to eq([:name])
     expect(subject.optional_columns.map(&:name)).to eq(%i[id category])
@@ -33,19 +33,19 @@ describe Datagrid::ColumnNamesAttribute do
     expect(columns_filter.select(subject)).to eq([["Id", :id], ["Category", :category]])
   end
 
-  it "should show only mandatory columns by default" do
+  it "shows only mandatory columns by default" do
     expect(subject.row_for(entry)).to eq(["hello"])
     subject.column_names = %w[name category]
     expect(subject.row_for(entry)).to eq(%w[hello greeting])
   end
 
-  it "should show mandatory columns even if they are unselected" do
+  it "shows mandatory columns even if they are unselected" do
     subject.column_names = ["category"]
     expect(subject.row_for(entry)).to eq(%w[hello greeting])
     expect(subject.data).to eq([%w[Name Category], %w[hello greeting]])
   end
 
-  it "should find any column by name" do
+  it "finds any column by name" do
     expect(subject.column_by_name(:id)).not_to be_nil
     expect(subject.column_by_name(:name)).not_to be_nil
     expect(subject.column_by_name(:category)).not_to be_nil
@@ -58,7 +58,8 @@ describe Datagrid::ColumnNamesAttribute do
 
     describe "#data" do
       subject { super().data }
-      it { should == [%w[Id Name], [entry.id, "hello"]] }
+
+      it { is_expected.to eq([%w[Id Name], [entry.id, "hello"]]) }
     end
   end
 

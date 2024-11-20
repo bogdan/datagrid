@@ -33,17 +33,17 @@ describe Datagrid::Core do
     describe "#scope" do
       it "wraps scope" do
         grid = test_grid
-        expect(grid.scope).to be_kind_of(ActiveRecord::Relation)
+        expect(grid.scope).to be_a(ActiveRecord::Relation)
       end
 
       context "in the class" do
         let(:report) { report_class.new }
 
         it { expect(report.scope.to_a.size).to eq(2) }
-        it { expect(report).to_not be_redefined_scope }
+        it { expect(report).not_to be_redefined_scope }
 
         context "when redefined" do
-          it "should accept previous scope" do
+          it "accepts previous scope" do
             module Ns83827
               class TestGrid < ScopeTestReport
                 scope do |previous|
@@ -78,13 +78,15 @@ describe Datagrid::Core do
           before do
             report.reset_scope
           end
+
           it { expect(report.scope.to_a.size).to eq(2) }
-          it { expect(report).to_not be_redefined_scope }
+          it { expect(report).not_to be_redefined_scope }
         end
       end
 
-      context "appending scope by initializer " do
+      context "appending scope by initializer" do
         let(:report) { report_class.new { |scope| scope.limit(1) } }
+
         it { expect(report.scope.to_a.size).to eq(1) }
         it { expect(report.scope.order_values.size).to eq(1) }
         it { expect(report).to be_redefined_scope }
@@ -93,7 +95,7 @@ describe Datagrid::Core do
   end
 
   describe "#inspect" do
-    it "should show all attribute values" do
+    it "shows all attribute values" do
       class InspectTest < Datagrid::Base
         scope { Entry }
         filter(:created_at, :date, range: true)
@@ -117,22 +119,26 @@ describe Datagrid::Core do
     it "work on empty objects" do
       expect(EqualTest.new).to eq(EqualTest.new)
     end
+
     it "sees the difference on the filter value" do
-      expect(EqualTest.new(created_at: Date.yesterday)).to_not eq(EqualTest.new(created_at: Date.today))
+      expect(EqualTest.new(created_at: Date.yesterday)).not_to eq(EqualTest.new(created_at: Date.today))
     end
+
     it "sees the difference on order" do
-      expect(EqualTest.new(order: :created_at)).to_not eq(EqualTest.new(order: :name))
+      expect(EqualTest.new(order: :created_at)).not_to eq(EqualTest.new(order: :name))
     end
+
     it "doesn't destinguish between String and Symbol order" do
       expect(EqualTest.new(order: :created_at)).to eq(EqualTest.new(order: "created_at"))
     end
+
     it "checks for redefined scope" do
-      expect(EqualTest.new).to_not eq(EqualTest.new { |s| s.reorder(:name) })
+      expect(EqualTest.new).not_to eq(EqualTest.new { |s| s.reorder(:name) })
     end
   end
 
   describe "dynamic helper" do
-    it "should work" do
+    it "works" do
       grid = test_grid do
         scope { Entry }
         column(:id)
@@ -192,7 +198,7 @@ describe Datagrid::Core do
       one = Entry.create!(name: "one")
       two = Entry.create!(name: "two")
       expect(grid.assets).to include(one)
-      expect(grid.assets).to_not include(two)
+      expect(grid.assets).not_to include(two)
     end
   end
 
@@ -227,7 +233,7 @@ describe Datagrid::Core do
           self.forbidden_attributes_protection = true
           filter(:name)
         end
-      end.to_not raise_error
+      end.not_to raise_error
     end
 
     it "supports hash attribute assignment" do

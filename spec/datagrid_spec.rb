@@ -4,12 +4,6 @@ require "spec_helper"
 require "datagrid/rspec"
 
 describe Datagrid do
-  describe SimpleReport do
-    it_should_behave_like "Datagrid"
-  end
-
-  let(:group) { Group.create!(name: "Pop") }
-
   subject do
     SimpleReport.new(
       group_id: group.id,
@@ -25,14 +19,20 @@ describe Datagrid do
       group: group, name: "Star", disabled: false, confirmed: false, category: "first",
     )
   end
+  let(:group) { Group.create!(name: "Pop") }
+
+  describe SimpleReport do
+    it_behaves_like "Datagrid"
+  end
 
   describe "#assets" do
     subject { super().assets }
-    it { should include(entry) }
+
+    it { is_expected.to include(entry) }
   end
 
   describe ".attributes" do
-    it "should return report attributes" do
+    it "returns report attributes" do
       (subject.filters.map(&:name) + %i[order descending]).each do |attribute|
         expect(subject.attributes).to have_key(attribute)
       end
@@ -40,7 +40,7 @@ describe Datagrid do
   end
 
   describe ".scope" do
-    it "should return defined scope of objects" do
+    it "returns defined scope of objects" do
       expect(subject.scope).to respond_to(:each)
     end
 
@@ -51,7 +51,7 @@ describe Datagrid do
         end
       end
 
-      it "should raise ConfigurationError" do
+      it "raises ConfigurationError" do
         expect do
           subject.scope
         end.to raise_error(Datagrid::ConfigurationError)
@@ -86,7 +86,7 @@ describe Datagrid do
       end
 
       it "returns nil" do
-        expect(subject.batch_size).to eq(nil)
+        expect(subject.batch_size).to be_nil
       end
     end
   end

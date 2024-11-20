@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe Datagrid::Generators::Scaffold do
-  subject { Datagrid::Generators::Scaffold.new(["user"]) }
+  subject { described_class.new(["user"]) }
 
   describe ".pagination_helper_code" do
     it "uses kaminari by default" do
@@ -11,15 +11,16 @@ describe Datagrid::Generators::Scaffold do
     end
 
     context "when WillPaginate exists" do
-      before(:each) do
+      before do
         Object.const_set("WillPaginate", 1)
       end
-      it "uses willpaginate" do
-        expect(subject.pagination_helper_code).to eql("will_paginate(@grid.assets)")
+
+      after do
+        Object.send(:remove_const, "WillPaginate")
       end
 
-      after(:each) do
-        Object.send(:remove_const, "WillPaginate")
+      it "uses willpaginate" do
+        expect(subject.pagination_helper_code).to eql("will_paginate(@grid.assets)")
       end
     end
   end

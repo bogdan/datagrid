@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe Datagrid::Filters::FloatFilter do
-  it "should support float values" do
+  it "supports float values" do
     g1 = Group.create!(rating: 1.5)
     g2 = Group.create!(rating: 1.6)
     report = test_grid(rating: 1.5) do
