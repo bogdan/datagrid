@@ -3,7 +3,7 @@ name: Publish RubyGem
 on:
   workflow_call:
     secrets:
-      JS_ROUTES_RUBYGEMS_KEY:
+      RUBYGEMS_API_KEY:
         description: "RubyGems account API key"
         required: true
 
