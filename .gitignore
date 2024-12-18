@@ -13,3 +13,4 @@ wiki
 Gemfile.lock
 gemfiles/*.gemfile.lock
 tmp
+/release_changelog.md
