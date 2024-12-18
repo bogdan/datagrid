@@ -3,11 +3,20 @@
 Datagrid v1 was released on Sep 19 2013 - more than 10 years ago.
 A lot of changes in best practices and available technology
 had happened during this period.
+These include:
+
+1. [HTML5](https://en.wikipedia.org/wiki/HTML5)
+2. [Ruby endless ranges](https://rubyreferences.github.io/rubychanges/2.6.html#endless-range-1)
+3. [Ruby beginless ranges](https://rubyreferences.github.io/rubychanges/2.7.html#beginless-range)
+   * Put a star if you didn't know they were introduced one version apart.
+5. [Ruby Keyword Arguments](https://www.ruby-lang.org/en/news/2019/12/12/separation-of-positional-and-keyword-arguments-in-ruby-3-0/)
+6. [Modular CSS](https://henryruhs.gitbook.io/ncss)
+7. [Rails Engines](https://guides.rubyonrails.org/engines.html#overriding-views)
+
 It caused the library to be designed without support of those technologies
 or their implementation to be suboptimal because of backward compatibility.
 Version 2 addresses all that evolution.
 
-List of things introduces:
 
 ## API changes
 
