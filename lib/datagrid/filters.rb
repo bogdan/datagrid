@@ -24,9 +24,9 @@ module Datagrid
   #     grid = UserGrid.new(posts_count: 1, name: "John")
   #     grid.assets # SELECT * FROM users WHERE users.posts_count > 1 AND name = 'John'
   #
-  # # Filter Block
-  #
   # Filter blocks should always return a chainable ORM object (e.g., `ActiveRecord::Relation`) rather than an `Array`.
+  #
+  # # Filter Block
   #
   # Filter blocks should have at least one argument representing the value assigned to the grid object attribute:
   #
@@ -189,9 +189,11 @@ module Datagrid
       # @param [Symbol] name filter name
       # @param [Symbol] type filter type that defines type case and GUI representation of a filter
       # @param [Hash] options hash of options
-      # @param [Proc] block proc to apply the filter
+      # @yield [value, scope, grid] Block to apply the filter.
+      # @yieldparam [Object] value The value assigned to the filter.
+      # @yieldparam [Object] scope The current ORM scope being filtered.
+      # @yieldparam [Datagrid::Base] grid The datagrid instance.
       # @return [Datagrid::Filters::BaseFilter] Filter definition object
-      # @see Datagrid::Filters
       # @option options [String] header Determines the header of the filter.
       # @option options [Object, Proc] default The default filter value. Accepts a `Proc` to allow dynamic calculation.
       # @option options [Boolean] range Whether the filter accepts two values to define a range.
@@ -213,6 +215,7 @@ module Datagrid
       # @option options [Hash] input_options Options passed to the HTML input tag for rendering attributes.
       #   Use `input_options[:type]` to control the input type (e.g., `textarea`).
       # @option options [Hash] label_options Options passed to the HTML label tag for rendering attributes.
+      # @see Datagrid::Filters
       def filter(name, type = :default, **options, &block)
         klass = type.is_a?(Class) ? type : FILTER_TYPES[type]
         raise ConfigurationError, "filter class #{type.inspect} not found" unless klass
