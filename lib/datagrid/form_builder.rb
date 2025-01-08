@@ -5,6 +5,14 @@ require "datagrid/deprecated_object"
 
 module Datagrid
   module FormBuilder
+    # @!visibility private
+    TYPE_METHOD_MAP = {
+      search: :search_field,
+      textarea: :text_area,
+      hidden: :hidden_field,
+      number: :number_field,
+    }.with_indifferent_access
+
     # @param filter_or_attribute [Datagrid::Filters::BaseFilter, String, Symbol] filter object or filter name
     # @param options [Hash] options of rails form input helper
     # @return [String] a form input html for the corresponding filter name
@@ -56,16 +64,12 @@ module Datagrid
         datetime_local_field filter.name, **options, &block
       when :date
         date_field filter.name, **options, &block
-      when :textarea
-        text_area filter.name, value: object.filter_value_as_string(filter), **options, &block
       when :checkbox
         value = options.fetch(:value, 1).to_s
-        options = { checked: true, **options } if filter.enum_checkboxes? && enum_checkbox_checked?(filter, value)
+        if filter.enum_checkboxes? && enum_checkbox_checked?(filter, value) && !options.key?(:checked)
+          options[:checked] = true
+        end
         check_box filter.name, options, value
-      when :hidden
-        hidden_field filter.name, **options
-      when :number
-        number_field filter.name, **options
       when :select
         select(
           filter.name,
@@ -80,7 +84,13 @@ module Datagrid
           &block
         )
       else
-        text_field filter.name, value: object.filter_value_as_string(filter), **options, &block
+        public_send(
+          TYPE_METHOD_MAP[type] || :text_field,
+          filter.name,
+          value: object.filter_value_as_string(filter),
+          **options,
+          &block
+        )
       end
     end
 

@@ -17,7 +17,7 @@ group :development do
   gem "rubocop", "~> 1.68"
   gem "rubocop-yard", "~> 0.9.3", require: false
   gem "sequel"
-  gem "sqlite3", "~> 1.7.0"
+  gem "sqlite3", "~> 2.1.0"
 
   group :mongo do
     gem "bson"

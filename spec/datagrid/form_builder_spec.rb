@@ -126,6 +126,19 @@ describe Datagrid::FormBuilder do
         }
       end
 
+      context "string filter type is search" do
+        let(:_filter) { :name }
+        let(:_grid) do
+          test_grid_filter(:name, :string, input_options: { type: :search })
+        end
+
+        it {
+          expect(subject).to equal_to_dom(
+            '<input type="search" name="report[name]" id="report_name"/>',
+          )
+        }
+      end
+
       context "datetime filter type is text" do
         let(:_filter) { :created_at }
         let(:_grid) do

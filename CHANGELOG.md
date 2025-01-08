@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.0.1]
+
+* Fixed `search` field type support [#330](https://github.com/bogdan/datagrid/issues/330)
+
+``` ruby
+class UsersGrid
+  scope  { User }
+
+  filter(
+    :query, :string, input_options: { type: "search" }
+  ) do |value, scope|
+    scope.magic_search(value)
+  end
+end
+```
+
+Renders filter as:
+
+``` html
+<input type="search" name="users_grid[query]" id="users_grid_query"/>
+```
+
 ## [2.0.0]
 
 Version 2 is a major update implementing a lot of major improvements
