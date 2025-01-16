@@ -98,6 +98,32 @@ describe Datagrid::Columns do
           expect(Report27.new.header.first).to eq("Nombre")
         end
       end
+
+      it "translates column-header using configured general namespace" do
+        grid = test_grid do
+          self.i18n_configuration = { namespace: "other.location" }
+
+          scope { Entry }
+          column(:name)
+        end
+
+        store_translations(:en, other: { location: { name: "Nosaukums" } }) do
+          expect(grid.header.first).to eq("Nosaukums")
+        end
+      end
+
+      it "prefers columns-specific translation namespace if configured" do
+        grid = test_grid do
+          self.i18n_configuration = { namespace: "other.general", columns_namespace: "other.columns" }
+
+          scope { Entry }
+          column(:name)
+        end
+
+        store_translations(:en, other: { general: { name: "Nosaukums" }, columns: { name: "Nosaukuma kolonna" } }) do
+          expect(grid.header.first).to eq("Nosaukuma kolonna")
+        end
+      end
     end
 
     it "returns html_columns" do

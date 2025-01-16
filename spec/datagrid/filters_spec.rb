@@ -202,6 +202,32 @@ describe Datagrid::Filters do
         expect(grid.filters.map(&:header)).to eq(["Navn"])
       end
     end
+
+    it "translates filter using configured general namespace" do
+      grid = test_grid do
+        self.i18n_configuration = { namespace: "other.location" }
+
+        scope { Entry }
+        filter(:name)
+      end
+
+      store_translations(:en, other: { location: { name: "Nosaukums" } }) do
+        expect(grid.filters.map(&:header)).to eq(["Nosaukums"])
+      end
+    end
+
+    it "prefers filters-specific translation namespace if configured" do
+      grid = test_grid do
+        self.i18n_configuration = { namespace: "other.general", filters_namespace: "other.filters" }
+
+        scope { Entry }
+        filter(:name)
+      end
+
+      store_translations(:en, other: { general: { name: "Nosaukums" }, filters: { name: "Nosaukuma filtrs" } }) do
+        expect(grid.filters.map(&:header)).to eq(["Nosaukuma filtrs"])
+      end
+    end
   end
 
   describe "#select_options" do

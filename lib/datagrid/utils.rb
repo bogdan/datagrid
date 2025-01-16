@@ -13,6 +13,15 @@ module Datagrid
 
       def translate_from_namespace(namespace, grid_class, key)
         lookups = []
+
+        if grid_class.i18n_configuration
+          specific_namespace = grid_class.i18n_configuration[:"#{namespace}_namespace"]
+          lookups << :"#{specific_namespace}.#{key}" if specific_namespace.present?
+
+          generic_namespace = grid_class.i18n_configuration[:namespace]
+          lookups << :"#{generic_namespace}.#{key}" if generic_namespace.present?
+        end
+
         namespaced_key = "#{namespace}.#{key}"
 
         grid_class.ancestors.each do |ancestor|
