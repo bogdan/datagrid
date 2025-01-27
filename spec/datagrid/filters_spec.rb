@@ -205,7 +205,7 @@ describe Datagrid::Filters do
 
     it "translates filter using configured default header" do
       grid = test_grid do
-        self.default_filter_options = { header: ->(filter) { I18n.t(filter.name, scope: "other.location") } }
+        self.default_filter_options = ->(filter) { { header: -> { I18n.t(filter.name, scope: "other.location") } } }
 
         scope { Entry }
         filter(:name)

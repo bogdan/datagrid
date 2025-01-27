@@ -369,11 +369,9 @@ module Datagrid
           model.public_send(name)
         end
 
-        options_with_defaults = default_column_options.merge(options)
-
-        position = Datagrid::Utils.extract_position_from_options(columns, options_with_defaults)
+        position = Datagrid::Utils.extract_position_from_options(columns, options)
         column = Datagrid::Columns::Column.new(
-          self, name, query, options_with_defaults, &block
+          self, name, query, options, &block
         )
         columns.insert(position, column)
         column

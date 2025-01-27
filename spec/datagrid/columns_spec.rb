@@ -101,7 +101,7 @@ describe Datagrid::Columns do
 
       it "uses configured default header" do
         grid = test_grid do
-          self.default_column_options = { header: ->(column) { I18n.t(column.name, scope: "other.location") } }
+          self.default_column_options = ->(column) { { header: -> { I18n.t(column.name, scope: "other.location") } } }
 
           scope { Entry }
           column(:name)

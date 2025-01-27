@@ -52,7 +52,7 @@ module Datagrid
         @grid_class = grid_class
         @name = name.to_sym
         @query = query
-        @options = options
+        @options = Datagrid::Utils.callable(grid_class.default_column_options, self).merge(options)
 
         if options[:class]
           Datagrid::Utils.warn_once(
@@ -86,7 +86,7 @@ module Datagrid
       # @return [String] column header
       def header
         if (header = options[:header])
-          Datagrid::Utils.callable(header, self)
+          Datagrid::Utils.callable(header)
         else
           Datagrid::Utils.translate_from_namespace(:columns, grid_class, name)
         end
