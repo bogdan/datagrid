@@ -133,8 +133,8 @@ module Datagrid
           !property_availability(grid, unless_option, false)
       end
 
-      def callable(value)
-        value.respond_to?(:call) ? value.call : value
+      def callable(value, *arguments)
+        value.respond_to?(:call) ? value.call(*arguments) : value
       end
 
       protected

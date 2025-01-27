@@ -15,7 +15,7 @@ module Datagrid
       def initialize(grid_class, name, **options, &block)
         self.grid_class = grid_class
         self.name = name.to_sym
-        self.options = options
+        self.options = Datagrid::Utils.callable(grid_class.default_filter_options, self).merge(options)
         self.block = block
       end
 

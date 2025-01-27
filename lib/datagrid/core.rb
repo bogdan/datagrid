@@ -52,6 +52,7 @@ module Datagrid
         class_attribute :datagrid_attributes, instance_writer: false, default: []
         class_attribute :dynamic_block, instance_writer: false
         class_attribute :forbidden_attributes_protection, instance_writer: false, default: false
+        class_attribute :default_filter_options, default: {}
       end
     end
 
