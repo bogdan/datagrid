@@ -14,6 +14,7 @@ end
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
+require 'logger'
 require "active_record"
 require "action_view"
 require "rails"
