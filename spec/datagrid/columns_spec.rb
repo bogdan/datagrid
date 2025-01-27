@@ -335,6 +335,23 @@ describe Datagrid::Columns do
       report.attributes = { order: :name, descending: true }
       expect(report.assets).to eq([second, first])
     end
+
+    it "accepts proc as default column options" do
+      report = test_grid do
+        scope { Entry }
+        self.default_column_options = ->(column) { { order: column.name == :name ? "name" : false } }
+        column(:id)
+        column(:name)
+      end
+      first = Entry.create(name: "1st")
+      second = Entry.create(name: "2nd")
+      expect do
+        report.attributes = { order: :id }
+        report.assets
+      end.to raise_error(Datagrid::OrderUnsupported)
+      report.attributes = { order: :name, descending: true }
+      expect(report.assets).to eq([second, first])
+    end
   end
 
   describe "fetching data in batches" do

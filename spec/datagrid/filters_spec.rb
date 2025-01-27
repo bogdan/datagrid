@@ -328,4 +328,30 @@ describe Datagrid::Filters do
       end
     end
   end
+
+  describe ".default_filter_options" do
+    it "passes default options to each filter definition" do
+      grid = test_grid do
+        scope { Entry }
+        self.default_filter_options = { header: "Guess!" }
+        filter(:id, :integer)
+        filter(:name, :string)
+      end
+
+      expect(grid.filters.map(&:header)).to eq(["Guess!", "Guess!"])
+    end
+
+    it "accepts proc as default filter options" do
+      grid = test_grid do
+        scope { Entry }
+        self.default_filter_options = lambda { |filter|
+          { header: filter.name == :id ? "Identification!" : filter.name.to_s }
+        }
+        filter(:id, :integer)
+        filter(:name, :string)
+      end
+
+      expect(grid.filters.map(&:header)).to eq(["Identification!", "name"])
+    end
+  end
 end
