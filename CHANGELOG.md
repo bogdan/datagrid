@@ -22,7 +22,7 @@ Renders filter as:
 <input type="search" name="users_grid[query]" id="users_grid_query"/>
 ```
 
-* Added support for `default_filter_options` and added lambda support for `default_column_options` [#333](https://github.com/bogdan/datagrid/issues/333).
+* Added support for `default_filter_options` and added lambda support for `default_column_options` [#333](https://github.com/bogdan/datagrid/issues/333) by @tmikoss.
 
 ``` ruby
 class UsersGrid < Datagrid::Base
