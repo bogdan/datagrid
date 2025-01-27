@@ -5,7 +5,7 @@
 * Fixed `search` field type support [#330](https://github.com/bogdan/datagrid/issues/330)
 
 ``` ruby
-class UsersGrid
+class UsersGrid < Datagrid::Base
   scope  { User }
 
   filter(
@@ -20,6 +20,31 @@ Renders filter as:
 
 ``` html
 <input type="search" name="users_grid[query]" id="users_grid_query"/>
+```
+
+* Added support for `default_filter_options` and added lambda support for `default_column_options` [#333](https://github.com/bogdan/datagrid/issues/333).
+
+``` ruby
+class UsersGrid < Datagrid::Base
+  scope { User }
+
+  self.default_column_options = -> (column) {
+    {header: I18n.t("datagrid.keywords.#{column.name}")}
+  }
+
+  self.default_filter_options = -> (filter) {
+    {
+      header: I18n.t("datagrid.keywords.user.#{filter.name}"),
+      input_options: filter.type == :string ? {type: "textarea"} : {},
+    }
+  }
+  
+  filter(:first_name, :string)
+  filter(:last_name, :string)
+
+  column(:first_name)
+  column(:last_name)
+end
 ```
 
 ## [2.0.0]
