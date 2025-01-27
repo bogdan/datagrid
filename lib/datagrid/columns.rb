@@ -155,6 +155,10 @@ module Datagrid
   #
   #     self.default_column_options = { order: false }
   #
+  # It can also accept a proc with the column instance as an argument:
+  #
+  #     self.default_column_options = ->(column) { { order: column.name == :id } }
+  #
   # ## Columns Visibility
   #
   # Columns can be dynamically shown or hidden based on the grid's `column_names` accessor.
@@ -201,15 +205,19 @@ module Datagrid
   #     end
   module Columns
     # @!method default_column_options=(value)
-    #   @param [Hash] value default options passed to {#column} method call
-    #   @return [Hash] default options passed to {#column} method call
+    #   @param [Hash,Proc] value default options passed to {#column} method call.
+    #     When a proc is passed, it will be called with the column instance as an argument,
+    #     and expected to produce the options hash.
+    #   @return [Hash,Proc] default options passed to {#column} method call, or a proc that returns them.
     #   @example Disable default order
     #     self.default_column_options = { order: false }
     #   @example Makes entire report HTML
     #     self.default_column_options = { html: true }
+    #   @example Set the default header for all columns
+    #     self.default_column_options = ->(column) { { header: I18n.t(column.name, scope: 'my_scope.columns') } }
 
     # @!method default_column_options
-    #   @return [Hash] default options passed to {#column} method call
+    #   @return [Hash,Proc] default options passed to {#column} method call, or a proc that returns them.
     #   @see #default_column_options=
 
     # @!method batch_size=(value)
@@ -368,9 +376,10 @@ module Datagrid
         block ||= lambda do |model|
           model.public_send(name)
         end
+
         position = Datagrid::Utils.extract_position_from_options(columns, options)
         column = Datagrid::Columns::Column.new(
-          self, name, query, default_column_options.merge(options), &block
+          self, name, query, options, &block
         )
         columns.insert(position, column)
         column

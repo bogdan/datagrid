@@ -123,6 +123,16 @@ module Datagrid
   #     filter(:id, :integer, header: "Identifier")
   #     filter(:created_at, :date, range: true, default: proc { 1.month.ago.to_date..Date.today })
   #
+  # ## Default Filter Options
+  #
+  # Default options for all filters in a grid can be set using `default_filter_options`.
+  #
+  #     self.default_filter_options = { header: "" }
+  #
+  # It can also accept a proc with the filter instance as an argument:
+  #
+  #     self.default_filter_options = ->(filter) { { header: I18n.t(filter.name, scope: 'filters') } }
+  #
   # # Localization
   #
   # Filter labels can be localized or specified via the `:header` option:
@@ -130,6 +140,18 @@ module Datagrid
   #     filter(:created_at, :date, header: "Creation date")
   #     filter(:created_at, :date, header: proc { I18n.t("creation_date") })
   module Filters
+    # @!method default_filter_options=(value)
+    #   @param [Hash,Proc] value default options passed to {#filter} method call.
+    #     When a proc is passed, it will be called with the filter instance as an argument,
+    #     and expected to produce the options hash.
+    #   @return [Hash,Proc] default options passed to {#filter} method call, or a proc that returns them.
+    #   @example Set the default header for all filters
+    #     self.default_filter_options = ->(filter) { { header: I18n.t(filter.name, scope: 'my_scope.filters') } }
+
+    # @!method default_filter_options
+    #   @return [Hash,Proc] default options passed to {#filter} method call, or a proc that returns them.
+    #   @see #default_filter_options=
+
     require "datagrid/filters/base_filter"
     require "datagrid/filters/enum_filter"
     require "datagrid/filters/extended_boolean_filter"
@@ -163,6 +185,7 @@ module Datagrid
 
     included do
       include Datagrid::Core
+      class_attribute :default_filter_options, instance_writer: false, default: {}
       class_attribute :filters_array, default: []
     end
 

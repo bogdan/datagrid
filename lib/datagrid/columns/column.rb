@@ -52,7 +52,7 @@ module Datagrid
         @grid_class = grid_class
         @name = name.to_sym
         @query = query
-        @options = options
+        @options = Datagrid::Utils.callable(grid_class.default_column_options, self).merge(options)
 
         if options[:class]
           Datagrid::Utils.warn_once(

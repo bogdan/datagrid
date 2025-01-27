@@ -202,6 +202,30 @@ describe Datagrid::Filters do
         expect(grid.filters.map(&:header)).to eq(["Navn"])
       end
     end
+
+    it "translates filter using configured default header" do
+      grid = test_grid do
+        self.default_filter_options = ->(filter) { { header: -> { I18n.t(filter.name, scope: "other.location") } } }
+
+        scope { Entry }
+        filter(:name)
+      end
+
+      store_translations(:en, other: { location: { name: "Nosaukums" } }) do
+        expect(grid.filters.map(&:header)).to eq(["Nosaukums"])
+      end
+    end
+
+    it "prefers filter-specific header over default" do
+      grid = test_grid do
+        self.default_filter_options = { header: -> { "Global Header" } }
+
+        scope { Entry }
+        filter(:name, header: "Filter Specific Header")
+      end
+
+      expect(grid.filters.map(&:header)).to eq(["Filter Specific Header"])
+    end
   end
 
   describe "#select_options" do
@@ -302,6 +326,32 @@ describe Datagrid::Filters do
 
         it { is_expected.not_to include(:id) }
       end
+    end
+  end
+
+  describe ".default_filter_options" do
+    it "passes default options to each filter definition" do
+      grid = test_grid do
+        scope { Entry }
+        self.default_filter_options = { header: "Guess!" }
+        filter(:id, :integer)
+        filter(:name, :string)
+      end
+
+      expect(grid.filters.map(&:header)).to eq(["Guess!", "Guess!"])
+    end
+
+    it "accepts proc as default filter options" do
+      grid = test_grid do
+        scope { Entry }
+        self.default_filter_options = lambda { |filter|
+          { header: filter.name == :id ? "Identification!" : filter.name.to_s }
+        }
+        filter(:id, :integer)
+        filter(:name, :string)
+      end
+
+      expect(grid.filters.map(&:header)).to eq(["Identification!", "name"])
     end
   end
 end

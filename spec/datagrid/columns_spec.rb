@@ -98,6 +98,30 @@ describe Datagrid::Columns do
           expect(Report27.new.header.first).to eq("Nombre")
         end
       end
+
+      it "uses configured default header" do
+        grid = test_grid do
+          self.default_column_options = ->(column) { { header: -> { I18n.t(column.name, scope: "other.location") } } }
+
+          scope { Entry }
+          column(:name)
+        end
+
+        store_translations(:en, other: { location: { name: "Nosaukums" } }) do
+          expect(grid.header.first).to eq("Nosaukums")
+        end
+      end
+
+      it "prefers column-specific header over default" do
+        grid = test_grid do
+          self.default_column_options = { header: -> { "Global Header" } }
+
+          scope { Entry }
+          column(:name, header: "Column Specific Header")
+        end
+
+        expect(grid.header.first).to eq("Column Specific Header")
+      end
     end
 
     it "returns html_columns" do
@@ -301,6 +325,23 @@ describe Datagrid::Columns do
         self.default_column_options = { order: false }
         column(:id)
         column(:name, order: "name")
+      end
+      first = Entry.create(name: "1st")
+      second = Entry.create(name: "2nd")
+      expect do
+        report.attributes = { order: :id }
+        report.assets
+      end.to raise_error(Datagrid::OrderUnsupported)
+      report.attributes = { order: :name, descending: true }
+      expect(report.assets).to eq([second, first])
+    end
+
+    it "accepts proc as default column options" do
+      report = test_grid do
+        scope { Entry }
+        self.default_column_options = ->(column) { { order: column.name == :name ? "name" : false } }
+        column(:id)
+        column(:name)
       end
       first = Entry.create(name: "1st")
       second = Entry.create(name: "2nd")
