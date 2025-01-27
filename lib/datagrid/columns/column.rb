@@ -86,7 +86,7 @@ module Datagrid
       # @return [String] column header
       def header
         if (header = options[:header])
-          Datagrid::Utils.callable(header)
+          Datagrid::Utils.callable(header, self)
         else
           Datagrid::Utils.translate_from_namespace(:columns, grid_class, name)
         end

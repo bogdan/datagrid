@@ -98,6 +98,30 @@ describe Datagrid::Columns do
           expect(Report27.new.header.first).to eq("Nombre")
         end
       end
+
+      it "uses configured default header" do
+        grid = test_grid do
+          self.default_column_options = { header: ->(column) { I18n.t(column.name, scope: "other.location") } }
+
+          scope { Entry }
+          column(:name)
+        end
+
+        store_translations(:en, other: { location: { name: "Nosaukums" } }) do
+          expect(grid.header.first).to eq("Nosaukums")
+        end
+      end
+
+      it "prefers column-specific header over default" do
+        grid = test_grid do
+          self.default_column_options = { header: -> { "Global Header" } }
+
+          scope { Entry }
+          column(:name, header: "Column Specific Header")
+        end
+
+        expect(grid.header.first).to eq("Column Specific Header")
+      end
     end
 
     it "returns html_columns" do

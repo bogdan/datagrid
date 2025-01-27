@@ -163,6 +163,7 @@ module Datagrid
 
     included do
       include Datagrid::Core
+      class_attribute :default_filter_options, instance_writer: false, default: {}
       class_attribute :filters_array, default: []
     end
 
@@ -220,8 +221,10 @@ module Datagrid
         klass = type.is_a?(Class) ? type : FILTER_TYPES[type]
         raise ConfigurationError, "filter class #{type.inspect} not found" unless klass
 
-        position = Datagrid::Utils.extract_position_from_options(filters_array, options)
-        filter = klass.new(self, name, **options, &block)
+        options_with_defaults = default_filter_options.merge(options)
+
+        position = Datagrid::Utils.extract_position_from_options(filters_array, options_with_defaults)
+        filter = klass.new(self, name, **options_with_defaults, &block)
         filters_array.insert(position, filter)
 
         datagrid_attribute(name) do |value|

@@ -202,6 +202,30 @@ describe Datagrid::Filters do
         expect(grid.filters.map(&:header)).to eq(["Navn"])
       end
     end
+
+    it "translates filter using configured default header" do
+      grid = test_grid do
+        self.default_filter_options = { header: ->(filter) { I18n.t(filter.name, scope: "other.location") } }
+
+        scope { Entry }
+        filter(:name)
+      end
+
+      store_translations(:en, other: { location: { name: "Nosaukums" } }) do
+        expect(grid.filters.map(&:header)).to eq(["Nosaukums"])
+      end
+    end
+
+    it "prefers filter-specific header over default" do
+      grid = test_grid do
+        self.default_filter_options = { header: -> { "Global Header" } }
+
+        scope { Entry }
+        filter(:name, header: "Filter Specific Header")
+      end
+
+      expect(grid.filters.map(&:header)).to eq(["Filter Specific Header"])
+    end
   end
 
   describe "#select_options" do
