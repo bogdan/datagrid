@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.2]
+
+* Fix generator [#336](https://github.com/bogdan/datagrid/issues/336)
+
 ## [2.0.1]
 
 * Fixed `search` field type support [#330](https://github.com/bogdan/datagrid/issues/330)

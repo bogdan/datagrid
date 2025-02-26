@@ -10,7 +10,7 @@ module Datagrid
       include Rails::Generators::ResourceHelpers
 
       check_class_collision suffix: "Grid"
-      source_root File.expand_path("#{__FILE__}/../../../templates")
+      source_root File.expand_path("#{__dir__}/../../../templates")
 
       def create_scaffold
         template "base.rb.erb", base_grid_file unless file_exists?(base_grid_file)
