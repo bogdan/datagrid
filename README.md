@@ -189,7 +189,7 @@ insert  app/assets/stylesheet/application.css
 In order to get a control on datagrid built-in views run:
 
 ``` sh
-rails g datagrid::views
+rails g datagrid:views
 ```
 
 #### Advanced frontend
