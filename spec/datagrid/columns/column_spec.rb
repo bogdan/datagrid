@@ -16,4 +16,18 @@ describe Datagrid::Columns::Column do
       expect(subject.inspect).to eq('#<Datagrid::Columns::Column ColumnInspectTest#id {:header=>"ID"}>')
     end
   end
+
+  describe 'initialize' do
+    subject do
+      class DefaultOptionsGrid < Datagrid::Base
+        self.default_column_options = { html: true }
+      end
+
+      Datagrid::Columns::Column.new(DefaultOptionsGrid, :id, "id", {})
+    end
+
+    it 'correctly inherits default options' do
+      expect(subject.options).to match(html: true)
+    end
+  end
 end

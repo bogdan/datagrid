@@ -43,16 +43,16 @@ module Datagrid
       #   @return [Class] grid class where column is defined
       # @attribute [r] name
       #   @return [Symbol] column name
-      # @attribute [r] options
+      # @attribute [r] column_options
       #   @return [Hash<Symbol, Object>] column options
       attr_reader :grid_class, :name, :query, :options, :data_block, :html_block
 
       # @!visibility private
-      def initialize(grid_class, name, query, options = {}, &block)
+      def initialize(grid_class, name, query, column_options = {}, &block)
         @grid_class = grid_class
         @name = name.to_sym
         @query = query
-        @options = Datagrid::Utils.callable(grid_class.default_column_options, self).merge(options)
+        @options = Datagrid::Utils.callable(grid_class.default_column_options, self).merge(column_options)
 
         if options[:class]
           Datagrid::Utils.warn_once(
