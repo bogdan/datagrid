@@ -21,9 +21,9 @@ describe Datagrid::Columns::Column do
     subject do
       class DefaultOptionsGrid < Datagrid::Base
         self.default_column_options = { html: true }
+        scope { Entry }
+        column(:id)
       end
-
-      Datagrid::Columns::Column.new(DefaultOptionsGrid, :id, "id", {})
     end
 
     it 'correctly inherits default options' do
