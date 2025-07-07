@@ -3,9 +3,6 @@
 ## [2.0.3]
 
 * Fix `default_column_options` bug [#338](https://github.com/bogdan/datagrid/issues/338) by @pokonski.
-
-## [2.0.2]
-
 * Fix generator [#336](https://github.com/bogdan/datagrid/issues/336)
 
 ## [2.0.1]
