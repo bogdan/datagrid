@@ -33,7 +33,7 @@ including admin panels, analytics and data browsers:
 
 * [Rdoc](https://rubydoc.info/gems/datagrid) - full API reference
 * [Scope](https://rubydoc.info/gems/datagrid/Datagrid/Core) - working with datagrid scope
-* [Columns](https://rubydoc.info/gems/datagrid/Datagrid/Columns) - definging datagrid columns
+* [Columns](https://rubydoc.info/gems/datagrid/Datagrid/Columns) - defining datagrid columns
 * [Filters](https://rubydoc.info/gems/datagrid/Datagrid/Filters) - defining datagrid filters
 * [Frontend](https://rubydoc.info/gems/datagrid/Datagrid/Helper) - building a frontend 
 * [Configuration](https://rubydoc.info/gems/datagrid/Datagrid/Configuration) - configuring the gem
