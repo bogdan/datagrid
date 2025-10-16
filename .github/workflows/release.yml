@@ -7,7 +7,6 @@ on:
         description: "RubyGems account API key"
         required: true
 
-
   workflow_dispatch: # Trigger the workflow manually
     inputs:
       otp_code:
@@ -26,12 +25,12 @@ jobs:
     steps:
 
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v5
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.3.4'
+        ruby-version: '3.4.7'
 
     - name: Extract Gem Version
       id: extract_version
