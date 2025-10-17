@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.0.4]
+
+* Support Rails 8.1 [#342](https://github.com/bogdan/datagrid/issues/342)
+* Support Ruby 3.4 [#342](https://github.com/bogdan/datagrid/issues/342)
+
 ## [2.0.3]
 
 * Fix `default_column_options` bug [#338](https://github.com/bogdan/datagrid/issues/338) by @pokonski.
