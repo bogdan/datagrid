@@ -33,3 +33,13 @@ appraise "rails-8.0" do
     end
   end
 end
+
+appraise "rails-8.1" do
+  group :development do
+    gem "rails", ">= 8.1.0.rc1", "< 8.2"
+    gem "sqlite3", "~> 2.1.0"
+    group :mongo do
+      gem "mongoid", github: "mongodb/mongoid"
+    end
+  end
+end
