@@ -13,13 +13,7 @@ describe Datagrid::Columns::Column do
     end
 
     it "shows inspect information" do
-      # Ruby 3.4+ changed Hash#inspect format for symbol keys from {:key=>"value"} to {key: "value"}
-      expected = if RUBY_VERSION >= "3.4"
-        '#<Datagrid::Columns::Column ColumnInspectTest#id {header: "ID"}>'
-      else
-        '#<Datagrid::Columns::Column ColumnInspectTest#id {:header=>"ID"}>'
-      end
-      expect(subject.inspect).to eq(expected)
+      expect(subject.inspect).to eq('#<Datagrid::Columns::Column ColumnInspectTest#id {header: "ID"}>')
     end
   end
 
