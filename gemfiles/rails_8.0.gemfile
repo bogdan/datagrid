@@ -20,7 +20,7 @@ group :development do
 
   group :mongo do
     gem "bson"
-    gem "mongoid", github: "mongodb/mongoid"
+    gem "mongoid", "~> 9.0"
   end
 end
 
