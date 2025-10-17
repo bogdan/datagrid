@@ -97,7 +97,7 @@ module Datagrid
           %i[integer primary_key] => :integer,
           %i[float decimal] => :float,
           [:date] => :date,
-          %i[datetime timestamp] => :timestamp,
+          %i[datetime timestamp timestamptz] => :timestamp,
           [:boolean] => :boolean,
         }.each do |keys, value|
           return value if keys.include?(builtin_type)

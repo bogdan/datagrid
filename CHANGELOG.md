@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.5]
+
+* Add support for timestamptz ActiveRecord column type
+
 ## [2.0.4]
 
 * Support Rails 8.1 [#342](https://github.com/bogdan/datagrid/issues/342)
