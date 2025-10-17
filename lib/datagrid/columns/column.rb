@@ -168,7 +168,14 @@ module Datagrid
 
       # @return [String] column console inspection
       def inspect
-        "#<#{self.class} #{grid_class}##{name} #{options.inspect}>"
+        options_inspection = if RUBY_VERSION >= "3.4"
+          # Ruby 3.4+ changed Hash#inspect format for symbol keys from {:key=>"value"} to {key: "value"}
+          options.inspect
+        else
+          "{#{options.map { |key, value| "#{key}: #{value.inspect}" }.join(", ")}}"
+        end
+
+        "#<#{self.class} #{grid_class}##{name} #{options_inspection}>"
       end
 
       # @return [String] column header

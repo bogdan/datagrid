@@ -13,7 +13,7 @@ describe Datagrid::Columns::Column do
     end
 
     it "shows inspect information" do
-      expect(subject.inspect).to eq('#<Datagrid::Columns::Column ColumnInspectTest#id {:header=>"ID"}>')
+      expect(subject.inspect).to eq('#<Datagrid::Columns::Column ColumnInspectTest#id {header: "ID"}>')
     end
   end
 
