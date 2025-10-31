@@ -135,12 +135,6 @@ describe Datagrid::Filters do
     end
   end
 
-  it "supports dummy filter" do
-    grid = test_grid_filter(:period, :date, dummy: true, default: proc { Date.today })
-    Entry.create!(created_at: 3.days.ago)
-    expect(grid.assets).not_to be_empty
-  end
-
   describe "#filter_by" do
     it "allows partial filtering" do
       grid = test_grid do

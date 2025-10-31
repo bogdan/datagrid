@@ -17,6 +17,9 @@ module Datagrid
         self.name = name.to_sym
         self.options = Datagrid::Utils.callable(grid_class.default_filter_options, self).merge(options)
         self.block = block
+        if dummy? && block
+          raise Datagrid::ConfigurationError, "#{grid_class}##{name} filter is dummy and can not accept block"
+        end
       end
 
       def parse(value)

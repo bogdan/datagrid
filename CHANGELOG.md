@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.6]
+
+* Validate dummy filter can not accept block
+
 ## [2.0.5]
 
 * Add support for timestamptz ActiveRecord column type
