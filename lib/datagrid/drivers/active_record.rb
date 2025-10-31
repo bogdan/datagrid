@@ -31,12 +31,10 @@ module Datagrid
       end
 
       def append_column_queries(assets, columns)
-        if columns.present?
-          assets = assets.select(assets.klass.arel_table[Arel.star]) if assets.select_values.empty?
-          columns = columns.map { |c| "#{c.query} AS #{c.name}" }
-          assets = assets.select(*columns)
-        end
-        assets
+        return assets if columns.empty?
+        assets = assets.select(assets.klass.arel_table[Arel.star]) if assets.select_values.empty?
+        columns = columns.map { |c| "#{c.query} AS #{c.name}" }
+        assets.select(*columns)
       end
 
       def where(scope, attribute, value)

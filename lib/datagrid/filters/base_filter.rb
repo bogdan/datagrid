@@ -35,7 +35,7 @@ module Datagrid
       end
 
       def apply(grid_object, scope, value)
-        return scope if unapplicable_value?(value)
+        return scope if dummy? || unapplicable_value?(value)
 
         result = execute(value, scope, grid_object)
 

@@ -12,7 +12,9 @@ module Datagrid
       end
 
       def apply(grid_object, scope, value)
-        value = Datagrid::Utils.format_date_as_timestamp(value) if grid_object.driver.timestamp_column?(scope, name)
+        if !dummy? && grid_object.driver.timestamp_column?(scope, name)
+          value = Datagrid::Utils.format_date_as_timestamp(value)
+        end
         super
       end
 

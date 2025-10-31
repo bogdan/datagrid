@@ -220,7 +220,7 @@ describe Datagrid::Columns do
 
   it "supports defining a query for a column" do
     report = test_grid do
-      scope { Entry }
+      scope { Entry.group("entries.id") }
       filter(:name)
       column(:id)
       column(:sum_group_id, "sum(group_id)")
