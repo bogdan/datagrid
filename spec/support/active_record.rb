@@ -9,7 +9,7 @@ ActiveRecord::Base.logger = TEST_LOGGER
 
 ActiveRecord::Schema.verbose = false
 ActiveRecord::Schema.define(version: 1) do
-  create_table :entries do |t|
+  create_table :entries, force: true do |t|
     t.integer :group_id
     t.string :name
     t.string :category
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 1) do
     t.timestamps
   end
 
-  create_table :groups do |t|
+  create_table :groups, force: true do |t|
     t.string :name
     t.float :rating
     t.timestamps

@@ -186,4 +186,36 @@ describe Datagrid::Filters::DynamicFilter do
       field: "shipping_date", operation: "<>", value: Date.parse("1996-08-05"),
     })
   end
+
+  it "supports guessing type of joined column" do
+    skip unless defined?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) &&
+      Entry.connection.is_a?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
+
+    group = Group.create!(name: "Test Group")
+    entry = Entry.create!(name: "Hello World", group:)
+
+    grid = test_grid do
+      scope { Entry.joins(:group) }
+      filter(
+        :condition, :dynamic,
+         operations: %w[= =~],
+         select: [
+           ["Entry Name", "entries.name"],
+           ["Group Name", "groups.name"]
+         ]
+      )
+    end
+
+    grid.condition = ["entries.name", "=~", "Hello"]
+    expect(grid.assets).to include(entry)
+
+    grid.condition = ["entries.name", "=~", "Test"]
+    expect(grid.assets).to_not include(entry)
+
+    grid.condition = ["groups.name", "=~", "Test"]
+    expect(grid.assets).to include(entry)
+
+    grid.condition = ["groups.name", "=~", "Hello"]
+    expect(grid.assets).to_not include(entry)
+  end
 end

@@ -87,9 +87,12 @@ module Datagrid
       end
 
       def normalized_column_type(scope, field)
-        return nil unless scope_has_column?(scope, field)
+        builtin_type = scope_has_column?(scope, field) ?
+          scope.columns_hash[field.to_s].type :
+          scope.connection.select_all(
+            scope.unscope(:select, :order).select(field => "custom_field").limit(0).arel
+          ).column_types['custom_field']&.type
 
-        builtin_type = scope.columns_hash[field.to_s].type
         {
           %i[string text time binary] => :string,
           %i[integer primary_key] => :integer,
@@ -100,6 +103,7 @@ module Datagrid
         }.each do |keys, value|
           return value if keys.include?(builtin_type)
         end
+        nil
       end
 
       def batch_each(scope, batch_size, &block)
