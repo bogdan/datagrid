@@ -192,7 +192,7 @@ describe Datagrid::Filters::DynamicFilter do
       Entry.connection.is_a?(::ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
 
     group = Group.create!(name: "Test Group")
-    entry = Entry.create!(name: "Hello World", group:)
+    entry = Entry.create!(name: "Hello World", group: group)
 
     grid = test_grid do
       scope { Entry.joins(:group) }
