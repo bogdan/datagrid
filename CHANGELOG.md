@@ -1,5 +1,8 @@
 # Changelog
 
+* Raise `Datagrid::ConfigurationError` when column or filter name 
+  specified in `before` or `after` option not found.
+
 ## [2.0.6]
 
 * Validate dummy filter can not accept block

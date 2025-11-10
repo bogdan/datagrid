@@ -68,7 +68,9 @@ module Datagrid
           array.index { |c| c.name.to_sym == before }
         elsif after
           after = after.to_sym
-          array.index { |c| c.name.to_sym == after } + 1
+          if index = array.index { |c| c.name.to_sym == after }
+            index + 1
+          end
         else
           -1
         end

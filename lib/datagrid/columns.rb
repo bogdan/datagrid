@@ -378,6 +378,9 @@ module Datagrid
         end
 
         position = Datagrid::Utils.extract_position_from_options(columns, options)
+        unless position
+          raise Datagrid::ConfigurationError, "#{self}##{options[:before] || options[:after]} column not found"
+        end
         column = Datagrid::Columns::Column.new(
           self, name, query, options, &block
         )

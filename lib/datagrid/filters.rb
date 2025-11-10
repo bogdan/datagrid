@@ -244,6 +244,9 @@ module Datagrid
         raise ConfigurationError, "filter class #{type.inspect} not found" unless klass
 
         position = Datagrid::Utils.extract_position_from_options(filters_array, options)
+        unless position
+          raise Datagrid::ConfigurationError, "#{self}##{options[:before] || options[:after]} filter not found"
+        end
         filter = klass.new(self, name, **options, &block)
         filters_array.insert(position, filter)
 

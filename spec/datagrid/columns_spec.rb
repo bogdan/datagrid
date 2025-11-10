@@ -267,13 +267,43 @@ describe Datagrid::Columns do
     end.to raise_error(Datagrid::ConfigurationError)
   end
 
-  it "raises when :before and :after used together" do
-    expect do
-      test_grid do
+  describe "before and after options" do
+
+    it "can't be used together" do
+      expect do
+        test_grid do
+          scope { Entry }
+          column(:id)
+          column(:name, before: :id, after: :name)
+        end
+      end.to raise_error(Datagrid::ConfigurationError)
+    end
+
+    it "used to control columns order" do
+      grid = test_grid do
+        scope { Entry }
         column(:id)
-        column(:name, before: :id, after: :name)
+        column(:name, before: :id)
+        column(:group, after: :name)
       end
-    end.to raise_error(Datagrid::ConfigurationError)
+
+      expect(grid.columns.map(&:name)).to eq([:name, :group, :id])
+    end
+
+    it "raises exception when column not found" do
+      expect do
+        test_grid do
+          scope { Entry }
+          column(:name, before: :id)
+        end
+      end.to raise_error(Datagrid::ConfigurationError)
+      expect do
+        test_grid do
+          scope { Entry }
+          column(:name, after: :id)
+        end
+      end.to raise_error(Datagrid::ConfigurationError)
+    end
   end
 
   describe ".column_names attributes" do

@@ -112,7 +112,7 @@ describe Datagrid::Filters do
     end
   end
 
-  describe "positioning filter before another" do
+  describe "positioning filter" do
     it "inserts the filter before the specified element" do
       grid = test_grid do
         scope { Entry }
@@ -121,9 +121,7 @@ describe Datagrid::Filters do
       end
       expect(grid.filters.index { |f| f.name == :name }).to eq(0)
     end
-  end
 
-  describe "positioning filter after another" do
     it "inserts the filter before the specified element" do
       grid = test_grid do
         scope { Entry }
@@ -132,6 +130,21 @@ describe Datagrid::Filters do
         filter(:group_id, after: :limit)
       end
       expect(grid.filters.index { |f| f.name == :group_id }).to eq(1)
+    end
+
+    it "raises if filter not found" do
+      expect do
+        test_grid do
+          scope { Entry }
+          filter(:name, before: :id)
+        end
+      end.to raise_error(Datagrid::ConfigurationError)
+      expect do
+        test_grid do
+          scope { Entry }
+          filter(:name, after: :id)
+        end
+      end.to raise_error(Datagrid::ConfigurationError)
     end
   end
 
