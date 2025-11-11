@@ -128,7 +128,7 @@ module Datagrid
         end
 
         def inspect
-          { field: field, operation: operation, value: value }
+          "#<#{self.class} #{to_h.inspect}>"
         end
 
         def to_ary
@@ -141,6 +141,10 @@ module Datagrid
 
         def to_h
           { field: field, operation: operation, value: value }
+        end
+
+        def as_query
+          to_h
         end
 
         protected
