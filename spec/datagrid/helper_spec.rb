@@ -234,6 +234,16 @@ describe Datagrid::Helper do
       )
     end
 
+    it "renders html columns with grid argument" do
+      grid = test_grid_column(:name, html: true) do |model, grid|
+        tag.span(model.name, data: {id: grid.object_id})
+      end
+
+      expect(subject.datagrid_rows(grid, [entry])).to match_css_pattern(
+        "tr td[data-column=name] span[data-id=#{grid.object_id}]" => "Star",
+      )
+    end
+
     it "renders :html columns with &:symbol block" do
       rp = test_grid_column(:name, html: true, &:name)
 
