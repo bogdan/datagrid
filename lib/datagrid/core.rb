@@ -2,6 +2,7 @@
 
 require "datagrid/drivers"
 require "active_support/core_ext/class/attribute"
+require "active_support/core_ext/object/json"
 require "active_model/attribute_assignment"
 
 module Datagrid
@@ -210,16 +211,15 @@ module Datagrid
       scope
     end
 
-    # @return [Hash{Symbol => Object}] serializable query arguments skipping all nil values
+    # @return [Hash{String => Object}] serializable query arguments skipping all nil values
     # @example
     #   grid = ProductsGrid.new(category: 'dresses', available: true)
     #   grid.as_query # => {category: 'dresses', available: true}
     def as_query
-      attributes = self.attributes.clone
-      attributes.each do |key, value|
-        attributes.delete(key) if value.nil?
+      self.attributes.reduce({}) do |result, (k,v)|
+        result[k.to_s] = v.as_json unless v.nil?
+        result
       end
-      attributes
     end
 
     # @return [Hash{Symbol => Hash{Symbol => Object}}] query parameters to link this grid from a page
@@ -228,7 +228,18 @@ module Datagrid
     #   Rails.application.routes.url_helpers.products_path(grid.query_params)
     #     # => "/products?products_grid[category]=dresses&products_grid[available]=true"
     def query_params(attributes = {})
-      { param_name.to_sym => as_query.merge(attributes) }
+      { param_name.to_s => as_query.merge(attributes.stringify_keys) }
+    end
+
+    # @return [Hash{String => Object}] JSON representation of datagrid attributes
+    # @example
+    #   grid = ProductsGrid.new(category: 'dresses', available: true)
+    #   grid.as_json # => {"category" => 'dresses', "available" => true}
+    def as_json(options = nil)
+      attributes.reduce({}) do |result, (k,v)|
+        result[k.to_s] = v.as_json(options)
+        result
+      end
     end
 
     # @return [void] redefines scope at instance level

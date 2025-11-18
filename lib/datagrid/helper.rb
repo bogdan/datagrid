@@ -436,7 +436,7 @@ module Datagrid
       query = request&.query_parameters || {}
       ActionDispatch::Http::URL.path_for(
         path: request&.path || "/",
-        params: query.merge(grid.query_params(order: column.name, descending: descending)),
+        params: query.merge(grid.query_params("order" => column.name, "descending" => descending)),
       )
     end
 

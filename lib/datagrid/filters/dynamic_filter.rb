@@ -143,8 +143,8 @@ module Datagrid
           { field: field, operation: operation, value: value }
         end
 
-        def as_query
-          to_h
+        def as_json
+          { "field" => field, "operation" => operation, "value" => value }
         end
 
         protected

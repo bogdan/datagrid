@@ -1,7 +1,29 @@
 # Changelog
 
+## [2.0.7]
+
 * Raise `Datagrid::ConfigurationError` when column or filter name 
   specified in `before` or `after` option not found.
+* Fixed `as_query` method when dynamic filter is used. Fixes [#344](https://github.com/bogdan/datagrid/issues/344)
+
+``` ruby
+grid = ProductsGrid.new(category: 'dresses', available: true, condition: ["price", ">=", 25])
+# Before
+grid.as_query 
+  # => {
+  #      category: 'dresses', 
+  #      available: true, 
+  #      condition: #<Object>
+  #    }
+# After
+grid.as_query 
+  # => {
+  #      "category" => 'dresses', 
+  #      "available" => true, 
+  #      "condition" => { "field" => "price", "operation" => ">=", "value" => "25" }
+  #    }
+```
+
 
 ## [2.0.6]
 

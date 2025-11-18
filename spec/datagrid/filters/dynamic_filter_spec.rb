@@ -218,4 +218,15 @@ describe Datagrid::Filters::DynamicFilter do
     grid.condition = ["groups.name", "=~", "Hello"]
     expect(grid.assets).to_not include(entry)
   end
+
+  it "serializes value to array when calling as_query" do
+    grid = test_grid(condition: ["id", "=", 1]) do
+      scope { Entry }
+      filter(:condition, :dynamic)
+    end
+
+    expect(grid.as_query).to eq({
+      "condition" => {"field" => "id", "operation" => "=", "value" => 1}
+    })
+  end
 end

@@ -244,7 +244,7 @@ describe Datagrid::Core do
     end
   end
 
-  describe ".query_param" do
+  describe "#query_param" do
     it "works" do
       grid = test_grid(name: "value") do
         scope { Entry }
@@ -253,7 +253,22 @@ describe Datagrid::Core do
           "grid"
         end
       end
-      expect(grid.query_params).to eq({ grid: { name: "value" } })
+      expect(grid.query_params).to eq({ "grid" => { "name" => "value" } })
+    end
+  end
+
+  describe "#as_json" do
+    it "works" do
+      grid = SimpleReport.new(category: "One", confirmed: true, disabled: true, group_id: 1, name: "hello", order: :category)
+      expect(grid.as_json).to eq(
+        "category" => "One",
+        "confirmed" => true,
+        "descending" => nil,
+        "disabled" => "YES",
+        "group_id" => [1],
+        "name" => "hello",
+        "order" => "category",
+      )
     end
   end
 end

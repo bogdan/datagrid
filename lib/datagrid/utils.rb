@@ -4,7 +4,7 @@ module Datagrid
   # @!visibility private
   module Utils
     class << self
-      TRUTH = [true, 1, "1", "true", "yes", "on"].freeze
+      TRUTH = [true, 1, "1", "true", "yes", "on", "y"].freeze
 
       def booleanize(value)
         value = value.downcase if value.respond_to?(:downcase)
