@@ -277,4 +277,14 @@ describe Datagrid::Filters::DateFilter do
 
     expect(ChildGrid.new.assets).to eq([])
   end
+
+  it "type casts default value" do
+    expect(
+      test_grid_filter(:created_at, :date, default: "2025-11-28").created_at,
+    ).to eq(Date.new(2025, 11, 28))
+
+    expect(
+      test_grid_filter(:created_at, :date, range: true, default: 3.day.ago..Time.now).created_at,
+    ).to eq(3.days.ago.to_date..Date.today)
+  end
 end

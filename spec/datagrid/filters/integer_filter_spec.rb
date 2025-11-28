@@ -184,4 +184,9 @@ describe Datagrid::Filters::IntegerFilter do
     report.group_id = "a1"
     expect(report.group_id).to be_nil
   end
+
+  it "type casts default value" do
+    expect(test_grid_filter(:group_id, :integer, default: "1").group_id).to eq(1)
+    expect(test_grid_filter(:group_id, :integer, range: true, default: "1".."2").group_id).to eq(1..2)
+  end
 end

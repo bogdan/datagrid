@@ -23,7 +23,7 @@ module Datagrid
       end
 
       def parse(value)
-        raise NotImplementedError, "#parse(value) suppose to be overwritten"
+        raise NotImplementedError, "#{self.class}#parse(value) suppose to be overwritten"
       end
 
       def default_input_options
