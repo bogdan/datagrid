@@ -2,8 +2,19 @@
 
 ## [2.0.8]
 
-* Prevent typecasting of date into timestamp when `:date` filter has a block
 * Rescue StatementInvalid when guessing column type from a query
+* Prevent typecasting of date into timestamp when `:date` filter has a block
+
+``` ruby
+class MyGrid < Datagrid::Base
+  scope { User }
+
+  filter(:created_at, :date) do |scope, value|
+    value.is_a?(Date) # => true
+    scope.joins(:registration).where(registrations: { registration_date: value })
+  end
+end
+```
 
 ## [2.0.7]
 
