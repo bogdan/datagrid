@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.8]
+
+* Rescue StatementInvalid when guessing column type from a query
+
 ## [2.0.7]
 
 * Raise `Datagrid::ConfigurationError` when column or filter name 
