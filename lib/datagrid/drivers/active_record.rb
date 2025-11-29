@@ -86,22 +86,32 @@ module Datagrid
         scope.where("#{field} #{contains_predicate} ?", "%#{value}%")
       end
 
-      def normalized_column_type(scope, field)
-        builtin_type = scope_has_column?(scope, field) ?
-          scope.columns_hash[field.to_s].type :
-          scope.connection.select_all(
-            scope.unscope(:select, :order).select(field => "custom_field").limit(0).arel
-          ).column_types['custom_field']&.type
+      def builtin_type(scope, field)
+        if scope_has_column?(scope, field)
+          scope.columns_hash[field.to_s].type
+        else
+          begin
+            scope.connection.select_all(
+              scope.unscope(:select, :order).select(field => "custom_field").limit(0).arel
+            ).column_types['custom_field']&.type
+          rescue ActiveRecord::StatementInvalid
+            nil
+          end
+        end
+      end
 
-        {
-          %i[string text time binary] => :string,
-          %i[integer primary_key] => :integer,
-          %i[float decimal] => :float,
-          [:date] => :date,
-          %i[datetime timestamp timestamptz] => :timestamp,
-          [:boolean] => :boolean,
-        }.each do |keys, value|
-          return value if keys.include?(builtin_type)
+      def normalized_column_type(scope, field)
+        if builtin_type = builtin_type(scope, field)
+          {
+            %i[string text time binary] => :string,
+            %i[integer primary_key] => :integer,
+            %i[float decimal] => :float,
+            [:date] => :date,
+            %i[datetime timestamp timestamptz] => :timestamp,
+            [:boolean] => :boolean,
+          }.each do |keys, value|
+            return value if keys.include?(builtin_type)
+          end
         end
         nil
       end
