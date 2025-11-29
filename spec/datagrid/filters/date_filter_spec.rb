@@ -187,7 +187,7 @@ describe Datagrid::Filters::DateFilter do
     time = Time.utc(2018, 0o1, 0o7, 2, 2)
 
     report = test_grid_filter(:created_at, :date, range: true) do |value|
-      where(created_at: value)
+      where(created_at: value.begin&.beginning_of_day..value.end&.end_of_day)
     end
     report.created_at = date
 
@@ -286,5 +286,19 @@ describe Datagrid::Filters::DateFilter do
     expect(
       test_grid_filter(:created_at, :date, range: true, default: 3.day.ago..Time.now).created_at,
     ).to eq(3.days.ago.to_date..Date.today)
+  end
+
+  it "doesn't convert to timestamp if block is given" do
+    grid = test_grid_filter(:created_at, :date) do |value, scope|
+      scope.where(created_at: (value - 5.minutes)..(value + 5.minutes))
+    end
+
+    time = Time.now
+    grid.created_at = time
+    e1 = Entry.create!(created_at: time.beginning_of_day)
+    e2 = Entry.create!(created_at: time)
+
+    expect(grid.assets).to include(e1)
+    expect(grid.assets).to_not include(e2)
   end
 end
