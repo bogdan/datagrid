@@ -265,11 +265,13 @@ module Datagrid
       # @param block [Block] proc to calculate a column value
       # @option options [Boolean, String] html Determines if the column should be present
       #   in the HTML table and how it is formatted.
-      # @option options [String, Array<Symbol>] order Determines if the column can be sortable and
+      # @option options [String, Array<Symbol>, Proc] order Determines if the column can be sortable and
       #   specifies the ORM ordering method.
       #   Example: `"created_at, id"` for ActiveRecord, `[:created_at, :id]` for Mongoid.
-      # @option options [String] order_desc Specifies a descending order for the column
-      #   (used when `:order` cannot be easily reversed by the ORM).
+      #   Can be a Proc accepting a scope argument and returning a scope with applied order
+      # @option options [String, Array<Symbol>, Proc] order_desc Specifies a descending order for the column.
+      #   See `order` option for context.
+      #   Used when `:order` cannot be easily reversed by the ORM.
       # @option options [Boolean, Proc] order_by_value Enables Ruby-level ordering for the column.
       #   Warning: Sorting large datasets in Ruby is not recommended.
       #   If `true`, Datagrid orders by the column value.
@@ -277,8 +279,8 @@ module Datagrid
       # @option options [Boolean] mandatory If `true`, the column will never be hidden by the `#column_names` selection.
       # @option options [Symbol] before Places the column before the specified column when determining order.
       # @option options [Symbol] after Places the column after the specified column when determining order.
-      # @option options [Boolean, Proc] if conditions when a column is available.
-      # @option options [Boolean, Proc] unless conditions when a column is not available.
+      # @option options [Symbol, Proc] if conditions when a column is available, can be a method name or a proc with grid argument returning `Boolean`.
+      # @option options [Symbol, Proc] unless conditions when a column is not available, can be a method name or a proc with grid argument returning `Boolean`.
       # @option options [Symbol, Array<Symbol>] preload Specifies associations
       #   to preload for the column within the scope.
       # @option options [Hash] tag_options Specifies HTML attributes for the `<td>` or `<th>` of the column.
