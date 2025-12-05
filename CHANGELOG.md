@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.9]
+
+* Use new Rails 7.1 `locals` notation in ERB partials
+
 ## [2.0.8]
 
 * Rescue StatementInvalid when guessing column type from a query

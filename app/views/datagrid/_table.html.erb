@@ -1,9 +1,4 @@
-<%#
-Local variables:
-* grid - instance of Datagrid
-* assets - Array of database Entities
-* options - passed options Hash
-%>
+<%# locals: (grid:, assets:, options: {}) -%>
 <% if grid.html_columns(*options[:columns]).any? %>
   <%= tag.table class: 'datagrid-table', **options.fetch(:html, {}) do %>
     <thead>

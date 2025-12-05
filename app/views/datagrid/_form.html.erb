@@ -1,3 +1,4 @@
+<%# locals: (grid:, options: {}) -%>
 <%= form_with model: grid, html: {class: 'datagrid-form'}, scope: grid.param_name, method: :get, **options do |f| %>
   <% grid.filters.each do |filter| %>
     <div class="datagrid-filter" data-filter="<%= filter.name %>" data-type="<%= filter.type %>">
