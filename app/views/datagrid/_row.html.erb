@@ -3,7 +3,7 @@
   <% grid.html_columns(*options[:columns]).each do |column| %>
     <%= tag.td(
       datagrid_value(grid, column, asset),
-      # Consider maintaining consistency with datagrid/rows partial
+      # Consider maintaining consistency with datagrid/head partial
       "data-column": column.name,
       **column.tag_options,
       class: [ 

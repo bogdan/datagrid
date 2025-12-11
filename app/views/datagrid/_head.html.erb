@@ -2,7 +2,7 @@
 <tr>
   <% grid.html_columns(*options[:columns]).each do |column| %>
     <%= tag.th(
-      # Consider maintaining consistency with datagrid/rows partial
+      # Consider maintaining consistency with datagrid/row partial
       "data-column": column.name,
       **column.tag_options,
       class: [        
