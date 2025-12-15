@@ -245,6 +245,7 @@ module Datagrid
         class_attribute :columns_array, default: []
         class_attribute :cached, default: false
         class_attribute :decorator, instance_writer: false
+        class_attribute :column_order, default: []
       end
     end
 
@@ -257,6 +258,13 @@ module Datagrid
       #   GridClass.columns(:id, :name)
       def columns(*column_names, data: false, html: false)
         filter_columns(columns_array, *column_names, data: data, html: html)
+      end
+
+      # @param order [Array<Symbol>] set the order of the columns by using the column names
+      # @example
+      #   GridClass.set_column_order(%i[id title description])
+      def set_column_order(order:)
+        self.column_order = order
       end
 
       # Defines a new datagrid column

@@ -187,6 +187,7 @@ module Datagrid
       include Datagrid::Core
       class_attribute :default_filter_options, instance_writer: false, default: {}
       class_attribute :filters_array, default: []
+      class_attribute :filter_order, default: []
     end
 
     # Grid class methods related to filters
@@ -203,6 +204,13 @@ module Datagrid
         filters.find do |filter|
           filter.name == attribute.to_sym
         end
+      end
+
+      # @param order [Array<Symbol>] set the order of the filters by using the filter names
+      # @example
+      #   GridClass.filter_order(%i[id title description])
+      def set_filter_order(order:)
+        self.filter_order = order
       end
 
       # Defines new datagrid filter.
