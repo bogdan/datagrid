@@ -1,0 +1,34 @@
+<%# locals: (filter:, object:, form:, field:, operation:, value:, template:, options: {}) -%>
+
+<%= form.dynamic_filter_select(
+      filter.name,
+      object.select_options(filter) || [],
+      {
+        include_blank: filter.include_blank,
+        prompt: filter.prompt,
+        include_hidden: false,
+        selected: field
+      },
+      class: [*options[:class], "datagrid-dynamic-field"],
+      name: template.field_name(form.object_name, filter.name, "field")
+    ) %>
+
+<%= form.dynamic_filter_select(
+      filter.name,
+      filter.operations_select,
+      {
+        include_blank: false,
+        include_hidden: false,
+        prompt: false,
+        selected: operation
+      },
+      class: [*options[:class], "datagrid-dynamic-operation"],
+      name: template.field_name(form.object_name, filter.name, "operation")
+    ) %>
+
+<%= form.datagrid_filter_input(
+      filter.name,
+      class: [*options[:class], "datagrid-dynamic-value"],
+      value: value,
+      name: template.field_name(form.object_name, filter.name, "value")
+    ) %>
