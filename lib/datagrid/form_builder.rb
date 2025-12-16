@@ -73,11 +73,12 @@ module Datagrid
       when :select
         select(
           filter.name,
-          object.select_options(filter) || [],
+          options.delete(:select_choices) || object.select_options(filter) || [],
           {
             include_blank: filter.include_blank,
             prompt: filter.prompt,
             include_hidden: false,
+            **options.delete(:select_options),
           },
           multiple: filter.multiple?,
           **options,

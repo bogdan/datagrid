@@ -3,6 +3,7 @@
 ## [2.0.10]
 
 * Added a partial for the dynamic filter
+* The `datagrid_filter_input` method now accepts options for the select input
 
 ## [2.0.9]
 
