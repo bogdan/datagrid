@@ -73,7 +73,7 @@ module Datagrid
       when :select
         select(
           filter.name,
-          options.delete(:select_choices) || object.select_options(filter) || [],
+          options.delete(:select_choices) || object.select_choices(filter) || [],
           {
             include_blank: filter.include_blank,
             prompt: filter.prompt,
@@ -98,7 +98,7 @@ module Datagrid
     protected
 
     def datagrid_enum_checkboxes_filter(filter, options = {})
-      elements = object.select_options(filter).map do |element|
+      elements = object.select_choices(filter).map do |element|
         text, value = @template.send(:option_text_and_value, element)
         checked = enum_checkbox_checked?(filter, value)
         [value, text, checked]
