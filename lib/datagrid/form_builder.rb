@@ -160,7 +160,6 @@ module Datagrid
           select_options: {
             selected: field,
           },
-          class: [*options[:class], "datagrid-dynamic-field"],
           name: @template.field_name(object_name, filter.name, "field"),
         },
       )
@@ -176,7 +175,6 @@ module Datagrid
             prompt: false,
             selected: operation,
           },
-          class: [*options[:class], "datagrid-dynamic-operation"],
           name: @template.field_name(object_name, filter.name, "operation"),
         },
       )
@@ -185,7 +183,6 @@ module Datagrid
     def datagrid_dynamic_value_options(options:, value:, filter:)
       options.merge(
         {
-          class: [*options[:class], "datagrid-dynamic-value"],
           value: value,
           name: @template.field_name(object_name, filter.name, "value"),
         },
