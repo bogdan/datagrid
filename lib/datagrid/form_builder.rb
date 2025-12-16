@@ -152,9 +152,55 @@ module Datagrid
     def datagrid_dynamic_filter(filter, options = {})
       options = add_filter_options(filter, **options)
       field, operation, value = object.filter_value(filter)
+      field_options = datagrid_dynamic_field_options(options: options, field: field, filter: filter)
+      operation_options = datagrid_dynamic_operation_options(options: options, operation: operation, filter: filter)
+      value_options = datagrid_dynamic_value_options(options: options, value: value, filter: filter)
       render_partial(
         "dynamic_filter",
-        { filter:, options:, object:, form: self, field:, operation:, value:, template: @template }
+        { filter: filter,
+          form: self,
+          field_options: field_options,
+          operation_options: operation_options,
+          value_options: value_options, },
+      )
+    end
+
+    def datagrid_dynamic_field_options(options:, field:, filter:)
+      options.merge(
+        {
+          type: :select,
+          select_options: {
+            selected: field,
+          },
+          class: [*options[:class], "datagrid-dynamic-field"],
+          name: @template.field_name(object_name, filter.name, "field"),
+        },
+      )
+    end
+
+    def datagrid_dynamic_operation_options(options:, operation:, filter:)
+      options.merge(
+        {
+          type: :select,
+          select_choices: filter.operations_select,
+          select_options: {
+            include_blank: false,
+            prompt: false,
+            selected: operation,
+          },
+          class: [*options[:class], "datagrid-dynamic-operation"],
+          name: @template.field_name(object_name, filter.name, "operation"),
+        },
+      )
+    end
+
+    def datagrid_dynamic_value_options(options:, value:, filter:)
+      options.merge(
+        {
+          class: [*options[:class], "datagrid-dynamic-value"],
+          value: value,
+          name: @template.field_name(object_name, filter.name, "value"),
+        },
       )
     end
 
