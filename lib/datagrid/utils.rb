@@ -41,17 +41,6 @@ module Datagrid
         true
       end
 
-      def add_html_classes(options, *classes)
-        return options if classes.empty?
-
-        options = options.clone
-        options[:class] ||= []
-        array = options[:class].is_a?(Array)
-        value = [*options[:class], *classes]
-        options[:class] = array ? value : value.join(" ")
-        options
-      end
-
       def string_like?(value)
         value.is_a?(Symbol) || value.is_a?(String)
       end

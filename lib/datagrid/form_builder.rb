@@ -94,10 +94,6 @@ module Datagrid
       end
     end
 
-    def add_html_classes(options, *classes)
-      Datagrid::Utils.add_html_classes(options, *classes)
-    end
-
     def dynamic_filter_select(name, variants, select_options, html_options)
       if variants.size <= 1
         value = variants.first
