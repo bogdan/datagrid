@@ -4,6 +4,7 @@
 
 * Added a partial for the dynamic filter
 * The `datagrid_filter_input` method now accepts options for the select input
+* Rename the `select_options` method to `select_choices`
 
 ## [2.0.9]
 
