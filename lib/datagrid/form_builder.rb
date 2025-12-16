@@ -95,18 +95,6 @@ module Datagrid
       end
     end
 
-    def dynamic_filter_select(name, variants, select_options, html_options)
-      if variants.size <= 1
-        value = variants.first
-        # select options format may vary
-        value = value.last if value.is_a?(Array)
-        # don't render any visible input when there is nothing to choose from
-        hidden_field(name, **html_options, value: value)
-      else
-        select(name, variants, select_options, html_options)
-      end
-    end
-
     protected
 
     def datagrid_enum_checkboxes_filter(filter, options = {})
