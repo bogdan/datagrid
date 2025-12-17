@@ -47,7 +47,7 @@ module Datagrid
     #   * `type` - special attribute the determines an input tag to be made.
     #     Examples: `text`, `select`, `textarea`, `number`, `date` etc.
     # @return [String] an input tag for the corresponding filter name
-    def datagrid_filter_input(attribute_or_filter, **options, &block)
+    def datagrid_filter_input(attribute_or_filter, select_choices: nil, select_options: nil, **options, &block)
       filter = datagrid_get_filter(attribute_or_filter)
       options = add_filter_options(filter, **options)
       type = options.delete(:type)&.to_sym
@@ -73,12 +73,12 @@ module Datagrid
       when :select
         select(
           filter.name,
-          options.delete(:select_choices) || object.select_choices(filter) || [],
+          select_choices || object.select_choices(filter) || [],
           {
             include_blank: filter.include_blank,
             prompt: filter.prompt,
             include_hidden: false,
-            **options.delete(:select_options),
+            **select_options,
           },
           multiple: filter.multiple?,
           **options,
@@ -157,6 +157,7 @@ module Datagrid
       options.merge(
         {
           type: :select,
+          select_choices: object.select_choices(filter),
           select_options: {
             selected: field,
           },

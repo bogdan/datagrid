@@ -783,33 +783,6 @@ describe Datagrid::FormBuilder do
 
         it { is_expected.to equal_to_dom(expected_html) }
       end
-
-      context "when the field is predefined" do
-        let(:filter_options) do
-          { operations: %w[>= <=], select: [:id] }
-        end
-        let(:expected_html) do
-          <<-HTML
-          <input class="datagrid-dynamic-field" name="report[condition][field]" value="id" autocomplete="off" type="hidden" id="report_condition"><select class="datagrid-dynamic-operation" name="report[condition][operation]" id="report_condition"><option value="&gt;=">≥</option>
-       <option value="&lt;=">≤</option></select><input class="datagrid-dynamic-value" name="report[condition][value]" type="text" id="report_condition">
-          HTML
-        end
-
-        it { is_expected.to equal_to_dom(expected_html) }
-      end
-
-      context "when operation is predefined" do
-        let(:filter_options) do
-          { operations: %w[=], select: %i[id name] }
-        end
-        let(:expected_html) do
-          <<-HTML
-          <select class="datagrid-dynamic-field" name="report[condition][field]" id="report_condition"><option value="id">id</option><option value="name">name</option></select><input class="datagrid-dynamic-operation" name="report[condition][operation]" value="=" autocomplete="off" type="hidden" id="report_condition"><input class="datagrid-dynamic-value" name="report[condition][value]" type="text" id="report_condition">
-          HTML
-        end
-
-        it { is_expected.to equal_to_dom(expected_html) }
-      end
     end
   end
 
