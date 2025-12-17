@@ -330,7 +330,7 @@ module Datagrid
 
     # @!visibility private
     def select_options(filter)
-      warn "[DEPRECATION] `select_options` is deprecated. Please use `select_choices` instead."
+      Datagrid::Utils.warn_once "#select_options is deprecated and renamed. Use #select_choices instead."
       select_choices(filter)
     end
 
