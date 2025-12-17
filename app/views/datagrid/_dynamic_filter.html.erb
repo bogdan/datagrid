@@ -1,0 +1,19 @@
+<%# locals: (filter:, form:, field_options:, operation_options:, value_options:) -%>
+
+<%= form.datagrid_filter_input(
+      filter,
+      **field_options,
+      class: [*field_options[:class], "datagrid-dynamic-field"]
+    ) %>
+
+<%= form.datagrid_filter_input(
+      filter,
+      **operation_options,
+      class: [*operation_options[:class], "datagrid-dynamic-operation"]
+    ) %>
+
+<%= form.datagrid_filter_input(
+      filter,
+      **value_options,
+      class: [*value_options[:class], "datagrid-dynamic-value"]
+    ) %>
