@@ -328,9 +328,15 @@ module Datagrid
       apply_filters(scope, filters.map { |f| filter_by_name(f) })
     end
 
+    # @!visibility private
+    def select_options(filter)
+      warn "[DEPRECATION] `select_options` is deprecated. Please use `select_choices` instead."
+      select_choices(filter)
+    end
+
     # @return [Array] the select options for the filter
     # @raise [ArgumentError] if the filter doesn't support select options
-    def select_options(filter)
+    def select_choices(filter)
       find_select_filter(filter).select(self)
     end
 

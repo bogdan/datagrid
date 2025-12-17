@@ -73,11 +73,12 @@ module Datagrid
       when :select
         select(
           filter.name,
-          object.select_options(filter) || [],
+          options.delete(:select_choices) || object.select_choices(filter) || [],
           {
             include_blank: filter.include_blank,
             prompt: filter.prompt,
             include_hidden: false,
+            **options.delete(:select_options),
           },
           multiple: filter.multiple?,
           **options,
@@ -97,7 +98,7 @@ module Datagrid
     protected
 
     def datagrid_enum_checkboxes_filter(filter, options = {})
-      elements = object.select_options(filter).map do |element|
+      elements = object.select_choices(filter).map do |element|
         text, value = @template.send(:option_text_and_value, element)
         checked = enum_checkbox_checked?(filter, value)
         [value, text, checked]
@@ -137,50 +138,55 @@ module Datagrid
     end
 
     def datagrid_dynamic_filter(filter, options = {})
-      field, operation, value = object.filter_value(filter)
       options = add_filter_options(filter, **options)
-      field_input = dynamic_filter_select(
-        filter.name,
-        object.select_options(filter) || [],
-        {
-          include_blank: filter.include_blank,
-          prompt: filter.prompt,
-          include_hidden: false,
-          selected: field,
-        },
-        **add_html_classes(options, "datagrid-dynamic-field"),
-        name: @template.field_name(object_name, filter.name, "field"),
+      field, operation, value = object.filter_value(filter)
+      field_options = datagrid_dynamic_field_options(options: options, field: field, filter: filter)
+      operation_options = datagrid_dynamic_operation_options(options: options, operation: operation, filter: filter)
+      value_options = datagrid_dynamic_value_options(options: options, value: value, filter: filter)
+      render_partial(
+        "dynamic_filter",
+        { filter: filter,
+          form: self,
+          field_options: field_options,
+          operation_options: operation_options,
+          value_options: value_options, },
       )
-      operation_input = dynamic_filter_select(
-        filter.name, filter.operations_select,
-        {
-          include_blank: false,
-          include_hidden: false,
-          prompt: false,
-          selected: operation,
-        },
-        **add_html_classes(options, "datagrid-dynamic-operation"),
-        name: @template.field_name(object_name, filter.name, "operation"),
-      )
-      value_input = datagrid_filter_input(
-        filter.name,
-        **add_html_classes(options, "datagrid-dynamic-value"),
-        value: value,
-        name: @template.field_name(object_name, filter.name, "value"),
-      )
-      [field_input, operation_input, value_input].join("\n").html_safe
     end
 
-    def dynamic_filter_select(name, variants, select_options, html_options)
-      if variants.size <= 1
-        value = variants.first
-        # select options format may vary
-        value = value.last if value.is_a?(Array)
-        # don't render any visible input when there is nothing to choose from
-        hidden_field(name, **html_options, value: value)
-      else
-        select(name, variants, select_options, html_options)
-      end
+    def datagrid_dynamic_field_options(options:, field:, filter:)
+      options.merge(
+        {
+          type: :select,
+          select_options: {
+            selected: field,
+          },
+          name: @template.field_name(object_name, filter.name, "field"),
+        },
+      )
+    end
+
+    def datagrid_dynamic_operation_options(options:, operation:, filter:)
+      options.merge(
+        {
+          type: :select,
+          select_choices: filter.operations_select,
+          select_options: {
+            include_blank: false,
+            prompt: false,
+            selected: operation,
+          },
+          name: @template.field_name(object_name, filter.name, "operation"),
+        },
+      )
+    end
+
+    def datagrid_dynamic_value_options(options:, value:, filter:)
+      options.merge(
+        {
+          value: value,
+          name: @template.field_name(object_name, filter.name, "value"),
+        },
+      )
     end
 
     def datagrid_range_filter(filter, options = {})
@@ -203,10 +209,6 @@ module Datagrid
 
       object.class.filter_by_name(attribute_or_filter) ||
         raise(ArgumentError, "Datagrid filter #{attribute_or_filter} not found")
-    end
-
-    def add_html_classes(options, *classes)
-      Datagrid::Utils.add_html_classes(options, *classes)
     end
 
     def partial_path(name)
