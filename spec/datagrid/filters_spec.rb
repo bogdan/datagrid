@@ -235,7 +235,7 @@ describe Datagrid::Filters do
     end
   end
 
-  describe "#select_options" do
+  describe "#select_choices" do
     it "returns select options" do
       filters = {
         id: [1, 2],
@@ -249,7 +249,7 @@ describe Datagrid::Filters do
         end
       end
       filters.each do |name, options|
-        expect(grid.select_options(name)).to eq(options)
+        expect(grid.select_choices(name)).to eq(options)
         expect(grid.select_values(name)).to eq([1, 2])
         grid.select_all(name)
         expect(grid.public_send(name)).to eq([1, 2])
@@ -259,7 +259,7 @@ describe Datagrid::Filters do
     it "raises ArgumentError for filter without options" do
       grid = test_grid_filter(:id, :integer)
       expect do
-        grid.select_options(:id)
+        grid.select_choices(:id)
       end.to raise_error(Datagrid::ArgumentError)
     end
   end
