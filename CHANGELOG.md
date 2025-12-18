@@ -1,8 +1,9 @@
 # Changelog
 
-## [2.0.10]
+## [2.0.9]
 
-* The `datagrid_filter_input` method now accepts `select_choices` and `select_options` options for the `select` tag.
+* Use new Rails 7.1 `locals` notation in ERB partials.
+* The `FormBuilder#datagrid_filter_input` method now accepts `select_choices` and `select_options` options for the `select` tag.
 * Rename the `Datagrid#select_options` method to `#select_choices`.
 * Added a partial for the dynamic filter allowing to customize the UI [#347](https://github.com/bogdan/datagrid/pull/347).
 
@@ -28,11 +29,6 @@
       class: [*value_options[:class], "datagrid-dynamic-value"]
     ) %>
 ```
-
-
-## [2.0.9]
-
-* Use new Rails 7.1 `locals` notation in ERB partials
 
 ## [2.0.8]
 
