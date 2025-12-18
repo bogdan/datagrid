@@ -2,9 +2,33 @@
 
 ## [2.0.10]
 
-* Added a partial for the dynamic filter
-* The `datagrid_filter_input` method now accepts options for the select input
-* Rename the `select_options` method to `select_choices`
+* The `datagrid_filter_input` method now accepts `select_choices` and `select_options` options for the `select` tag.
+* Rename the `Datagrid#select_options` method to `#select_choices`.
+* Added a partial for the dynamic filter allowing to customize the UI [#347](https://github.com/bogdan/datagrid/pull/347).
+
+
+``` erb
+<%# locals: (filter:, form:, field_options:, operation_options:, value_options:) -%>
+
+<%= form.datagrid_filter_input(
+      filter,
+      **field_options,
+      class: [*field_options[:class], "datagrid-dynamic-field"]
+    ) %>
+
+<%= form.datagrid_filter_input(
+      filter,
+      **operation_options,
+      class: [*operation_options[:class], "datagrid-dynamic-operation"]
+    ) %>
+
+<%= form.datagrid_filter_input(
+      filter,
+      **value_options,
+      class: [*value_options[:class], "datagrid-dynamic-value"]
+    ) %>
+```
+
 
 ## [2.0.9]
 
