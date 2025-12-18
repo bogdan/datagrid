@@ -47,7 +47,7 @@ module Datagrid
     #   * `type` - special attribute the determines an input tag to be made.
     #     Examples: `text`, `select`, `textarea`, `number`, `date` etc.
     # @return [String] an input tag for the corresponding filter name
-    def datagrid_filter_input(attribute_or_filter, select_choices: nil, select_options: nil, **options, &block)
+    def datagrid_filter_input(attribute_or_filter, select_choices: nil, select_options: {}, **options, &block)
       filter = datagrid_get_filter(attribute_or_filter)
       options = add_filter_options(filter, **options)
       type = options.delete(:type)&.to_sym
