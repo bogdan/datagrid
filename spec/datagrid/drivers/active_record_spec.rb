@@ -38,6 +38,26 @@ describe Datagrid::Drivers::ActiveRecord do
     end
   end
 
+  describe "when providing blank dynamic fields with include_blank" do
+    subject do
+      test_grid(name: entry.name, condition1: { field: "", operator: "eq", value: "test" }) do
+        scope { Entry }
+
+        filter(:name)
+        filter(
+          :condition1, :dynamic,
+          operators: %w[eq not_eq], include_blank: true, select: %w[name category access_level],
+        )
+      end.assets
+    end
+
+    let(:entry) { Entry.create!(name: "test") }
+
+    it "still applies other filters without raising errors" do
+      expect(subject).to eq([entry])
+    end
+  end
+
   describe "where by timestamp" do
     subject do
       test_grid(created_at: 10.days.ago..5.days.ago) do
