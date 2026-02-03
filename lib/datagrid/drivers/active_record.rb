@@ -94,7 +94,7 @@ module Datagrid
             scope.connection.select_all(
               scope.unscope(:select, :order).select(field => "custom_field").limit(0).arel
             ).column_types['custom_field']&.type
-          rescue ActiveRecord::StatementInvalid
+          rescue ::ActiveRecord::StatementInvalid
             nil
           end
         end
