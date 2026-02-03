@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.10]
+
+* Fix dynamic filter error [#349](https://github.com/bogdan/datagrid/issues/349).
+
 ## [2.0.9]
 
 * Use new Rails 7.1 `locals` notation in ERB partials.

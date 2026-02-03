@@ -91,8 +91,9 @@ module Datagrid
           scope.columns_hash[field.to_s].type
         else
           begin
+            arel_field = arel_field_with_alias(scope, field)
             scope.connection.select_all(
-              scope.unscope(:select, :order).select(field => "custom_field").limit(0).arel
+              scope.unscope(:select, :order).select(arel_field).limit(0).arel
             ).column_types['custom_field']&.type
           rescue ::ActiveRecord::StatementInvalid
             nil
@@ -138,6 +139,13 @@ module Datagrid
       end
 
       protected
+
+      def arel_field_with_alias(scope, field)
+        unless defined?(::Arel::Nodes::Node) && field.is_a?(::Arel::Nodes::Node)
+          field = Arel.sql(field.to_s)
+        end
+        field.as("custom_field")
+      end
 
       def prefix_table_name(scope, field)
         scope_has_column?(scope, field) ? [scope.table_name, field].join(".") : field
