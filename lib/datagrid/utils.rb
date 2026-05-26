@@ -128,7 +128,32 @@ module Datagrid
         value.respond_to?(:call) ? value.call(*arguments) : value
       end
 
+      def select_values(options)
+        return [] if options.blank?
+
+        if grouped_choices?(options)
+          options.flat_map do |group|
+            group[1].map { |o| option_text_and_value(o).last }
+          end
+        else
+          options.map { |option| option_text_and_value(option).last }
+        end
+      end
+
       protected
+
+      def option_text_and_value(option)
+        if !option.is_a?(String) && option.respond_to?(:first) && option.respond_to?(:last)
+          option = option.reject { |e| e.is_a?(Hash) } if option.is_a?(Array)
+          [option.first, option.last]
+        else
+          [option, option]
+        end
+      end
+
+      def grouped_choices?(choices)
+        !choices.blank? && choices.first.respond_to?(:last) && choices.first.last.is_a?(Array)
+      end
 
       def property_availability(grid, option, default)
         case option
