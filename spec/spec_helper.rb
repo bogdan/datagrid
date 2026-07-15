@@ -37,6 +37,18 @@ NO_MONGO = ENV.fetch("NO_MONGO", nil)
 if NO_MONGO
   warn("MONGODB WARNING: Skipping Mongoid and Mongomapper tests.")
 else
+  # Fail fast with a cheap TCP probe before touching Mongoid. Raising here
+  # instead of exiting would unwind Ruby's `require`, leaving spec_helper
+  # unloaded so every spec file that requires it would retry the (slow)
+  # Mongoid connection attempt all over again.
+  begin
+    require "socket"
+    Socket.tcp("localhost", 27017, connect_timeout: 2).close
+  rescue SystemCallError, SocketError
+    warn "Didn't find mongodb at localhost:27017. Run with NO_MONGO=true env variable to skip mongodb tests"
+    exit 1
+  end
+
   begin
     Mongoid.load_configuration({
       "clients" =>
@@ -63,9 +75,9 @@ else
       MongoMapper.connection = Mongo::Connection.new("localhost", 27_017)
       MongoMapper.database = "datagrid_mongo_mapper"
     end
-  rescue Mongo::Error::NoServerAvailable => e
+  rescue Mongo::Error::NoServerAvailable
     warn "Didn't find mongodb at localhost:27017. Run with NO_MONGO=true env variable to skip mongodb tests"
-    raise e
+    exit 1
   end
 end
 
