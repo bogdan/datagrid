@@ -147,6 +147,10 @@ module Datagrid
           { "field" => field, "operation" => operation, "value" => value }
         end
 
+        def to_query(key = nil)
+          to_h.to_query(key)
+        end
+
         protected
 
         def type_cast(type, value)

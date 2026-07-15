@@ -57,6 +57,13 @@ describe Datagrid::Filters::DynamicFilter do
     expect(report.assets).not_to include(Entry.create!(group_id: 3))
   end
 
+  it "converts to query string" do
+    report.condition = [:name, "=", "hello"]
+    expect(report.condition.to_query("condition")).to eq(
+      "condition%5Bfield%5D=name&condition%5Boperation%5D=%3D&condition%5Bvalue%5D=hello",
+    )
+  end
+
   it "nullifies incorrect value for integer" do
     report.condition = [:group_id, "<=", "aa"]
     expect(report.condition.to_h).to eq(

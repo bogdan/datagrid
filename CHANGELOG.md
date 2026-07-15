@@ -3,6 +3,7 @@
 ## [2.0.10]
 
 * Fix dynamic filter error [#349](https://github.com/bogdan/datagrid/issues/349).
+* Add `Datagrid::Filters::DynamicFilter::FilterValue#to_query` method.
 
 ## [2.0.9]
 
